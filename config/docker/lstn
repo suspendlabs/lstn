@@ -1,0 +1,54 @@
+FROM ubuntu:14.04
+MAINTAINER Suspend Labs
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get -y update
+RUN apt-get -y install \
+    python \
+    python-dev \
+    python-distribute \
+    python-pip \
+    nginx \
+    supervisor \
+    libmysqlclient-dev
+
+RUN pip install uwsgi
+
+RUN pip install Flask==0.10.1
+RUN pip install Flask-Login==0.2.11
+RUN pip install Flask-SQLAlchemy==2.0
+RUN pip install Jinja2==2.7.3
+RUN pip install MarkupSafe==0.23
+RUN pip install MySQL-python==1.2.5
+RUN pip install SQLAlchemy==0.9.7
+RUN pip install Werkzeug==0.9.6
+RUN pip install argparse==1.2.1
+RUN pip install boto==2.33.0
+RUN pip install google-api-python-client==1.3.1
+RUN pip install httplib2==0.9
+RUN pip install itsdangerous==0.24
+RUN pip install oauth2==1.5.211
+RUN pip install oauth2client==1.4.6
+RUN pip install pyasn1==0.1.7
+RUN pip install pyasn1-modules==0.0.5
+RUN pip install --allow-external python-dateutil --allow-unverified python-dateutil python-dateutil==2.0
+RUN pip install python-rdio==0.6
+RUN pip install rsa==3.1.4
+RUN pip install simplejson==3.6.5
+RUN pip install six==1.9.0
+RUN pip install uritemplate==0.6
+RUN pip install wsgiref==0.1.2
+
+
+ADD . /opt/lstn
+RUN python /opt/lstn/bin/build.py
+
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+ADD config/nginx.conf /etc/nginx/sites-available/default
+
+ADD config/uwsgi.ini /etc/uwsgi.ini
+ADD config/supervisord.conf /etc/supervisord.conf
+
+EXPOSE 80 443 9000
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

@@ -1,0 +1,13 @@
+<li id="track-{{ $id }}-{{ $index }}-{{ song.key }}" class="track">
+  <div class="track__image">
+    <img data-ng-src="{{ song.icon }}" alt="{{ song.album }}" title="{{ song.album }}">
+    <div class="overlay"></div>
+    <i data-ng-hide="song.id" class="glyphicon glyphicon-plus-sign" data-ng-click="addSongToQueue(room.id, song.key)"></i>
+    <i data-ng-show="song.id" class="glyphicon glyphicon-minus-sign" data-ng-click="removeSongFromQueue(room.id, song.id)"></i>
+  </div>
+  <div class="track__info">
+    <div class="track__title" title="{{ song.name }}"><a data-ng-click="playSong(song.key)" data-ng-bind="song.name | truncate:cutoff"></a></div>
+    <div class="track__artist" data-ng-bind="song.artist | truncate:cutoff" title="{{ song.artist }}"></div>
+  </div>
+  <div class="clear"></div>
+</li>
