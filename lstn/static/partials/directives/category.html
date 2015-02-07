@@ -1,0 +1,15 @@
+<div id="category{{ $id }}" class="category panel panel-primary">
+  <div class="panel-heading" role="tab" id="heading{{ $id }}">
+    <h4 class="panel-title">
+      <a data-ng-click="toggleCategoryOpen()" aria-expanded="{{ categoryStatus.open }}" aria-controls="content{{ $id }}" data-parent="#{{ group }}">
+        <span data-ng-bind="name | truncate:28" title="{{ name }}"></span>
+        <i class="pull-right glyphicon ng-scope glyphicon-chevron-right" data-ng-class="{'glyphicon-chevron-down': categoryStatus.open, 'glyphicon-chevron-right': !categoryStatus.open}"></i>
+      </a>
+    </h4>
+  </div>
+  <div id="content{{ $id }}" class="panel-collapse" collapse="!categoryStatus.open" role="tabpanel" aria-labeledby="heading{{ $id }}">
+    <div class="category__contents panel-body">
+      <div id="categoryContents{{ $id }}" ng-transclude></div>
+    </div>
+  </div>
+</div>

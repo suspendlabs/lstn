@@ -1,0 +1,14 @@
+db:
+  build: "config/docker/db"
+  volumes:
+    - ".:/opt/lstn"
+
+lstn:
+  build: .
+  links:
+    - db
+  volumes:
+    - ".:/opt/lstn"
+  ports:
+    - "7000:7000"
+  command: python /opt/lstn/application.py

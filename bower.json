@@ -1,0 +1,32 @@
+{
+  "name": "lstn",
+  "dependencies": {
+    "jquery": "~2.1.0",
+    "angular-cookies": "~1.2.16",
+    "angular-resource": "~1.2.16",
+    "angular-route": "~1.2.16",
+    "angular": "~1.2.16",
+    "modernizr": "~2.7.2",
+    "bootstrap": "~3.3.2",
+    "fontawesome": "~4.3.0",
+    "angular-bootstrap": "~0.12.0",
+    "swfobject": "*",
+    "holderjs": "~2.5.0"
+  },
+  "version": "0.1.0",
+  "homepage": "http://lstn.in",
+  "authors": [
+    "Brandon Peters <brandon@lstn.in>"
+  ],
+  "description": "Listen to music with your friends",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "lstn/static/bower_components",
+    "test",
+    "tests"
+  ]
+}
