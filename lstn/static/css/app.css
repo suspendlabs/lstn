@@ -1,5 +1,5 @@
 body {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: Roboto, sans-serif;
 }
 body > .container {
   padding: 60px 15px 0;
@@ -7,6 +7,42 @@ body > .container {
 
 .nav, .pagination, .carousel, .panel-title a {
   cursor: pointer;
+}
+
+.navbar-brand {
+  padding: 5px 0 0 0;
+}
+.navbar-brand img {
+  margin-left: 15px;
+}
+
+.lstn {
+  color: #E84961;
+}
+
+.rdio {
+  color: #008fd5;
+}
+
+.hero {
+  color: white;
+  text-align: center;
+  background: url(/static/images/hero.jpg) no-repeat center center;
+  background-size: cover;
+  margin-bottom: 60px;
+}
+.hero h1 {
+  font-size: 70px;
+}
+.hero p {
+  font-size: 30px;
+}
+
+.front__info {
+  text-align: center;
+}
+.front__info .glyphicon {
+  font-size: 3em;
 }
 
 .room .room__left {
@@ -137,6 +173,11 @@ body > .container {
   height: 450px;
 }
 
+.categories {
+  overflow: auto;
+  height: 450px;
+}
+
 .category {
   margin-bottom: 5px;
 }
@@ -157,9 +198,6 @@ body > .container {
 }
 
 .track__list {
-  height: 242px;
-  overflow-x: hidden;
-  overflow-y: auto;
   list-style: none;
   padding: 0;
   margin-bottom: 0;
@@ -231,6 +269,8 @@ body > .container {
 }
 .track__list.queue {
   height: 194px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .track__list.queue .track .track__image {
   width: 50px;
