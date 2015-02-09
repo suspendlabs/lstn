@@ -142,6 +142,10 @@ body {
     border: 1px solid #e3e3e3;
 
     @include border-radius(4px);
+
+    &.playing__info--stopped {
+        padding-top: 45px;
+    }
   }
 
   .progress {
@@ -237,6 +241,12 @@ body {
 
 .playlist__tracks {
   padding: 0;
+}
+
+.queue--empty {
+  margin: 10px;
+  height: 170px;
+  padding-top: 40px;
 }
 
 .track__list {
