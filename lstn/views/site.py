@@ -15,6 +15,7 @@ site = Blueprint('site', __name__)
 
 @site.route('/login')
 def login():
+  # TODO: Use CSRF here
   state = {}
   rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'], current_app.config['RDIO_CONSUMER_SECRET'])
 
@@ -59,6 +60,7 @@ def auth():
     user = User(
       name=rdio_user.name,
       external_id=rdio_user.key,
+      profile=rdio_user.url,
       picture=rdio_user._data['icon250'],
       oauth_token=auth['oauth_token'],
       oauth_token_secret=auth['oauth_token_secret'],
@@ -66,6 +68,9 @@ def auth():
     db.session.add(user)
     db.session.commit()
   else:
+    user.name = rdio_user.name;
+    user.profile = rdio_user.url;
+    user.picture = rdio_user._data['icon250'];
     user.oauth_token = auth['oauth_token'];
     user.oauth_token_secret = auth['oauth_token_secret'];
     db.session.add(user)
@@ -76,7 +81,7 @@ def auth():
 
   login_user(user)
 
-  return redirect(url_for('site.index'))
+  return redirect("%s/#rooms/" % url_for('site.index'))
 
 @site.route('/logout')
 @login_required
@@ -87,11 +92,12 @@ def logout():
 @site.route('/', defaults={'path': 'index'})
 @site.route('/<path:path>')
 def index(path):
-  if current_user.is_anonymous:
+  if current_user.is_anonymous():
     user_json = json.dumps({
       'name': 'Anonymous'
     })
   else:
+    current_user.roomCount = 0;
     user_json = current_user.to_json(for_public=True)
 
   return render_template('index.html', user_json=user_json)
