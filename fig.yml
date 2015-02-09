@@ -11,4 +11,4 @@ lstn:
     - ".:/opt/lstn"
   ports:
     - "7000:7000"
-  command: python /opt/lstn/application.py
+    - "3000:3000"
