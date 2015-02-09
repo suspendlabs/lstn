@@ -4,6 +4,7 @@
 angular.module('lstn', [
   'ngRoute',
   'ui.bootstrap',
+  'btford.socket-io',
   'lstn.services',
   'lstn.controllers',
   'lstn.filters',
