@@ -3,6 +3,79 @@
 
 angular.module('lstn.services', ['ngResource'])
 
+.factory('Rdio', [
+  function() {
+    var rdio = {
+      status: {
+        mute: false,
+        visualize: false
+      },
+      toggleMute: function() {
+        this.mute = !this.mute;
+        this.apiswf.rdio_setMute(this.mute);
+      },
+      toggleVisualize: function() {
+        this.visualize = !this.visualize;
+
+        if (this.visualize) {
+          this.apiswf.rdio_startFrequencyAnalyzer({
+            frequencies: '10-band',
+            period: 100
+          });
+        } else {
+          this.apiswf.rdio_stopFrequencyAnalyzer();
+        }
+      }
+    };
+
+    return rdio;
+  }
+])
+
+.factory('socket', ['socketFactory', function(socketFactory) {
+  var socket = socketFactory();
+  socket.forward('broadcast');
+  socket.forward('error');
+
+  socket.releaseControl = function(id, user) {
+    console.log('sending room:controller:release');
+    this.emit('room:controller:release');
+  };
+  
+  socket.requestControl = function(id, user) {
+    console.log('sending room:controller:request');
+    this.emit('room:controller:request');
+  };
+  
+  socket.roomConnect = function(id, user) {
+    console.log('sending room:connect');
+    this.emit('room:connect', {
+      id: id,
+      user: user
+    });
+  };
+
+  socket.registerRoom = function(id, user) {
+    if (!this.isConnected) {
+      return;
+    }
+
+    this.roomConnect(id, user);
+  };
+
+  socket.updatePosition = function(position) {
+    console.log('sending room:controller:playing:position');
+    this.emit('room:controller:playing:position', position);
+  };
+
+  socket.sendFinished = function() {
+    console.log('sending room:controller:playing:finished');
+    this.emit('room:controller:playing:finished');
+  };
+
+  return socket;
+}])
+
 .factory('Room', ['$resource', function($resource) {
   return $resource('/api/room/:id/:action/:target', {
     id: '@id',
@@ -17,27 +90,29 @@ angular.module('lstn.services', ['ngResource'])
         action: 'roster'
       }
     },
-    addQueue: {
+  });
+}])
+
+.factory('User', ['$resource', function($resource) {
+  return $resource('/api/user/:action/:id', {
+    id: '@id'
+  }, {
+    playlists: {
+      method: 'GET',
+      params: {
+        action: 'playlists'
+      }
+    },
+    addToQueue: {
       method: 'POST',
       params: {
         action: 'queue'
       }
     },
-    removeQueue: {
+    removeFromQueue: {
       method: 'DELETE',
       params: {
         action: 'queue'
-      }
-    }
-  });
-}])
-
-.factory('User', ['$resource', function($resource) {
-  return $resource('/api/user/:action', {}, {
-    playlists: {
-      method: 'GET',
-      params: {
-        action: 'playlists'
       }
     }
   });
