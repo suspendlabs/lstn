@@ -13,6 +13,113 @@ angular.module('lstn.directives', [])
   }
 ])
 
+.directive('lstnRoomRoster', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-roster.html'
+    };
+  }
+])
+
+.directive('lstnRoomPlaying', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-playing.html'
+    };
+  }
+])
+
+.directive('lstnRoomMusic', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-music.html'
+    };
+  }
+])
+
+.directive('lstnMusicSearch', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/music-search.html'
+    };
+  }
+])
+
+.directive('lstnMusicCategories', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/music-categories.html'
+    };
+  }
+])
+
+.directive('lstnPlayingImage', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/playing-image.html'
+    };
+  }
+])
+
+
+.directive('lstnPlayingInfo', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/playing-info.html'
+    };
+  }
+])
+
+.directive('lstnVisualizer', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/visualizer.html',
+      link: function($scope, $element, $attrs) {
+        $scope.bands = 10;
+        $scope.getNumber = function(num) {
+          return new Array(num);
+        };
+      }
+    };
+  }
+])
+
+.directive('lstnRoomControls', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-controls.html'
+    };
+  }
+])
+
+.directive('lstnRoomQueue', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-queue.html'
+    };
+  }
+])
+
 .directive('lstnCategory', [
   function() {
     return {
