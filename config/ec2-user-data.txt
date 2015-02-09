@@ -1,0 +1,24 @@
+Content-Type: multipart/mixed; boundary="===============5189065377222898407=="
+MIME-Version: 1.0
+
+--===============5189065377222898407==
+Content-Type: text/x-shellscript; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename="user-data.txt"
+
+#!/bin/bash
+yum update  -y
+yum install -y aws-cli
+
+cd /home/ec2-user
+
+aws s3 cp s3://devops.suspend.io/lstn-bootstrap.sh .
+chmod +x ./lstn-bootstrap.sh
+./lstn-bootstrap.sh
+
+aws s3 cp s3://aws-codedeploy-us-east-1/latest/install . --region us-east-1
+chmod +x ./install
+./install auto
+
+--===============5189065377222898407==--
