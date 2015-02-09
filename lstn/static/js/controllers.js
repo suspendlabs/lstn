@@ -30,6 +30,10 @@ angular.module('lstn.controllers', [])
     $scope.rdioReady = false;
     $scope.rdioPlay = null;
 
+    $scope.mute = false;
+    $scope.visualize = false;
+
+    // Setup sockets
     socket.on('connect', function() {
       console.log('connect');
       socket.isConnected = true;
@@ -47,6 +51,8 @@ angular.module('lstn.controllers', [])
     socket.on('room:roster:update', function(data) {
       console.log('room:roster:update', data);
       $scope.roster = data;
+      $scope.roster.controllersCount = $scope.roster.controllerOrder.length;
+      $scope.roster.usersCount = Object.keys($scope.roster.users).length;
     });
 
     socket.on('room:controller:playing:request', function(data) {
@@ -78,6 +84,7 @@ angular.module('lstn.controllers', [])
       $scope.playSong(data);
     });
 
+    // TODO: Move these to Room service (badjokeeel) if possible
     $scope.playSong = function(data) {
       if (!data || !data.key) {
         $scope.isCurrentController = false;
@@ -128,9 +135,6 @@ angular.module('lstn.controllers', [])
       $scope.updateTimeout = $timeout($scope.updatePosition, 1 * 1000, false);
     };
   
-    $scope.mute = false;
-    $scope.visualize = false;
-
     $scope.toggleBroadcast = function() {
       $scope.isController = !$scope.isController;
 
@@ -169,6 +173,7 @@ angular.module('lstn.controllers', [])
       }
         
       $scope.playing.voted = 1;
+      $scope.playing.upvoted = 1;
     };
   
     $scope.downvote = function() {
@@ -181,6 +186,7 @@ angular.module('lstn.controllers', [])
       }
   
       $scope.playing.voted = 1;
+      $scope.playing.downvoted = 1;
     };
 
     $scope.skipSong = function() {
@@ -191,6 +197,7 @@ angular.module('lstn.controllers', [])
       $scope.songFinished();
     };
 
+    // Watches
     $scope.$watch('rdioReady', function(newVal, oldVal) {
       console.log('rdioReady', newVal, oldVal);
       if (newVal === oldVal) {
@@ -241,10 +248,13 @@ angular.module('lstn.controllers', [])
           duration: newVal.duration,
           user: 0
         },
-        voted: 0
+        voted: 0,
+        upvoted: 0,
+        downvoted: 0
       };
     }, true);
-  
+
+    // Rdio Callback (TODO: Move to Rdio service?)
     var initPlayback = function() {
       window.playbackHandler = {
         ready: function(user) {
