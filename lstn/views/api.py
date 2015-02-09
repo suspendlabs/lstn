@@ -14,11 +14,7 @@ api = Blueprint('api', __name__, url_prefix='/api')
 @api.route('/rooms', methods=['GET'])
 @login_required
 def rooms():
-  current_app.logger.debug(current_user.memberships)
-
-  rooms = []
-  for membership in current_user.memberships:
-    rooms.append(membership.room)
+  rooms = [room for room in current_user.owned]
 
   response = {
     'success': 1,
