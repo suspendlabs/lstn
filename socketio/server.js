@@ -19,7 +19,7 @@ Lstn.prototype.isCurrentController = function(userId) {
 };
 
 Lstn.prototype.setCurrentController = function(controller) {
-  controller = controller || this.socket.userId;
+  controller = controller || this.userId;
   currentController[this.roomId] = controller;
 };
 
@@ -97,7 +97,7 @@ Lstn.prototype.addPlayingTimeout = function() {
 Lstn.prototype.isController = function() {
   return roster[this.roomId] &&
     roster[this.roomId].controllers &&
-    this.socket.userId in roster[this.roomId].controllers;
+    this.userId in roster[this.roomId].controllers;
 };
 
 Lstn.prototype.getControllerCount = function() {
