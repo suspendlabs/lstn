@@ -11,7 +11,8 @@
     "fontawesome": "~4.3.0",
     "angular-bootstrap": "~0.12.0",
     "swfobject": "*",
-    "holderjs": "~2.5.0"
+    "holderjs": "~2.5.0",
+    "angular-socket-io": "~0.7.0"
   },
   "version": "0.1.0",
   "homepage": "http://lstn.in",
