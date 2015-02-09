@@ -3,8 +3,11 @@
 @import "compass/css3/box-shadow";
 @import "compass/css3/opacity";
 
+$rdio-red: #E84961;
+$rdio-blue: #008fd5;
+
 body {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: Roboto, sans-serif;
 
   > .container {
     padding: 60px 15px 0;
@@ -13,6 +16,51 @@ body {
 
 .nav, .pagination, .carousel, .panel-title a {
   cursor: pointer;
+}
+
+.navbar-brand {
+  padding: 5px 0 0 0;
+
+  img {
+    margin-left: 15px;
+  }
+}
+
+.lstn {
+  color: $rdio-red;
+}
+
+.rdio {
+  color: $rdio-blue;
+}
+
+.hero {
+  color: white;
+  text-align: center;
+
+  background: url(/static/images/hero.jpg) no-repeat center center;
+  background-size: cover;
+
+  margin-bottom: 60px;
+
+  h1 {
+    font-size: 70px;
+  }
+  
+  p {
+    font-size: 30px;
+  }
+}
+
+.front__info__container {
+  margin-bottom: 30px;
+ }
+
+.front__info {
+  text-align: center;
+  .glyphicon {
+    font-size: 3em;
+  }
 }
 
 .room {
@@ -166,6 +214,11 @@ body {
   }
 }
 
+.categories {
+    overflow: auto;
+    height: 450px;
+}
+
 .category {
   margin-bottom: 5px;
 }
@@ -187,9 +240,6 @@ body {
 }
 
 .track__list {
-  height: 242px;
-  overflow-x: hidden;
-  overflow-y: auto;
   list-style: none;
   padding: 0;
   margin-bottom: 0;
@@ -284,6 +334,8 @@ body {
 
   &.queue {
     height: 194px;
+    overflow-x: hidden;
+    overflow-y: auto;
 
     .track {
       .track__image {
