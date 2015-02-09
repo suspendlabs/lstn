@@ -7,12 +7,25 @@
     <div class="room__left col-md-3">
       <div class="column__header">Room Users</div>
       <div class="roster__container room__container">
-        <ul class="roster list-group">
-          <li data-ng-repeat="user in roster" class="list-group-item">
-            <span class="badge">132</span>
-            <a data-ng-href="#/user/{{ user.id }}" data-ng-bind="user.name" data-ng-class="{current: current_user.id === user.id}"></a>
-          </li>
-        </ul>
+        <div class="panel panel-primary">
+          <div class="panel-heading">Broadcasters</div>
+          <ul class="roster roster--controllers list-group">
+            <li data-ng-repeat="user_id in roster.controllerOrder" class="list-group-item" data-ng-class="{'list-group-item-success': current_user.id === user_id}">
+              <span class="badge" data-ng-bind="roster.controllers[user_id].points"></span>
+              <a data-ng-href="http://www.rdio.com{{ roster.controllers[user_id].profile }}" data-ng-bind="roster.controllers[user_id].name" target="_blank"></a>
+              <span class="glyphicon glyphicon-music pull-right" aria-hidden="true" data-ng-show="user_id === currentController"></span>
+            </li>
+          </ul>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">Listeners</div>
+          <ul class="roster list-group">
+            <li data-ng-repeat="(user_id, user) in roster.users | orderBy:name" class="list-group-item" data-ng-class="{'list-group-item-success': current_user.id === user.id}">
+              <span class="badge" data-ng-bind="user.points"></span>
+              <a data-ng-href="http://www.rdio.com{{ user.profile }}" data-ng-bind="user.name" target="_blank"></a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="room__middle col-md-6">
@@ -48,28 +61,34 @@
         <div class="row">
           <div class="playing__actions col-md-12 text-center">
             <div class="playing__actions__container panel panel-default">
-              <button data-ng-show="!mute" data-ng-disabled="!playing.song.key" type="button" class="btn btn-default btn-lg" aria-label="Mute" data-ng-click="toggleMute()">
+              <button data-ng-show="!mute" data-ng-disabled="!playing.song.key" type="button" class="btn btn-default btn-lg" aria-label="Unmute" data-ng-click="toggleMute()" title="Unmute">
                 <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span> 
               </button>
-              <button data-ng-show="mute" data-ng-disabled="!playing.song.key" type="button" class="btn btn-default btn-lg" aria-label="Unmute" data-ng-click="toggleMute()">
+              <button data-ng-show="mute" data-ng-disabled="!playing.song.key" type="button" class="btn btn-default btn-lg" aria-label="Mute" data-ng-click="toggleMute()" title="Mute">
                 <span class="glyphicon glyphicon-volume-off" aria-hidden="true"></span> 
               </button>
-              <button type="button" data-ng-disabled="!playing.song.key || playing.song.user === current_user.id || playing.song.voted" class="btn btn-danger btn-lg" aria-label="Downvote" data-ng-click="downvote()">
+              <button data-ng-show="!isCurrentController" type="button" data-ng-disabled="!playing.song.key || playing.song.voted" class="btn btn-danger btn-lg" aria-label="Downvote" data-ng-click="downvote()" title="Downvote">
                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> 
               </button>
-              <a data-ng-href="{{ playing.song.link }}" data-ng-disabled="!playing.song.key" class="btn btn-primary btn-lg" aria-label="Info" target="_blank">
-                <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> 
-              </a>
-              <button type="button" data-ng-disabled="!playing.song.key || playing.song.user === current_user.id || playing.song.voted" class="btn btn-success btn-lg" aria-label="Upvote" data-ng-click="upvote()">
+              <button data-ng-show="isCurrentController" type="button" data-ng-disabled="!playing.song.key" class="btn btn-danger btn-lg" aria-label="Skip Song" data-ng-click="skipSong()" title="Skip Song">
+                <span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span> 
+              </button>
+              <button data-ng-show="isController" type="button" class="btn btn-primary btn-lg" aria-label="Stop Broadcasting" data-ng-click="toggleBroadcast()" title="Stop Broadcasting">
+                <span class="glyphicon glyphicon-headphones" aria-hidden="true"></span>
+              </button>
+             <button data-ng-show="!isController" data-ng-disabled="!queue || queue.length === 0" type="button" class="btn btn-primary btn-lg" aria-label="Start Broadcasting" data-ng-click="toggleBroadcast()" title="Start Broadcasting">
+                <span class="glyphicon glyphicon-cd" aria-hidden="true"></span>
+              </button>
+              <button type="button" data-ng-disabled="!playing.song.key || isCurrentController || playing.song.voted" class="btn btn-success btn-lg" aria-label="Upvote" data-ng-click="upvote()" title="Upvote">
                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> 
               </button>
-              <button data-ng-show="visualize" data-ng-disabled="!playing.song.key" type="button" class="btn btn-default btn-lg" aria-label="Visualize" data-ng-click="toggleVisualize()">
+              <button data-ng-show="visualize" data-ng-disabled="!playing.song.key" type="button" class="btn btn-default btn-lg" aria-label="Show Visualizer" data-ng-click="toggleVisualize()" title="Show Visualizer">
                 <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> 
               </button>
-              <button data-ng-show="!visualize" data-ng-disabled="!playing.song.key" type="button" class="btn btn-default btn-lg" aria-label="Track Status" data-ng-click="toggleVisualize()">
+              <button data-ng-show="!visualize" data-ng-disabled="!playing.song.key" type="button" class="btn btn-default btn-lg" aria-label="Hide Visualizer" data-ng-click="toggleVisualize()" title="Hide Visualizer">
                 <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span> 
               </button>
-            </div>
+             </div>
           </div>
         </div>
         <div class="row">
@@ -77,7 +96,7 @@
             <div class="playing__queue__container panel panel-success">
               <div class="panel-heading">Queue</div>
               <ul id="queue" class="queue track__list">
-                <lstn-track data-ng-class-even="'track--even'" data-ng-repeat="song in queue track by song.id" data-cutoff="50"></lstn-track>
+                <lstn-track data-ng-class-even="'track--even'" data-ng-repeat="song in queue" data-cutoff="50"></lstn-track>
               </ul>
             </div>
           </div>
@@ -93,7 +112,7 @@
             <button class="btn btn-default" type="button">Go</button>
           </span>
         </div>
-        <div id="categories">
+        <div id="categories" class="categories">
           <lstn-category data-ng-show="playlists.owned && playlists.owned.length > 0" name="'Your Playlists'" open="true">
             <lstn-playlist data-ng-repeat="playlist in playlists.owned"></lstn-playlist>
           </lstn-category>
