@@ -1,28 +1,32 @@
 <div>
-  <div class="jumbotron">
+  <div class="hero jumbotron">
     <div class="container">
-      <h1>Hello World</h1>
-      <p>Paragraph</p>
-      <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn More &raquo;</a></p>
+      <h1><span class="lstn">Lstn</span> to <span class="rdio">Rdio</span> with Friends</h1>
+      <p>Create a room and start listening to Rdio with your friends.</p>
+      <p>
+        <a data-ng-show="!current_user.id" class="btn btn-primary btn-lg" href="#/login" role="button">Get Started</a>
+        <a data-ng-show="current_user.id && current_user.roomCount === 0" class="btn btn-primary btn-lg" href="#/room/create" role="button">Get Started</a>
+        <a data-ng-show="current_user.id && current_user.roomCount > 0" class="btn btn-primary btn-lg" href="#/rooms" role="button">Get Started</a>
+      </p>
     </div>
   </div>
 
-  <div class="container">
+  <div class="front__info__container container">
     <div class="row">
-      <div class="col-md-4">
-        <h2>Heading 1</h2>
-        <p>Paragraph</p>
-        <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+      <div class="front__info col-xs-4">
+        <div><i class="glyphicon glyphicon-headphones"></i></div>
+        <h4>Simple to get started</h4>
+        <p>Login with your Rdio account and create a room to start listening</p>
       </div>
-      <div class="col-md-4">
-        <h2>Heading 2</h2>
-        <p>Paragraph</p>
-        <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+      <div class="front__info col-xs-4">
+        <div><i class="glyphicon glyphicon-list"></i></div>
+        <h4>Sharing is caring</h4>
+        <p>Share your favorite music by using your playlists, collections, and stations from Rdio</p>
       </div>
-      <div class="col-md-4">
-        <h2>Heading 3</h2>
-        <p>Paragraph</p>
-        <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+      <div class="front__info col-xs-4">
+        <div><i class="glyphicon glyphicon-transfer"></i></div>
+        <h4>Stay in sync</h4>
+        <p>Music playback is synced between room members so you can listen and discover music together</p>
       </div>
     </div>
   </div>
