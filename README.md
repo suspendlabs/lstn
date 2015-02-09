@@ -1,4 +1,4 @@
-lstn
+Lstn
 --------------
 
-Listen to music with your friends
+Lstn to Rdio with Friends
