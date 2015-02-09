@@ -11,7 +11,9 @@ RUN apt-get -y install \
     python-pip \
     nginx \
     supervisor \
-    libmysqlclient-dev
+    libmysqlclient-dev \
+    nodejs \
+    npm
 
 RUN pip install uwsgi
 
@@ -22,6 +24,7 @@ RUN pip install Jinja2==2.7.3
 RUN pip install MarkupSafe==0.23
 RUN pip install MySQL-python==1.2.5
 RUN pip install SQLAlchemy==0.9.7
+RUN pip install Unidecode==0.04.17
 RUN pip install Werkzeug==0.9.6
 RUN pip install argparse==1.2.1
 RUN pip install boto==2.33.0
@@ -34,11 +37,15 @@ RUN pip install pyasn1==0.1.7
 RUN pip install pyasn1-modules==0.0.5
 RUN pip install --allow-external python-dateutil --allow-unverified python-dateutil python-dateutil==2.0
 RUN pip install python-rdio==0.6
+RUN pip install python-slugify==0.1.0
 RUN pip install rsa==3.1.4
 RUN pip install simplejson==3.6.5
 RUN pip install six==1.9.0
 RUN pip install uritemplate==0.6
 RUN pip install wsgiref==0.1.2
+
+RUN npm install socket.io
+RUN npm install express
 
 
 ADD . /opt/lstn
@@ -48,7 +55,7 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 ADD config/nginx.conf /etc/nginx/sites-available/default
 
 ADD config/uwsgi.ini /etc/uwsgi.ini
-ADD config/supervisord.conf /etc/supervisord.conf
+ADD config/supervisord.conf /etc/supervisor/supervisord.conf
 
-EXPOSE 80 443 9000
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+EXPOSE 80 443 7000 3000
+CMD ["/usr/bin/supervisord"]
