@@ -77,7 +77,7 @@ angular.module('lstn.services', ['ngResource'])
 }])
 
 .factory('Room', ['$resource', function($resource) {
-  return $resource('/api/room/:id/:action/:target', {
+  var Room = $resource('/api/room/:id/:action/:target', {
     id: '@id',
     target: '@target'
   },{
@@ -91,6 +91,8 @@ angular.module('lstn.services', ['ngResource'])
       }
     },
   });
+
+  return Room;
 }])
 
 .factory('User', ['$resource', function($resource) {
