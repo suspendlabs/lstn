@@ -1,0 +1,11 @@
+<div class="playing__queue col-md-12">
+  <div class="playing__queue__container panel panel-success">
+    <div class="panel-heading">Queue</div>
+    <ul id="queue" class="queue queue--full track__list" data-ng-show="queue && queue.length > 0">
+      <lstn-track data-ng-class-even="'track--even'" data-ng-repeat="song in queue" data-cutoff="50"></lstn-track>
+    </ul>
+    <div class="queue--empty alert alert-info text-center" data-ng-show="!queue || queue.length === 0">
+      <h3>Select songs from your playlists to the left to add songs to your queue</h3>
+    </div>
+  </div>
+</div>

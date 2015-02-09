@@ -1,0 +1,21 @@
+<div id="categories" class="categories">
+  <lstn-category data-ng-show="playlists.owned && playlists.owned.length > 0" name="'Your Playlists'" open="true">
+    <lstn-playlist data-ng-repeat="playlist in playlists.owned"></lstn-playlist>
+  </lstn-category>
+  <lstn-category data-ng-show="playlists.collab && playlists.collab.length > 0" name="'Collaborative Playlists'">
+    <lstn-playlist data-ng-repeat="playlist in playlists.collab"></lstn-playlist>
+  </lstn-category>
+  <lstn-category data-ng-show="playlists.subscribed && playlists.subscribed.length > 0" name="'Subscribed Playlists'">
+    <lstn-playlist data-ng-repeat="playlist in playlists.subscribed"></lstn-playlist>
+  </lstn-category>
+  <lstn-category data-ng-show="playlists.favorites && playlists.favorites.length > 0" name="'Favorited Playlists'">
+    <lstn-playlist data-ng-repeat="playlist in playlists.favorites"></lstn-playlist>
+  </lstn-category>
+  <lstn-category name="'Collections'">
+    Albums / Tracks
+    Artists / Tracks
+  </lstn-category>
+  <lstn-category name="'Stations'">
+    Stations
+  </lstn-category>
+</div>
