@@ -77,6 +77,32 @@ def get_playlists():
 
   return jsonify(response)
 
+@user.route('/playlists/<list_type>', methods=['GET'])
+@login_required
+def get_playlist_type(list_type):
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  if list_type not in ['owned', 'collab', 'subscribed', 'favorites']:
+    raise APIException('Invalid list type')
+
+  data = {
+    'method': 'getUserPlaylists',
+    'user': current_user.external_id,
+    'kind': list_type,
+  };
+
+  response = {
+    'success': True,
+    'playlists': {},
+  }
+
+  response['playlists'][list_type] = rdio_manager.call_api_authenticated(data);
+
+  return jsonify(response)
+
 @user.route('/queue', methods=['GET'])
 @login_required
 def user_queue():
