@@ -32,8 +32,8 @@
       </div>
 
       <div class="collapse navbar-collapse" id="navbar-collapse-1">
+        <% if current_user.is_authenticated() %>
         <ul class="nav navbar-nav navbar-right">
-          <% if current_user.is_authenticated() %>
           <li><a href="#/rooms">Rooms</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">%% current_user.name %% <span class="caret"></span></a>
@@ -43,10 +43,12 @@
               <li><a href="/logout">Logout</a></li>
             </ul>
           </li>
-          <% else %>
-          <li><div><a class="btn btn-success navbar-btn" href="/login">Login</a></div></li>
-          <% endif %>
         </ul>
+        <% else %>
+        <ul class="nav navbar-nav navbar-right navbar--login">
+          <li><div><a class="btn btn-success navbar-btn" href="/login">Login</a></div></li>
+        </ul>
+        <% endif %>
 
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
