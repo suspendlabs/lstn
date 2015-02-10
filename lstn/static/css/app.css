@@ -37,6 +37,10 @@ body > .container {
   margin-left: 15px;
 }
 
+.page-header .alert {
+  font-size: 14px;
+}
+
 .lstn {
   color: #E84961;
 }
