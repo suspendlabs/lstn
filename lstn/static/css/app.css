@@ -41,6 +41,10 @@ body > .container {
   margin-left: 15px;
 }
 
+.navbar-right.navbar--login {
+  margin-right: 5px;
+}
+
 .page-header .alert {
   font-size: 14px;
 }
