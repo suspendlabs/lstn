@@ -35,11 +35,7 @@ def vote(user_id, room_id, direction):
   db.session.add(user)
   db.session.flush()
 
-  response = {
-    success: 1,
-  }
-
-  return jsonify(response)
+  return jsonify(success=True)
 
 @user.route('/playlists', methods=['GET'])
 @login_required
@@ -70,12 +66,7 @@ def get_playlists():
   if hasattr(playlist_set, 'favorites_playlists'):
     playlists['favorites'] = [playlist._data for playlist in playlist_set.favorites_playlists if hasattr(playlist, '_data')]
 
-  response = {
-    'success': 1,
-    'playlists': playlists
-  }
-
-  return jsonify(response)
+  return jsonify(success=True, playlists=playlists)
 
 @user.route('/playlists/<list_type>', methods=['GET'])
 @login_required
@@ -92,16 +83,12 @@ def get_playlist_type(list_type):
     'method': 'getUserPlaylists',
     'user': current_user.external_id,
     'kind': list_type,
-  };
-
-  response = {
-    'success': True,
-    'playlists': {},
   }
 
-  response['playlists'][list_type] = rdio_manager.call_api_authenticated(data);
+  playlists = {}
+  playlists[list_type] = rdio_manager.call_api_authenticated(data)
 
-  return jsonify(response)
+  return jsonify(success=True, playlists=playlists)
 
 @user.route('/queue', methods=['GET', 'PUT'])
 @login_required
@@ -110,20 +97,14 @@ def user_queue():
     return update_queue()
 
   queue = current_user.get_queue()
-
-  response = {
-    'success': 1,
-    'queue': queue,
-  }
-
-  return jsonify(response)
+  return jsonify(success=True, queue=queue)
 
 def update_queue():
   if 'queue' not in request.json:
     raise APIException('You must specify queue data')
 
   if not current_user.queue:
-    raise APIException('Unable to set user queue', 500);
+    raise APIException('Unable to set user queue', 500)
 
   rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
     current_app.config['RDIO_CONSUMER_SECRET'],
@@ -135,11 +116,7 @@ def update_queue():
   if tracks:
     rdio_manager.set_playlist_order(current_user.queue, tracks)
 
-  response = {
-    'success': True,
-  }
-
-  return jsonify(response)
+  return jsonify(success=True)
 
 @user.route('/queue/<track_id>', methods=['POST', 'DELETE'])
 @login_required
@@ -175,13 +152,7 @@ def add_queue(track_id):
 
   # Get the user's queue
   queue = current_user.get_queue()
-
-  response = {
-    'success': 1,
-    'queue': queue
-  }
-
-  return jsonify(response)
+  return jsonify(success=True, queue=queue)
 
 def delete_queue(track_id):
   if not current_user.queue:
@@ -196,10 +167,27 @@ def delete_queue(track_id):
   rdio_manager.remove_from_playlist(current_user.queue, [track_id], index)
 
   queue = current_user.get_queue()
+  return jsonify(success=True, queue=queue)
 
-  response = {
-    'success': 1,
-    'queue': queue
+@user.route('/search', methods=['GET'])
+def search():
+  query = request.args.get('query', None)
+  if not query:
+    raise APIException('You must specify a search query')
+
+  if len(query) < 3:
+    return jsonify(success=True, results=[])
+
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  data = {
+    'method': 'search',
+    'query': query,
+    'types': 'track',
   }
 
-  return jsonify(response)
+  results = rdio_manager.call_api(data)
+  return jsonify(success=True, results=results['results'])
