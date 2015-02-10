@@ -10,83 +10,91 @@ angular.module('lstn.controllers', [])
 }])
 
 .controller('RoomsController', ['$scope', '$location', 'Room', function($scope, $location, Room) {
+  $scope.loading = true;
+  $scope.showCreateRoom = false;
+
   Room.list({}, function(response) {
+    $scope.loading = false;
     if (!response || !response.success || !response.rooms) {
       // TODO: Error
       return;
     }
 
     $scope.rooms = response.rooms;
-    $scope.showCreateRoom = false;
+  }, function(response) {
+    // TODO: Error
+    $scope.loading = false;
+  });
 
-    $scope.newRoom = {
-      name: null
-    };
+  $scope.newRoom = {
+    name: null
+  };
 
-    $scope.createRoom = function() {
-      $scope.showCreateRoom = true;
-    };
+  $scope.createRoom = function() {
+    $scope.showCreateRoom = true;
+  };
 
-    $scope.saveCreateRoom = function() {
-      Room.save({}, $scope.newRoom, function(response) {
-        if (!response || !response.success || !response.slug) {
-          // TODO: Error
-          return false;
-        }
-
-        $location.path('/room/' + response.slug);
-      }, function(response) {
+  $scope.saveCreateRoom = function() {
+    Room.save({}, $scope.newRoom, function(response) {
+      if (!response || !response.success || !response.slug) {
         // TODO: Error
-      });
-    };
+        return false;
+      }
 
-    $scope.cancelCreateRoom = function() {
-      $scope.showCreateRoom = false;
-      $scope.newRoom.name = null;
-    };
+      $location.path('/room/' + response.slug);
+    }, function(response) {
+      // TODO: Error
+    });
+  };
 
-    $scope.editRoom = function(index) {
-      $scope.rooms[index].editing = true;
-    };
+  $scope.cancelCreateRoom = function() {
+    $scope.showCreateRoom = false;
+    $scope.newRoom.name = null;
+  };
 
-    $scope.saveEditRoom = function(index) {
-      console.log(index, $scope.rooms[index]);
+  $scope.editRoom = function(index) {
+    $scope.rooms[index].editing = true;
+  };
 
-      Room.update({
-        id: $scope.rooms[index].id
-      }, $scope.rooms[index], function(response) {
-        if (!response || !response.success || !response.room) {
-          // TODO: Error
-          return false;
-        }
+  $scope.saveEditRoom = function(index) {
+    console.log(index, $scope.rooms[index]);
 
-        $scope.rooms[index] = response.room;
-      });
-    };
+    Room.update({
+      id: $scope.rooms[index].id
+    }, $scope.rooms[index], function(response) {
+      if (!response || !response.success || !response.room) {
+        // TODO: Error
+        return false;
+      }
 
-    $scope.cancelEditRoom = function(index) {
-      $scope.rooms[index].editing = false;
-    };
+      $scope.rooms[index] = response.room;
+    }, function(response) {
+      // TODO: Error
+    });
+  };
 
-    $scope.deleteRoom = function(index) {
-      if (!confirm('Are you sure you want to delete this room?')) {
+  $scope.cancelEditRoom = function(index) {
+    $scope.rooms[index].editing = false;
+  };
+
+  $scope.deleteRoom = function(index) {
+    if (!confirm('Are you sure you want to delete this room?')) {
+      return;
+    }
+
+    Room.delete({
+      id: $scope.rooms[index].id
+    }, function(response) {
+      if (!response || !response.success) {
+        // TODO: Error
         return;
       }
 
-      Room.delete({
-        id: $scope.rooms[index].id
-      }, function(response) {
-        if (!response || !response.success) {
-          // TODO: Error
-          return;
-        }
-
-        $scope.rooms.splice(index, 1);
-      }, function(response) {
-        // TODO: Error
-      });
-    };
-  });
+      $scope.rooms.splice(index, 1);
+    }, function(response) {
+      // TODO: Error
+    });
+  };
 }])
 
 .controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'Room', 'User', 'Playlist',
