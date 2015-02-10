@@ -1,21 +1,21 @@
 <div id="categories" class="categories">
-  <lstn-category data-ng-show="playlists.owned && playlists.owned.length > 0" name="'Your Playlists'" open="true">
+  <lstn-category data-ng-show="playlists.owned && playlists.owned.length > 0" data-name="'Your Playlists'" data-type="'owned'" data-open="true">
     <lstn-playlist data-ng-repeat="playlist in playlists.owned"></lstn-playlist>
   </lstn-category>
-  <lstn-category data-ng-show="playlists.collab && playlists.collab.length > 0" name="'Collaborative Playlists'">
+  <lstn-category data-ng-show="playlists.collab && playlists.collab.length > 0" data-name="'Collaborative Playlists'" data-type="'collab'">
     <lstn-playlist data-ng-repeat="playlist in playlists.collab"></lstn-playlist>
   </lstn-category>
-  <lstn-category data-ng-show="playlists.subscribed && playlists.subscribed.length > 0" name="'Subscribed Playlists'">
+  <lstn-category data-ng-show="playlists.subscribed && playlists.subscribed.length > 0" data-name="'Subscribed Playlists'" data-type="'subscribed'">
     <lstn-playlist data-ng-repeat="playlist in playlists.subscribed"></lstn-playlist>
   </lstn-category>
-  <lstn-category data-ng-show="playlists.favorites && playlists.favorites.length > 0" name="'Favorited Playlists'">
+  <lstn-category data-ng-show="playlists.favorites && playlists.favorites.length > 0" data-name="'Favorited Playlists'" data-type="'favorites'">
     <lstn-playlist data-ng-repeat="playlist in playlists.favorites"></lstn-playlist>
   </lstn-category>
-  <lstn-category name="'Collections'">
+  <lstn-category data-name="'Collections'" data-type="'collections'">
     Albums / Tracks
     Artists / Tracks
   </lstn-category>
-  <lstn-category name="'Stations'">
+  <lstn-category data-name="'Stations'" data-type="'stations'">
     Stations
   </lstn-category>
 </div>
