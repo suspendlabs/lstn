@@ -21,7 +21,6 @@ app = CustomFlask(__name__)
 app.config.from_object(LSTN_CONFIG)
 
 login_manager = LoginManager()
-login_manager.login_view = 'site.login'
 login_manager.init_app(app)
 
 db = SQLAlchemy(app)
@@ -33,6 +32,13 @@ app.json_encoder = ModelEncoder
 def load_user(id):
   from lstn.models import User
   return User.query.get(int(id))
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+  if '/api' not in request.path:
+    session['next_url'] = request.url
+
+  return redirect('site.login')
 
 @app.after_request
 def after_request(response):
