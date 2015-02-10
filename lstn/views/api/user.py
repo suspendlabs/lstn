@@ -103,14 +103,40 @@ def get_playlist_type(list_type):
 
   return jsonify(response)
 
-@user.route('/queue', methods=['GET'])
+@user.route('/queue', methods=['GET', 'PUT'])
 @login_required
 def user_queue():
+  if request.method == 'PUT':
+    return update_queue()
+
   queue = current_user.get_queue()
 
   response = {
     'success': 1,
     'queue': queue,
+  }
+
+  return jsonify(response)
+
+def update_queue():
+  if 'queue' not in request.json:
+    raise APIException('You must specify queue data')
+
+  if not current_user.queue:
+    raise APIException('Unable to set user queue', 500);
+
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  tracks = [track['key'] for track in request.json['queue']]
+
+  if tracks:
+    rdio_manager.set_playlist_order(current_user.queue, tracks)
+
+  response = {
+    'success': True,
   }
 
   return jsonify(response)
