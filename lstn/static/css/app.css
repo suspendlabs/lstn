@@ -194,6 +194,10 @@ body > .container {
   height: 235px;
 }
 
+.search__contents {
+  padding: 0;
+}
+
 .music__container {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
