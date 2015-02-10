@@ -216,6 +216,9 @@ angular.module('lstn.controllers', [])
 
       // Play the song
       $scope.playSong($scope.rdioPlay);
+
+      // Clear the rdioPlay variable
+      $scope.rdioPlay = null;
     });
   
     $scope.$watch('playingTrack', function(newVal, oldVal) {
@@ -224,6 +227,7 @@ angular.module('lstn.controllers', [])
         return;
       }
 
+      // Signal that the song is finished
       if (!newVal) {
         $scope.playing = null;
 
@@ -232,6 +236,12 @@ angular.module('lstn.controllers', [])
           $scope.songFinished(oldVal.key);
         }
 
+        return;
+      }
+
+      // Skip auto play songs from Rdio
+      if (newVal.type === 'ap') {
+        $scope.playing = null;
         return;
       }
   
