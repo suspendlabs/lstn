@@ -100,7 +100,6 @@ def index(path):
       'name': 'Anonymous'
     })
   else:
-    current_user.roomCount = 0;
     user_json = current_user.to_json(for_public=True)
 
   return render_template('index.html', user_json=user_json)
