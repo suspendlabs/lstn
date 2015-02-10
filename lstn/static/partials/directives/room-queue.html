@@ -1,6 +1,6 @@
 <div class="playing__queue col-md-12">
   <div class="playing__queue__container panel panel-success">
-    <div class="panel-heading">Queue</div>
+    <div class="panel-heading">Your Queue</div>
     <ul id="queue" class="queue queue--full track__list" data-ng-show="queue && queue.length > 0" data-ui-sortable="sortableOptions" ng-model="queue">
       <lstn-track data-ng-class-even="'track--even'" data-ng-class-odd="'track--odd'" data-ng-repeat="song in queue" data-cutoff="50"></lstn-track>
     </ul>
