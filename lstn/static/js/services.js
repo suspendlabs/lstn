@@ -125,6 +125,12 @@ angular.module('lstn.services', ['ngResource'])
       params: {
         action: 'queue'
       }
+    },
+    search: {
+      method: 'GET',
+      params: {
+        action: 'search'
+      }
     }
   });
 }])
