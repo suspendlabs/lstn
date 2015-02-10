@@ -97,8 +97,8 @@ angular.module('lstn.controllers', [])
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'Room', 'User', 'Playlist',
-  function($scope, $routeParams, $timeout, socket, Rdio, Room, User, Playlist) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'Room', 'CurrentUser', 'User', 'Playlist',
+  function($scope, $routeParams, $timeout, socket, Rdio, Room, CurrentUser, User, Playlist) {
     $scope.playingTrack = null;
     $scope.isController = false;
     $scope.isCurrentController = false;
@@ -109,6 +109,7 @@ angular.module('lstn.controllers', [])
 
     $scope.mute = false;
     $scope.visualize = false;
+    $scope.voting = false;
 
     $scope.playingSomewhereElse = false;
     $scope.hasRemaining = false;
@@ -251,31 +252,87 @@ angular.module('lstn.controllers', [])
     };
   
     $scope.upvote = function() {
-      if ($scope.playing &&
-        $scope.playing.song &&
-        typeof $scope.playing.voted !== 'undefined' &&
-        $scope.playing.voted) {
-        
+      if (!$scope.playing ||
+        $scope.playing.voted ||
+        $scope.voting ||
+        !$scope.currentController ||
+        $scope.isCurrentController) {
+
         return;
       }
-        
-      $scope.playing.voted = 1;
-      $scope.playing.upvoted = 1;
-    };
-  
-    $scope.downvote = function() {
-      if ($scope.playing &&
-        $scope.playing.song &&
-        typeof $scope.playing.voted !== 'undefined' &&
-        $scope.playing.voted) {
-        
+
+      var remaining = Math.floor($scope.playing.song.duration - window.playingPosition);
+      if (remaining <= 0) {
         return;
       }
-  
-      $scope.playing.voted = 1;
-      $scope.playing.downvoted = 1;
+
+      $scope.voting = true;
+
+      User.upvote({
+        id: $scope.currentController,
+        room: $scope.room.id,
+        song: $scope.playing.song.key,
+        remaining: remaining
+      }, function(response) {
+        $scope.voting = false;
+        if (!response || !response.success) {
+          // TODO: Error
+          return false;
+        }
+
+        if (!$scope.playing) {
+          return;
+        }
+
+        $scope.playing.voted = true;
+        $scope.playing.upvoted = true;
+      }, function(response) {
+        // TODO: Error
+        $scope.voting = false;
+      });
     };
 
+    $scope.downvote = function() {
+      if (!$scope.playing ||
+        $scope.playing.voted ||
+        $scope.voting ||
+        !$scope.currentController ||
+        $scope.isCurentController) {
+
+        return;
+      }
+
+      var remaining = Math.floor($scope.playing.song.duration - window.playingPosition);
+      if (remaining <= 0) {
+        return;
+      }
+
+      $scope.voting = true;
+
+      User.downvote({
+        id: $scope.currentController,
+        room: $scope.room.id,
+        song: $scope.playing.song.key,
+        remaining: remaining
+      }, function(response) {
+        $scope.voting = false;
+        if (!response || !response.success) {
+          // TODO: Error
+          return false;
+        }
+
+        if (!$scope.playing) {
+          return;
+        }
+
+        $scope.playing.voted = true;
+        $scope.playing.downvoted = true;
+      }, function(response) {
+        // TODO: Error
+        $scope.voting = false;
+      });
+    };
+  
     $scope.skipSong = function() {
       if (!$scope.isCurrentController) {
         return;
@@ -469,7 +526,7 @@ angular.module('lstn.controllers', [])
     };
   
     $scope.addSongToQueue = function(song_id) {
-      User.addToQueue({
+      CurrentUser.addToQueue({
         id: song_id
       }, function(response) {
         if (!response || !response.success || !response.queue) {
@@ -489,7 +546,7 @@ angular.module('lstn.controllers', [])
     $scope.removeSongFromQueue = function(song_id, index, callback) {
       console.log('removing song from queue', song_id, index);
 
-      User.removeFromQueue({
+      CurrentUser.removeFromQueue({
         id: song_id,
         index: index
       }, function(response) {
@@ -527,7 +584,7 @@ angular.module('lstn.controllers', [])
       initPlayback();
     });
   
-    User.playlists({}, function(response) {
+    CurrentUser.playlists({}, function(response) {
       if (!response || !response.success || !response.playlists) {
         // TODO: Error
         return;
