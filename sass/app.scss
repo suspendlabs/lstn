@@ -296,7 +296,11 @@ body {
     }
 
     &.track--even {
-      background-color: #f5f5f5;
+      background-color: #F5F5F5;
+    }
+
+    &.track--odd {
+      background-color: #FFFFFF;
     }
   
     .track__image {
@@ -373,6 +377,8 @@ body {
     overflow-y: auto;
 
     .track {
+      cursor: move;
+
       .track__image {
         width: 50px;
         height: 50px;
