@@ -152,7 +152,7 @@ angular.module('lstn.directives', [])
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/static/partials/room-list.html'
+      templateUrl: '/static/partials/directives/room-list.html'
     };
   }
 ])
