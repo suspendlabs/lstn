@@ -110,12 +110,40 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnRoomQueue', [
-  function() {
+.directive('lstnRoomQueue', ['User', 
+  function(User) {
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/static/partials/directives/room-queue.html'
+      templateUrl: '/static/partials/directives/room-queue.html',
+      link: function($scope, $element, $attrs) {
+        $scope.oldQueue = null;
+
+        $scope.sortableOptions = {
+          'ui-floating': false,
+          axis: 'y',
+          start: function(e, ui) {
+            $scope.oldQueue = angular.copy($scope.queue);
+          },
+          stop: function(e, ui) {
+            if (angular.equals($scope.oldQueue, $scope.queue)) {
+              $scope.oldQueue = null;
+              return;
+            }
+
+            User.updateQueue({
+              queue: $scope.queue
+            }, function(response) {
+              if (!response || !response.success) {
+                // TODO: Error
+                return;
+              }
+            }, function(response) {
+              // TODO: Error
+            });
+          }
+        };
+      }
     };
   }
 ])
@@ -212,8 +240,8 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnPlaylist', ['Playlist', 
-  function(Playlist) {
+.directive('lstnPlaylist', ['$timeout', 'Playlist', 
+  function($timeout, Playlist) {
     return {
       restrict: 'E',
       replace: true,
@@ -246,7 +274,9 @@ angular.module('lstn.directives', [])
 
               $scope.tracks = response.tracks;
 
-              $scope.status.open = !$scope.status.open;
+              $timeout(function() {
+                $scope.status.open = !$scope.status.open;
+              }, 100);
             }, function(response) {
               $scope.showLoading = false;
               // TODO: Error
