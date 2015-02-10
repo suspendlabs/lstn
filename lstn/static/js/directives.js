@@ -197,18 +197,28 @@ angular.module('lstn.directives', [])
         };
 
         $scope.toggleOpen = function() {
-          $scope.status.open = !$scope.status.open;
-
           if (typeof $scope.tracks === 'undefined') {
+            $scope.showLoading = true;
+
             Playlist.tracks({
               id: $scope.playlist.key
             }, function(response) {
+              $scope.showLoading = false;
+
               if (!response || !response.success || !response.tracks) {
+                // TODO: Error
                 return;
               }
 
               $scope.tracks = response.tracks;
+
+              $scope.status.open = !$scope.status.open;
+            }, function(response) {
+              $scope.showLoading = false;
+              // TODO: Error
             });
+          } else {
+            $scope.status.open = !$scope.status.open;
           }
         }
       }
