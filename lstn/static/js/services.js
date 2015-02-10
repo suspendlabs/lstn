@@ -119,6 +119,12 @@ angular.module('lstn.services', ['ngResource'])
       params: {
         action: 'queue'
       }
+    },
+    updateQueue: {
+      method: 'PUT',
+      params: {
+        action: 'queue'
+      }
     }
   });
 }])
