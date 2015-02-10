@@ -15,6 +15,8 @@ site = Blueprint('site', __name__)
 
 @site.route('/login')
 def login():
+  session['next_url'] = request.args.get('next', None)
+
   # TODO: Use CSRF here
   state = {}
   rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'], current_app.config['RDIO_CONSUMER_SECRET'])
@@ -81,7 +83,9 @@ def auth():
 
   login_user(user)
 
-  return redirect("%s/#rooms/" % url_for('site.index'))
+  next_url = session.get('next_url', "%s/#rooms" % url_for('site.index'))
+  session.clear()
+  return redirect(next_url)
 
 @site.route('/logout')
 @login_required
