@@ -7,7 +7,7 @@ CREATE TABLE `user` (
 `oauth_token_secret` VARCHAR(255) NOT NULL,
 `picture` VARCHAR(255) NULL,
 `queue` VARCHAR(255) NULL,
-`points` INT(10) NULL,
+`points` INT(10) NULL DEFAULT '0',
 `settings` TEXT NULL,
 `created_at` DATETIME NOT NULL,
 PRIMARY KEY (`id`),
