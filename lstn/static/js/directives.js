@@ -120,28 +120,57 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnCategory', [
-  function() {
+.directive('lstnCategory', ['$parse', 'User',
+  function($parse, User) {
     return {
       restrict: 'E',
       transclude: true,
       replace: true,
-      scope: {
-        name: '=',
-        open: '='
-      },
+      scope: true,
       templateUrl: '/static/partials/directives/category.html',
       link: function($scope, $element, $attrs) {
+        $scope.name = $parse($attrs.name)($scope);
+        $scope.type = $parse($attrs.type)($scope);
+        $scope.open = $parse($attrs.open)($scope);
+
+        // TODO: We should consider passing this in
         $scope.group = $element.parent().attr('id');
 
         $scope.categoryId = Date.now();
+        $scope.refreshingList = false;
+
         $scope.categoryStatus = {
           open: $scope.open || false
         };
 
         $scope.toggleCategoryOpen = function() {
           $scope.categoryStatus.open = !$scope.categoryStatus.open;
-        }
+        };
+
+        $scope.refreshList = function() {
+          console.log('refreshList', $scope.type);
+
+          $scope.refreshingList = true;
+          $scope.categoryStatus.open = false;
+
+          User.playlists({
+            id: $scope.type
+          }, function(response) {
+            $scope.refreshingList = false;
+
+            if (!response || !response.success || !response.playlists) {
+              // TODO: Error
+              return;
+            }
+
+            $scope.playlists[type] = response.playlists[type];
+
+            $scope.categoryStatus.open = true;
+          }, function(response) {
+            $scope.refreshingList = false;
+            // TODO: Error
+          });
+        };
       }
     };
   }
