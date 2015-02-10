@@ -8,6 +8,11 @@ class DefaultConfig(object):
     SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://root:root@db/lstn'
     SQLALCHEMY_ECHO = False
 
+    # Redis
+    REDIS_HOST = 'localhost'
+    REDIS_PORT = 6379
+    REDIS_DB = 0
+
     # Application Specific
     APP_NAME = 'lstn'
     BASE_URL = 'http://lstn.suspend.io'
