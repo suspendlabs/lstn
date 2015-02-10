@@ -276,6 +276,23 @@ angular.module('lstn.controllers', [])
       $scope.songFinished();
     };
 
+    $scope.rdioToLstn = function(rdioSong) {
+      var lstnSong = {
+        key: rdioSong.key,
+        link: rdioSong.shortUrl,
+        image: rdioSong.icon,
+        title: rdioSong.name,
+        artist: rdioSong.artist,
+        album: rdioSong.album,
+        position: 0,
+        duration: rdioSong.duration,
+        user: 0
+      };
+
+      return lstnSong;
+    };
+
+
     // Watches
     $scope.$watch('rdioReady', function(newVal, oldVal) {
       console.log('rdioReady', newVal, oldVal);
@@ -326,17 +343,7 @@ angular.module('lstn.controllers', [])
   
       $scope.playing = {
         status: 'playing',
-        song: {
-          key: newVal.key,
-          link: newVal.shortUrl,
-          image: newVal.icon,
-          title: newVal.name,
-          artist: newVal.artist,
-          album: newVal.album,
-          position: 0,
-          duration: newVal.duration,
-          user: 0
-        },
+        song: $scope.rdioToLstn(newVal),
         voted: 0,
         upvoted: 0,
         downvoted: 0
