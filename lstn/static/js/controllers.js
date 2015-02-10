@@ -102,6 +102,11 @@ angular.module('lstn.controllers', [])
     $scope.mute = false;
     $scope.visualize = false;
 
+    $scope.playingSomewhereElse = false;
+    $scope.hasRemaining = false;
+    $scope.remaining = 0;
+    $scope.hideRemaining = false;
+
     // Setup sockets
     socket.on('connect', function() {
       console.log('connect');
@@ -353,6 +358,7 @@ angular.module('lstn.controllers', [])
         freeRemainingChanged: function(remaining) {
           var scope = angular.element(document.body).scope();
           scope.$evalAsync(function() {
+            $scope.hasRemaining = true;
             $scope.remaining = remaining;
           });
         },
@@ -414,7 +420,10 @@ angular.module('lstn.controllers', [])
         shuffleChanged: function(shuffle) {},
         repeatChanged: function(repeatMode) {},
         playingSomewhereElse: function() {
-          console.log('playing somewhere else');
+          var scope = angular.element(document.body).scope();
+          scope.$evalAsync(function() {
+            $scope.playingSomewhereElse = true;
+          });
         },
         updateFrequencyData: function(data) {
           var frequencies = data.split(',');
