@@ -3,7 +3,7 @@
     <h4 class="panel-title">
       <a data-ng-click="toggleCategoryOpen()" aria-expanded="{{ categoryStatus.open }}" aria-controls="content{{ $id }}" data-parent="#{{ group }}">
         <span data-ng-bind="name | truncate:28" title="{{ name }}"></span>
-        <i class="pull-right glyphicon ng-scope glyphicon-chevron-right" data-ng-class="{'glyphicon-chevron-down': categoryStatus.open, 'glyphicon-chevron-right': !categoryStatus.open}"></i>
+        <span class="pull-right glyphicon glyphicon-chevron-right" data-ng-class="{'glyphicon-chevron-down': categoryStatus.open, 'glyphicon-chevron-right': !categoryStatus.open}"></span>
       </a>
     </h4>
   </div>
