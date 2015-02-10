@@ -99,9 +99,30 @@ angular.module('lstn.services', ['ngResource'])
 }])
 
 .factory('User', ['$resource', function($resource) {
+  return $resource('/api/user/:id/:action/:argument', {
+    id: '@id'
+  },{
+    upvote: {
+      method: 'POST',
+      params: {
+        action: 'vote',
+        argument: 'upvote'
+      }
+    },
+    downvote: {
+      method: 'POST',
+      params: {
+        action: 'vote',
+        argument: 'downvote'
+      }
+    }
+  });
+}])
+
+.factory('CurrentUser', ['$resource', function($resource) {
   return $resource('/api/user/:action/:id', {
     id: '@id'
-  }, {
+  },{
     playlists: {
       method: 'GET',
       params: {
