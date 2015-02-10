@@ -19,6 +19,7 @@ pyasn1-modules==0.0.5
 python-dateutil==2.0
 python-rdio==0.6
 python-slugify==0.1.0
+redis==2.10.3
 rsa==3.1.4
 simplejson==3.6.5
 six==1.9.0
