@@ -8,14 +8,14 @@
       </tr>
     </thead>
     <tbody>
-      <tr data-ng-if="(!rooms || rooms.length === 0) && !showCreateRoom" class="rooms__empty">
+      <tr data-ng-show="(!rooms || rooms.length === 0) && !showCreateRoom && !loading" class="rooms__empty">
         <td colspan="3" class="text-center">
           <h3>
             You don't have any rooms yet. <a data-ng-click="createRoom()">Create one</a> now.
           </h3>
         </td>
       </tr>
-      <tr data-ng-repeat="room in rooms">
+      <tr data-ng-repeat="room in rooms" data-ng-show="rooms && rooms.length > 0 && !loading">
         <td data-ng-show="!room.editing"><a data-ng-href="#/room/{{ room.slug }}" data-ng-bind="room.name"></a></td>
         <td data-ng-show="room.editing" class="form-inline">
           <label for="room-name" class="sr-only">Room Name</label>
