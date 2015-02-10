@@ -1,8 +1,9 @@
 import datetime
 import simplejson as json
 import rdio
+import time
 
-from lstn import db
+from lstn import db, r
 
 from flask import current_app
 from flask.ext.login import UserMixin, current_user
@@ -128,6 +129,42 @@ class User(db.Model, ModelMixin, UserMixin):
       queue.append(data)
 
     return queue
+
+  def get_owned_rooms(self):
+    rooms = {}
+    for room in self.owned:
+      data = room.to_array()
+      data['owner'] = room.owner.to_array(for_public=True)
+      rooms[data['id']] = data;
+
+    return rooms
+
+  def get_recent_rooms(self):
+    # Fetch recent rooms from Redis
+    userKey = 'user_%s' % self.id
+    start_time = int(time.time()) - (60 * 60 * 24 * 7);
+    recent_room_ids = r.zrevrangebyscore(userKey, '+inf', start_time)
+    recent_room_ids = [room_id for room_id in recent_room_ids]
+
+    rooms = {}
+    if recent_room_ids:
+      recent_rooms = Room.query.filter(Room.id.in_(recent_room_ids)).all()
+      for room in recent_rooms:
+        data = room.to_array()
+        data['owner'] = room.owner.to_array(for_public=True)
+        rooms[data['id']] = data
+
+    return rooms
+
+  def get_rooms(self):
+    owned_rooms = self.get_owned_rooms()
+    recent_rooms = self.get_recent_rooms()
+    owned_rooms.update(recent_rooms)
+
+    return owned_rooms
+
+  def get_room_count(self):
+    return len(self.get_rooms())
 
   @staticmethod
   def get_users(include_self=True):
