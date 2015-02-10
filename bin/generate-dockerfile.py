@@ -54,7 +54,8 @@ RUN apt-get -y install \\
     supervisor \\
     libmysqlclient-dev \\
     nodejs \\
-    npm
+    npm \\
+    redis-server
 
 RUN pip install uwsgi
 
@@ -69,7 +70,7 @@ ADD config/nginx.conf /etc/nginx/sites-available/default
 ADD config/uwsgi.ini /etc/uwsgi.ini
 ADD config/supervisord.conf /etc/supervisor/supervisord.conf
 
-EXPOSE 80 443 7000 3000
+EXPOSE 80 443 7000 3000 6379
 CMD ["/usr/bin/supervisord"]
 """
 
