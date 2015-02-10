@@ -43,12 +43,44 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnMusicSearch', [
-  function() {
+.directive('lstnMusicSearch', ['User',
+  function(User) {
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/static/partials/directives/music-search.html'
+      templateUrl: '/static/partials/directives/music-search.html',
+      link: function($scope, $element, $attrs) {
+        $scope.searchResults = [];
+        $scope.searchQuery = null;
+
+        $scope.clearSearchResults = function() {
+          $scope.searchResults = [];
+          $scope.searchQuery = null;
+        };
+
+        $scope.$watch('searchQuery', function(newVal, oldVal) {
+          if (newVal === oldVal) {
+            return;
+          }
+
+          if (!newVal || newVal.length < 3) {
+            return;
+          }
+
+          User.search({
+            query: newVal
+          }, function(response) {
+            if (!response || !response.success || !response.results) {
+              // TODO: Error
+              return;
+            }
+
+            $scope.searchResults = response.results;
+          }, function(response) {
+            // TODO: Error
+          });
+        });
+      }
     };
   }
 ])
