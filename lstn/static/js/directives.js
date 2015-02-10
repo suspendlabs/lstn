@@ -226,6 +226,11 @@ angular.module('lstn.directives', [])
         };
 
         $scope.toggleOpen = function() {
+          // Prevent a double click of the toggle
+          if ($scope.showLoading) {
+            return;
+          }
+
           if (typeof $scope.tracks === 'undefined') {
             $scope.showLoading = true;
 
