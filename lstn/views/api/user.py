@@ -5,17 +5,26 @@ from flask import Flask, request, redirect, url_for, \
   render_template, Blueprint, current_app, jsonify
 
 from flask.ext.login import login_required, current_user
+from lstn.models import User, Room
+from lstn.exceptions import APIException
 
-from lstn import db
+from lstn import db, r
 
 user = Blueprint('user', __name__, url_prefix='/api/user')
 
-@user.route('/<user_id>/<room_id>/vote/<direction>', methods=['POST'])
+@user.route('/<user_id>/vote/<direction>', methods=['POST'])
 @login_required
-def vote(user_id, room_id, direction):
-  user = User.query.get(int(user_id))
-  if not user:
+def vote(user_id, direction):
+  if user_id == current_user.id:
+    raise APIException('You are unable to vote for yourself')
+
+  voted_user = User.query.get(int(user_id))
+  if not voted_user:
     raise APIException('Unable to find user', 404)
+
+  room_id = request.json.get('room', None)
+  if not room_id:
+    raise APIException('You must specify a room id')
 
   room = Room.query.filter(Room.slug == room_id).first()
 
@@ -25,15 +34,30 @@ def vote(user_id, room_id, direction):
   if not room:
     raise APIException('Unable to find room', 404)
 
-  # TODO: Check permissions
+  song_id = request.json.get('song', None)
+  if not song_id:
+    raise APIException('You must specify a song id')
+
+  remaining = request.json.get('remaining', None)
+  if not remaining:
+    raise APIException('You must specify a song remaining time')
+
+  remaining = int(remaining)
+
+  voting_key = 'vote_%s_%s_%s_%s' % (current_user.id, user_id, room_id, song_id)
+  voted = r.get(voting_key)
+  if voted and voted == direction:
+    raise APIException('You have already voted')
 
   if direction is 'downvote':
-    user.points = User.c.points - 1
+    voted_user.points = User.points - 1
   else:
-    user.points = User.c.points + 1
+    voted_user.points = User.points + 1
 
-  db.session.add(user)
+  db.session.add(voted_user)
   db.session.flush()
+
+  r.set(voting_key, direction, remaining)
 
   return jsonify(success=True)
 
