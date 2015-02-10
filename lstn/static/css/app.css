@@ -247,7 +247,10 @@ body > .container {
   border-bottom-left-radius: 4px;
 }
 .track__list .track.track--even {
-  background-color: #f5f5f5;
+  background-color: #F5F5F5;
+}
+.track__list .track.track--odd {
+  background-color: #FFFFFF;
 }
 .track__list .track .track__image {
   width: 40px;
@@ -305,6 +308,9 @@ body > .container {
   height: 194px;
   overflow-x: hidden;
   overflow-y: auto;
+}
+.track__list.queue .track {
+  cursor: move;
 }
 .track__list.queue .track .track__image {
   width: 50px;
