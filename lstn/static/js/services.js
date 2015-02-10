@@ -90,6 +90,9 @@ angular.module('lstn.services', ['ngResource'])
         action: 'roster'
       }
     },
+    update: {
+      method: 'PUT'
+    }
   });
 
   return Room;
