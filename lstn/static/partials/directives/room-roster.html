@@ -6,7 +6,7 @@
         <div class="text-center"><strong>No Broadcasters</strong></div>
       </li>
       <li data-ng-show="roster && roster.controllersCount > 0" data-ng-repeat="user_id in roster.controllerOrder" class="list-group-item" data-ng-class="{'list-group-item-success': current_user.id === user_id}">
-        <span class="badge" data-ng-bind="roster.controllers[user_id].points"></span>
+        <span class="badge" data-ng-bind="roster.controllers[user_id].points" data-ng-show="user_id !== currentController"></span>
         <a data-ng-href="http://www.rdio.com{{ roster.controllers[user_id].profile }}" data-ng-bind="roster.controllers[user_id].name" target="_blank"></a>
         <span class="glyphicon glyphicon-music pull-right" aria-hidden="true" data-ng-show="user_id === currentController"></span>
       </li>
