@@ -1,4 +1,5 @@
 var io = require('socket.io').listen(3000);
+var redis = require('redis').createClient();
 
 var PLAYING_REQUEST_TIMEOUT = 2 * 1000;
 var playing = {};
@@ -364,6 +365,16 @@ Lstn.prototype.onRoomConnect = function(data) {
 
   // Update the roster for the room
   this.addToRoster(data.user);
+
+  // Register room for user in Redis
+  var userKey = 'user_' + this.userId;
+  var currentTime = Math.floor(Date.now() / 1000);
+  redis.zadd(userKey, currentTime, this.roomId);
+
+  // Purge expired rooms
+  var expiration = currentTime - (60 * 60 * 24 * 7);
+  console.log('expiring to ' + expiration);
+  redis.zremrangebyscore(userKey, '-inf', expiration);
 
   // Send the updated roster
   this.sendRoster();
