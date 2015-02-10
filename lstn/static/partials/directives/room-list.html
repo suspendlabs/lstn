@@ -1,13 +1,20 @@
-<div>
-  <table class="table table-striped">
+<div class="rooms__container">
+  <table class="table table-striped rooms">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Owner</th>
+        <th class="name">Name</th>
+        <th class="owner">Owner</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
+      <tr data-ng-if="(!rooms || rooms.length === 0) && !showCreateRoom" class="rooms__empty">
+        <td colspan="3" class="text-center">
+          <h3>
+            You don't have any rooms yet. <a data-ng-click="createRoom()">Create one</a> now.
+          </h3>
+        </td>
+      </tr>
       <tr data-ng-repeat="room in rooms">
         <td data-ng-show="!room.editing"><a data-ng-href="#/room/{{ room.slug }}" data-ng-bind="room.name"></a></td>
         <td data-ng-show="room.editing" class="form-inline">
