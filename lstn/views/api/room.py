@@ -1,7 +1,6 @@
 import string
 import simplejson as json
 import rdio
-import time
 
 from flask import Flask, request, redirect, url_for, \
   render_template, Blueprint, current_app, jsonify
@@ -9,7 +8,7 @@ from flask import Flask, request, redirect, url_for, \
 from flask.ext.login import login_required, current_user
 from slugify import slugify
 
-from lstn import db, r
+from lstn import db
 from lstn.models import Room
 from lstn.exceptions import APIException
 
@@ -21,25 +20,7 @@ def room_action():
   if request.method == 'POST':
     return room_post_action()
 
-  # Get the rooms owned by the current user
-  rooms = {}
-  for room in current_user.owned:
-    data = room.to_array()
-    data['owner'] = room.owner.to_array(for_public=True)
-    rooms[data['id']] = data;
-
-  # Fetch recent rooms from Redis
-  userKey = 'user_%s' % current_user.id
-  start_time = int(time.time()) - (60 * 60 * 24 * 7);
-  recent_room_ids = r.zrevrangebyscore(userKey, '+inf', start_time)
-  recent_room_ids = [room_id for room_id in recent_room_ids if room_id not in rooms]
-
-  if recent_room_ids:
-    recent_rooms = Room.query.filter(Room.id.in_(recent_room_ids)).all()
-    for room in recent_rooms:
-      data = room.to_array()
-      data['owner'] = room.owner.to_array(for_public=True)
-      rooms[data['id']] = data
+  rooms = current_user.get_rooms()
 
   response = {
     'success': 1,
