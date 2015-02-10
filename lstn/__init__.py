@@ -6,6 +6,8 @@ from flask.json import jsonify
 from lstn.local import LSTN_CONFIG
 from lstn.exceptions import APIException
 
+import redis
+
 class CustomFlask(Flask):
   jinja_options = Flask.jinja_options.copy()
   jinja_options.update(dict(
@@ -24,6 +26,8 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 
 db = SQLAlchemy(app)
+
+r = redis.StrictRedis(host=app.config['REDIS_HOST'], port=app.config['REDIS_PORT'], db=app.config['REDIS_DB'])
 
 from lstn.models import ModelEncoder
 app.json_encoder = ModelEncoder
