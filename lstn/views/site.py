@@ -62,6 +62,7 @@ def auth():
       external_id=rdio_user.key,
       profile=rdio_user.url,
       picture=rdio_user._data['icon250'],
+      points=0,
       oauth_token=auth['oauth_token'],
       oauth_token_secret=auth['oauth_token_secret'],
     )
