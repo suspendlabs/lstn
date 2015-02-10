@@ -74,6 +74,32 @@ body > .container {
   font-size: 3em;
 }
 
+.rooms__container {
+  border: 1px solid #DDD;
+  border-radius: 4px;
+}
+
+.rooms {
+  margin-bottom: 0;
+}
+.rooms th.name {
+  width: 50%;
+}
+.rooms th.owner {
+  width: 35%;
+}
+.rooms td .btn {
+  width: 70px;
+}
+.rooms .rooms__empty td {
+  text-align: center;
+  height: 150px;
+  padding-top: 44px;
+}
+.rooms .rooms__empty td a {
+  cursor: pointer;
+}
+
 .room .room__left {
   padding-right: 0;
 }

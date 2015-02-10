@@ -94,6 +94,41 @@ body {
   }
 }
 
+.rooms__container {
+  border: 1px solid #DDD;
+  border-radius: 4px;
+}
+
+.rooms {
+  margin-bottom: 0;
+
+  th.name {
+    width: 50%;
+  }
+
+  th.owner {
+    width: 35%;
+  }
+
+  td {
+    .btn {
+      width: 70px;
+    }
+  }
+
+  .rooms__empty {
+    td {
+      text-align: center;
+      height: 150px;
+      padding-top: 44px;
+
+      a {
+        cursor: pointer;
+      }
+    }
+  }
+}
+
 .room {
   .room__left {
     padding-right: 0;
