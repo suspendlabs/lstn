@@ -9,10 +9,30 @@
     </thead>
     <tbody>
       <tr data-ng-repeat="room in rooms">
-        <td><a data-ng-href="#/room/{{ room.slug }}" data-ng-bind="room.name"></a></div>
+        <td data-ng-show="!room.editing"><a data-ng-href="#/room/{{ room.slug }}" data-ng-bind="room.name"></a></td>
+        <td data-ng-show="room.editing" class="form-inline">
+          <label for="room-name" class="sr-only">Room Name</label>
+          <input type="text" id="room-name" data-ng-model="room.name" class="form-control" placeholder="Room Name" />
+        </td>
         <td data-ng-bind="room.owner.name"></div>
+        <td data-ng-show="!room.editing">
+          <button class="btn btn-default" data-ng-click="editRoom($index)">Edit</button>
+          <button class="btn btn-default" data-ng-click="deleteRoom($index)">Delete</button>
+        </td>
+        <td data-ng-show="room.editing">
+          <button class="btn btn-primary" data-ng-click="saveEditRoom($index)">Save</button>
+          <button class="btn btn-default" data-ng-click="cancelEditRoom($index)">Cancel</button>
+        </td>
+      </tr>
+      <tr data-ng-show="showCreateRoom">
+        <td class="form-inline">
+          <label for="room-name" class="sr-only">Room Name</label>
+          <input type="text" id="room-name" data-ng-model="newRoom.name" class="form-control" placeholder="Room Name" />
+        </td>
+        <td></td>
         <td>
-          <a data-ng-href="#/rooms/{{ room.slug }}/edit" data-ng-if="current_user.id === room.owner_id">Edit</a>
+          <button class="btn btn-primary" data-ng-click="saveCreateRoom()">Create</button>
+          <button class="btn btn-default" data-ng-click="cancelCreateRoom()">Cancel</button>
         </td>
       </tr>
     </tbody>
