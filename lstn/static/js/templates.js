@@ -176,7 +176,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        </td>\n" +
     "      </tr>\n" +
     "      <tr data-ng-repeat=\"room in rooms\" data-ng-show=\"rooms && rooms.length > 0 && !loading\">\n" +
-    "        <td data-ng-show=\"!room.editing\"><a data-ng-href=\"#/room/{{ room.slug }}\" data-ng-bind=\"room.name\"></a></td>\n" +
+    "        <td data-ng-show=\"!room.editing\"><a data-ng-href=\"/room/{{ room.slug }}\" data-ng-bind=\"room.name\"></a></td>\n" +
     "        <td data-ng-show=\"room.editing\" class=\"form-inline\">\n" +
     "          <label for=\"room-name\" class=\"sr-only\">Room Name</label>\n" +
     "          <input type=\"text\" id=\"room-name\" data-ng-model=\"room.name\" class=\"form-control\" placeholder=\"Room Name\" />\n" +
@@ -317,8 +317,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <h1><span class=\"lstn\">Lstn</span> to <span class=\"rdio\">Rdio</span> with Friends</h1>\n" +
     "      <p>Create a room and start listening to Rdio with your friends.</p>\n" +
     "      <p>\n" +
-    "        <a data-ng-show=\"!current_user.id\" class=\"btn btn-primary btn-lg\" href=\"/#/login\" role=\"button\">Get Started</a>\n" +
-    "        <a data-ng-show=\"current_user.id\" class=\"btn btn-primary btn-lg\" href=\"/#/rooms\" role=\"button\">Get Started</a>\n" +
+    "        <a data-ng-show=\"!current_user.id\" class=\"btn btn-primary btn-lg\" href=\"/login\" role=\"button\" target=\"_self\">Get Started</a>\n" +
+    "        <a data-ng-show=\"current_user.id\" class=\"btn btn-primary btn-lg\" href=\"/rooms\" role=\"button\">Get Started</a>\n" +
     "      </p>\n" +
     "    </div>\n" +
     "  </div>\n" +
