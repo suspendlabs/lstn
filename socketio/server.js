@@ -341,9 +341,7 @@ Lstn.prototype.sendPlaying = function(broadcast) {
     data.controller = this.getCurrentController();
     if (data.key && data.controller) {
       var votingKey = 'vote_' + this.userId + '_' + data.controller + '_' + this.roomId + '_' + data.key;
-      console.log(votingKey);
       var direction = redis.get(votingKey);
-      console.log(direction);
       
       if (direction === 'upvote') {
         data.voted = 1;
