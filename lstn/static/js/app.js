@@ -55,6 +55,13 @@ angular.module('lstn', [
     user = angular.element(user);
     $rootScope.current_user = angular.fromJson(user.html());
   }
+
+  // Turn on debugging for SocketIO
+  /*
+  if (window.localStorage) {
+    window.localStorage.debug = '*';
+  }
+  */
 }]);
 
 })();
