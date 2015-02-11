@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, redirect, url_for, session
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.json import jsonify
@@ -42,7 +42,7 @@ def unauthorized_handler():
   if '/api' not in request.path:
     session['next_url'] = request.url
 
-  return redirect('site.login')
+  return redirect(url_for('site.login'))
 
 @app.after_request
 def after_request(response):
