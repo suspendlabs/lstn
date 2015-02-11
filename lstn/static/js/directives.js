@@ -43,8 +43,8 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnMusicSearch', ['User',
-  function(User) {
+.directive('lstnMusicSearch', ['CurrentUser',
+  function(CurrentUser) {
     return {
       restrict: 'E',
       replace: true,
@@ -67,7 +67,7 @@ angular.module('lstn.directives', [])
             return;
           }
 
-          User.search({
+          CurrentUser.search({
             query: newVal
           }, function(response) {
             if (!response || !response.success || !response.results) {
@@ -142,8 +142,8 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnRoomQueue', ['User',
-  function(User) {
+.directive('lstnRoomQueue', ['CurrentUser',
+  function(CurrentUser) {
     return {
       restrict: 'E',
       replace: true,
@@ -163,7 +163,7 @@ angular.module('lstn.directives', [])
               return;
             }
 
-            User.updateQueue({
+            CurrentUser.updateQueue({
               queue: $scope.queue
             }, function(response) {
               if (!response || !response.success) {
@@ -180,8 +180,8 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnCategory', ['$parse', 'User',
-  function($parse, User) {
+.directive('lstnCategory', ['$parse', 'CurrentUser',
+  function($parse, CurrentUser) {
     return {
       restrict: 'E',
       transclude: true,
@@ -213,7 +213,7 @@ angular.module('lstn.directives', [])
           $scope.refreshingList = true;
           $scope.categoryStatus.open = false;
 
-          User.playlists({
+          CurrentUser.playlists({
             id: $scope.type
           }, function(response) {
             $scope.refreshingList = false;
