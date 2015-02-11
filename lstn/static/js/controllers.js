@@ -7,6 +7,29 @@ angular.module('lstn.controllers', [])
   $scope.$on('socket:error', function(ev, data) {
     console.log('socket:error', ev, data);
   });
+
+  $scope.alerts = {
+    success: [],
+    info: [],
+    warning: [],
+    danger: []
+  };
+
+  $scope.dismissAlert = function(type) {
+    $scope.alerts[type].splice(0, 1);
+    console.log($scope.alerts);
+  };
+
+  $scope.addAlert = function(message, type) {
+    type = type || 'info';
+
+    if (!(type in $scope.alerts)) {
+      console.log(type, message);
+      return;
+    }
+
+    $scope.alerts[type].push(message);
+  };
 }])
 
 .controller('RoomsController', ['$scope', '$location', 'Room', function($scope, $location, Room) {
@@ -16,14 +39,17 @@ angular.module('lstn.controllers', [])
   Room.list({}, function(response) {
     $scope.loading = false;
     if (!response || !response.success || !response.rooms) {
-      // TODO: Error
+      $scope.addAlert('Something went wrong while trying to load the rooms list.', 'danger');
+      console.log('Room.list', response);
       return;
     }
 
     $scope.rooms = response.rooms;
   }, function(response) {
-    // TODO: Error
     $scope.loading = false;
+
+    $scope.addAlert('Something went wrong while trying to load the rooms list.', 'danger');
+    console.log('Room.list', response);
   });
 
   $scope.newRoom = {
@@ -37,13 +63,15 @@ angular.module('lstn.controllers', [])
   $scope.saveCreateRoom = function() {
     Room.save({}, $scope.newRoom, function(response) {
       if (!response || !response.success || !response.slug) {
-        // TODO: Error
+        $scope.addAlert('Something went wrong while trying to create the new room.', 'danger');
+        console.log('Room.save', response);
         return false;
       }
 
       $location.path('/room/' + response.slug);
     }, function(response) {
-      // TODO: Error
+      $scope.addAlert('Something went wrong while trying to create the new room.', 'danger');
+      console.log('Room.save', response);
     });
   };
 
@@ -63,13 +91,15 @@ angular.module('lstn.controllers', [])
       id: $scope.rooms[index].id
     }, $scope.rooms[index], function(response) {
       if (!response || !response.success || !response.room) {
-        // TODO: Error
+        $scope.addAlert('Something went wrong while trying to save the room.', 'danger');
+        console.log('Room.update', response);
         return false;
       }
 
       $scope.rooms[index] = response.room;
     }, function(response) {
-      // TODO: Error
+      $scope.addAlert('Something went wrong while trying to save the room.', 'danger');
+      console.log('Room.update', response);
     });
   };
 
@@ -86,13 +116,15 @@ angular.module('lstn.controllers', [])
       id: $scope.rooms[index].id
     }, function(response) {
       if (!response || !response.success) {
-        // TODO: Error
+        $scope.addAlert('Something went wrong while trying to delete the room.', 'danger');
+        console.log('Room.delete', response);
         return;
       }
 
       $scope.rooms.splice(index, 1);
     }, function(response) {
-      // TODO: Error
+      $scope.addAlert('Something went wrong while trying to delete the room.', 'danger');
+      console.log('Room.delete', response);
     });
   };
 }])
@@ -275,9 +307,11 @@ angular.module('lstn.controllers', [])
         remaining: remaining
       }, function(response) {
         $scope.voting = false;
+
         if (!response || !response.success) {
-          // TODO: Error
-          return false;
+          $scope.addAlert('Something went wrong while trying to upvote the song.', 'danger');
+          console.log('User.upvote', response);
+          return;
         }
 
         if (!$scope.playing) {
@@ -287,8 +321,10 @@ angular.module('lstn.controllers', [])
         $scope.playing.voted = true;
         $scope.playing.upvoted = true;
       }, function(response) {
-        // TODO: Error
         $scope.voting = false;
+
+        $scope.addAlert('Something went wrong while trying to upvote the song.', 'danger');
+        console.log('User.upvote', response);
       });
     };
 
@@ -302,6 +338,7 @@ angular.module('lstn.controllers', [])
         return;
       }
 
+      // This is to give us a target expiration for the Redis key
       var remaining = Math.floor($scope.playing.song.duration - window.playingPosition);
       if (remaining <= 0) {
         return;
@@ -316,8 +353,10 @@ angular.module('lstn.controllers', [])
         remaining: remaining
       }, function(response) {
         $scope.voting = false;
+
         if (!response || !response.success) {
-          // TODO: Error
+          $scope.addAlert('Something went wrong while trying to downvote the song.', 'danger');
+          console.log('User.downvote', response);
           return false;
         }
 
@@ -328,8 +367,10 @@ angular.module('lstn.controllers', [])
         $scope.playing.voted = true;
         $scope.playing.downvoted = true;
       }, function(response) {
-        // TODO: Error
         $scope.voting = false;
+
+        $scope.addAlert('Something went wrong while trying to downvote the song.', 'danger');
+        console.log('User.downvote', response);
       });
     };
   
@@ -415,7 +456,7 @@ angular.module('lstn.controllers', [])
       };
     }, true);
 
-    // Rdio Callback (TODO: Move to Rdio service?)
+    // Rdio Callback (TODO: Move to Rdio service? Redo with jQuery)
     var initPlayback = function() {
       window.playbackHandler = {
         ready: function(user) {
@@ -530,6 +571,8 @@ angular.module('lstn.controllers', [])
         id: song_id
       }, function(response) {
         if (!response || !response.success || !response.queue) {
+          $scope.addAlert('Something went wrong while trying to add the song to your queue.', 'danger');
+          console.log('CurrentUser.addToQueue', response);
           return;
         }
   
@@ -540,27 +583,27 @@ angular.module('lstn.controllers', [])
             scrollTop: $('#queue')[0].scrollHeight
           }, 500);
         }, 10);
+      }, function(response) {
+        $scope.addAlert('Something went wrong while trying to add the song to your queue.', 'danger');
+        console.log('CurrentUser.addToQueue', response);
       });
     };
   
-    $scope.removeSongFromQueue = function(song_id, index, callback) {
-      console.log('removing song from queue', song_id, index);
-
+    $scope.removeSongFromQueue = function(song_id, index) {
       CurrentUser.removeFromQueue({
         id: song_id,
         index: index
       }, function(response) {
-        console.log('song removed from queue', response);
-
         if (!response || !response.success || !response.queue) {
+          $scope.addAlert('Something went wrong while trying to remove the song from your queue.', 'danger');
+          console.log('CurrentUser.removeFromQueue', response);
           return;
         }
   
         $scope.queue = response.queue;
-
-        if (typeof callback === 'function') {
-          callback();
-        }
+      }, function(response) {
+        $scope.addAlert('Something went wrong while trying to remove the song from your queue.', 'danger');
+        console.log('CurrentUser.removeFromQueue', response);
       });
     };
   
@@ -568,7 +611,8 @@ angular.module('lstn.controllers', [])
       id: $routeParams.id
     }, function(response) {
       if (!response || !response.success || !response.room) {
-        // TODO: Error
+        $scope.addAlert('Something went wrong while trying to load the room data.', 'danger');
+        console.log('Room.get', response);
         return;
       }
   
@@ -582,15 +626,22 @@ angular.module('lstn.controllers', [])
   
       socket.registerRoom($scope.room.id, $scope.current_user);
       initPlayback();
+    }, function(response) {
+      $scope.addAlert('Something went wrong while trying to load the room data.', 'danger');
+      console.log('Room.get', response);
     });
   
     CurrentUser.playlists({}, function(response) {
       if (!response || !response.success || !response.playlists) {
-        // TODO: Error
+        $scope.addAlert('Something went wrong while trying to load your playlists.', 'danger');
+        console.log('CurrentUser.playlists', response);
         return;
       }
 
       $scope.playlists = response.playlists;
+    }, function(response) {
+      $scope.addAlert('Something went wrong while trying to load your playlists.', 'danger');
+      console.log('CurrentUser.playlists', response);
     });
   }
 ])
