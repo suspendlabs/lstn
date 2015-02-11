@@ -199,6 +199,48 @@ angular.module('lstn.controllers', [])
       $scope.playSong(data);
     });
 
+    socket.on('room:upvote', function(score) {
+      if (!$scope.isCurrentController) {
+        return;
+      }
+
+      CurrentUser.get({}, function(response) {
+        if (!response || !response.success || !response.user) {
+          $scope.addAlert('Something went wrong while trying to get your latest score.', 'warning');
+          console.log('CurrentUser.get', response);
+          return;
+        }
+
+        socket.roomUpdate(response.user);
+      }, function(response) {
+        $scope.addAlert('Something went wrong while trying to get your latest score.', 'warning');
+        console.log('CurrentUser.get', response);
+      });
+    });
+
+    socket.on('room:downvote', function(score) {
+      if (!$scope.isCurrentController) {
+        return;
+      }
+
+      CurrentUser.get({}, function(response) {
+        if (!response || !response.success || !response.user) {
+          $scope.addAlert('Something went wrong while trying to get your latest score.', 'warning');
+          console.log('CurrentUser.get', response);
+          return;
+        }
+
+        socket.roomUpdate(response.user);
+      }, function(response) {
+        $scope.addAlert('Something went wrong while trying to get your latest score.', 'warning');
+        console.log('CurrentUser.get', response);
+      });
+
+      if (score <= -2) {
+        $scope.skipSong();
+      }
+    });
+
     // TODO: Move these to Room service (badjokeeel) if possible
     $scope.playSong = function(data) {
       if (!$scope.rdioReady) {
@@ -320,6 +362,8 @@ angular.module('lstn.controllers', [])
 
         $scope.playing.voted = true;
         $scope.playing.upvoted = true;
+
+        socket.sendUpvote();
       }, function(response) {
         $scope.voting = false;
 
@@ -366,6 +410,8 @@ angular.module('lstn.controllers', [])
 
         $scope.playing.voted = true;
         $scope.playing.downvoted = true;
+
+        socket.sendDownvote();
       }, function(response) {
         $scope.voting = false;
 
@@ -418,9 +464,6 @@ angular.module('lstn.controllers', [])
 
       // Play the song
       $scope.playSong($scope.rdioPlay);
-
-      // Clear the rdioPlay variable
-      $scope.rdioPlay = null;
     });
   
     $scope.$watch('playingTrack', function(newVal, oldVal) {
@@ -446,7 +489,7 @@ angular.module('lstn.controllers', [])
         $scope.playing = null;
         return;
       }
-  
+
       $scope.playing = {
         status: 'playing',
         song: $scope.rdioToLstn(newVal),
@@ -454,6 +497,15 @@ angular.module('lstn.controllers', [])
         upvoted: 0,
         downvoted: 0
       };
+
+      if ($scope.rdioPlay) {
+        $scope.playing.voted = $scope.rdioPlay.voted || 0;
+        $scope.playing.upvoted = $scope.rdioPlay.upvoted || 0;
+        $scope.playing.downvoted = $scope.rdioPlay.downvoted || 0;
+
+        // Clear the rdioPlay variable
+        $scope.rdioPlay = null;
+      }
     }, true);
 
     // Rdio Callback (TODO: Move to Rdio service? Redo with jQuery)
