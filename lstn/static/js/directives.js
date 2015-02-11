@@ -142,7 +142,7 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnRoomQueue', ['CurrentUser', 
+.directive('lstnRoomQueue', ['CurrentUser',
   function(CurrentUser) {
     return {
       restrict: 'E',
@@ -259,7 +259,7 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnTrackList', ['$parse', 
+.directive('lstnTrackList', ['$parse',
   function($parse) {
     return {
       restrict: 'E',
@@ -272,7 +272,7 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnPlaylist', ['$timeout', 'Playlist', 
+.directive('lstnPlaylist', ['$timeout', 'Playlist',
   function($timeout, Playlist) {
     return {
       restrict: 'E',
@@ -316,7 +316,7 @@ angular.module('lstn.directives', [])
           } else {
             $scope.status.open = !$scope.status.open;
           }
-        }
+        };
       }
     };
   }
