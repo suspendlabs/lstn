@@ -124,8 +124,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <button data-ng-show=\"mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Mute\" data-ng-click=\"toggleMute()\" title=\"Mute\">\n" +
     "      <span class=\"glyphicon glyphicon-volume-off\" aria-hidden=\"true\"></span> \n" +
     "    </button>\n" +
-    "    <button data-ng-show=\"!isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key || playing.song.voted\" class=\"btn btn-danger btn-lg\" aria-label=\"Downvote\" data-ng-click=\"downvote()\" title=\"Downvote\">\n" +
+    "    <button data-ng-show=\"!playing.downvoted && !isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key || playing.song.voted\" class=\"btn btn-danger btn-lg\" aria-label=\"Downvote\" data-ng-click=\"downvote()\" title=\"Downvote\">\n" +
     "      <span class=\"glyphicon glyphicon-thumbs-down\" aria-hidden=\"true\"></span> \n" +
+    "    </button>\n" +
+    "    <button data-ng-show=\"playing.downvoted\" type=\"button\" disabled=\"disabled\" class=\"btn btn-danger btn-lg\" aria-label=\"Downvoted\" title=\"Downvoted\">\n" +
+    "      <span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> \n" +
     "    </button>\n" +
     "    <button data-ng-show=\"isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key\" class=\"btn btn-danger btn-lg\" aria-label=\"Skip Song\" data-ng-click=\"skipSong()\" title=\"Skip Song\">\n" +
     "      <span class=\"glyphicon glyphicon-step-forward\" aria-hidden=\"true\"></span> \n" +
@@ -136,9 +139,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <button data-ng-show=\"!isController\" data-ng-disabled=\"!queue || queue.length === 0\" type=\"button\" class=\"btn btn-primary btn-lg\" aria-label=\"Start Broadcasting\" data-ng-click=\"toggleBroadcast()\" title=\"Start Broadcasting\">\n" +
     "      <span class=\"glyphicon glyphicon-headphones\" aria-hidden=\"true\"></span>\n" +
     "    </button>\n" +
-    "    <button type=\"button\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
+    "    <button data-ng-show=\"!playing.upvoted\" type=\"button\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
     "      <span class=\"glyphicon glyphicon-thumbs-up\" aria-hidden=\"true\"></span> \n" +
     "    </button>\n" +
+    "    <button data-ng-show=\"playing.upvoted\" type=\"button\" disabled=\"disabled\" class=\"btn btn-success btn-lg\" aria-label=\"Upvoted\" title=\"Upvoted\">\n" +
+    "      <span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> \n" +
+    "    </button>\n" +
+    "\n" +
     "    <button data-ng-show=\"visualize\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Show Visualizer\" data-ng-click=\"toggleVisualize()\" title=\"Show Visualizer\">\n" +
     "      <span class=\"glyphicon glyphicon-eye-open\" aria-hidden=\"true\"></span> \n" +
     "    </button>\n" +
@@ -234,7 +241,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <lstn-track data-ng-class-even=\"'track--even'\" data-ng-class-odd=\"'track--odd'\" data-ng-repeat=\"song in queue\" data-cutoff=\"50\"></lstn-track>\n" +
     "    </ul>\n" +
     "    <div class=\"queue--empty alert alert-info text-center\" data-ng-show=\"!queue || queue.length === 0\">\n" +
-    "      <h3>Select songs from your playlists to the left to add songs to your queue</h3>\n" +
+    "      <h3>Select songs from your playlists on the left to add songs to your queue</h3>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
