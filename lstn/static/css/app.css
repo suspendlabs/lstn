@@ -54,6 +54,7 @@ body > .container {
 }
 .alerts .alert {
   padding: 9px 35px 9px 9px;
+  text-align: center;
 }
 
 .page-header .alert {
