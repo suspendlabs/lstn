@@ -45,7 +45,7 @@ angular.module('lstn', [
     redirectTo: '/'
   });
 
-  $locationProvider.html5Mode(false);
+  $locationProvider.html5Mode(true);
 }])
 
 .run(['$rootScope', function($rootScope) {
