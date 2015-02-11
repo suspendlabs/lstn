@@ -47,25 +47,25 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/#/"><img src="%% url_for('static', filename='images/lstn.png') %%" alt="Lstn"></a>
+        <a class="navbar-brand" href="/"><img src="%% url_for('static', filename='images/lstn.png') %%" alt="Lstn"></a>
       </div>
 
       <div class="collapse navbar-collapse" id="navbar-collapse-1">
         <% if current_user.is_authenticated() %>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#/rooms">Rooms</a></li>
+          <li><a href="/rooms">Rooms</a></li>
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">%% current_user.name %% <span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="http://www.rdio.com%% current_user.profile %%" target="_blank">Profile</a></li>
               <li class="divider"></li>
-              <li><a href="/logout">Logout</a></li>
+              <li><a href="/logout" target="_self">Logout</a></li>
             </ul>
           </li>
         </ul>
         <% else %>
         <ul class="nav navbar-nav navbar-right navbar--login">
-          <li><div><a class="btn btn-success navbar-btn" href="/login">Login</a></div></li>
+          <li><div><a class="btn btn-success navbar-btn" href="/login" target="_self">Login</a></div></li>
         </ul>
         <% endif %>
 
