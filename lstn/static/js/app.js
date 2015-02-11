@@ -9,6 +9,7 @@ angular.module('lstn', [
   'lstn.services',
   'lstn.controllers',
   'lstn.filters',
+  'lstn.directives',
   'lstn.templates'
 ])
 
