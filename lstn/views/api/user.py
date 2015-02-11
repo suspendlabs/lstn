@@ -12,6 +12,11 @@ from lstn import db, r
 
 user = Blueprint('user', __name__, url_prefix='/api/user')
 
+@user.route('/', methods=['GET'])
+@login_required
+def get_user():
+  return jsonify(success=True, user=current_user.to_array(for_public=True))
+
 @user.route('/<user_id>/vote/<direction>', methods=['POST'])
 @login_required
 def vote(user_id, direction):
@@ -49,7 +54,7 @@ def vote(user_id, direction):
   if voted and voted == direction:
     raise APIException('You have already voted')
 
-  if direction is 'downvote':
+  if direction == 'downvote':
     voted_user.points = User.points - 1
   else:
     voted_user.points = User.points + 1
