@@ -21,4 +21,4 @@ CREATE TABLE `room` (
 `settings` TEXT NULL,
 `created_at` DATETIME NOT NULL,
 PRIMARY KEY (`id`),
-KEY `owner` (`owner`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+KEY `owner_id` (`owner_id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;
