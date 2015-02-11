@@ -1,6 +1,6 @@
 (function() {
 'use strict';
-
+//test
 angular.module('lstn', [
   'ngRoute',
   'ui.bootstrap',
@@ -9,7 +9,7 @@ angular.module('lstn', [
   'lstn.services',
   'lstn.controllers',
   'lstn.filters',
-  'lstn.directives'
+  'lstn.templates'
 ])
 
 .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
@@ -55,5 +55,4 @@ angular.module('lstn', [
     $rootScope.current_user = angular.fromJson(user.html());
   }
 }]);
-
 })();
