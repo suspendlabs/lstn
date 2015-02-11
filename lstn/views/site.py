@@ -96,6 +96,10 @@ def logout():
 @site.route('/', defaults={'path': 'index'})
 @site.route('/<path:path>')
 def index(path):
+  if path not in ['index', 'login', 'auth']:
+    if not current_user.is_authenticated():
+      return current_app.login_manager.unauthorized()
+
   if current_user.is_anonymous():
     user_json = json.dumps({
       'name': 'Anonymous'
