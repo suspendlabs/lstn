@@ -1,6 +1,6 @@
 (function() {
 'use strict';
-//test
+
 angular.module('lstn', [
   'ngRoute',
   'ui.bootstrap',
@@ -56,4 +56,5 @@ angular.module('lstn', [
     $rootScope.current_user = angular.fromJson(user.html());
   }
 }]);
+
 })();
