@@ -45,6 +45,17 @@ body > .container {
   margin-right: 5px;
 }
 
+.alerts {
+  z-index: 2000;
+  width: 50%;
+  position: fixed;
+  top: 5px;
+  left: 25%;
+}
+.alerts .alert {
+  padding: 9px 35px 9px 9px;
+}
+
 .page-header .alert {
   font-size: 14px;
 }
