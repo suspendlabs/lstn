@@ -3,6 +3,17 @@ module.exports = (grunt) ->
   cssFiles = ['lstn/static/css/**/*.css']
 
   grunt.initConfig
+    ngtemplates:
+      lstn:
+        src: 'lstn/static/partials/**/*.html'
+        dest: 'lstn/static/js/templates.js'
+        options:
+          standalone: true,
+          module: 'lstn.templates',
+          prefix: '/',
+          url: (path) ->
+            return path.substring('/lstn'.length);
+
     concat:
       lstn:
         files:
@@ -28,6 +39,9 @@ module.exports = (grunt) ->
           noLineComments: true
           force: true
     watch:
+      ngtemplates:
+        files: ['lstn/static/partials/**/*.html']
+        tasks: ['ngtemplates']
       sass:
         files: ['lstn/sass/**/*.scss']
         tasks: ['compass']
@@ -56,7 +70,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
-  
+  grunt.loadNpmTasks 'grunt-angular-templates'
+
   grunt.registerTask 'default', ['jshint', 'compass']
   grunt.registerTask 'precommit', ['jshint', 'compass']
   grunt.registerTask 'deploy', ['concat', 'uglify', 'cssmin']
