@@ -1,4 +1,9 @@
-var io = require('socket.io').listen(3000);
+var app = require('express')();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+server.listen(3000);
+
 var redis = require('redis').createClient();
 
 var PLAYING_REQUEST_TIMEOUT = 2 * 1000;
@@ -183,6 +188,22 @@ Lstn.prototype.addToRoster = function(user) {
   roster[this.roomId].users[this.userId] = user;
 };
 
+Lstn.prototype.updateRoster = function(user) {
+  if (!(this.roomId in roster)) {
+    roster[this.roomId] = {
+      controllers: {},
+      controllerOrder: [],
+      users: {}
+    };
+  }
+
+  if (this.isController()) {
+    roster[this.roomId].controllers[this.userId] = user;
+  } else {
+    roster[this.roomId].users[this.userId] = user;
+  }
+};
+
 Lstn.prototype.removeFromRoster = function() {
   // Delete the user from the room's roster
   if (this.userId in roster[this.roomId].controllers) {
@@ -263,6 +284,34 @@ Lstn.prototype.setPlayingPosition = function(data) {
   playing[this.roomId].position = data;
 };
 
+Lstn.prototype.incrPlayingVotes = function() {
+  if (!playing[this.roomId]) {
+    return 0;
+  }
+
+  if (!playing[this.roomId].points) {
+    playing[this.roomId].points = 0;
+  }
+
+  playing[this.roomId].points += 1;
+
+  return playing[this.roomId].points;
+};
+
+Lstn.prototype.decrPlayingVotes = function() {
+  if (!playing[this.roomId]) {
+    return 0;
+  }
+
+  if (!playing[this.roomId].points) {
+    playing[this.roomId].points = 0;
+  }
+
+  playing[this.roomId].points -= 1;
+
+  return playing[this.roomId].points;
+};
+
 Lstn.prototype.clearPlaying = function() {
   playing[this.roomId] = null;
 };
@@ -271,7 +320,10 @@ Lstn.prototype.sendPlaying = function(broadcast) {
   var data = {
     key: null,
     position: 0,
-    controller: null
+    controller: null,
+    voted: 0,
+    upvoted: 0,
+    downvoted: 0
   };
 
   if (playing &&
@@ -287,6 +339,20 @@ Lstn.prototype.sendPlaying = function(broadcast) {
     }
 
     data.controller = this.getCurrentController();
+    if (data.key && data.controller) {
+      var votingKey = 'vote_' + this.userId + '_' + data.controller + '_' + this.roomId + '_' + data.key;
+      console.log(votingKey);
+      var direction = redis.get(votingKey);
+      console.log(direction);
+      
+      if (direction === 'upvote') {
+        data.voted = 1;
+        data.upvoted = 1;
+      } else if (direction === 'downvote') {
+        data.voted = 1;
+        data.downvoted = 1;
+      }
+    }
   }
 
   if (broadcast) {
@@ -381,6 +447,11 @@ Lstn.prototype.onRoomConnect = function(data) {
 
   // Send playing status
   this.sendPlaying();
+};
+
+Lstn.prototype.onRoomUpdate = function(data) {
+  this.updateRoster(data);
+  this.sendRoster();
 };
 
 Lstn.prototype.onControllerRelease = function() {
@@ -479,12 +550,23 @@ Lstn.prototype.onControllerPlayingFinished = function(data) {
   }
 };
 
+Lstn.prototype.onControllerUpvote = function() {
+  var votes = this.incrPlayingVotes();
+  io.sockets.in(this.roomId).emit('room:upvote', votes);
+};
+
+Lstn.prototype.onControllerDownvote = function() {
+  var votes = this.decrPlayingVotes();
+  io.sockets.in(this.roomId).emit('room:downvote', votes);
+};
+
 io.sockets.on('connection', function(socket) {
   console.log('new socket', socket.id);
   var lstn = new Lstn(socket);
 
   // Client handling
   socket.on('room:connect', lstn.onRoomConnect.bind(lstn));
+  socket.on('room:update', lstn.onRoomUpdate.bind(lstn));
   socket.on('disconnect', lstn.onDisconnect.bind(lstn));
 
   // Controller registration handling
@@ -496,4 +578,8 @@ io.sockets.on('connection', function(socket) {
   socket.on('room:controller:playing', lstn.onControllerPlaying.bind(lstn));
   socket.on('room:controller:playing:position', lstn.onControllerPlayingPosition.bind(lstn));
   socket.on('room:controller:playing:finished', lstn.onControllerPlayingFinished.bind(lstn));
+
+  // Controller voting
+  socket.on('room:controller:upvote', lstn.onControllerUpvote.bind(lstn));
+  socket.on('room:controller:downvote', lstn.onControllerDownvote.bind(lstn));
 });
