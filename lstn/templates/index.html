@@ -21,6 +21,25 @@
 <body data-ng-controller="AppController">
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
+      <div class="alerts">
+        <div class="alert alert-danger alert-dismissable" data-ng-show="alerts.danger.length > 0" data-ng-cloak>
+          <button type="button" class="close" data-ng-click="dismissAlert('danger')" data-dismiss="alert">&times;</button>
+          <span data-ng-bind="alerts.danger[0]"></span>
+        </div>
+        <div class="alert alert-warning alert-dismissable" data-ng-show="alerts.warning.length > 0 && alerts.danger.length === 0" data-ng-cloak>
+          <button type="button" class="close" data-ng-click="dismissAlert('warning')" data-dismiss="alert">&times;</button>
+          <span data-ng-bind="alerts.warning[0]"></span>
+        </div>
+        <div class="alert alert-info alert-dismissable" data-ng-show="alerts.info.length > 0 && alerts.warning.length === 0 && alerts.danger.length === 0" data-ng-cloak>
+          <button type="button" class="close" data-ng-click="dismissAlert('info')" data-dismiss="alert">&times;</button>
+          <span data-ng-bind="alerts.info[0]"></span>
+        </div>
+        <div class="alert alert-success alert-dismissable" data-ng-show="alerts.success.length > 0 && alerts.info.length === 0 && alerts.warning.length === 0 && alerts.danger.length === 0" data-ng-cloak>
+          <button type="button" class="close" data-ng-click="dismissAlert('success')" data-dismiss="alert">&times;</button>
+          <span data-ng-bind="alerts.success[0]"></span>
+        </div>
+      </div>
+
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
           <span class="sr-only">Toggle navigation</span>
