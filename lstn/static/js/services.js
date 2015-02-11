@@ -55,6 +55,11 @@ angular.module('lstn.services', ['ngResource'])
     });
   };
 
+  socket.roomUpdate = function(user) {
+    console.log('sending room:update');
+    this.emit('room:update', user);
+  };
+
   socket.registerRoom = function(id, user) {
     if (!this.isConnected) {
       return;
@@ -71,6 +76,16 @@ angular.module('lstn.services', ['ngResource'])
   socket.sendFinished = function() {
     console.log('sending room:controller:playing:finished');
     this.emit('room:controller:playing:finished');
+  };
+
+  socket.sendUpvote = function() {
+    console.log('sending room:controller:upvote');
+    this.emit('room:controller:downvote');
+  };
+
+  socket.sendDownvote = function() {
+    console.log('sending room:controller:downvote');
+    this.emit('room:controller:downvote');
   };
 
   return socket;
