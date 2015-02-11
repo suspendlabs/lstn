@@ -159,12 +159,13 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:connect:error', function(data) {
+      $scope.addAlert('Something went wrong while trying to connect to the room.', 'danger');
       console.log('room:connect:error', data);
-      console.error('Unable to connect to room', data);
     });
 
     socket.on('room:roster:update', function(data) {
       console.log('room:roster:update', data);
+
       $scope.roster = data;
       $scope.roster.controllersCount = $scope.roster.controllerOrder.length;
       $scope.roster.usersCount = Object.keys($scope.roster.users).length;
@@ -182,9 +183,10 @@ angular.module('lstn.controllers', [])
 
         $scope.removeSongFromQueue(song.key, 0);
       } else {
+        $scope.addAlert("You've been made a listener because your queue ran out of music.", 'info');
         $scope.isController = false;
         console.log('room:controller:empty');
-        socket.emit('room:controller:empty', {});
+        socket.emit('room:controller:empty');
       }
     });
 
@@ -248,6 +250,8 @@ angular.module('lstn.controllers', [])
         return;
       }
 
+      console.log('playSong', data);
+
       if (!data || !data.key) {
         $scope.isCurrentController = false;
         $scope.playing = null;
@@ -279,6 +283,8 @@ angular.module('lstn.controllers', [])
     };
 
     $scope.songFinished = function() {
+      console.log('songFinished');
+
       $scope.isCurrentController = false;
       socket.sendFinished();
     };
@@ -301,8 +307,10 @@ angular.module('lstn.controllers', [])
       $scope.isController = !$scope.isController;
 
       if ($scope.isController) {
+        console.log('become a broadcaster');
         socket.requestControl($scope.room.id, $scope.current_user.id);
       } else {
+        console.log('become a listener');
         socket.releaseControl($scope.room.id, $scope.current_user.id);
       }
     };
@@ -486,6 +494,7 @@ angular.module('lstn.controllers', [])
 
       // Skip auto play songs from Rdio
       if (newVal.type === 'ap') {
+        console.log('trying to play auto-play song', newVal);
         $scope.playing = null;
         return;
       }
