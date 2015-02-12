@@ -57,6 +57,10 @@ body > .container {
   text-align: center;
 }
 
+.page-header {
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
 .page-header .alert {
   font-size: 14px;
 }
@@ -239,6 +243,48 @@ body > .container {
 .playing__container .playing__queue .playing__queue__container {
   height: 235px;
 }
+.playing__container .playing__queue .playing__queue__container .queue__tabs {
+  height: 100%;
+}
+.playing__container .playing__queue .playing__queue__container .queue__tabs .nav-tabs {
+  height: 17%;
+}
+.playing__container .playing__queue .playing__queue__container .queue__tabs .tab-content {
+  height: 83%;
+}
+.playing__container .playing__queue .playing__queue__container .queue__tabs .tab-content .tab-pane {
+  height: 100%;
+}
+.playing__container .playing__queue .playing__queue__container .queue__tabs .tab-content .tab-pane .messages {
+  height: 82%;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-width: 1px 1px 0 1px;
+  border-color: #ddd;
+  border-style: solid;
+}
+.playing__container .playing__queue .playing__queue__container .queue__tabs .tab-content .tab-pane .messages .list-group-item {
+  padding: 0;
+  font-size: 0.85em;
+  border-radius: 0;
+}
+.playing__container .playing__queue .playing__queue__container .queue__tabs .tab-content .tab-pane .messages .list-group-item .chat__user {
+  display: inline-block;
+  padding: 5px;
+  width: 20%;
+  text-align: right;
+  vertical-align: top;
+}
+.playing__container .playing__queue .playing__queue__container .queue__tabs .tab-content .tab-pane .messages .list-group-item .chat__message {
+  display: inline-block;
+  padding: 5px;
+  width: 79%;
+}
+.playing__container .playing__queue .playing__queue__container .queue__tabs .tab-content .tab-pane .form-control {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
 
 .search__contents {
   padding: 0;
@@ -360,6 +406,7 @@ body > .container {
 }
 .track__list.queue {
   height: 194px;
+  width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -394,6 +441,10 @@ body > .container {
 }
 .track__list.queue .track .track__info .track__artist {
   font-size: 14px;
+}
+
+.messages {
+  margin-bottom: 0;
 }
 
 footer {
