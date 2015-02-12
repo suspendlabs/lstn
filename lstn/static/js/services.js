@@ -88,6 +88,11 @@ angular.module('lstn.services', ['ngResource'])
     this.emit('room:controller:downvote');
   };
 
+  socket.sendMessage = function(message) {
+    console.log('sending room:chat:message');
+    this.emit('room:chat:message', message);
+  };
+
   return socket;
 }])
 
