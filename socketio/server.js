@@ -12,6 +12,7 @@ var roster = {};
 var connections = {};
 var timeouts = {};
 var currentController = {};
+var chatHistory = {};
 
 var Lstn = function(socket) {
   this.socket = socket;
@@ -245,6 +246,18 @@ Lstn.prototype.sendRoster = function() {
   io.sockets.in(this.roomId).emit('room:roster:update', roster[this.roomId]);
 };
 
+Lstn.prototype.getChatHistory = function() {
+  if (!(this.roomId in chatHistory)) {
+    return [];
+  }
+
+  return chatHistory[this.roomId];
+};
+
+Lstn.prototype.sendChatHistory = function() {
+  this.socket.emit('room:chat:history', this.getChatHistory());
+};
+
 Lstn.prototype.addConnection = function() {
   // Create the room's connection pool if needed
   if (!(this.roomId in connections)) {
@@ -443,6 +456,9 @@ Lstn.prototype.onRoomConnect = function(data) {
   // Send the updated roster
   this.sendRoster();
 
+  // Send the chat history
+  this.sendChatHistory();
+
   // Send playing status
   this.sendPlaying();
 };
@@ -558,6 +574,20 @@ Lstn.prototype.onControllerDownvote = function() {
   io.sockets.in(this.roomId).emit('room:downvote', votes);
 };
 
+Lstn.prototype.onChatMessage = function(message) {
+  io.sockets.in(this.roomId).emit('room:chat:message', message);
+
+  if (!(this.roomId in chatHistory)) {
+    chatHistory[this.roomId] = [];
+  }
+
+  chatHistory[this.roomId].push(message);
+
+  if (chatHistory[this.roomId].length > 250) {
+    chatHistory[this.roomId].splice(0, chatHistory[this.roomId].length - 250);
+  }
+};
+
 io.sockets.on('connection', function(socket) {
   console.log('new socket', socket.id);
   var lstn = new Lstn(socket);
@@ -580,4 +610,7 @@ io.sockets.on('connection', function(socket) {
   // Controller voting
   socket.on('room:controller:upvote', lstn.onControllerUpvote.bind(lstn));
   socket.on('room:controller:downvote', lstn.onControllerDownvote.bind(lstn));
+
+  // Chat
+  socket.on('room:chat:message', lstn.onChatMessage.bind(lstn));
 });
