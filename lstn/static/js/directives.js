@@ -2,6 +2,22 @@
 'use strict';
 
 angular.module('lstn.directives', [])
+.directive('lstnEnter', function() {
+  return function($scope, $element, $attrs) {
+    $element.bind('keydown keypress', function(event) {
+      if (event.which !== 13) {
+        return;
+      }
+
+      $scope.$apply(function(){
+        $scope.$eval($attrs.lstnEnter);
+      });
+
+      event.preventDefault();
+    });
+  };
+})
+
 .directive('holder', [
   function() {
     return {
@@ -142,8 +158,8 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnRoomQueue', ['CurrentUser',
-  function(CurrentUser) {
+.directive('lstnRoomQueue', ['CurrentUser', 'socket',
+  function(CurrentUser, socket) {
     return {
       restrict: 'E',
       replace: true,
@@ -174,6 +190,21 @@ angular.module('lstn.directives', [])
               // TODO: Error
             });
           }
+        };
+
+        $scope.message = {
+          sender: $scope.current_user.id,
+          user: $scope.current_user.name,
+          text: null
+        };
+
+        $scope.sendMessage = function() {
+          if (!$scope.message || !$scope.message.text) {
+            return;
+          }
+
+          socket.sendMessage($scope.message);
+          $scope.message.text = null;
         };
       }
     };
