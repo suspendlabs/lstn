@@ -80,7 +80,7 @@ angular.module('lstn.services', ['ngResource'])
 
   socket.sendUpvote = function() {
     console.log('sending room:controller:upvote');
-    this.emit('room:controller:downvote');
+    this.emit('room:controller:upvote');
   };
 
   socket.sendDownvote = function() {
