@@ -1,11 +1,31 @@
 <div class="playing__queue col-md-12">
   <div class="playing__queue__container panel panel-success">
-    <div class="panel-heading">Your Queue</div>
-    <ul id="queue" class="queue queue--full track__list" data-ng-show="queue && queue.length > 0" data-ui-sortable="sortableOptions" ng-model="queue">
-      <lstn-track data-ng-class-even="'track--even'" data-ng-class-odd="'track--odd'" data-ng-repeat="song in queue" data-cutoff="50"></lstn-track>
-    </ul>
-    <div class="queue--empty alert alert-info text-center" data-ng-show="!queue || queue.length === 0">
-      <h3>Select songs from your playlists on the left to add songs to your queue</h3>
-    </div>
+    <tabset class="queue__tabs">
+      <tab heading="Your Queue">
+        <ul id="queue" class="queue queue--full track__list" data-ng-show="queue && queue.length > 0" data-ui-sortable="sortableOptions" ng-model="queue">
+          <lstn-track data-ng-class-even="'track--even'" data-ng-class-odd="'track--odd'" data-ng-repeat="song in queue" data-cutoff="50"></lstn-track>
+        </ul>
+        <div class="queue--empty alert alert-info text-center" data-ng-show="!queue || queue.length === 0">
+          <h3>Select songs from your playlists on the left to add songs to your queue</h3>
+        </div>
+      </tab>
+      <tab heading="Room Queue">
+        <ul id="room-queue" class="queue queue--full track__list" data-ng-show="roomQueue && roomQueue.length > 0">
+          <lstn-track data-ng-class-even="'track--even'" data-ng-class-odd="'track--odd'" data-ng-repeat="song in roomQueue" data-cutoff="50"></lstn-track>
+        </ul>
+        <div class="queue--empty alert alert-info text-center" data-ng-show="!roomQueue || roomQueue.length === 0">
+          <h3>See the upcoming songs from each broadcaster</h3>
+        </div>
+      </tab>
+      <tab heading="Chat">
+        <ul id="messages" class="messages list-group">
+          <li class="list-group-item" data-ng-repeat="message in chat.messages" data-ng-class="{'list-group-item-info': message.sender === current_user.id}">
+            <div class="chat__user" data-ng-bind="message.user"></div>
+            <div class="chat__message" data-ng-bind="message.text"></div>
+          </li>
+        </ul>
+        <input class="form-control" type="text" data-ng-model="message.text" data-lstn-enter="sendMessage()" placeholder="Send message..."></input>
+      </tab>
+    </tabset>
   </div>
 </div>
