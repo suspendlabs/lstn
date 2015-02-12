@@ -43,7 +43,7 @@ module.exports = (grunt) ->
         files: ['lstn/static/partials/**/*.html']
         tasks: ['ngtemplates']
       sass:
-        files: ['lstn/sass/**/*.scss']
+        files: ['sass/**/*.scss']
         tasks: ['compass']
     uglify:
       lstn:
