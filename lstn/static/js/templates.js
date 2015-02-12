@@ -119,10 +119,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div class=\"playing__actions col-md-12 text-center\">\n" +
     "  <div class=\"playing__actions__container panel panel-default\">\n" +
     "    <button data-ng-show=\"!mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Unmute\" data-ng-click=\"toggleMute()\" title=\"Unmute\">\n" +
-    "      <span class=\"glyphicon glyphicon-volume-up\" aria-hidden=\"true\"></span> \n" +
+    "      <span class=\"glyphicon glyphicon-volume-off\" aria-hidden=\"true\"></span> \n" +
     "    </button>\n" +
     "    <button data-ng-show=\"mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Mute\" data-ng-click=\"toggleMute()\" title=\"Mute\">\n" +
-    "      <span class=\"glyphicon glyphicon-volume-off\" aria-hidden=\"true\"></span> \n" +
+    "      <span class=\"glyphicon glyphicon-volume-up\" aria-hidden=\"true\"></span> \n" +
     "    </button>\n" +
     "    <button data-ng-show=\"!playing.downvoted && !isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key || playing.song.voted\" class=\"btn btn-danger btn-lg\" aria-label=\"Downvote\" data-ng-click=\"downvote()\" title=\"Downvote\">\n" +
     "      <span class=\"glyphicon glyphicon-thumbs-down\" aria-hidden=\"true\"></span> \n" +
@@ -134,10 +134,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <span class=\"glyphicon glyphicon-step-forward\" aria-hidden=\"true\"></span> \n" +
     "    </button>\n" +
     "    <button data-ng-show=\"isController\" type=\"button\" class=\"btn btn-primary btn-lg\" aria-label=\"Stop Broadcasting\" data-ng-click=\"toggleBroadcast()\" title=\"Stop Broadcasting\">\n" +
-    "      <span class=\"glyphicon glyphicon-cd\" aria-hidden=\"true\"></span>\n" +
+    "      <span class=\"glyphicon glyphicon-headphones\" aria-hidden=\"true\"></span>\n" +
     "    </button>\n" +
     "    <button data-ng-show=\"!isController\" data-ng-disabled=\"!queue || queue.length === 0\" type=\"button\" class=\"btn btn-primary btn-lg\" aria-label=\"Start Broadcasting\" data-ng-click=\"toggleBroadcast()\" title=\"Start Broadcasting\">\n" +
-    "      <span class=\"glyphicon glyphicon-headphones\" aria-hidden=\"true\"></span>\n" +
+    "      <span class=\"glyphicon glyphicon-cd\" aria-hidden=\"true\"></span>\n" +
     "    </button>\n" +
     "    <button data-ng-show=\"!playing.upvoted\" type=\"button\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
     "      <span class=\"glyphicon glyphicon-thumbs-up\" aria-hidden=\"true\"></span> \n" +
@@ -147,10 +147,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </button>\n" +
     "\n" +
     "    <button data-ng-show=\"visualize\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Show Visualizer\" data-ng-click=\"toggleVisualize()\" title=\"Show Visualizer\">\n" +
-    "      <span class=\"glyphicon glyphicon-eye-open\" aria-hidden=\"true\"></span> \n" +
+    "      <span class=\"glyphicon glyphicon-eye-close\" aria-hidden=\"true\"></span> \n" +
     "    </button>\n" +
     "    <button data-ng-show=\"!visualize\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Hide Visualizer\" data-ng-click=\"toggleVisualize()\" title=\"Hide Visualizer\">\n" +
-    "      <span class=\"glyphicon glyphicon-eye-close\" aria-hidden=\"true\"></span> \n" +
+    "      <span class=\"glyphicon glyphicon-eye-open\" aria-hidden=\"true\"></span> \n" +
     "    </button>\n" +
     "   </div>\n" +
     "</div>\n"
@@ -236,13 +236,33 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-queue.html',
     "<div class=\"playing__queue col-md-12\">\n" +
     "  <div class=\"playing__queue__container panel panel-success\">\n" +
-    "    <div class=\"panel-heading\">Your Queue</div>\n" +
-    "    <ul id=\"queue\" class=\"queue queue--full track__list\" data-ng-show=\"queue && queue.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue\">\n" +
-    "      <lstn-track data-ng-class-even=\"'track--even'\" data-ng-class-odd=\"'track--odd'\" data-ng-repeat=\"song in queue\" data-cutoff=\"50\"></lstn-track>\n" +
-    "    </ul>\n" +
-    "    <div class=\"queue--empty alert alert-info text-center\" data-ng-show=\"!queue || queue.length === 0\">\n" +
-    "      <h3>Select songs from your playlists on the left to add songs to your queue</h3>\n" +
-    "    </div>\n" +
+    "    <tabset class=\"queue__tabs\">\n" +
+    "      <tab heading=\"Your Queue\">\n" +
+    "        <ul id=\"queue\" class=\"queue queue--full track__list\" data-ng-show=\"queue && queue.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue\">\n" +
+    "          <lstn-track data-ng-class-even=\"'track--even'\" data-ng-class-odd=\"'track--odd'\" data-ng-repeat=\"song in queue\" data-cutoff=\"50\"></lstn-track>\n" +
+    "        </ul>\n" +
+    "        <div class=\"queue--empty alert alert-info text-center\" data-ng-show=\"!queue || queue.length === 0\">\n" +
+    "          <h3>Select songs from your playlists on the left to add songs to your queue</h3>\n" +
+    "        </div>\n" +
+    "      </tab>\n" +
+    "      <tab heading=\"Room Queue\">\n" +
+    "        <ul id=\"room-queue\" class=\"queue queue--full track__list\" data-ng-show=\"roomQueue && roomQueue.length > 0\">\n" +
+    "          <lstn-track data-ng-class-even=\"'track--even'\" data-ng-class-odd=\"'track--odd'\" data-ng-repeat=\"song in roomQueue\" data-cutoff=\"50\"></lstn-track>\n" +
+    "        </ul>\n" +
+    "        <div class=\"queue--empty alert alert-info text-center\" data-ng-show=\"!roomQueue || roomQueue.length === 0\">\n" +
+    "          <h3>See the upcoming songs from each broadcaster</h3>\n" +
+    "        </div>\n" +
+    "      </tab>\n" +
+    "      <tab heading=\"Chat\">\n" +
+    "        <ul id=\"messages\" class=\"messages list-group\">\n" +
+    "          <li class=\"list-group-item\" data-ng-repeat=\"message in chat.messages\" data-ng-class=\"{'list-group-item-info': message.sender === current_user.id}\">\n" +
+    "            <div class=\"chat__user\" data-ng-bind=\"message.user\"></div>\n" +
+    "            <div class=\"chat__message\" data-ng-bind=\"message.text\"></div>\n" +
+    "          </li>\n" +
+    "        </ul>\n" +
+    "        <input class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
+    "      </tab>\n" +
+    "    </tabset>\n" +
     "  </div>\n" +
     "</div>\n"
   );
