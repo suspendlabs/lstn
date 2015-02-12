@@ -148,6 +148,13 @@ angular.module('lstn.controllers', [])
     $scope.remaining = 0;
     $scope.hideRemaining = false;
 
+    $scope.queue = [];
+    $scope.roomQueue = [];
+
+    $scope.chat = {
+      messages: []
+    };
+
     // Setup sockets
     socket.on('connect', function() {
       console.log('connect');
@@ -161,6 +168,17 @@ angular.module('lstn.controllers', [])
     socket.on('room:connect:error', function(data) {
       $scope.addAlert('Something went wrong while trying to connect to the room.', 'danger');
       console.log('room:connect:error', data);
+    });
+
+    socket.on('room:chat:history', function(data) {
+      console.log('room:chat:history', data);
+      $scope.chat.messages = data;
+
+      $timeout(function() {
+        $('#messages').animate({
+          scrollTop: $('#messages')[0].scrollHeight
+        }, 200);
+      }, 10);
     });
 
     socket.on('room:roster:update', function(data) {
@@ -241,6 +259,16 @@ angular.module('lstn.controllers', [])
       if (score <= -2) {
         $scope.skipSong();
       }
+    });
+
+    socket.on('room:chat:message', function(message) {
+      $scope.chat.messages.push(message);
+
+      $timeout(function() {
+        $('#messages').animate({
+          scrollTop: $('#messages')[0].scrollHeight
+        }, 200);
+      }, 10);
     });
 
     // TODO: Move these to Room service (badjokeeel) if possible
@@ -680,7 +708,6 @@ angular.module('lstn.controllers', [])
       $scope.room = response.room;
       $scope.playback = response.playback;
 
-      $scope.queue = [];
       if (response.queue) {
         $scope.queue = response.queue;
       }
