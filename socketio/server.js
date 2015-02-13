@@ -43,6 +43,8 @@ Lstn.prototype.getUser = function(user) {
     return null;
   }
 
+  user = user || this.userId;
+
   if (user in roster[this.roomId].controllers) {
     return roster[this.roomId].controllers[user];
   }
@@ -645,12 +647,11 @@ Lstn.prototype.onControllerUpvote = function() {
   var votes = this.incrPlayingVotes();
   io.sockets.in(this.roomId).emit('room:upvote', votes);
 
-  var controller = this.getCurrentController();
-  var user = this.getUser(controller);
+  var user = this.getUser();
 
-  if (controller && user) {
+  if (user) {
     this.sendChatMessage({
-      sender: this.getCurrentController(),
+      sender: this.userId,
       text: 'upvoted this song',
       user: user.name,
       type: 'upvote'
@@ -662,12 +663,11 @@ Lstn.prototype.onControllerDownvote = function() {
   var votes = this.decrPlayingVotes();
   io.sockets.in(this.roomId).emit('room:downvote', votes);
 
-  var controller = this.getCurrentController();
-  var user = this.getUser(controller);
+  var user = this.getUser();
 
-  if (controller && user) {
+  if (&& user) {
     this.sendChatMessage({
-      sender: this.getCurrentController(),
+      sender: this.userId,
       text: 'downvoted this song',
       user: user.name,
       type: 'downvote'
