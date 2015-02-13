@@ -476,10 +476,17 @@ body {
     }
   
     .track__info {
+      width: 90%;
       float: left;
       font-family: 'Inconsolata', monospace, sans-serif;
 
       padding: 3px 0 0 3px;
+
+      .track__top {
+          float: right;
+          margin: 12px 10px 0px 5px;
+          cursor: pointer;
+      }
   
       .track__title {
         font-weight: bold;
