@@ -79,7 +79,12 @@ angular.module('lstn.directives', [])
             return;
           }
 
-          if (!newVal || newVal.length < 3) {
+          if (!newVal) {
+            $scope.searchResults = [];
+            return;
+          }
+
+          if (newVal.length < 3) {
             return;
           }
 
