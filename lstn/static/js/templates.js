@@ -255,7 +255,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      </tab>\n" +
     "      <tab heading=\"Chat\">\n" +
     "        <ul id=\"messages\" class=\"messages list-group\">\n" +
-    "          <li class=\"list-group-item\" data-ng-repeat=\"message in chat.messages\" data-ng-class=\"{'list-group-item-info': message.sender === current_user.id}\">\n" +
+    "          <li class=\"list-group-item\" data-ng-repeat=\"message in chat.messages\" data-ng-class=\"{'list-group-item-info': message.sender === current_user.id, 'list-group-item-warning': message.type === 'system', 'list-group-item-success': message.type === 'upvote', 'list-group-item-danger': message.type === 'downvote'}\">\n" +
     "            <div class=\"chat__user\" data-ng-bind=\"message.user\"></div>\n" +
     "            <div class=\"chat__message\" data-ng-bind=\"message.text\"></div>\n" +
     "          </li>\n" +
