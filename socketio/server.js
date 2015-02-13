@@ -38,6 +38,55 @@ Lstn.prototype.getCurrentController = function() {
   return currentController[this.roomId];
 };
 
+Lstn.prototype.getUser = function(user) {
+  if (!(this.roomId in roster)) {
+    return null;
+  }
+
+  if (user in roster[this.roomId].controllers) {
+    return roster[this.roomId].controllers[user];
+  }
+
+  if (user in roster[this.roomId].users) {
+    return roster[this.roomId].users[user];
+  }
+
+  return null;
+};
+
+Lstn.prototype.getSongName = function() {
+  if (!(this.roomId in playing)) {
+    return null;
+  }
+
+  if (!playing[this.roomId]) {
+    return null;
+  }
+
+  if (!('name' in playing[this.roomId])) {
+    return null;
+  }
+
+  return playing[this.roomId].name;
+};
+
+Lstn.prototype.getSongArtist = function() {
+  if (!(this.roomId in playing)) {
+    return null;
+  }
+
+  if (!playing[this.roomId]) {
+    return null;
+  }
+
+  if (!('artist' in playing[this.roomId])) {
+    return null;
+  }
+
+  return playing[this.roomId].artist;
+};
+
+
 Lstn.prototype.clearTimeouts = function() {
   if (!(this.roomId in timeouts)) {
     return;
@@ -258,6 +307,20 @@ Lstn.prototype.sendChatHistory = function() {
   this.socket.emit('room:chat:history', this.getChatHistory());
 };
 
+Lstn.prototype.sendChatMessage = function(message) {
+  io.sockets.in(this.roomId).emit('room:chat:message', message);
+
+  if (!(this.roomId in chatHistory)) {
+    chatHistory[this.roomId] = [];
+  }
+
+  chatHistory[this.roomId].push(message);
+
+  if (chatHistory[this.roomId].length > 250) {
+    chatHistory[this.roomId].splice(0, chatHistory[this.roomId].length - 250);
+  }
+};
+
 Lstn.prototype.addConnection = function() {
   // Create the room's connection pool if needed
   if (!(this.roomId in connections)) {
@@ -368,6 +431,20 @@ Lstn.prototype.sendPlaying = function(broadcast) {
 
   if (broadcast) {
     io.sockets.in(this.roomId).emit('room:playing', data);
+
+    var controller = this.getCurrentController();
+    var user = this.getUser(controller);
+    var name = this.getSongName();
+    var artist = this.getSongArtist();
+
+    if (controller && user && name && artist) {
+      this.sendChatMessage({
+        sender: this.getCurrentController(),
+        text: 'has started playing ' + name + ' by ' + artist,
+        user: user.name,
+        type: 'system',
+      });
+    }
   } else {
     this.socket.emit('room:playing', data);
   }
@@ -567,25 +644,39 @@ Lstn.prototype.onControllerPlayingFinished = function(data) {
 Lstn.prototype.onControllerUpvote = function() {
   var votes = this.incrPlayingVotes();
   io.sockets.in(this.roomId).emit('room:upvote', votes);
+
+  var controller = this.getCurrentController();
+  var user = this.getUser(controller);
+
+  if (controller && user) {
+    this.sendChatMessage({
+      sender: this.getCurrentController(),
+      text: 'upvoted this song',
+      user: user.name,
+      type: 'upvote'
+    });
+  }
 };
 
 Lstn.prototype.onControllerDownvote = function() {
   var votes = this.decrPlayingVotes();
   io.sockets.in(this.roomId).emit('room:downvote', votes);
+
+  var controller = this.getCurrentController();
+  var user = this.getUser(controller);
+
+  if (controller && user) {
+    this.sendChatMessage({
+      sender: this.getCurrentController(),
+      text: 'downvoted this song',
+      user: user.name,
+      type: 'downvote'
+    });
+  }
 };
 
 Lstn.prototype.onChatMessage = function(message) {
-  io.sockets.in(this.roomId).emit('room:chat:message', message);
-
-  if (!(this.roomId in chatHistory)) {
-    chatHistory[this.roomId] = [];
-  }
-
-  chatHistory[this.roomId].push(message);
-
-  if (chatHistory[this.roomId].length > 250) {
-    chatHistory[this.roomId].splice(0, chatHistory[this.roomId].length - 250);
-  }
+  this.sendChatMessage(message);
 };
 
 io.sockets.on('connection', function(socket) {
