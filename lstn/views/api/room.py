@@ -88,7 +88,12 @@ def room_id_action(room_id):
     components = string.split(hostname, ':')
     hostname = components[0]
 
-  playback = rdio_manager.get_playback_token(hostname)
+  try:
+    playback = rdio_manager.get_playback_token(hostname)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to retrieve playback credentials: %s' % str(e))
+
   if not playback:
       raise APIException('Unable to retrieve playback token', 500)
 
