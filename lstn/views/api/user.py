@@ -74,7 +74,11 @@ def get_playlists():
     current_user.oauth_token,
     current_user.oauth_token_secret)
 
-  playlist_set = rdio_manager.get_playlists()
+  try:
+    playlist_set = rdio_manager.get_playlists()
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to get playlists: %s' % str(e))
 
   playlists = {
     'owned': [],
@@ -115,7 +119,12 @@ def get_playlist_type(list_type):
   }
 
   playlists = {}
-  playlists[list_type] = rdio_manager.call_api_authenticated(data)
+
+  try:
+    playlists[list_type] = rdio_manager.call_api_authenticated(data)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to retrieve playlist: %s' % str(e))
 
   return jsonify(success=True, playlists=playlists)
 
@@ -143,7 +152,11 @@ def update_queue():
   tracks = [track['key'] for track in request.json['queue']]
 
   if tracks:
-    rdio_manager.set_playlist_order(current_user.queue, tracks)
+    try:
+      rdio_manager.set_playlist_order(current_user.queue, tracks)
+    except Exception as e:
+      current_app.logger.debug(e)
+      raise APIException('Unable to reorder your queue: %s' % str(e))
 
   return jsonify(success=True)
 
@@ -164,9 +177,17 @@ def add_queue(track_id):
   queue_playlist = current_user.get_queue_id()
 
   if queue_playlist:
-    rdio_manager.add_to_playlist(queue_playlist, [track_id])
+    try:
+      rdio_manager.add_to_playlist(queue_playlist, [track_id])
+    except Exception as e:
+      current_app.logger.debug(e)
+      raise APIException('Unable to add the song to your queue: %s' % str(e))
   else:
-    playlist = rdio_manager.create_playlist('Lstn to Rdio', 'User Queue for Lstn', [track_id])
+    try:
+      playlist = rdio_manager.create_playlist('Lstn to Rdio', 'User Queue for Lstn', [track_id])
+    except Exception as e:
+      current_app.logger.debug(e)
+      raise APIException('Unable to add the song to your queue: %s' % str(e))
 
     # Throw an error if we couldn't create it
     if not playlist:
@@ -193,7 +214,11 @@ def delete_queue(track_id):
     current_user.oauth_token_secret)
 
   index = request.args.get('index', 0)
-  rdio_manager.remove_from_playlist(current_user.queue, [track_id], index)
+  try:
+    rdio_manager.remove_from_playlist(current_user.queue, [track_id], index)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to remove that song from your queue: %s' % str(e))
 
   queue = current_user.get_queue()
   return jsonify(success=True, queue=queue)
@@ -218,5 +243,10 @@ def search():
     'types': 'track',
   }
 
-  results = rdio_manager.call_api(data)
+  try:
+    results = rdio_manager.call_api(data)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to search music: %s' % str(e))
+
   return jsonify(success=True, results=results['results'])
