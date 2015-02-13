@@ -2,10 +2,11 @@
   <div class="track__image">
     <img data-ng-src="{{ song.icon }}" alt="{{ song.album }}" title="{{ song.album }}">
     <div class="overlay"></div>
-    <i data-ng-hide="song.in_queue" class="glyphicon glyphicon-plus-sign" data-ng-click="addSongToQueue(song.key)"></i>
-    <i data-ng-show="song.in_queue" class="glyphicon glyphicon-minus-sign" data-ng-click="removeSongFromQueue(song.key, $index)"></i>
+    <span data-ng-hide="song.in_queue" class="glyphicon glyphicon-plus-sign" data-ng-click="addSongToQueue(song.key)" title="Add to Queue"></span>
+    <span data-ng-show="song.in_queue" class="glyphicon glyphicon-minus-sign" data-ng-click="removeSongFromQueue(song.key, $index)" title="Remove from Queue"></span>
   </div>
   <div class="track__info">
+    <span data-ng-show="song.in_queue" class="track__top glyphicon glyphicon-chevron-up" data-ng-click="moveToTopOfQueue($index)" title="Move to Top of Queue"></span>
     <div class="track__title" title="{{ song.name }}" data-ng-bind="song.name | truncate:cutoff"></div>
     <div class="track__artist" data-ng-bind="song.artist | truncate:cutoff" title="{{ song.artist }}"></div>
   </div>
