@@ -15,7 +15,7 @@ class DefaultConfig(object):
 
     # Application Specific
     APP_NAME = 'lstn'
-    BASE_URL = 'http://lstn.suspend.io'
+    BASE_URL = 'http://lstn.fm'
     SECRET_KEY = 'af8d1d7f-369e-4ad2-b680-f7b27eac0d2d'
 
     # Google Settings
