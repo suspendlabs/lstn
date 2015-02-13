@@ -1,4 +1,6 @@
-Lstn
+Lstn.fm
 --------------
 
-Lstn to Rdio with Friends
+Lstn.fm is a platform for listening to music together with your friends. It takes the best of Rdio and combines it with rooms for shared listening. 
+
+You can check out a copy at [lstn.fm](http://lstn.fm)
