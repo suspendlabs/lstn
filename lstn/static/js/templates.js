@@ -311,10 +311,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <div class=\"track__image\">\n" +
     "    <img data-ng-src=\"{{ song.icon }}\" alt=\"{{ song.album }}\" title=\"{{ song.album }}\">\n" +
     "    <div class=\"overlay\"></div>\n" +
-    "    <i data-ng-hide=\"song.in_queue\" class=\"glyphicon glyphicon-plus-sign\" data-ng-click=\"addSongToQueue(song.key)\"></i>\n" +
-    "    <i data-ng-show=\"song.in_queue\" class=\"glyphicon glyphicon-minus-sign\" data-ng-click=\"removeSongFromQueue(song.key, $index)\"></i>\n" +
+    "    <span data-ng-hide=\"song.in_queue\" class=\"glyphicon glyphicon-plus-sign\" data-ng-click=\"addSongToQueue(song.key)\"></span>\n" +
+    "    <span data-ng-show=\"song.in_queue\" class=\"glyphicon glyphicon-minus-sign\" data-ng-click=\"removeSongFromQueue(song.key, $index)\"></span>\n" +
     "  </div>\n" +
     "  <div class=\"track__info\">\n" +
+    "    <span data-ng-show=\"song.in_queue\" class=\"track__top glyphicon glyphicon-chevron-up\" data-ng-click=\"moveToTopOfQueue($index)\"></span>\n" +
     "    <div class=\"track__title\" title=\"{{ song.name }}\" data-ng-bind=\"song.name | truncate:cutoff\"></div>\n" +
     "    <div class=\"track__artist\" data-ng-bind=\"song.artist | truncate:cutoff\" title=\"{{ song.artist }}\"></div>\n" +
     "  </div>\n" +
