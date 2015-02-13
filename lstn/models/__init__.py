@@ -83,12 +83,16 @@ class User(db.Model, ModelMixin, UserMixin):
       self.oauth_token,
       self.oauth_token_secret)
 
-    results = rdio_manager.call_api_authenticated(data);
-    if results:
-      for playlist in results:
-        if playlist['name'] == u'Lstn to Rdio':
-          self.queue = playlist['key']
-          break
+    try:
+      results = rdio_manager.call_api_authenticated(data);
+      if results:
+        for playlist in results:
+          if playlist['name'] == u'Lstn to Rdio':
+            self.queue = playlist['key']
+            break
+    except Exception as e:
+      current_app.logger.debug(e)
+      raise APIException('Unable to create Lstn playlist: %s' % str(e))
 
     if not self.queue:
       return None
@@ -108,13 +112,11 @@ class User(db.Model, ModelMixin, UserMixin):
     if not queue_id:
       return []
 
-    current_app.logger.debug('queue id %s' % queue_id)
-
     try:
       playlists = rdio_manager.get([queue_id], ['tracks'])
     except Exception as e:
       current_app.logger.debug(e)
-      return []
+      raise APIException('Unable to retrieve your queue: %s' % str(e))
 
     if not playlists:
       return []
