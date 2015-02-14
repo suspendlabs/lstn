@@ -71,15 +71,17 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/playing-image.html',
-    "<div class=\"playing__art\">\n" +
+    "<div class=\"playing__art\" class=\"text-center\">\n" +
     "  <img data-ng-show=\"playing.song.image\" data-ng-src=\"{{ playing.song.image }}\" alt=\"{{ playing.song.title }} - {{ playing.song.artist }}\">\n" +
-    "  <div data-ng-show=\"!playing.song.image\"><i class=\"glyphicon glyphicon-music playing__placeholder\"></i></div>\n" +
+    "  <div data-ng-show=\"!playing.song.image\" class=\"text-center\">\n" +
+    "    <i class=\"glyphicon glyphicon-music playing__placeholder text-muted\"></i>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 
 
   $templateCache.put('/static/partials/directives/playing-info.html',
-    "<div>\n" +
+    "<div class=\"playing__info-container\">\n" +
     "  <div data-ng-show=\"!visualize && !playing.song\" class=\"playing__info playing__info--stopped text-center\">\n" +
     "    <h3>Add music to your queue and click Broadcast to start playing</h3>\n" +
     "  </div>\n" +
@@ -218,11 +220,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-playing.html',
     "<div class=\"playing__container room__container\">\n" +
-    "  <div class=\"row no-gutters\" style=\"padding:12px;background:#f5f5f5;\">\n" +
-    "    <div class=\"col-md-4 col-sm-5\">\n" +
+    "  <div class=\"row no-gutters\">\n" +
+    "    <div class=\"col-md-4 col-sm-3\">\n" +
     "      <lstn-playing-image></lstn-playing-image>\n" +
     "    </div>\n" +
-    "    <div class=\"col-md-8 col-sm-7\">\n" +
+    "    <div class=\"col-md-8 col-sm-9\">\n" +
     "      <lstn-playing-info></lstn-playing-info>\n" +
     "      <lstn-visualizer data-ng-show=\"visualize && playing.song\"></lstn-visualizer>\n" +
     "    </div>\n" +
