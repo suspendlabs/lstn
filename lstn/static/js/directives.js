@@ -358,6 +358,37 @@ angular.module('lstn.directives', [])
       }
     };
   }
-]);
+])
+.directive('timeFromNow', ['$timeout', '$filter', function($timeout, $filter) {
+  return {
+    scope: {
+      timeFromNow: '='
+    }, 
+    link: function($scope, element) {
 
+      var timeoutId;
+      var intervalLength = 1000 * 60;
+      var filter = $filter('timeFromNow');
+        
+      function updateTime() {
+        element.text(filter($scope.timeFromNow));
+      }
+
+      function updateLater() {
+        timeoutId = $timeout(function() {
+          updateTime();
+          updateLater();
+        }, intervalLength);
+      }
+
+      element.bind('$destroy', function() {
+        $timeout.cancel(timeoutId);
+      });
+
+      updateTime();
+      updateLater();
+    }
+  };  
+}
+]);
 })();

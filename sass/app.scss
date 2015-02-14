@@ -6,6 +6,15 @@
 $rdio-red: #E84961;
 $rdio-blue: #008fd5;
 
+/* Source: http://snipplr.com/view/10979/css-cross-browser-word-wrap */
+.wordwrap { 
+   white-space: pre-wrap;      /* CSS3 */   
+   white-space: -moz-pre-wrap; /* Firefox */    
+   white-space: -pre-wrap;     /* Opera <7 */   
+   white-space: -o-pre-wrap;   /* Opera 7 */    
+   word-wrap: break-word;      /* IE */
+}
+
 body {
   font-family: Roboto, sans-serif;
 
@@ -318,18 +327,9 @@ body {
                 font-size: 0.85em;
                 border-radius: 0;
 
+                padding: 5px;
                 .chat__user {
-                  display: inline-block;
-                  padding: 5px;
-                  width: 20%;
                   text-align: right;
-                  vertical-align: top;
-                }
-
-                .chat__message {
-                  display: inline-block;
-                  padding: 5px;
-                  width: 79%;
                 }
               }
             }
@@ -586,3 +586,4 @@ footer {
 .clear {
   clear: both;
 }
+
