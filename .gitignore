@@ -69,3 +69,6 @@ node_modules
 
 # Bower
 bower_components
+
+# Local
+lstn/config.py
