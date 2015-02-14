@@ -266,8 +266,17 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <tab heading=\"Chat\">\n" +
     "        <ul id=\"messages\" class=\"messages list-group\">\n" +
     "          <li class=\"list-group-item\" data-ng-repeat=\"message in chat.messages\" data-ng-class=\"{'list-group-item-info': message.sender === current_user.id, 'list-group-item-warning': message.type === 'system', 'list-group-item-success': message.type === 'upvote', 'list-group-item-danger': message.type === 'downvote'}\">\n" +
-    "            <div class=\"chat__user\" data-ng-bind=\"message.user\"></div>\n" +
-    "            <div class=\"chat__message\" data-ng-bind=\"message.text\"></div>\n" +
+    "            <div class=\"row\">\n" +
+    "              <div class=\"col-xs-3\">\n" +
+    "                <div class=\"chat__user\" data-ng-bind=\"message.user\"></div>\n" +
+    "              </div>\n" +
+    "              <div data-ng-class=\"{'col-xs-6': message.created, 'col-xs-9': !message.created}\">\n" +
+    "                <div class=\"chat__message wordwrap\" data-ng-bind=\"message.text\"></div>\n" +
+    "              </div>\n" +
+    "              <div class=\"col-xs-3\" data-ng-if=\"message.created\">\n" +
+    "                <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
+    "              </div>\n" +
+    "            </div>\n" +
     "          </li>\n" +
     "        </ul>\n" +
     "        <input class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
