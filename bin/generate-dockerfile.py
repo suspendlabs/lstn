@@ -54,6 +54,7 @@ RUN apt-get -y install \\
     supervisor \\
     libmysqlclient-dev \\
     nodejs \\
+    nodejs-legacy \\
     npm \\
     redis-server
 
