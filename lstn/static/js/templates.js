@@ -321,7 +321,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div class=\"track__image\">\n" +
     "  <img data-ng-src=\"{{ song.icon }}\" alt=\"{{ song.album }}\" title=\"{{ song.album }}\">\n" +
     "  <div class=\"overlay\"></div>\n" +
-    "  <i class=\"fa fa-spinner fa-spin\" data-ng-show=\"song.addingToQueue\"></i>\n" +
+    "  <i class=\"fa fa-circle-o-notch fa-spin\" data-ng-show=\"song.addingToQueue\"></i>\n" +
     "  <span data-ng-hide=\"song.addingToQueue || song.in_queue || queueBitset[song.key]\" \n" +
     "    class=\"glyphicon glyphicon-plus-sign\" data-ng-click=\"addSongToQueue(song)\" title=\"Add to Queue\"></span>\n" +
     "  <span data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context==='queue'\" \n" +
