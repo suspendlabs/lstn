@@ -387,7 +387,7 @@ body > .container {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=65);
   opacity: 0.65;
 }
-.track__list .track .track__image .glyphicon {
+.track__list .track .track__image .glyphicon, .track__list .track .track__image .fa {
   display: none;
   position: relative;
   top: -80px;
@@ -403,7 +403,7 @@ body > .container {
 .track__list .track .track__image:hover .overlay {
   display: block;
 }
-.track__list .track .track__image:hover .glyphicon {
+.track__list .track .track__image:hover .glyphicon, .track__list .track .track__image:hover .fa {
   display: block;
 }
 .track__list .track .track__info {

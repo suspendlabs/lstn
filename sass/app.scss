@@ -448,7 +448,7 @@ body {
         @include opacity(0.65);
       }
 
-      .glyphicon {
+      .glyphicon, .fa {
         display: none;
 
         position: relative;
@@ -469,7 +469,7 @@ body {
           display: block;
         }
 
-        .glyphicon {
+        .glyphicon, .fa {
           display: block;
         }
       }
