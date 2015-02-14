@@ -318,22 +318,29 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/track.html',
     "<li id=\"track-{{ $id }}-{{ $index }}-{{ song.key }}\" class=\"track\">\n" +
-    "  <div class=\"track__image\">\n" +
-    "    <img data-ng-src=\"{{ song.icon }}\" alt=\"{{ song.album }}\" title=\"{{ song.album }}\">\n" +
-    "    <div class=\"overlay\"></div>\n" +
-    "    <i data-ng-hide=\"song.in_queue || queueBitset[song.key]\" class=\"glyphicon glyphicon-plus-sign\" data-ng-click=\"addSongToQueue(song.key)\"></i>\n" +
-    "    <i data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context === 'queue'\" \n" +
-    "      class=\"glyphicon glyphicon-minus-sign\" data-ng-click=\"removeSongFromQueue(song.key, $index)\"></i>\n" +
-    "    <i data-ng-show=\"queueBitset[song.key] && context === 'playlist'\" \n" +
-    "      class=\"glyphicon glyphicon-ok\" title=\"This song is already in your queue.\"></i>\n" +
-    "  </div>\n" +
-    "  <div class=\"track__info\">\n" +
-    "    <div class=\"track__title\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\" \n" +
-    "      title=\"{{ song.name }}\" data-ng-bind=\"song.name | truncate:cutoff\"></div>\n" +
-    "    <div class=\"track__artist\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\"\n" +
-    "      data-ng-bind=\"song.artist | truncate:cutoff\" title=\"{{ song.artist }}\"></div>\n" +
-    "  </div>\n" +
-    "  <div class=\"clear\"></div>\n" +
+    "<div class=\"track__image\">\n" +
+    "  <img data-ng-src=\"{{ song.icon }}\" alt=\"{{ song.album }}\" title=\"{{ song.album }}\">\n" +
+    "  <div class=\"overlay\"></div>\n" +
+    "  <span data-ng-hide=\"song.in_queue || queueBitset[song.key]\" \n" +
+    "    class=\"glyphicon glyphicon-plus-sign\" data-ng-click=\"addSongToQueue(song.key)\" title=\"Add to Queue\"></span>\n" +
+    "  <span data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context==='queue'\" \n" +
+    "    class=\"glyphicon glyphicon-minus-sign\" data-ng-click=\"removeSongFromQueue(song.key, $index)\" title=\"Remove from Queue\"></span>\n" +
+    "  <span data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context==='playlist'\" \n" +
+    "    class=\"glyphicon glyphicon-ok\" data-ng-click=\"removeSongFromQueue(song.key, $index)\" title=\"Remove from Queue\"></span>\n" +
+    "</div>\n" +
+    "<div class=\"track__info\">\n" +
+    "  <div class=\"track__title\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\" \n" +
+    "    title=\"{{ song.name }}\" data-ng-bind=\"song.name | truncate:cutoff\"></div>\n" +
+    "  <div class=\"track__artist\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\"\n" +
+    "    data-ng-bind=\"song.artist | truncate:cutoff\" title=\"{{ song.artist }}\"></div>\n" +
+    "</div>\n" +
+    "<div class=\"track__actions--queued\">\n" +
+    "  <a data-ng-click=\"moveToTopOfQueue($index)\">\n" +
+    "    <i data-ng-show=\"song.in_queue && context==='queue'\" class=\"track__top glyphicon glyphicon-chevron-up\" \n" +
+    "      data-ng-click=\"moveToTopOfQueue($index)\" title=\"Move to Top of Queue\"></i>\n" +
+    "  </a>\n" +
+    "</div>\n" +
+    "<div class=\"clear\"></div>\n" +
     "</li>\n"
   );
 

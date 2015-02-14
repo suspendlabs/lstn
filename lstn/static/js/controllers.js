@@ -193,19 +193,32 @@ angular.module('lstn.controllers', [])
       console.log('room:controller:playing:request', data);
 
       $scope.isCurrentController = true;
-      if ($scope.queue && $scope.queue.length > 0) {
-        var song = $scope.queue[0];
-
-        console.log('room:controller:playing', song);
-        socket.emit('room:controller:playing', song);
-
-        $scope.removeSongFromQueue(song.key, 0);
-      } else {
+      if (!$scope.queue || $scope.queue.length === 0) {
         $scope.addAlert("You've been made a listener because your queue ran out of music.", 'info');
         $scope.isController = false;
         console.log('room:controller:empty');
         socket.emit('room:controller:empty');
+        return;
       }
+
+      var song = $scope.queue.shift();
+      $scope.queue.push(song);
+
+      console.log('room:controller:playing', song);
+      socket.emit('room:controller:playing', song);
+
+      CurrentUser.updateQueue({
+        queue: $scope.queue
+      }, function(response) {
+        if (!response || !response.success) {
+          $scope.addAlert('Something went wrong while trying to move the song to the bottom of your queue.', 'danger');
+          console.log('moveToBottomOfQueue', response);
+          return;
+        }
+      }, function(response) {
+        $scope.addAlert('Something went wrong while trying to move the song to the bottom of your queue.', 'danger');
+        console.log('moveToBottomOfQueue', response);
+      });
     });
 
     socket.on('room:playing', function(data) {
@@ -705,6 +718,36 @@ angular.module('lstn.controllers', [])
     };
 
     
+    $scope.moveToTopOfQueue = function(index) {
+      var tracks = $scope.queue.splice(index, 1);
+      if (!tracks || tracks.length === 0) {
+        $scope.addAlert('Something went wrong while trying to move the song to the top of your queue.', 'danger');
+        console.log('moveToTopOfQueue', 'no tracks to move');
+        return;
+      }
+
+      $scope.queue.unshift(tracks[0]);
+
+      CurrentUser.updateQueue({
+        queue: $scope.queue
+      }, function(response) {
+        if (!response || !response.success) {
+          $scope.addAlert('Something went wrong while trying to move the song to the top of your queue.', 'danger');
+          console.log('moveToTopOfQueue', response);
+          return;
+        }
+
+        $timeout(function() {
+          $('#queue').animate({
+            scrollTop: 0
+          }, 500);
+        }, 10);
+      }, function(response) {
+        $scope.addAlert('Something went wrong while trying to move the song to the top of your queue.', 'danger');
+        console.log('moveToTopOfQueue', response);
+      });
+    };
+  
     Room.get({
       id: $routeParams.id
     }, function(response) {
