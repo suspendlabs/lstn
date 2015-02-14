@@ -665,7 +665,7 @@ Lstn.prototype.onControllerDownvote = function() {
 
   var user = this.getUser();
 
-  if (&& user) {
+  if (user) {
     this.sendChatMessage({
       sender: this.userId,
       text: 'downvoted this song',

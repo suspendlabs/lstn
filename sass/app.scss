@@ -448,7 +448,7 @@ body {
         @include opacity(0.65);
       }
 
-      .glyphicon {
+      .glyphicon, .fa {
         display: none;
 
         position: relative;
@@ -469,14 +469,13 @@ body {
           display: block;
         }
 
-        .glyphicon {
+        .glyphicon, .fa {
           display: block;
         }
       }
     }
   
     .track__info {
-      width: 90%;
       float: left;
       font-family: 'Inconsolata', monospace, sans-serif;
 
@@ -497,7 +496,26 @@ body {
         font-size: 11px;
       }
     }
+
+    .track__actions--queued {
+      float: right;
+      margin-right: 22px;
+      line-height: 50px;
+      a {
+        display:none;
+        cursor:pointer;
+      }
+    }
+
+    &:hover {
+      .track__actions--queued {
+        a {
+          display:inline;
+        }
+      }
+    }
   }
+
 
   &.queue {
     height: 194px;

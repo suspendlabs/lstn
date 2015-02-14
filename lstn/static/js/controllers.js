@@ -148,7 +148,7 @@ angular.module('lstn.controllers', [])
     $scope.remaining = 0;
     $scope.hideRemaining = false;
 
-    $scope.queue = [];
+    $scope.queue = [];    
     $scope.roomQueue = [];
 
     $scope.chat = {
@@ -668,10 +668,12 @@ angular.module('lstn.controllers', [])
         flashVars, params, {});
     };
   
-    $scope.addSongToQueue = function(song_id) {
+    $scope.addSongToQueue = function(song) {
+      song.addingToQueue = true;
       CurrentUser.addToQueue({
-        id: song_id
+        id: song.key
       }, function(response) {
+        song.addingToQueue = false;
         if (!response || !response.success || !response.queue) {
           $scope.addAlert('Something went wrong while trying to add the song to your queue.', 'danger');
           console.log('CurrentUser.addToQueue', response);
@@ -679,17 +681,25 @@ angular.module('lstn.controllers', [])
         }
   
         $scope.queue = response.queue;
-  
         $timeout(function() {
           $('#queue').animate({
             scrollTop: $('#queue')[0].scrollHeight
           }, 500);
         }, 10);
       }, function(response) {
+        song.addingToQueue = false;
         $scope.addAlert('Something went wrong while trying to add the song to your queue.', 'danger');
         console.log('CurrentUser.addToQueue', response);
       });
     };
+
+    $scope.$watch('queue', function() {
+      var set = {};
+      for (var i = 0; i < $scope.queue.length; i++) {
+        set[$scope.queue[i].key] = true;
+      }
+      $scope.queueBitset = set;
+    });
   
     $scope.removeSongFromQueue = function(song_id, index) {
       CurrentUser.removeFromQueue({
@@ -709,6 +719,7 @@ angular.module('lstn.controllers', [])
       });
     };
 
+    
     $scope.moveToTopOfQueue = function(index) {
       var tracks = $scope.queue.splice(index, 1);
       if (!tracks || tracks.length === 0) {
