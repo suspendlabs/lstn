@@ -327,7 +327,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <span data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context==='queue'\" \n" +
     "    class=\"glyphicon glyphicon-minus-sign\" data-ng-click=\"removeSongFromQueue(song.key, $index)\" title=\"Remove from Queue\"></span>\n" +
     "  <span data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context==='playlist'\" \n" +
-    "    class=\"glyphicon glyphicon-ok\" data-ng-click=\"removeSongFromQueue(song.key, $index)\" title=\"Remove from Queue\"></span>\n" +
+    "    class=\"glyphicon glyphicon-ok\" title=\"This song is already in your queue\"></span>\n" +
     "</div>\n" +
     "<div class=\"track__info\">\n" +
     "  <div class=\"track__title\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\" \n" +
