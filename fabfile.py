@@ -1,4 +1,4 @@
-simport getpass
+import getpass
 import requests
 import json
 import time
@@ -19,17 +19,24 @@ def __version():
     return version
 
 def build():
-
     with lcd(LOCAL_REPO):
         version = __version()
-        compressed = '%s.zip' % (version)
+        compressed = '%s.zip' % version
 
-        print(green('building version %s' % (version)))
+        print(green('building version %s' % version))
 
         # Copy codebase to the build path.
-        archive = os.path.join(BUILD_DIR, version) + '.zip'
-        local('rm -rf %s' % (archive))
-        local('git archive %s --output=%s' % (version, archive))
+        archive = os.path.join(BUILD_DIR, version)
+        local('rm -rf %s' % archive)
+        #local('git archive %s --output=%s' % (version, archive))
+        local('git checkout-index -f -a --prefix=%s/' % archive)
+
+        local('cp %s/lstn/config.py %s/lstn/' % (LOCAL_REPO, archive))
+
+    with lcd(BUILD_DIR):
+        compressed = '%s.zip' % version
+        local('zip -r %s %s' % (compressed, version))
+        local('rm -rf %s' % version)
 
 def deploy():
     version = __version()
