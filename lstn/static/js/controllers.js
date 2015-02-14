@@ -148,7 +148,7 @@ angular.module('lstn.controllers', [])
     $scope.remaining = 0;
     $scope.hideRemaining = false;
 
-    $scope.queue = [];
+    $scope.queue = [];    
     $scope.roomQueue = [];
 
     $scope.chat = {
@@ -656,6 +656,7 @@ angular.module('lstn.controllers', [])
     };
   
     $scope.addSongToQueue = function(song_id) {
+
       CurrentUser.addToQueue({
         id: song_id
       }, function(response) {
@@ -666,7 +667,6 @@ angular.module('lstn.controllers', [])
         }
   
         $scope.queue = response.queue;
-  
         $timeout(function() {
           $('#queue').animate({
             scrollTop: $('#queue')[0].scrollHeight
@@ -677,6 +677,14 @@ angular.module('lstn.controllers', [])
         console.log('CurrentUser.addToQueue', response);
       });
     };
+
+    $scope.$watch('queue', function() {
+      var set = {};
+      for (var i = 0; i < $scope.queue.length; i++) {
+        set[$scope.queue[i].key] = true;
+      }
+      $scope.queueBitset = set;
+    });
   
     $scope.removeSongFromQueue = function(song_id, index) {
       CurrentUser.removeFromQueue({
@@ -695,7 +703,8 @@ angular.module('lstn.controllers', [])
         console.log('CurrentUser.removeFromQueue', response);
       });
     };
-  
+
+    
     Room.get({
       id: $routeParams.id
     }, function(response) {
