@@ -668,11 +668,12 @@ angular.module('lstn.controllers', [])
         flashVars, params, {});
     };
   
-    $scope.addSongToQueue = function(song_id) {
-
+    $scope.addSongToQueue = function(song) {
+      song.addingToQueue = true;
       CurrentUser.addToQueue({
-        id: song_id
+        id: song.key
       }, function(response) {
+        song.addingToQueue = false;
         if (!response || !response.success || !response.queue) {
           $scope.addAlert('Something went wrong while trying to add the song to your queue.', 'danger');
           console.log('CurrentUser.addToQueue', response);
@@ -686,6 +687,7 @@ angular.module('lstn.controllers', [])
           }, 500);
         }, 10);
       }, function(response) {
+        song.addingToQueue = false;
         $scope.addAlert('Something went wrong while trying to add the song to your queue.', 'danger');
         console.log('CurrentUser.addToQueue', response);
       });
