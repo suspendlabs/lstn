@@ -1,0 +1,28 @@
+class DefaultConfig(object):
+    DEBUG = True
+    PRODUCTION = False
+    HOST = '0.0.0.0'
+    PORT = 7000
+
+    # SQLAlchemny
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqldb://username:password@db/lstn'
+    SQLALCHEMY_ECHO = False
+
+    # Redis
+    REDIS_HOST = 'localhost'
+    REDIS_PORT = 6379
+    REDIS_DB = 0
+
+    # Application Specific
+    APP_NAME = 'lstn'
+    BASE_URL = 'http://lstn.dev'
+    SECRET_KEY = '-SECRET-KEY-HERE-'
+
+    # Google Settings
+    GOOGLE_API_CLIENT_ID = '-GOOGLE-CLIENT-ID-'
+    GOOGLE_API_CLIENT_SECRET = '-GOOGLE-CLIENT-SECRET-'
+    GOOGLE_API_SCOPE = 'openid email profile'
+
+    # Rdio Settings
+    RDIO_CONSUMER_KEY = '-RDIO-CONSUMER-KEY-'
+    RDIO_CONSUMER_SECRET = '-RDIO-CONSUMER-SECRET-'
