@@ -36,22 +36,18 @@ body > .container {
   from {
     transform: scale(1) rotate(0deg);
   }
-
   to {
     transform: scale(1) rotate(360deg);
   }
 }
-
 @-webkit-keyframes spin2 {
   from {
     -webkit-transform: rotate(0deg);
   }
-
   to {
     -webkit-transform: rotate(360deg);
   }
 }
-
 .navbar-brand {
   padding: 5px 0 0 0;
 }
@@ -84,7 +80,7 @@ body > .container {
 }
 
 .lstn {
-  color: #e84961;
+  color: #E84961;
 }
 
 .rdio {
@@ -157,10 +153,8 @@ body > .container {
   border: 1px solid #ddd;
   padding: 5px;
   height: 500px;
-  -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 
@@ -194,10 +188,8 @@ body > .container {
   width: 180px;
   height: 180px;
   border: 1px solid #333;
-  -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 .playing__container .playing__art .playing__placeholder {
@@ -207,10 +199,8 @@ body > .container {
   height: 180px;
   line-height: 180px;
   border: 1px solid #333;
-  -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 .playing__container .playing__info {
@@ -219,10 +209,8 @@ body > .container {
   margin-bottom: 5px;
   background-color: #f5f5f5;
   border: 1px solid #e3e3e3;
-  -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 .playing__container .playing__info.playing__info--stopped {
@@ -245,10 +233,8 @@ body > .container {
   padding-right: 0;
   background-color: #333;
   border: 1px solid #e3e3e3;
-  -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 .playing__container .playing__visualization div {
