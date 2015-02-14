@@ -1,6 +1,7 @@
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var moment = require('moment');
 
 server.listen(3000);
 
@@ -310,6 +311,8 @@ Lstn.prototype.sendChatHistory = function() {
 };
 
 Lstn.prototype.sendChatMessage = function(message) {
+
+  message.created = moment().format();
   io.sockets.in(this.roomId).emit('room:chat:message', message);
 
   if (!(this.roomId in chatHistory)) {

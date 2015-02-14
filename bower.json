@@ -14,7 +14,8 @@
     "holderjs": "~2.5.0",
     "angular-socket-io": "~0.7.0",
     "jquery-ui": "~1.11.2",
-    "angular-ui-sortable": "~0.13.3"
+    "angular-ui-sortable": "~0.13.3",
+    "moment": "~2.9.0"
   },
   "version": "0.1.0",
   "homepage": "http://lstn.in",

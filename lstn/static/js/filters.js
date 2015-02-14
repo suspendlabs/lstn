@@ -2,6 +2,12 @@
 'use strict';
 
 angular.module('lstn.filters', [])
+
+.filter('timeFromNow', [function() {
+  return function(date) {
+    return moment(date).fromNow();
+  };
+}])
 .filter('truncate', function() {
   return function(input, targetLength, separator) {
     targetLength = parseInt(targetLength, 10);
