@@ -289,7 +289,9 @@ angular.module('lstn.directives', [])
       replace: true,
       templateUrl: '/static/partials/directives/track.html',
       link: function($scope, $element, $attrs) {
-        $scope.cutoff = $parse($attrs.cutoff || 25)($scope);
+        $scope.cutoff  = $parse($attrs.cutoff || 25)($scope);
+        $scope.context = $attrs.context || 'playlist';
+        
       }
     };
   }

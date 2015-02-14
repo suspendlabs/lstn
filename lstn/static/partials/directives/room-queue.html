@@ -3,7 +3,12 @@
     <tabset class="queue__tabs">
       <tab heading="Your Queue">
         <ul id="queue" class="queue queue--full track__list" data-ng-show="queue && queue.length > 0" data-ui-sortable="sortableOptions" ng-model="queue">
-          <lstn-track data-ng-class-even="'track--even'" data-ng-class-odd="'track--odd'" data-ng-repeat="song in queue" data-cutoff="50"></lstn-track>
+          <lstn-track 
+            data-ng-class-even="'track--even'" 
+            data-ng-class-odd="'track--odd'" 
+            data-ng-repeat="song in queue" 
+            data-context="queue"
+            data-cutoff="50"></lstn-track>
         </ul>
         <div class="queue--empty alert alert-info text-center" data-ng-show="!queue || queue.length === 0">
           <h3>Select songs from your playlists on the left to add songs to your queue</h3>
@@ -11,7 +16,12 @@
       </tab>
       <tab heading="Room Queue">
         <ul id="room-queue" class="queue queue--full track__list" data-ng-show="roomQueue && roomQueue.length > 0">
-          <lstn-track data-ng-class-even="'track--even'" data-ng-class-odd="'track--odd'" data-ng-repeat="song in roomQueue" data-cutoff="50"></lstn-track>
+          <lstn-track 
+            data-ng-class-even="'track--even'" 
+            data-ng-class-odd="'track--odd'" 
+            data-ng-repeat="song in roomQueue" 
+            data-context="queue"
+            data-cutoff="50"></lstn-track>
         </ul>
         <div class="queue--empty alert alert-info text-center" data-ng-show="!roomQueue || roomQueue.length === 0">
           <h3>See the upcoming songs from each broadcaster</h3>
