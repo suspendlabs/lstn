@@ -713,7 +713,6 @@ angular.module('lstn.controllers', [])
           console.log('CurrentUser.removeFromQueue', response);
           return;
         }
-  
         $scope.queue = response.queue;
       }, function(response) {
         song.removingFromQueue = false;
