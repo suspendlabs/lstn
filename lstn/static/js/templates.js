@@ -415,12 +415,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "\n" +
     "  <div class=\"room row\">\n" +
-    "    <div class=\"room__left col-md-3\">\n" +
+    "    <div class=\"room__middle col-md-6 col-md-push-3\">\n" +
+    "      <lstn-room-playing></lstn-room-playing>\n" +
+    "    </div>\n" +
+    "    <div class=\"room__left col-md-3 col-md-pull-6\">\n" +
     "      <div class=\"column__header\">Room Users</div>\n" +
     "      <lstn-room-roster></lstn-room-roster>\n" +
-    "    </div>\n" +
-    "    <div class=\"room__middle col-md-6\">\n" +
-    "      <lstn-room-playing></lstn-room-playing>\n" +
     "    </div>\n" +
     "    <div class=\"room__right col-md-3\">\n" +
     "      <div class=\"column__header\">Music</div>\n" +
