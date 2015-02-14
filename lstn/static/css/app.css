@@ -198,8 +198,16 @@ body > .container {
 .playing__container {
   height: 542px;
 }
+.playing__container .no-gutters {
+  padding: 12px;
+  background: #f5f5f5;
+}
+.playing__container .playing__info-container {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .playing__container .playing__art {
-  margin-right: 5px;
+  text-align: center;
 }
 .playing__container .playing__art img {
   width: 100%;
@@ -215,25 +223,13 @@ body > .container {
 .playing__container .playing__art .playing__placeholder {
   font-size: 8em;
   text-align: center;
-  width: 180px;
-  height: 180px;
-  line-height: 180px;
-  border: 1px solid #333;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   -ms-border-radius: 4px;
   -o-border-radius: 4px;
   border-radius: 4px;
 }
-.playing__container .playing__info {
-  height: 180px;
-  padding: 12px;
-}
-.playing__container .playing__info.playing__info--stopped {
-  padding-top: 45px;
-}
 .playing__container .progress {
-  margin-top: 40px;
   border: 1px solid #aaa;
 }
 .playing__container .progress .time {
