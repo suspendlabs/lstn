@@ -480,6 +480,12 @@ body {
       font-family: 'Inconsolata', monospace, sans-serif;
 
       padding: 3px 0 0 3px;
+
+      .track__top {
+          float: right;
+          margin: 12px 10px 0px 5px;
+          cursor: pointer;
+      }
   
       .track__title {
         font-weight: bold;
@@ -490,7 +496,26 @@ body {
         font-size: 11px;
       }
     }
+
+    .track__actions--queued {
+      float: right;
+      margin-right: 22px;
+      line-height: 50px;
+      a {
+        display:none;
+        cursor:pointer;
+      }
+    }
+
+    &:hover {
+      .track__actions--queued {
+        a {
+          display:inline;
+        }
+      }
+    }
   }
+
 
   &.queue {
     height: 194px;
