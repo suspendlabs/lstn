@@ -2,11 +2,11 @@
 <div class="track__image">
   <img data-ng-src="{{ song.icon }}" alt="{{ song.album }}" title="{{ song.album }}">
   <div class="overlay"></div>
-  <i class="fa fa-circle-o-notch fa-spin" data-ng-show="song.addingToQueue"></i>
+  <i class="fa fa-circle-o-notch fa-spin" data-ng-show="song.addingToQueue || song.removingFromQueue"></i>
   <span data-ng-hide="song.addingToQueue || song.in_queue || queueBitset[song.key]" 
     class="glyphicon glyphicon-plus-sign" data-ng-click="addSongToQueue(song)" title="Add to Queue"></span>
-  <span data-ng-show="(song.in_queue || queueBitset[song.key]) && context==='queue'" 
-    class="glyphicon glyphicon-minus-sign" data-ng-click="removeSongFromQueue(song.key, $index)" title="Remove from Queue"></span>
+  <span data-ng-show="(song.in_queue || queueBitset[song.key]) && context==='queue' && !song.removingFromQueue" 
+    class="glyphicon glyphicon-minus-sign" data-ng-click="removeSongFromQueue(song, $index)" title="Remove from Queue"></span>
   <span data-ng-show="(song.in_queue || queueBitset[song.key]) && context==='playlist'" 
     class="glyphicon glyphicon-ok" title="This song is already in your queue"></span>
 </div>

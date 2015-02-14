@@ -701,11 +701,13 @@ angular.module('lstn.controllers', [])
       $scope.queueBitset = set;
     });
   
-    $scope.removeSongFromQueue = function(song_id, index) {
+    $scope.removeSongFromQueue = function(song, index) {
+      song.removingFromQueue = true;
       CurrentUser.removeFromQueue({
-        id: song_id,
+        id: song.key,
         index: index
       }, function(response) {
+        song.removingFromQueue = false;
         if (!response || !response.success || !response.queue) {
           $scope.addAlert('Something went wrong while trying to remove the song from your queue.', 'danger');
           console.log('CurrentUser.removeFromQueue', response);
@@ -714,6 +716,7 @@ angular.module('lstn.controllers', [])
   
         $scope.queue = response.queue;
       }, function(response) {
+        song.removingFromQueue = false;
         $scope.addAlert('Something went wrong while trying to remove the song from your queue.', 'danger');
         console.log('CurrentUser.removeFromQueue', response);
       });
