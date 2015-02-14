@@ -90,6 +90,7 @@ angular.module('lstn.services', ['ngResource'])
 
   socket.sendMessage = function(message) {
     console.log('sending room:chat:message');
+    message.created = moment().format();
     this.emit('room:chat:message', message);
   };
 
