@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: create.sql
-    destination: /home/ec2-user/create.sql
+    destination: /home/ec2-user/
 hooks:
   AfterInstall:
     - location: ./bin/docker-deploy.py
