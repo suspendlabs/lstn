@@ -83,7 +83,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/playing-info.html',
     "<div class=\"playing__info-container\">\n" +
     "  <div data-ng-show=\"!visualize && !playing.song\" class=\"playing__info playing__info--stopped text-center\">\n" +
-    "    <h3>Add music to your queue and click Broadcast to start playing</h3>\n" +
+    "    <h3 class=\"text-muted\">Add music to your queue and click Broadcast to start playing</h3>\n" +
     "  </div>\n" +
     "  <div data-ng-show=\"!visualize && playing.song\" class=\"playing__info playing__info--playing text-center\">\n" +
     "    <h3 class=\"playing__title\" data-ng-bind=\"playing.song.title | truncate:28\"></h3>\n" +
