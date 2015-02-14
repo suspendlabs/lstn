@@ -239,7 +239,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <tabset class=\"queue__tabs\">\n" +
     "      <tab heading=\"Your Queue\">\n" +
     "        <ul id=\"queue\" class=\"queue queue--full track__list\" data-ng-show=\"queue && queue.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue\">\n" +
-    "          <lstn-track data-ng-class-even=\"'track--even'\" data-ng-class-odd=\"'track--odd'\" data-ng-repeat=\"song in queue\" data-cutoff=\"50\"></lstn-track>\n" +
+    "          <lstn-track \n" +
+    "            data-ng-class-even=\"'track--even'\" \n" +
+    "            data-ng-class-odd=\"'track--odd'\" \n" +
+    "            data-ng-repeat=\"song in queue\" \n" +
+    "            data-context=\"queue\"\n" +
+    "            data-cutoff=\"50\"></lstn-track>\n" +
     "        </ul>\n" +
     "        <div class=\"queue--empty alert alert-info text-center\" data-ng-show=\"!queue || queue.length === 0\">\n" +
     "          <h3>Select songs from your playlists on the left to add songs to your queue</h3>\n" +
@@ -247,7 +252,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      </tab>\n" +
     "      <tab heading=\"Room Queue\">\n" +
     "        <ul id=\"room-queue\" class=\"queue queue--full track__list\" data-ng-show=\"roomQueue && roomQueue.length > 0\">\n" +
-    "          <lstn-track data-ng-class-even=\"'track--even'\" data-ng-class-odd=\"'track--odd'\" data-ng-repeat=\"song in roomQueue\" data-cutoff=\"50\"></lstn-track>\n" +
+    "          <lstn-track \n" +
+    "            data-ng-class-even=\"'track--even'\" \n" +
+    "            data-ng-class-odd=\"'track--odd'\" \n" +
+    "            data-ng-repeat=\"song in roomQueue\" \n" +
+    "            data-context=\"queue\"\n" +
+    "            data-cutoff=\"50\"></lstn-track>\n" +
     "        </ul>\n" +
     "        <div class=\"queue--empty alert alert-info text-center\" data-ng-show=\"!roomQueue || roomQueue.length === 0\">\n" +
     "          <h3>See the upcoming songs from each broadcaster</h3>\n" +
@@ -311,12 +321,17 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <div class=\"track__image\">\n" +
     "    <img data-ng-src=\"{{ song.icon }}\" alt=\"{{ song.album }}\" title=\"{{ song.album }}\">\n" +
     "    <div class=\"overlay\"></div>\n" +
-    "    <i data-ng-hide=\"song.in_queue\" class=\"glyphicon glyphicon-plus-sign\" data-ng-click=\"addSongToQueue(song.key)\"></i>\n" +
-    "    <i data-ng-show=\"song.in_queue\" class=\"glyphicon glyphicon-minus-sign\" data-ng-click=\"removeSongFromQueue(song.key, $index)\"></i>\n" +
+    "    <i data-ng-hide=\"song.in_queue || queueBitset[song.key]\" class=\"glyphicon glyphicon-plus-sign\" data-ng-click=\"addSongToQueue(song.key)\"></i>\n" +
+    "    <i data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context === 'queue'\" \n" +
+    "      class=\"glyphicon glyphicon-minus-sign\" data-ng-click=\"removeSongFromQueue(song.key, $index)\"></i>\n" +
+    "    <i data-ng-show=\"queueBitset[song.key] && context === 'playlist'\" \n" +
+    "      class=\"glyphicon glyphicon-ok\" title=\"This song is already in your queue.\"></i>\n" +
     "  </div>\n" +
     "  <div class=\"track__info\">\n" +
-    "    <div class=\"track__title\" title=\"{{ song.name }}\" data-ng-bind=\"song.name | truncate:cutoff\"></div>\n" +
-    "    <div class=\"track__artist\" data-ng-bind=\"song.artist | truncate:cutoff\" title=\"{{ song.artist }}\"></div>\n" +
+    "    <div class=\"track__title\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\" \n" +
+    "      title=\"{{ song.name }}\" data-ng-bind=\"song.name | truncate:cutoff\"></div>\n" +
+    "    <div class=\"track__artist\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\"\n" +
+    "      data-ng-bind=\"song.artist | truncate:cutoff\" title=\"{{ song.artist }}\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"clear\"></div>\n" +
     "</li>\n"
