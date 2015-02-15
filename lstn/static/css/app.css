@@ -48,6 +48,10 @@ body > .container {
     -webkit-transform: rotate(360deg);
   }
 }
+.label-as-badge {
+  border-radius: 1em;
+}
+
 .navbar-brand {
   padding: 5px 0 0 0;
 }
