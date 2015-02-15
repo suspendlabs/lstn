@@ -1,7 +1,7 @@
 <div class="playing__queue col-md-12">
   <div class="playing__queue__container panel panel-success">
     <tabset class="queue__tabs">
-      <tab heading="Your Queue">
+      <tab heading="Your Queue" data-select="selectQueueTab('personal')">
         <ul id="queue" class="queue queue--full track__list" data-ng-show="queue && queue.length > 0" data-ui-sortable="sortableOptions" ng-model="queue">
           <lstn-track 
             data-ng-class-even="'track--even'" 
@@ -14,7 +14,7 @@
           <h3>Select songs from your playlists on the left to add songs to your queue</h3>
         </div>
       </tab>
-      <tab heading="Room Queue">
+      <tab heading="Room Queue" data-select="selectQueueTab('room')">
         <ul id="room-queue" class="queue queue--full track__list" data-ng-show="roomQueue && roomQueue.length > 0">
           <lstn-track 
             data-ng-class-even="'track--even'" 
@@ -27,7 +27,11 @@
           <h3>See the upcoming songs from each broadcaster</h3>
         </div>
       </tab>
-      <tab heading="Chat">
+      <tab data-select="selectQueueTab('chat')">
+        <tab-heading>
+          Chat
+          <span class="label label-danger label-as-badge" data-ng-show="trackUnseenChatMessages && unseenChatMessages > 0" data-ng-bind="unseenChatMessages"></span>
+        </tab-heading>
         <ul id="messages" class="messages list-group">
           <lstn-chat-message
             class="list-group-item"
