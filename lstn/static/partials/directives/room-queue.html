@@ -29,19 +29,10 @@
       </tab>
       <tab heading="Chat">
         <ul id="messages" class="messages list-group">
-          <li class="list-group-item" data-ng-repeat="message in chat.messages" data-ng-class="{'list-group-item-info': message.sender === current_user.id, 'list-group-item-warning': message.type === 'system', 'list-group-item-success': message.type === 'upvote', 'list-group-item-danger': message.type === 'downvote'}">
-            <div class="row">
-              <div class="col-xs-3">
-                <div class="chat__user" data-ng-bind="message.user"></div>
-              </div>
-              <div data-ng-class="{'col-xs-6': message.created, 'col-xs-9': !message.created}">
-                <div class="chat__message wordwrap" data-ng-bind="message.text"></div>
-              </div>
-              <div class="col-xs-3" data-ng-if="message.created">
-                <div class="chat__timestamp text-muted" data-time-from-now="message.created"></div>
-              </div>
-            </div>
-          </li>
+          <lstn-chat-message
+            class="list-group-item"
+            data-ng-repeat="message in chat.messages"
+            data-ng-class="getMessageClass()"></lstn-chat-message>
         </ul>
         <input class="form-control" type="text" data-ng-model="message.text" data-lstn-enter="sendMessage()" placeholder="Send message..."></input>
       </tab>
