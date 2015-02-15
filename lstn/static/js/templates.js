@@ -20,6 +20,23 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
+  $templateCache.put('/static/partials/directives/chat-message.html',
+    "<li>\n" +
+    "  <div class=\"row\">\n" +
+    "    <div class=\"col-xs-3\">\n" +
+    "      <div class=\"chat__user\" data-ng-bind=\"message.user\"></div>\n" +
+    "    </div>\n" +
+    "    <div data-ng-class=\"{'col-xs-6': message.created, 'col-xs-9': !message.created}\">\n" +
+    "      <div class=\"chat__message wordwrap\" data-ng-bind=\"message.text\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"col-xs-3\" data-ng-if=\"message.created\">\n" +
+    "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "</li>\n"
+  );
+
+
   $templateCache.put('/static/partials/directives/music-categories.html',
     "<div id=\"categories\" class=\"categories\">\n" +
     "  <div class=\"search__container category panel panel-primary\" data-ng-show=\"searchResults && searchResults.length > 0\">\n" +
@@ -265,19 +282,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      </tab>\n" +
     "      <tab heading=\"Chat\">\n" +
     "        <ul id=\"messages\" class=\"messages list-group\">\n" +
-    "          <li class=\"list-group-item\" data-ng-repeat=\"message in chat.messages\" data-ng-class=\"{'list-group-item-info': message.sender === current_user.id, 'list-group-item-warning': message.type === 'system', 'list-group-item-success': message.type === 'upvote', 'list-group-item-danger': message.type === 'downvote'}\">\n" +
-    "            <div class=\"row\">\n" +
-    "              <div class=\"col-xs-3\">\n" +
-    "                <div class=\"chat__user\" data-ng-bind=\"message.user\"></div>\n" +
-    "              </div>\n" +
-    "              <div data-ng-class=\"{'col-xs-6': message.created, 'col-xs-9': !message.created}\">\n" +
-    "                <div class=\"chat__message wordwrap\" data-ng-bind=\"message.text\"></div>\n" +
-    "              </div>\n" +
-    "              <div class=\"col-xs-3\" data-ng-if=\"message.created\">\n" +
-    "                <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
-    "              </div>\n" +
-    "            </div>\n" +
-    "          </li>\n" +
+    "          <lstn-chat-message\n" +
+    "            class=\"list-group-item\"\n" +
+    "            data-ng-repeat=\"message in chat.messages\"\n" +
+    "            data-ng-class=\"getMessageClass()\"></lstn-chat-message>\n" +
     "        </ul>\n" +
     "        <input class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
     "      </tab>\n" +
@@ -403,14 +411,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <div class=\"page-header\">\n" +
     "    <h1>\n" +
     "      {{ room.name }}\n" +
-    "      <div data-ng-show=\"playingSomewhereElse\" class=\"pull-right alert alert-danger alert-dismissable\" role=\"alert\">\n" +
-    "        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\" data-ng-click=\"playingSomewhereElse = 0\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-    "        You appear to be playing music from a different source. Rdio only allows one source to play music at a time.\n" +
-    "      </div>\n" +
-    "      <div data-ng-show=\"remaining && !playingSomethingElse && !hideRemaining\" class=\"pull-right alert alert-info alert-dismissable\" role=\"alert\">\n" +
-    "        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\" data-ng-click=\"hideRemaining = 1\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-    "        You have <strong data-ng-bind=\"remaining\"></strong> remaining songs left on your free account.\n" +
-    "      </div>\n" +
     "    </h1>\n" +
     "  </div>\n" +
     "\n" +

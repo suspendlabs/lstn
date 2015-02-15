@@ -474,7 +474,9 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      $scope.songFinished();
+      console.log('skipSong');
+      $scope.isCurrentController = false;
+      socket.sendSkipped();
     };
 
     $scope.rdioToLstn = function(rdioSong) {
@@ -564,32 +566,27 @@ angular.module('lstn.controllers', [])
         ready: function(user) {
           window.apiswf = $('#apiswf').get(0);
   
-          var scope = angular.element(document.body).scope();
-          scope.$evalAsync(function() {
+          $scope.$evalAsync(function() {
             $scope.rdioReady = true;
             $scope.rdioUser = user;
           });
         },
         freeRemainingChanged: function(remaining) {
-          var scope = angular.element(document.body).scope();
-          scope.$evalAsync(function() {
-            $scope.hasRemaining = true;
-            $scope.remaining = remaining;
+          $scope.$evalAsync(function() {
+            $scope.addAlert('You have ' + remaining + ' remaining songs left on your free account.', 'info');
           });
         },
         playStateChanged: function(playState) {
           console.log('play state changed', playState);
 
-          var scope = angular.element(document.body).scope();
-          scope.$evalAsync(function() {
+          $scope.$evalAsync(function() {
             $scope.playState = playState;
           });
         },
         playingTrackChanged: function(playingTrack, sourcePosition) {
           console.log('playing track changed', playingTrack);
 
-          var scope = angular.element(document.body).scope();
-          scope.$evalAsync(function() {
+          $scope.$evalAsync(function() {
             $scope.playingTrack = playingTrack;
             $scope.sourcePosition = sourcePosition;
           });
@@ -597,8 +594,7 @@ angular.module('lstn.controllers', [])
         playingSourceChanged: function(playingSource) {
           console.log('playing source changed', playingSource);
 
-          var scope = angular.element(document.body).scope();
-          scope.$evalAsync(function() {
+          $scope.$evalAsync(function() {
             $scope.playingSource = $scope.playingSource;
           });
         },
@@ -635,9 +631,8 @@ angular.module('lstn.controllers', [])
         shuffleChanged: function(shuffle) {},
         repeatChanged: function(repeatMode) {},
         playingSomewhereElse: function() {
-          var scope = angular.element(document.body).scope();
-          scope.$evalAsync(function() {
-            $scope.playingSomewhereElse = true;
+          $scope.$evalAsync(function() {
+            $scope.addAlert("You're playing music from a different source. Rdio only allows one source to play music at a time.", 'danger');
           });
         },
         updateFrequencyData: function(data) {
