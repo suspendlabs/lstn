@@ -27,7 +27,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <div class=\"chat__user\" data-ng-bind=\"message.user\"></div>\n" +
     "    </div>\n" +
     "    <div data-ng-class=\"{'col-xs-6': message.created, 'col-xs-9': !message.created}\">\n" +
-    "      <div class=\"chat__message wordwrap\" data-ng-bind=\"message.text\"></div>\n" +
+    "      <div class=\"chat__message wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"col-xs-3\" data-ng-if=\"message.created\">\n" +
     "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +

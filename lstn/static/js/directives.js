@@ -1,7 +1,10 @@
 (function() {
 'use strict';
 
-angular.module('lstn.directives', [])
+angular.module('lstn.directives', ['sc.twemoji'])
+.config(['twemojiProvider', function(twemojiProvider) {
+  twemojiProvider.setOptions({ size: 16 });
+}])
 .directive('lstnEnter', function() {
   return function($scope, $element, $attrs) {
     $element.bind('keydown keypress', function(event) {
@@ -296,7 +299,7 @@ angular.module('lstn.directives', [])
           upvote: 'list-group-item-success',
           downvote: 'list-group-item-danger'
         };
-
+        
         $scope.getMessageClass = function() {
           if (!$scope.message) {
             return null;
