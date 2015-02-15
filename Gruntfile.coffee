@@ -72,6 +72,6 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-angular-templates'
 
-  grunt.registerTask 'default', ['jshint', 'compass']
-  grunt.registerTask 'precommit', ['jshint', 'compass']
+  grunt.registerTask 'default', ['jshint', 'compass', 'ngtemplates']
+  grunt.registerTask 'precommit', ['jshint', 'compass', 'ngtemplates']
   grunt.registerTask 'deploy', ['concat', 'uglify', 'cssmin']

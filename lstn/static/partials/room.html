@@ -2,14 +2,6 @@
   <div class="page-header">
     <h1>
       {{ room.name }}
-      <div data-ng-show="playingSomewhereElse" class="pull-right alert alert-danger alert-dismissable" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" data-ng-click="playingSomewhereElse = 0"><span aria-hidden="true">&times;</span></button>
-        You appear to be playing music from a different source. Rdio only allows one source to play music at a time.
-      </div>
-      <div data-ng-show="remaining && !playingSomethingElse && !hideRemaining" class="pull-right alert alert-info alert-dismissable" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close" data-ng-click="hideRemaining = 1"><span aria-hidden="true">&times;</span></button>
-        You have <strong data-ng-bind="remaining"></strong> remaining songs left on your free account.
-      </div>
     </h1>
   </div>
 
