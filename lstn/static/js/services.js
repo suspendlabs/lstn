@@ -78,6 +78,11 @@ angular.module('lstn.services', ['ngResource'])
     this.emit('room:controller:playing:finished');
   };
 
+  socket.sendSkipped = function() {
+    console.log('sending room:controller:playing:skipped');
+    this.emit('room:controller:playing:skipped');
+  };
+
   socket.sendUpvote = function() {
     console.log('sending room:controller:upvote');
     this.emit('room:controller:upvote');

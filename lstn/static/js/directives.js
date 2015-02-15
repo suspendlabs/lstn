@@ -200,7 +200,8 @@ angular.module('lstn.directives', [])
         $scope.message = {
           sender: $scope.current_user.id,
           user: $scope.current_user.name,
-          text: null
+          text: null,
+          type: 'message',
         };
 
         $scope.sendMessage = function() {
@@ -281,6 +282,43 @@ angular.module('lstn.directives', [])
     };
   }
 ])
+
+.directive('lstnChatMessage', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/chat-message.html',
+      link: function($scope, $element, $attrs) {
+        var messageClasses = {
+          playing: 'list-group-item-warning',
+          skipped: 'list-group-item-danger',
+          upvote: 'list-group-item-success',
+          downvote: 'list-group-item-danger'
+        };
+
+        $scope.getMessageClass = function() {
+          if (!$scope.message) {
+            return null;
+          }
+
+          if ($scope.message.sender === $scope.current_user.id
+            && $scope.message.type === 'message') {
+
+            return 'list-group-item-info';
+          }
+
+          if (!($scope.message.type in messageClasses)) {
+            return null;
+          }
+
+          return messageClasses[$scope.message.type];
+        };
+      }
+    };
+  }
+])
+
 
 .directive('lstnTrack', ['$parse',
   function($parse) {
