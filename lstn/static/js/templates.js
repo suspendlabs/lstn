@@ -104,7 +104,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <h3 class=\"playing__title\" data-ng-bind=\"playing.song.title | truncate:28\"></h3>\n" +
     "    <h4 class=\"playing__artist\" data-ng-bind=\"playing.song.artist | truncate:35\"></h4>\n" +
     "    <p class=\"playing__album\" data-ng-bind=\"playing.song.album | truncate: 40\"></p>\n" +
-    "    <div class=\"progress\" data-ng-show=\"playing.song.duration\">\n" +
+    "    <p class=\"playing__warning text-warning\" data-ng-show=\"!playing.song.canStream\"><strong>This song can't be played in your region.</strong></p>\n" +
+    "    <div class=\"progress\" data-ng-show=\"playing.song.duration && playing.song.canStream\">\n" +
     "      <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.song.duration }}\"></div>\n" +
     "      <span id=\"time\" class=\"time\"></span>\n" +
     "    </div>\n" +
