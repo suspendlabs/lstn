@@ -403,14 +403,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <div class=\"page-header\">\n" +
     "    <h1>\n" +
     "      {{ room.name }}\n" +
-    "      <div data-ng-show=\"playingSomewhereElse\" class=\"pull-right alert alert-danger alert-dismissable\" role=\"alert\">\n" +
-    "        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\" data-ng-click=\"playingSomewhereElse = 0\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-    "        You appear to be playing music from a different source. Rdio only allows one source to play music at a time.\n" +
-    "      </div>\n" +
-    "      <div data-ng-show=\"remaining && !playingSomethingElse && !hideRemaining\" class=\"pull-right alert alert-info alert-dismissable\" role=\"alert\">\n" +
-    "        <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\" data-ng-click=\"hideRemaining = 1\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-    "        You have <strong data-ng-bind=\"remaining\"></strong> remaining songs left on your free account.\n" +
-    "      </div>\n" +
     "    </h1>\n" +
     "  </div>\n" +
     "\n" +
