@@ -212,6 +212,17 @@ angular.module('lstn.directives', [])
           socket.sendMessage($scope.message);
           $scope.message.text = null;
         };
+
+        $scope.selectQueueTab = function(tab) {
+          $scope.trackUnseenChatMessages = tab !== 'chat';
+          if (!$scope.trackUnseenChatMessages) {
+            $scope.unseenChatMessages = 0;
+
+            $('#messages').animate({
+              scrollTop: $('#messages')[0].scrollHeight
+            }, 200);
+          }
+        };
       }
     };
   }
