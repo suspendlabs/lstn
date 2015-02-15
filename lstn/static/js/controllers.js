@@ -474,7 +474,9 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      $scope.songFinished();
+      console.log('skipSong');
+      $scope.isCurrentController = false;
+      socket.sendSkipped();
     };
 
     $scope.rdioToLstn = function(rdioSong) {
