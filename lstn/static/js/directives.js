@@ -313,9 +313,7 @@ angular.module('lstn.directives', [])
             return null;
           }
 
-          if ($scope.message.sender === $scope.current_user.id
-            && $scope.message.type === 'message') {
-
+          if ($scope.message.sender === $scope.current_user.id && $scope.message.type === 'message') {
             return 'list-group-item-info';
           }
 

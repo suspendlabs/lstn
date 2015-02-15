@@ -12,6 +12,18 @@
   /* IE */
 }
 
+/* http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/ */
+.row.no-gutters {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.row.no-gutters > [class^="col-"],
+.row.no-gutters > [class*=" col-"] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
 body {
   font-family: Roboto, sans-serif;
 }
@@ -184,13 +196,21 @@ body > .container {
 .playing__container {
   height: 542px;
 }
+.playing__container .no-gutters {
+  padding: 12px;
+  background: #f5f5f5;
+}
+.playing__container .playing__info-container {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 .playing__container .playing__art {
-  width: 34%;
-  margin-right: 5px;
+  text-align: center;
 }
 .playing__container .playing__art img {
-  width: 180px;
-  height: 180px;
+  width: 100%;
+  max-width: 180px;
+  height: auto;
   border: 1px solid #333;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -199,29 +219,11 @@ body > .container {
 .playing__container .playing__art .playing__placeholder {
   font-size: 8em;
   text-align: center;
-  width: 180px;
-  height: 180px;
-  line-height: 180px;
-  border: 1px solid #333;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
-}
-.playing__container .playing__info {
-  width: 62.5%;
-  height: 180px;
-  margin-bottom: 5px;
-  background-color: #f5f5f5;
-  border: 1px solid #e3e3e3;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-}
-.playing__container .playing__info.playing__info--stopped {
-  padding-top: 45px;
 }
 .playing__container .progress {
-  margin-top: 40px;
   border: 1px solid #aaa;
 }
 .playing__container .progress .time {
@@ -230,21 +232,21 @@ body > .container {
   position: absolute;
 }
 .playing__container .playing__visualization {
-  width: 62.5%;
   height: 180px;
-  margin-bottom: 5px;
   padding-left: 0;
   padding-right: 0;
-  background-color: #333;
-  border: 1px solid #e3e3e3;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
 }
+.playing__container .playing__visualization:first-child {
+  border-left: 1px solid #c2c2c2;
+}
 .playing__container .playing__visualization div {
   width: 31px;
-  background-color: #f5f5f5;
-  border: 1px solid #ddd;
+  background-color: #dcdcdc;
+  border-top: 1px solid #c2c2c2;
+  border-right: 1px solid #c2c2c2;
   display: inline-block;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
