@@ -154,6 +154,8 @@ angular.module('lstn.controllers', [])
     $scope.chat = {
       messages: []
     };
+    $scope.trackUnseenChatMessages = true;
+    $scope.unseenChatMessages = 0;
 
     // Setup sockets
     socket.on('connect', function() {
@@ -276,6 +278,9 @@ angular.module('lstn.controllers', [])
 
     socket.on('room:chat:message', function(message) {
       $scope.chat.messages.push(message);
+      if ($scope.trackUnseenChatMessages) {
+        $scope.unseenChatMessages += 1;
+      }
 
       $timeout(function() {
         $('#messages').animate({
@@ -489,12 +494,12 @@ angular.module('lstn.controllers', [])
         album: rdioSong.album,
         position: 0,
         duration: rdioSong.duration,
+        canStream: rdioSong.canStream,
         user: 0
       };
 
       return lstnSong;
     };
-
 
     // Watches
     $scope.$watch('rdioReady', function(newVal, oldVal) {

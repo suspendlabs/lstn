@@ -48,20 +48,20 @@ body > .container {
   from {
     transform: scale(1) rotate(0deg);
   }
-
   to {
     transform: scale(1) rotate(360deg);
   }
 }
-
 @-webkit-keyframes spin2 {
   from {
     -webkit-transform: rotate(0deg);
   }
-
   to {
     -webkit-transform: rotate(360deg);
   }
+}
+.label-as-badge {
+  border-radius: 1em;
 }
 
 .navbar-brand {
@@ -96,7 +96,7 @@ body > .container {
 }
 
 .lstn {
-  color: #e84961;
+  color: #E84961;
 }
 
 .rdio {
@@ -169,10 +169,8 @@ body > .container {
   border: 1px solid #ddd;
   padding: 5px;
   height: 500px;
-  -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 
@@ -214,19 +212,15 @@ body > .container {
   max-width: 180px;
   height: auto;
   border: 1px solid #333;
-  -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 .playing__container .playing__art .playing__placeholder {
   font-size: 8em;
   text-align: center;
-  -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 .playing__container .progress {
@@ -241,10 +235,8 @@ body > .container {
   height: 180px;
   padding-left: 0;
   padding-right: 0;
-  -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 .playing__container .playing__visualization:first-child {
