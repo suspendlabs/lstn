@@ -221,10 +221,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-playing.html',
     "<div class=\"playing__container room__container\">\n" +
     "  <div class=\"row no-gutters\">\n" +
-    "    <div class=\"col-md-4 col-sm-3\">\n" +
+    "    <div class=\"col-md-5 col-sm-4\">\n" +
     "      <lstn-playing-image></lstn-playing-image>\n" +
     "    </div>\n" +
-    "    <div class=\"col-md-8 col-sm-9\">\n" +
+    "    <div class=\"col-md-7 col-sm-8\">\n" +
     "      <lstn-playing-info></lstn-playing-info>\n" +
     "      <lstn-visualizer data-ng-show=\"visualize && playing.song\"></lstn-visualizer>\n" +
     "    </div>\n" +
@@ -363,7 +363,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/visualizer.html',
     "<div class=\"playing__visualization text-center\">\n" +
-    "  <div ng-repeat=\"i in getNumber(bands) track by $index\"></div>\n" +
+    "  <div data-ng-repeat=\"i in getNumber(bands) track by $index\"></div>\n" +
     "</div>\n"
   );
 
