@@ -255,7 +255,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div class=\"playing__queue col-md-12\">\n" +
     "  <div class=\"playing__queue__container panel panel-success\">\n" +
     "    <tabset class=\"queue__tabs\">\n" +
-    "      <tab heading=\"Your Queue\">\n" +
+    "      <tab heading=\"Your Queue\" data-select=\"selectQueueTab('personal')\">\n" +
     "        <ul id=\"queue\" class=\"queue queue--full track__list\" data-ng-show=\"queue && queue.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue\">\n" +
     "          <lstn-track \n" +
     "            data-ng-class-even=\"'track--even'\" \n" +
@@ -268,7 +268,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "          <h3>Select songs from your playlists on the left to add songs to your queue</h3>\n" +
     "        </div>\n" +
     "      </tab>\n" +
-    "      <tab heading=\"Room Queue\">\n" +
+    "      <tab heading=\"Room Queue\" data-select=\"selectQueueTab('room')\">\n" +
     "        <ul id=\"room-queue\" class=\"queue queue--full track__list\" data-ng-show=\"roomQueue && roomQueue.length > 0\">\n" +
     "          <lstn-track \n" +
     "            data-ng-class-even=\"'track--even'\" \n" +
@@ -281,7 +281,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "          <h3>See the upcoming songs from each broadcaster</h3>\n" +
     "        </div>\n" +
     "      </tab>\n" +
-    "      <tab heading=\"Chat\">\n" +
+    "      <tab data-select=\"selectQueueTab('chat')\">\n" +
+    "        <tab-heading>\n" +
+    "          Chat\n" +
+    "          <span class=\"label label-danger label-as-badge\" data-ng-show=\"trackUnseenChatMessages && unseenChatMessages > 0\" data-ng-bind=\"unseenChatMessages\"></span>\n" +
+    "        </tab-heading>\n" +
     "        <ul id=\"messages\" class=\"messages list-group\">\n" +
     "          <lstn-chat-message\n" +
     "            class=\"list-group-item\"\n" +
