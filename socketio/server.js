@@ -447,7 +447,7 @@ Lstn.prototype.sendPlaying = function(broadcast) {
         sender: this.getCurrentController(),
         text: 'has started playing ' + name + ' by ' + artist,
         user: user.name,
-        type: 'system',
+        type: 'playing',
       });
     }
   } else {
@@ -646,6 +646,31 @@ Lstn.prototype.onControllerPlayingFinished = function(data) {
   }
 };
 
+Lstn.prototype.onControllerPlayingSkipped = function(data) {
+  console.log(this.userId + ' says song in ' + this.roomId + ' was skipped');
+
+  var controller = this.getCurrentController();
+  var user = this.getUser(controller);
+  var name = this.getSongName();
+  var artist = this.getSongArtist();
+
+  if (controller && user && name && artist) {
+    this.sendChatMessage({
+      sender: this.getCurrentController(),
+      text: 'has skipped ' + name + ' by ' + artist,
+      user: user.name,
+      type: 'skipped',
+    });
+  }
+
+  // If the user is the current controller, process controllers
+  if (this.isCurrentController()) {
+    // Select the next controller in the list
+    this.initController(this.getNextController());
+  }
+};
+
+
 Lstn.prototype.onControllerUpvote = function() {
   var votes = this.incrPlayingVotes();
   io.sockets.in(this.roomId).emit('room:upvote', votes);
@@ -700,6 +725,7 @@ io.sockets.on('connection', function(socket) {
   socket.on('room:controller:playing', lstn.onControllerPlaying.bind(lstn));
   socket.on('room:controller:playing:position', lstn.onControllerPlayingPosition.bind(lstn));
   socket.on('room:controller:playing:finished', lstn.onControllerPlayingFinished.bind(lstn));
+  socket.on('room:controller:playing:skipped', lstn.onControllerPlayingSkipped.bind(lstn));
 
   // Controller voting
   socket.on('room:controller:upvote', lstn.onControllerUpvote.bind(lstn));
