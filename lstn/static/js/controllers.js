@@ -489,12 +489,12 @@ angular.module('lstn.controllers', [])
         album: rdioSong.album,
         position: 0,
         duration: rdioSong.duration,
+        canStream: rdioSong.canStream,
         user: 0
       };
 
       return lstnSong;
     };
-
 
     // Watches
     $scope.$watch('rdioReady', function(newVal, oldVal) {
