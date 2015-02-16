@@ -13,7 +13,7 @@ yum install -y aws-cli
 
 cd /home/ec2-user
 
-aws s3 cp s3://devops.last.fm/lstn-bootstrap.sh .
+aws s3 cp s3://devops.lstn.fm/lstn-bootstrap.sh .
 chmod +x ./lstn-bootstrap.sh
 ./lstn-bootstrap.sh
 
