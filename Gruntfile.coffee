@@ -3,6 +3,19 @@ module.exports = (grunt) ->
   cssFiles = ['lstn/static/css/**/*.css']
 
   grunt.initConfig
+    ngconstant:
+      options:
+        space: '  '
+        wrap: '/* jshint ignore:start */\n\n"use strict";\n\n {%= __ngModule %}',
+        name: 'lstn.config'
+      development:
+        options:
+          dest: 'lstn/static/js/config.js'
+        constants: 'config/development.json'
+      production:
+        options:
+          dest: 'lstn/static/js/config.js'
+        constants: 'config/production.json'
     ngtemplates:
       lstn:
         src: 'lstn/static/partials/**/*.html'
@@ -13,7 +26,6 @@ module.exports = (grunt) ->
           prefix: '/',
           url: (path) ->
             return path.substring('/lstn'.length);
-
     concat:
       lstn:
         files:
@@ -71,7 +83,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-angular-templates'
+  grunt.loadNpmTasks 'grunt-ng-constant'
 
-  grunt.registerTask 'default', ['jshint', 'compass', 'ngtemplates']
+  grunt.registerTask 'default', ['ngconstant:development', 'jshint', 'compass', 'ngtemplates']
   grunt.registerTask 'precommit', ['jshint', 'compass', 'ngtemplates']
-  grunt.registerTask 'deploy', ['concat', 'uglify', 'cssmin']
+  grunt.registerTask 'deploy', ['ngconstant:production', 'concat', 'uglify', 'cssmin']

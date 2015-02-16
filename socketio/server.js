@@ -2,10 +2,27 @@ var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var moment = require('moment');
+var nconf = require('nconf');
 
-server.listen(3000);
+nconf.argv().env();
 
-var redis = require('redis').createClient();
+nconf.file({
+  file: 'config.json'
+});
+
+nconf.defaults({
+  http: {
+    port: 3000
+  },
+  redis: {
+    host: '127.0.0.1',
+    port: 6379
+  }
+});
+
+server.listen(nconf.get('http:port'));
+
+var redis = require('redis').createClient(nconf.get('redis:port'), nconf.get('redis:host'));
 
 var PLAYING_REQUEST_TIMEOUT = 2 * 1000;
 var playing = {};

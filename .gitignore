@@ -72,3 +72,5 @@ bower_components
 
 # Local
 lstn/config.py
+socketio/production.json
+config/production.json
