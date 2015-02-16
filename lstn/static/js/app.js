@@ -3,6 +3,7 @@
 
 angular.module('lstn', [
   'ngRoute',
+  'ngSanitize',
   'ui.bootstrap',
   'ui.sortable',
   'btford.socket-io',
