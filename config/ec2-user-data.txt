@@ -13,11 +13,11 @@ yum install -y aws-cli
 
 cd /home/ec2-user
 
-aws s3 cp s3://devops.suspend.io/lstn-bootstrap.sh .
+aws s3 cp s3://devops.lstn.fm/lstn-bootstrap.sh . --region us-west-2
 chmod +x ./lstn-bootstrap.sh
 ./lstn-bootstrap.sh
 
-aws s3 cp s3://aws-codedeploy-us-west-1/latest/install . --region us-west-1
+aws s3 cp s3://aws-codedeploy-us-west-2/latest/install . --region us-west-2
 chmod +x ./install
 ./install auto
 
