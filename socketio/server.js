@@ -21,7 +21,7 @@ nconf.defaults({
   }
 });
 
-io.set('origins', nconf.get('http:origins'));
+//io.set('origins', nconf.get('http:origins'));
 
 server.listen(nconf.get('http:port'));
 
