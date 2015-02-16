@@ -32,10 +32,11 @@ angular.module('lstn.services', ['ngResource'])
   }
 ])
 
-.factory('socket', ['socketFactory', function(socketFactory) {
-  var socket = socketFactory();
-  socket.forward('broadcast');
-  socket.forward('error');
+.factory('socket', ['config', 'socketFactory', function(config, socketFactory) {
+  var ioSocket = io.connect('http://' + config.WS_HOST + '/socket.io');
+  var socket = socketFactory({
+    ioSocket: ioSocket
+  });
 
   socket.releaseControl = function(id, user) {
     console.log('sending room:controller:release');
