@@ -12,13 +12,16 @@ nconf.file({
 
 nconf.defaults({
   http: {
-    port: 3000
+    port: 3000,
+    origins: 'http://lstn.dev'
   },
   redis: {
     host: '127.0.0.1',
     port: 6379
   }
 });
+
+io.set('origins', nconf.get('http:origins'));
 
 server.listen(nconf.get('http:port'));
 
