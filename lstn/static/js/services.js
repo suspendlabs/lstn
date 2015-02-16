@@ -1,7 +1,7 @@
 (function() {
 'use strict';
 
-angular.module('lstn.services', ['ngResource'])
+angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
 .factory('Rdio', [
   function() {
@@ -32,7 +32,7 @@ angular.module('lstn.services', ['ngResource'])
   }
 ])
 
-.factory('socket', ['socketFactory', function(socketFactory) {
+.factory('socket', ['socketFactory', 'emojiToUnicodeFilter', function(socketFactory, emojiToUnicodeFilter) {
   var socket = socketFactory();
   socket.forward('broadcast');
   socket.forward('error');
@@ -94,7 +94,8 @@ angular.module('lstn.services', ['ngResource'])
   };
 
   socket.sendMessage = function(message) {
-    console.log('sending room:chat:message');
+    console.log('sending room:chat:message', message);
+    message.text = emojiToUnicodeFilter(message.text);
     message.created = moment().format();
     this.emit('room:chat:message', message);
   };
