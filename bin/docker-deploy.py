@@ -24,7 +24,7 @@ if __name__ == '__main__':
         raise Exception('Failed to build docker image.')
 
     # Start the new container alongside the old ones we found above.
-    cid = subprocess.Popen(['docker', 'run', '-p', '3000:3000', '-d', 'lstn'], stdout=subprocess.PIPE).communicate()[0].strip()
+    cid = subprocess.Popen(['docker', 'run', '-d', 'lstn'], stdout=subprocess.PIPE).communicate()[0].strip()
     if not cid:
         raise Exception('Failed to create docker container')
 
