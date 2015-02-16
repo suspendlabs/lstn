@@ -32,10 +32,36 @@ def build():
         local('git checkout-index -f -a --prefix=%s/' % archive)
 
         local('cp %s/lstn/config.py %s/lstn/' % (LOCAL_REPO, archive))
+        local('cp %s/socketio/production.json %s/socketio/config.json' % (LOCAL_REPO, archive))
+
+        # Attempt to copy node modules
+        node_modules_dir = LOCAL_REPO + '/node_modules'
+        has_node_modules = False
+        if os.path.isdir(node_modules_dir):
+            local('cp -R %s %s/' % (node_modules_dir, archive))
+            has_node_modules = True
+
+        # Attempt to copy bower deps
+        bower_path = '/lstn/static/bower_components'
+        bower_deps_dir = LOCAL_REPO + bower_path
+        has_bower_deps = False
+        if os.path.isdir(bower_deps_dir):
+            local('cp -R %s %s/' % (bower_deps_dir, archive + bower_path))
+            has_bower_deps = True
 
     with lcd(archive):
+        if not has_node_modules:
+            local('npm install')
+
+        if not has_bower_deps:
+            local('bower install')
+
+        local('grunt deploy')
+
         compressed = '%s.zip' % version
-        local('zip -r ../%s *' % compressed)
+        local('zip -x "*.git*" -x "*node_modules*" -r ../%s *' % compressed)
+
+
 
     with lcd(BUILD_DIR):
         local('rm -rf %s' % version)
