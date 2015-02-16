@@ -6,9 +6,10 @@ def write_nginx_config(ip):
     fp = open('/etc/nginx/lstn.upstream.conf', 'w')
     fp.write('upstream lstn {\n')
     fp.write('  server ' + ip + ':7000;\n')
-    fp.write('}')
+    fp.write('}\n')
     fp.write('upstream socketio {\n')
     fp.write(' server ' + ip + ':3000;\n')
+    fp.write(' keepalive 256;\n')
     fp.write('}')
     fp.close()
 
