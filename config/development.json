@@ -1,0 +1,6 @@
+{
+    "config": {
+        "BASE_URL": "https://lstn.dev",
+        "WS_HOST": "lstn.dev:3000"
+    }
+}
