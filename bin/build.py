@@ -19,6 +19,7 @@ try:
   reservations = ec2.get_all_instances(instance_ids=[instance_id])
   tags = reservations[0].instances[0].tags
   env  = tags.get('lstn:environment', env)
+  env  = 'production'
 except:
   pass
 

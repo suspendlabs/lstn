@@ -33,9 +33,11 @@ def build():
 
         local('cp %s/lstn/config.py %s/lstn/' % (LOCAL_REPO, archive))
 
-    with lcd(BUILD_DIR):
+    with lcd(archive):
         compressed = '%s.zip' % version
-        local('zip -r %s %s' % (compressed, version))
+        local('zip -r ../%s *' % compressed)
+
+    with lcd(BUILD_DIR):
         local('rm -rf %s' % version)
 
 def deploy():
@@ -46,7 +48,7 @@ def deploy():
     if not os.path.isfile(os.path.join(BUILD_DIR, compressed)):
         abort(red('Build file not found. Did you forget to build?'))
 
-    S3_BUCKET   = 'devops.suspend.io'
+    S3_BUCKET   = 'devops.lstn.fm'
     S3_KEY      = 'builds/lstn/' + compressed
     CD_APP_NAME = 'Lstn'
     CD_DEPLOYMENT_GROUP = 'Production'
