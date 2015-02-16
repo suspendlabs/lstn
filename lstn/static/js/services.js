@@ -33,7 +33,7 @@ angular.module('lstn.services', ['ngResource'])
 ])
 
 .factory('socket', ['config', 'socketFactory', function(config, socketFactory) {
-  var ioSocket = io.connect('http://' + config.WS_HOST + '/socket.io');
+  var ioSocket = io.connect(config.WS_URL);
   var socket = socketFactory({
     ioSocket: ioSocket
   });
