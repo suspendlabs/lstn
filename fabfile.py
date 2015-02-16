@@ -46,7 +46,7 @@ def deploy():
     if not os.path.isfile(os.path.join(BUILD_DIR, compressed)):
         abort(red('Build file not found. Did you forget to build?'))
 
-    S3_BUCKET   = 'devops.suspend.io'
+    S3_BUCKET   = 'devops.lstn.fm'
     S3_KEY      = 'builds/lstn/' + compressed
     CD_APP_NAME = 'Lstn'
     CD_DEPLOYMENT_GROUP = 'Production'
