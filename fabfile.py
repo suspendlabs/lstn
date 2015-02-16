@@ -33,9 +33,11 @@ def build():
 
         local('cp %s/lstn/config.py %s/lstn/' % (LOCAL_REPO, archive))
 
-    with lcd(BUILD_DIR):
+    with lcd(archive):
         compressed = '%s.zip' % version
-        local('zip -r %s %s' % (compressed, version))
+        local('zip -r ../%s *' % compressed)
+
+    with lcd(BUILD_DIR):
         local('rm -rf %s' % version)
 
 def deploy():
