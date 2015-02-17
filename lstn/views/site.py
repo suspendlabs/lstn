@@ -9,6 +9,7 @@ from flask import Flask, request, redirect, url_for, \
 from flask.ext.login import login_required, current_user, login_user, logout_user
 
 from lstn import db, login_manager
+from lstn.exceptions import WebException
 from lstn.models import User
 
 site = Blueprint('site', __name__)
@@ -22,12 +23,15 @@ def login():
   try:
     auth = rdio_manager.get_token_and_login_url(url_for('site.auth', _external=True))
   except Exception as e:
-    raise APIException('Unable to login: %s' % str(e))
+    raise WebException('Unable to login: %s' % str(e), 500)
+
+  if not auth:
+    raise WebException('Unable to login', 500)
 
   required = ['login_url', 'oauth_token', 'oauth_token_secret']
   missing = [key for key in required if key not in auth]
   if missing:
-    raise Exception('Unable to authenticate with Rdio')
+    raise WebException('Unable to authenticate with Rdio', 500)
 
   session['oauth_token_secret'] = auth['oauth_token_secret']
 
@@ -37,10 +41,10 @@ def login():
 @site.route('/auth')
 def auth():
   if 'oauth_verifier' not in request.args or 'oauth_token' not in request.args:
-    raise Exception('Missing authentication response from Rdio')
+    raise WebException('Missing authentication response from Rdio', 500)
 
   if 'oauth_token_secret' not in session:
-    raise Exception('Missing required authentication token')
+    raise WebException('Missing required authentication token', 500)
 
   request_token = {
     'oauth_token': request.args['oauth_token'],
@@ -52,14 +56,14 @@ def auth():
   try:
     auth = rdio_manager.authorize_with_verifier(request.args['oauth_verifier'], request_token)
   except Exception as e:
-    raise APIException('Unable to authenticate: %s' % str(e))
+    raise WebException('Unable to authenticate: %s' % str(e), 500)
 
   if not auth or 'oauth_token' not in auth or 'oauth_token_secret' not in auth:
-    raise Exception('Missing authentication response from Rdio')
+    raise WebException('Missing authentication response from Rdio', 500)
 
   rdio_user = rdio_manager.current_user()
   if not rdio_user:
-    raise Exception('Unable to retrieve user information from Rdio')
+    raise WebException('Unable to retrieve user information from Rdio', 500)
 
   user = User.query.filter(User.external_id == rdio_user.key).first()
 
@@ -85,7 +89,7 @@ def auth():
     db.session.commit()
 
   if not user:
-    raise Exception('Unable to update user')
+    raise WebException('Unable to update user', 500)
 
   login_user(user)
 
