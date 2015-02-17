@@ -1,6 +1,7 @@
 module.exports = (grunt) ->
   jsFiles = ['lstn/static/js/**/*.js']
   grunt.initConfig
+
     ngconstant:
       options:
         space: '  '
@@ -14,6 +15,7 @@ module.exports = (grunt) ->
         options:
           dest: 'lstn/static/js/config.js'
         constants: 'config/production.json'
+
     ngtemplates:
       lstn:
         src: 'lstn/static/partials/**/*.html'
@@ -24,6 +26,7 @@ module.exports = (grunt) ->
           prefix: '/',
           url: (path) ->
             return path.substring('/lstn'.length);
+
     jshint:
       files: jsFiles
       options:
@@ -32,10 +35,12 @@ module.exports = (grunt) ->
         browser: true
         devel: true
         jquery: true
+
     jsbeautifier:
       files: jsFiles
       options:
         indent_size: 2
+
     compass:
       lstn:
         options:
@@ -43,6 +48,7 @@ module.exports = (grunt) ->
           cssDir: 'lstn/static/css'
           noLineComments: true
           force: true
+
     watch:
       ngtemplates:
         files: ['lstn/static/partials/**/*.html']
@@ -51,6 +57,11 @@ module.exports = (grunt) ->
         files: ['sass/**/*.scss']
         tasks: ['compass']
 
+    wiredep:
+      lstn:
+        src: ['lstn/templates/index.html']
+        ignorePath: '..'
+
     useminPrepare:
       html: 'lstn/templates/index.html'
       options:
@@ -58,10 +69,7 @@ module.exports = (grunt) ->
 
     usemin:
       html: 'lstn/templates/index.html'
-    wiredep:
-      lstn:
-        src: ['lstn/templates/index.html']
-        ignorePath: '..'
+
     copy:
       fonts:
         files: [
@@ -84,9 +92,13 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-wiredep'
   grunt.loadNpmTasks 'grunt-usemin'
   
-
-  grunt.registerTask 'test', ['copy']
-  grunt.registerTask 'build', ['useminPrepare', 'concat:generated', 'cssmin:generated', 'uglify:generated', 'usemin']
   grunt.registerTask 'default', ['wiredep', 'ngconstant:development', 'jshint', 'compass', 'ngtemplates']
-  grunt.registerTask 'precommit', ['jshint', 'compass', 'ngtemplates']
+  grunt.registerTask 'build', [
+    'copy',
+    'useminPrepare', 
+    'concat:generated', 
+    'cssmin:generated', 
+    'uglify:generated', 
+    'usemin'
+  ]
   grunt.registerTask 'deploy', ['ngconstant:production', 'build']
