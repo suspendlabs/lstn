@@ -48,7 +48,11 @@ def auth():
   }
 
   rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'], current_app.config['RDIO_CONSUMER_SECRET'])
-  auth = rdio_manager.authorize_with_verifier(request.args['oauth_verifier'], request_token)
+
+  try:
+    auth = rdio_manager.authorize_with_verifier(request.args['oauth_verifier'], request_token)
+  except Exception as e:
+    raise APIException('Unable to authenticate: %s' % str(e))
 
   if not auth or 'oauth_token' not in auth or 'oauth_token_secret' not in auth:
     raise Exception('Missing authentication response from Rdio')
