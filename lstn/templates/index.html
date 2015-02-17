@@ -91,7 +91,8 @@
 
   <div id="content" class="container" data-ng-view></div>
   <div id="apiswf"></div>
-
+  
+  <!-- build:js js/vendor.js -->
   <!-- bower:js -->
   <script src="/static/bower_components/modernizr/modernizr.js"></script>
   <script src="/static/bower_components/jquery/dist/jquery.js"></script>
@@ -110,17 +111,21 @@
   <script src="/static/bower_components/angular-sanitize/angular-sanitize.js"></script>
   <script src="/static/bower_components/angular-emoji-map/angular-emoji-map.js"></script>
   <!-- endbower -->
-  <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
   <script src="/static/bower_components/angular-twemoji/dist/angular-twemoji.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
+  <!-- endbuild -->
 
-  <script src="%% url_for('static', filename='js/config.js') %%"></script>
-  <script src="%% url_for('static', filename='js/controllers.js') %%"></script>
-  <script src="%% url_for('static', filename='js/services.js') %%"></script>
-  <script src="%% url_for('static', filename='js/filters.js') %%"></script>
-  <script src="%% url_for('static', filename='js/directives.js') %%"></script>
-  <script src="%% url_for('static', filename='js/templates.js') %%"></script>
-  <script src="%% url_for('static', filename='js/app.js') %%"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
+
+  <!-- build:js js/lstn.js -->
+  <script src="/static/js/config.js"></script>
+  <script src="/static/js/controllers.js"></script>
+  <script src="/static/js/services.js"></script>
+  <script src="/static/js/filters.js"></script>
+  <script src="/static/js/directives.js"></script>
+  <script src="/static/js/templates.js"></script>
+  <script src="/static/js/app.js"></script>
+  <!-- endbuild -->
 
   <div id="user" style="display: none;">%% user_json | safe %%</div>
   </body>
