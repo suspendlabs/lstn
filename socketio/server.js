@@ -251,17 +251,28 @@ Lstn.prototype.initController = function(socket) {
   return true;
 };
 
+Lstn.prototype.getMentionName = function(name) {
+  return name.replace(/^([a-z\u00E0-\u00FC])|\s+([a-z\u00E0-\u00FC])/g, function($1) {
+    return $1.toUpperCase();
+  }).replace(/\s/, '');
+};
+
 Lstn.prototype.addToRoster = function(user) {
   // Create the room roster if needed
   if (!(this.roomId in roster)) {
     roster[this.roomId] = {
       controllers: {},
       controllerOrder: [],
-      users: {}
+      users: {},
+      mentionNames: {}
     };
   }
 
   roster[this.roomId].users[this.userId] = user;
+  roster[this.roomId].mentionNames[this.userId] = {
+    id: this.userId,
+    label: this.getMentionName(user.name)
+  };
 };
 
 Lstn.prototype.updateRoster = function(user) {
@@ -269,7 +280,8 @@ Lstn.prototype.updateRoster = function(user) {
     roster[this.roomId] = {
       controllers: {},
       controllerOrder: [],
-      users: {}
+      users: {},
+      mentionNames: {}
     };
   }
 
@@ -278,6 +290,14 @@ Lstn.prototype.updateRoster = function(user) {
   } else {
     roster[this.roomId].users[this.userId] = user;
   }
+
+  if (!(this.userId in roster[this.roomId].mentionNames)) {
+    roster[this.roomId].mentionNames[this.userId] = {
+      id: this.userId
+    };
+  }
+
+  roster[this.roomId].mentionNames[this.userId].label = this.getMentionName(user.name);
 };
 
 Lstn.prototype.removeFromRoster = function() {
@@ -287,6 +307,8 @@ Lstn.prototype.removeFromRoster = function() {
   } else if (this.userId in roster[this.roomId].users) {
     this.removeFromUsers();
   }
+
+  delete roster[this.roomId].mentionNames[this.userId];
 };
 
 Lstn.prototype.removeFromControllers = function() {
@@ -318,7 +340,14 @@ Lstn.prototype.addToUsers = function() {
 };
 
 Lstn.prototype.sendRoster = function() {
-  io.sockets.in(this.roomId).emit('room:roster:update', roster[this.roomId]);
+  var currentRoster = JSON.parse(JSON.stringify(roster[this.roomId]));
+  if (currentRoster) {
+    currentRoster.mentionNames = Object.keys(currentRoster.mentionNames || {}).map(function(key) {
+      return currentRoster.mentionNames[key];
+    });
+  }
+
+  io.sockets.in(this.roomId).emit('room:roster:update', currentRoster);
 };
 
 Lstn.prototype.getChatHistory = function() {
