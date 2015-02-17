@@ -19,7 +19,10 @@ def login():
   state = {}
   rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'], current_app.config['RDIO_CONSUMER_SECRET'])
 
-  auth = rdio_manager.get_token_and_login_url(url_for('site.auth', _external=True))
+  try:
+    auth = rdio_manager.get_token_and_login_url(url_for('site.auth', _external=True))
+  except Exception as e:
+    raise APIException('Unable to login: %s' % str(e))
 
   required = ['login_url', 'oauth_token', 'oauth_token_secret']
   missing = [key for key in required if key not in auth]
