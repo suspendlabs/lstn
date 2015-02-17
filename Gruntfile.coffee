@@ -1,7 +1,5 @@
 module.exports = (grunt) ->
   jsFiles = ['lstn/static/js/**/*.js']
-  cssFiles = ['lstn/static/css/**/*.css']
-
   grunt.initConfig
     ngconstant:
       options:
@@ -26,11 +24,6 @@ module.exports = (grunt) ->
           prefix: '/',
           url: (path) ->
             return path.substring('/lstn'.length);
-    concat:
-      lstn:
-        files:
-          'lstn/static/js/lstn.js': jsFiles
-          'lstn/static/css/lstn.css': cssFiles
     jshint:
       files: jsFiles
       options:
@@ -65,29 +58,20 @@ module.exports = (grunt) ->
 
     usemin:
       html: 'lstn/templates/index.html'
-      
     wiredep:
       lstn:
         src: ['lstn/templates/index.html']
         ignorePath: '..'
-    uglify:
-      lstn:
-        options:
-          sourceMap: true
+    copy:
+      fonts:
         files: [
-          expand: true
-          cwd: 'lstn/static/js'
-          src: ['**/*.js', '!**/*.min.js', '!**/*.src.js']
-          dest: 'lstn/static/js'
+          { src: ['lstn/static/bower_components/bootstrap/fonts/*'], dest: 'lstn/static/dist/fonts'},
+          { src: ['lstn/static/bower_components/fontawesome/fonts/*'], dest: 'lstn/static/dist/fonts'}
         ]
-    cssmin:
-      lstn:
-        expand: true
-        cwd: 'lstn/static/css'
-        src: '**/*.css'
-        dest: 'lstn/static/css'
+        
 
   grunt.loadNpmTasks 'grunt-contrib-jshint'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-jsbeautifier'
@@ -101,7 +85,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-usemin'
   
 
+  grunt.registerTask 'test', ['copy']
   grunt.registerTask 'build', ['useminPrepare', 'concat:generated', 'cssmin:generated', 'uglify:generated', 'usemin']
   grunt.registerTask 'default', ['wiredep', 'ngconstant:development', 'jshint', 'compass', 'ngtemplates']
   grunt.registerTask 'precommit', ['jshint', 'compass', 'ngtemplates']
-  grunt.registerTask 'deploy', ['ngconstant:production', 'concat', 'uglify', 'cssmin']
+  grunt.registerTask 'deploy', ['ngconstant:production', 'build']
