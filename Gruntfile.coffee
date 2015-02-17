@@ -101,7 +101,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-usemin'
   
 
-  grunt.registerTask 'build', ['useminPrepare', 'concat:generated', 'uglify:generated']
+  grunt.registerTask 'build', ['useminPrepare', 'concat:generated', 'uglify:generated', 'usemin']
   grunt.registerTask 'default', ['wiredep', 'ngconstant:development', 'jshint', 'compass', 'ngtemplates']
   grunt.registerTask 'precommit', ['jshint', 'compass', 'ngtemplates']
   grunt.registerTask 'deploy', ['ngconstant:production', 'concat', 'uglify', 'cssmin']
