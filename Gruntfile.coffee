@@ -71,7 +71,7 @@ module.exports = (grunt) ->
       html: 'lstn/templates/index.html'
 
     copy:
-      fonts:
+      dist:
         files: [
           { cwd: 'lstn/static/bower_components/bootstrap/fonts/', src:['**'], dest: 'lstn/static/dist/fonts', expand: true},
           { cwd: 'lstn/static/bower_components/fontawesome/fonts/', src:['**'], dest: 'lstn/static/dist/fonts', expand: true}
@@ -103,11 +103,12 @@ module.exports = (grunt) ->
   
   grunt.registerTask 'default', ['wiredep', 'ngconstant:development', 'jshint', 'compass', 'ngtemplates']
   grunt.registerTask 'build', [
-    'copy',
+    'copy:dist',
     'useminPrepare', 
     'concat:generated', 
     'cssmin:generated', 
     'uglify:generated', 
-    'usemin'
+    'usemin',
+    'htmlmin:dist'
   ]
   grunt.registerTask 'deploy', ['ngconstant:production', 'build']
