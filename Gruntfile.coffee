@@ -73,8 +73,8 @@ module.exports = (grunt) ->
     copy:
       fonts:
         files: [
-          { cwd: 'lstn/static/bower_components/bootstrap/fonts/', src:['**'], dest: 'lstn/static/dist/fonts'},
-          { cwd: 'lstn/static/bower_components/fontawesome/fonts/', src:['**'], dest: 'lstn/static/dist/fonts'}
+          { cwd: 'lstn/static/bower_components/bootstrap/fonts/', src:['**'], dest: 'lstn/static/dist/fonts', expand: true},
+          { cwd: 'lstn/static/bower_components/fontawesome/fonts/', src:['**'], dest: 'lstn/static/dist/fonts', expand: true}
         ]
 
   grunt.loadNpmTasks 'grunt-contrib-jshint'
