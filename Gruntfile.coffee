@@ -62,7 +62,6 @@ module.exports = (grunt) ->
       html: 'lstn/templates/index.html'
       options:
         root: 'lstn'
-        dest: 'lstn/static/dist'
     usemin:
       html: 'lstn/templates/index.html'
       
