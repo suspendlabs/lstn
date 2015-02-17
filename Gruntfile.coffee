@@ -60,8 +60,7 @@ module.exports = (grunt) ->
 
     useminPrepare:
       html: 'lstn/templates/index.html'
-      options:
-        root: 'lstn'
+
     usemin:
       html: 'lstn/templates/index.html'
       
