@@ -4,7 +4,7 @@
       <div class="chat__user" data-ng-bind="message.user"></div>
     </div>
     <div data-ng-class="{'col-xs-6': message.created, 'col-xs-9': !message.created}">
-      <div class="chat__message wordwrap" data-ng-bind="message.text"></div>
+      <div class="chat__message wordwrap" data-ng-bind-html="message.text|twemoji"></div>
     </div>
     <div class="col-xs-3" data-ng-if="message.created">
       <div class="chat__timestamp text-muted" data-time-from-now="message.created"></div>
