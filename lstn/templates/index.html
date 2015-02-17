@@ -27,12 +27,18 @@
   <meta name="msapplication-TileColor" content="#2d89ef">
   <meta name="msapplication-TileImage" content="%% url_for('static', filename='/mstile-144x144.png') %%">
   <meta name="theme-color" content="#ffffff">
-
-  <link rel="stylesheet" href="%% url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.css') %%">
-  <link rel="stylesheet" href="%% url_for('static', filename='bower_components/fontawesome/css/font-awesome.css') %%">
+  
   <link href='//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <!-- build:js(lstn) /static/dist/css/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="/static/bower_components/fontawesome/css/font-awesome.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(lstn) /static/dist/css/lstn.css -->
+  <link rel="stylesheet" href="/static/css/app.css" />
+  <!-- endbuild -->
 
-  <link rel="stylesheet" href="%% url_for('static', filename='css/app.css') %%" />
 </head>
 <body data-ng-controller="AppController">
   <nav class="navbar navbar-inverse navbar-fixed-top">
