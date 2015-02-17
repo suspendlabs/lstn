@@ -1,0 +1,9 @@
+<% extends "layout.html" %>
+<% block title %>Forbidden<% endblock %>
+<% block body %>
+<h1>Forbidden</h1>
+<p>ಠ_ಠ No. <a href="%% url_for('site.index') %%">Lstn again</a>.</p>
+<% if message %>
+<p>%% message %%</p>
+<% endif %>
+<% endblock %>

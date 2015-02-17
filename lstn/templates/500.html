@@ -1,0 +1,9 @@
+<% extends "layout.html" %>
+<% block title %>Internal Server Error<% endblock %>
+<% block body %>
+<h1>Internal Server Error</h1>
+<p> (╯°□°）╯︵ ┻━┻  How could this happen?! <a href="%% url_for('site.index') %%">Lstn again</a></p>
+<% if message %>
+<p>%% message %%</p>
+<% endif %>
+<% endblock %>
