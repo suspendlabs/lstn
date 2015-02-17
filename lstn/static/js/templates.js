@@ -263,10 +263,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <tabset class=\"queue__tabs\">\n" +
     "      <tab heading=\"Your Queue\" data-select=\"selectQueueTab('personal')\">\n" +
     "        <ul id=\"queue\" class=\"queue queue--full track__list\" data-ng-show=\"queue && queue.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue\">\n" +
-    "          <lstn-track \n" +
-    "            data-ng-class-even=\"'track--even'\" \n" +
-    "            data-ng-class-odd=\"'track--odd'\" \n" +
-    "            data-ng-repeat=\"song in queue\" \n" +
+    "          <lstn-track\n" +
+    "            data-ng-class-even=\"'track--even'\"\n" +
+    "            data-ng-class-odd=\"'track--odd'\"\n" +
+    "            data-ng-repeat=\"song in queue\"\n" +
     "            data-context=\"queue\"\n" +
     "            data-cutoff=\"50\"></lstn-track>\n" +
     "        </ul>\n" +
@@ -276,10 +276,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      </tab>\n" +
     "      <tab heading=\"Room Queue\" data-select=\"selectQueueTab('room')\">\n" +
     "        <ul id=\"room-queue\" class=\"queue queue--full track__list\" data-ng-show=\"roomQueue && roomQueue.length > 0\">\n" +
-    "          <lstn-track \n" +
-    "            data-ng-class-even=\"'track--even'\" \n" +
-    "            data-ng-class-odd=\"'track--odd'\" \n" +
-    "            data-ng-repeat=\"song in roomQueue\" \n" +
+    "          <lstn-track\n" +
+    "            data-ng-class-even=\"'track--even'\"\n" +
+    "            data-ng-class-odd=\"'track--odd'\"\n" +
+    "            data-ng-repeat=\"song in roomQueue\"\n" +
     "            data-context=\"queue\"\n" +
     "            data-cutoff=\"50\"></lstn-track>\n" +
     "        </ul>\n" +
@@ -298,7 +298,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "            data-ng-repeat=\"message in chat.messages\"\n" +
     "            data-ng-class=\"getMessageClass()\"></lstn-chat-message>\n" +
     "        </ul>\n" +
-    "        <input class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
+    "        <input id=\"chat-input\" class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\" data-mentio></input>\n" +
+    "        <mentio-menu\n" +
+    "          mentio-for=\"'chat-input'\"\n" +
+    "          mentio-trigger-char=\"@\"\n" +
+    "          mentio-items=\"roster.mentionNames\"\n" +
+    "          mentio-search=\"searchRoster(term)\"></mentio-menu>\n" +
+    "          <!--mentio-template-url=\"/static/partials/directives/roster-mention.html\"-->\n" +
+    "\n" +
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
