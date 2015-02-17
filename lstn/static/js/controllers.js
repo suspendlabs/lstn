@@ -663,7 +663,7 @@ angular.module('lstn.controllers', [])
         allowScriptAccess: 'always'
       };
   
-      swfobject.embedSWF('https://www.rdio.com/api/swf/',
+      swfobject.embedSWF('//www.rdio.com/api/swf/',
         'apiswf', 1, 1, '9.0.0', 'expressInstall.swf',
         flashVars, params, {});
     };

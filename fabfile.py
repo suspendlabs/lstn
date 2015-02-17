@@ -82,13 +82,14 @@ def deploy():
 
     # Upload to S3
     with lcd(BUILD_DIR):
-        local('aws s3 cp %s s3://%s/%s' % (compressed, S3_BUCKET, S3_KEY))
+        local('aws s3 cp %s s3://%s/%s --profile Lstn' % (compressed, S3_BUCKET, S3_KEY))
         local('rm -f %s' % (compressed))
 
         cmd = """aws deploy create-deployment \\
             --application-name "%s" \\
             --deployment-group-name "%s" \\
-            --s3-location "bucket=%s,key=%s,bundleType=zip"
+            --s3-location "bucket=%s,key=%s,bundleType=zip" \\
+            --profile Lstn
         """
         cmd = cmd % (CD_APP_NAME, CD_DEPLOYMENT_GROUP, S3_BUCKET, S3_KEY)
         res = json.loads(local(cmd, capture=True))
@@ -96,7 +97,8 @@ def deploy():
 
         print(green('Waiting for deployment status...'))
         cmd = """aws deploy get-deployment \\
-            --deployment-id %s
+            --deployment-id %s \\
+            --profile Lstn
         """
 
         # Print the status of the deployment.
