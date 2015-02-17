@@ -59,7 +59,7 @@ module.exports = (grunt) ->
 
     wiredep:
       lstn:
-        src: ['lstn/templates/index.html']
+        files: ['lstn/templates/index.html']
         ignorePath: '..'
 
     useminPrepare:
@@ -77,6 +77,15 @@ module.exports = (grunt) ->
           { cwd: 'lstn/static/bower_components/fontawesome/fonts/', src:['**'], dest: 'lstn/static/dist/fonts', expand: true}
         ]
 
+    htmlmin:
+      dist:
+        files: 
+          'lstn/templates/index.html': 'lstn/templates/index.html'
+        options:
+          removeComments: true,
+          collapseWhitespace: true
+      
+
   grunt.loadNpmTasks 'grunt-contrib-jshint'
   grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-clean'
@@ -86,6 +95,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
+  grunt.loadNpmTasks 'grunt-contrib-htmlmin'
   grunt.loadNpmTasks 'grunt-angular-templates'
   grunt.loadNpmTasks 'grunt-ng-constant'
   grunt.loadNpmTasks 'grunt-wiredep'
