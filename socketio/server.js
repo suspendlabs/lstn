@@ -26,6 +26,9 @@ nconf.defaults({
 server.listen(nconf.get('http:port'));
 
 var redis = require('redis').createClient(nconf.get('redis:port'), nconf.get('redis:host'));
+redis.on('error', function(err) {
+  console.log('Error connecting to redis' err);
+});
 
 var PLAYING_REQUEST_TIMEOUT = 2 * 1000;
 var playing = {};
