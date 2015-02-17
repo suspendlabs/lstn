@@ -32,10 +32,11 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   }
 ])
 
-.factory('socket', ['socketFactory', 'emojiToUnicodeFilter', function(socketFactory, emojiToUnicodeFilter) {
-  var socket = socketFactory();
-  socket.forward('broadcast');
-  socket.forward('error');
+.factory('socket', ['config', 'socketFactory', 'emojiToUnicodeFilter', function(config, socketFactory, emojiToUnicodeFilter) {
+  var ioSocket = io.connect(config.WS_URL);
+  var socket = socketFactory({
+    ioSocket: ioSocket
+  });
 
   socket.releaseControl = function(id, user) {
     console.log('sending room:controller:release');

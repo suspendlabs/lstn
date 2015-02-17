@@ -7,6 +7,7 @@ angular.module('lstn', [
   'ui.bootstrap',
   'ui.sortable',
   'btford.socket-io',
+  'lstn.config',
   'lstn.services',
   'lstn.controllers',
   'lstn.filters',
