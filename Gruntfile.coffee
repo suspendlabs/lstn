@@ -57,6 +57,10 @@ module.exports = (grunt) ->
       sass:
         files: ['sass/**/*.scss']
         tasks: ['compass']
+    wiredep:
+      lstn:
+        src: ['lstn/templates/index.html']
+        ignorePath: '..'
     uglify:
       lstn:
         options:
@@ -84,7 +88,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-angular-templates'
   grunt.loadNpmTasks 'grunt-ng-constant'
+  grunt.loadNpmTasks 'grunt-wiredep'
 
-  grunt.registerTask 'default', ['ngconstant:development', 'jshint', 'compass', 'ngtemplates']
+  grunt.registerTask 'default', ['wiredep', 'ngconstant:development', 'jshint', 'compass', 'ngtemplates']
   grunt.registerTask 'precommit', ['jshint', 'compass', 'ngtemplates']
   grunt.registerTask 'deploy', ['ngconstant:production', 'concat', 'uglify', 'cssmin']
