@@ -51,6 +51,7 @@ RUN pip install times==0.7
 RUN pip install uritemplate==0.6
 RUN pip install wsgiref==0.1.2
 
+RUN npm install socket.io-redis
 RUN npm install express
 RUN npm install redis
 RUN npm install socket.io
