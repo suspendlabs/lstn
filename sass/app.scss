@@ -653,7 +653,7 @@ footer {
 
 @include keyframes(mentioned) {
   0% {
-    background: #337ab7;
+    background: #777;
   }
   40% {
     background: #FF0000;
@@ -664,7 +664,7 @@ footer {
     color: white;
   }
   100% {
-    background: #337ab7;
+    background: #777;
     color: white;
   }
 }

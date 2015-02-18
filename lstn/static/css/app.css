@@ -573,7 +573,7 @@ footer .container .text-muted {
 
 @-moz-keyframes mentioned {
   0% {
-    background: #337ab7;
+    background: #777;
   }
   40% {
     background: #FF0000;
@@ -584,13 +584,13 @@ footer .container .text-muted {
     color: white;
   }
   100% {
-    background: #337ab7;
+    background: #777;
     color: white;
   }
 }
 @-webkit-keyframes mentioned {
   0% {
-    background: #337ab7;
+    background: #777;
   }
   40% {
     background: #FF0000;
@@ -601,13 +601,13 @@ footer .container .text-muted {
     color: white;
   }
   100% {
-    background: #337ab7;
+    background: #777;
     color: white;
   }
 }
 @keyframes mentioned {
   0% {
-    background: #337ab7;
+    background: #777;
   }
   40% {
     background: #FF0000;
@@ -618,7 +618,7 @@ footer .container .text-muted {
     color: white;
   }
   100% {
-    background: #337ab7;
+    background: #777;
     color: white;
   }
 }
