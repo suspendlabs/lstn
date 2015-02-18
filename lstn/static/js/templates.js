@@ -298,14 +298,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "            data-ng-repeat=\"message in chat.messages\"\n" +
     "            data-ng-class=\"getMessageClass()\"></lstn-chat-message>\n" +
     "        </ul>\n" +
-    "        <input id=\"chat-input\" class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\" data-mentio></input>\n" +
+    "        <input data-mentio data-mentio-id=\"'chat-input'\" ng-trim=\"false\" class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
     "        <mentio-menu\n" +
     "          mentio-for=\"'chat-input'\"\n" +
-    "          mentio-trigger-char=\"@\"\n" +
-    "          mentio-items=\"roster.mentionNames\"\n" +
-    "          mentio-search=\"searchRoster(term)\"></mentio-menu>\n" +
-    "          <!--mentio-template-url=\"/static/partials/directives/roster-mention.html\"-->\n" +
-    "\n" +
+    "          mentio-trigger-char=\"'@'\"\n" +
+    "          mentio-items=\"mentionNames\"\n" +
+    "          mentio-template-url=\"/static/partials/directives/roster-mention.html\"\n" +
+    "          mentio-search=\"searchRoster(term)\"\n" +
+    "          mentio-select=\"getUser(item)\"></mentio-menu>\n" +
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
@@ -341,6 +341,16 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </ul>\n" +
     "  </div>\n" +
     "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/roster-mention.html',
+    "<ul class=\"list-group user-search\">\n" +
+    "  <li mentio-menu-item=\"person\" ng-repeat=\"person in items\" class=\"list-group-item\">\n" +
+    "    <img ng-src=\"{{ person.picture }}\" class=\"user-photo\">\n" +
+    "    <span class=\"text-primary\" ng-bind-html=\"person.name | mentioHighlight:typedTerm:'menu-highlighted' | unsafe\"></span>\n" +
+    "  </li>\n" +
+    "</ul>\n"
   );
 
 
