@@ -57,11 +57,11 @@ module.exports = (grunt) ->
         space: '  '
         wrap: '/* jshint ignore:start */\n\n"use strict";\n\n {%= __ngModule %}',
         name: 'lstn.config'
-      development:
+      lstn:
         options:
           dest: '<%= lstn.static %>/js/config.js'
         constants: 'config/development.json'
-      production:
+      dist:
         options:
           dest: '<%= lstn.dist %>/js/config.js'
         constants: 'config/production.json'
@@ -192,7 +192,7 @@ module.exports = (grunt) ->
   
   grunt.registerTask 'default', [
     'wiredep'
-    'ngconstant:development'
+    'ngconstant:lstn'
     'jshint'
     'compass:lstn'
     'ngtemplates:lstn'
@@ -201,7 +201,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', [
     'clean:dist'
     'copy',
-    'ngconstant:production'
+    'ngconstant:dist'
     'ngtemplates:dist'
     'useminPrepare'
     'concat:generated'
@@ -210,5 +210,3 @@ module.exports = (grunt) ->
     'filerev'
     'usemin'
   ]
-
-  grunt.registerTask 'deploy', ['ngconstant:production', 'build']
