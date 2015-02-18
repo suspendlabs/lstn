@@ -2,6 +2,7 @@ import datetime
 import simplejson as json
 import rdio
 import time
+import re
 
 from lstn import db, r
 
@@ -68,7 +69,7 @@ class User(db.Model, ModelMixin, UserMixin):
       data.pop('oauth_token_secret', None)
       data.pop('settings', None)
 
-    data['mention'] = slugify(self.name)
+    data['mention'] = ''.join(word.capitalize() for word in slugify(self.name).split('-'))
 
     return data
 
