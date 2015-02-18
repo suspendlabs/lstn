@@ -15,6 +15,24 @@ $rdio-blue: #008fd5;
    word-wrap: break-word;      /* IE */
 }
 
+img.avatar {
+  border-radius: 50%;
+  &.upvoted {
+    border: 2px solid #4cae4c;
+  }
+  &.downvoted {
+    border: 2px solid #d43f3a;
+  }
+  &.xs {
+    width:32px;
+    height:32px;
+  }
+  &.sm {
+    width: 50px;
+    height:50px;
+  }
+}
+
 /* http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/ */
 .row.no-gutters {
   margin-right: 0;
