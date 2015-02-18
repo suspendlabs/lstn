@@ -157,6 +157,7 @@ angular.module('lstn.controllers', [])
 
     $scope.trackUnseenChatMessages = true;
     $scope.unseenChatMessages = 0;
+    $scope.mentioned = false;
 
     // Notifications
     $scope.notificationPermission = 'default';
