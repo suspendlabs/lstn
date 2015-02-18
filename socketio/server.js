@@ -276,12 +276,6 @@ Lstn.prototype.initController = function(socket) {
   return true;
 };
 
-Lstn.prototype.getMentionName = function(name) {
-  return name.replace(/^([a-z\u00E0-\u00FC])|\s+([a-z\u00E0-\u00FC])/g, function($1) {
-    return $1.toUpperCase();
-  }).replace(/\s/, '');
-};
-
 Lstn.prototype.addToRoster = function(user) {
   // Create the room roster if needed
   if (!(this.roomId in roster)) {
@@ -296,7 +290,7 @@ Lstn.prototype.addToRoster = function(user) {
   roster[this.roomId].users[this.userId] = user;
   roster[this.roomId].mentionNames[this.userId] = {
     id: this.userId,
-    label: this.getMentionName(user.name),
+    label: user.mention,
     name: user.name,
     picture: user.picture
   };
@@ -324,7 +318,7 @@ Lstn.prototype.updateRoster = function(user) {
     };
   }
 
-  roster[this.roomId].mentionNames[this.userId].label = this.getMentionName(user.name);
+  roster[this.roomId].mentionNames[this.userId].label = user.mention;
   roster[this.roomId].mentionNames[this.userId].name = user.name;
   roster[this.roomId].mentionNames[this.userId].picture = user.picture;
 };
@@ -795,20 +789,19 @@ Lstn.prototype.onChatMessage = function(message) {
     return;
   }
 
-  var user = this.getUser();
-  if (user) {
-    var mentionName = this.getMentionName(user.name);
-    if (mentionName &&
-      message.text.toUpperCase().indexOf('@' + mentionName.toUpperCase()) >= 0) {
+  message.mentionedNames = [];
 
-      message.mention = true;
-    }
+  var mentioned = message.text.match(/@(\S+)/ig);
+  if (mentioned) {
+    // Populate mentioned names
+    var mentionedNames = {};
 
-    /*
-    if (message.text.toUpperCase().indexOf('@ALL') >= 0) {
-      message.mention = true;
-    }
-    */
+    mentioned.forEach(function(value) {
+      console.log(value);
+      mentionedNames[value.toLowerCase().substring(1)] = 1;
+    }, this);
+
+    message.mentionedNames = Object.keys(mentionedNames);
   }
 
   this.sendChatMessage(message);
