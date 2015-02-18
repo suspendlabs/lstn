@@ -494,3 +494,23 @@ footer .container .text-muted {
 .error-message {
   margin-top: 1em;
 }
+
+.user-search .user-photo {
+  max-width: 30px;
+  max-height: 30px;
+  border-radius: 15px;
+}
+.user-search .list-group-item {
+  padding: 5px;
+}
+.user-search .list-group-item.active {
+  color: #fff;
+  background-color: #428bca;
+  border-color: #428bca;
+}
+.user-search .list-group-item.active .text-muted {
+  color: #ccc;
+}
+.user-search .list-group-item.active .text-primary {
+  color: #fff;
+}
