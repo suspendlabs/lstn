@@ -30,7 +30,7 @@
       <tab id="chat-tab" data-select="selectQueueTab('chat')">
         <tab-heading>
           Chat
-          <span data-ng-class="{'mentioned': mentioned}" class="label label-primary label-as-badge" data-ng-show="trackUnseenChatMessages && unseenChatMessages > 0" data-ng-bind="unseenChatMessages"></span>
+          <span data-ng-class="{'mentioned': mentioned}" class="label label-default label-as-badge" data-ng-show="trackUnseenChatMessages && unseenChatMessages > 0" data-ng-bind="unseenChatMessages"></span>
         </tab-heading>
         <ul id="messages" class="messages list-group">
           <lstn-chat-message

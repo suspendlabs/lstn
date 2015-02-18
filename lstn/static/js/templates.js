@@ -299,7 +299,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <tab id=\"chat-tab\" data-select=\"selectQueueTab('chat')\">\n" +
     "        <tab-heading>\n" +
     "          Chat\n" +
-    "          <span data-ng-class=\"{'mentioned': mentioned}\" class=\"label label-primary label-as-badge\" data-ng-show=\"trackUnseenChatMessages && unseenChatMessages > 0\" data-ng-bind=\"unseenChatMessages\"></span>\n" +
+    "          <span data-ng-class=\"{'mentioned': mentioned}\" class=\"label label-default label-as-badge\" data-ng-show=\"trackUnseenChatMessages && unseenChatMessages > 0\" data-ng-bind=\"unseenChatMessages\"></span>\n" +
     "        </tab-heading>\n" +
     "        <ul id=\"messages\" class=\"messages list-group\">\n" +
     "          <lstn-chat-message\n" +
