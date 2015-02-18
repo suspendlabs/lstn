@@ -166,14 +166,15 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnRoomQueue', ['CurrentUser', 'socket',
-  function(CurrentUser, socket) {
+.directive('lstnRoomQueue', ['$timeout', 'CurrentUser', 'socket',
+  function($timeout, CurrentUser, socket) {
     return {
       restrict: 'E',
       replace: true,
       templateUrl: '/static/partials/directives/room-queue.html',
       link: function($scope, $element, $attrs) {
         $scope.oldQueue = null;
+        $scope.mentionNames = [];
 
         $scope.sortableOptions = {
           'ui-floating': false,
@@ -203,6 +204,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.message = {
           sender: $scope.current_user.id,
           user: $scope.current_user.name,
+          picture: $scope.current_user.picture,
           text: null,
           type: 'message',
         };
@@ -221,10 +223,30 @@ angular.module('lstn.directives', ['sc.twemoji'])
           if (!$scope.trackUnseenChatMessages) {
             $scope.unseenChatMessages = 0;
 
-            $('#messages').animate({
-              scrollTop: $('#messages')[0].scrollHeight
-            }, 200);
+            $timeout(function() {
+              $('#messages').animate({
+                scrollTop: $('#messages')[0].scrollHeight
+              }, 200);
+            }, 100);
           }
+        };
+
+        $scope.searchRoster = function(term) {
+          if (!$scope.roster || !$scope.roster.mentionNames) {
+            return;
+          }
+
+          var mentionNames = [];
+          angular.forEach($scope.roster.mentionNames, function(user) {
+            if (user.label.toUpperCase().indexOf(term.toUpperCase()) >= 0) {
+              mentionNames.push(user);
+            }
+          });
+          $scope.mentionNames = mentionNames;
+        };
+
+        $scope.getUser = function(user) {
+          return '@' + user.label;
         };
       }
     };
