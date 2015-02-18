@@ -166,8 +166,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnRoomQueue', ['$timeout', 'CurrentUser', 'socket',
-  function($timeout, CurrentUser, socket) {
+.directive('lstnRoomQueue', ['$timeout', 'CurrentUser', 'socket', 'emojiMap',
+  function($timeout, CurrentUser, socket, emojiMap) {
     return {
       restrict: 'E',
       replace: true,
@@ -175,6 +175,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       link: function($scope, $element, $attrs) {
         $scope.oldQueue = null;
         $scope.mentionNames = [];
+        $scope.emoticons = [];
 
         $scope.sortableOptions = {
           'ui-floating': false,
@@ -239,14 +240,37 @@ angular.module('lstn.directives', ['sc.twemoji'])
           var mentionNames = [];
           angular.forEach($scope.roster.mentionNames, function(user) {
             if (user.label.toUpperCase().indexOf(term.toUpperCase()) >= 0) {
-              mentionNames.push(user);
+              this.push(user);
             }
-          });
+          }, mentionNames);
           $scope.mentionNames = mentionNames;
         };
 
         $scope.getUser = function(user) {
           return '@' + user.label;
+        };
+
+        $scope.searchEmoticons = function(term) {
+          var emoticons = [];
+
+          if (term && term.length > 2) {
+            angular.forEach(emojiMap, function(value, text) {
+              var name = text.substr(1, text.length - 2).toUpperCase();
+
+              if (name.indexOf(term.toUpperCase()) >= 0) {
+                this.push({
+                  text: text,
+                  value: value
+                });
+              }
+            }, emoticons);
+          }
+
+          $scope.emoticons = emoticons;
+        };
+
+        $scope.getEmoticon = function(emoticon) {
+          return emoticon.text;
         };
       }
     };
