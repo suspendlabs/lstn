@@ -220,6 +220,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.trackUnseenChatMessages = tab !== 'chat';
           if (!$scope.trackUnseenChatMessages) {
             $scope.unseenChatMessages = 0;
+            $scope.mentioned = false;
 
             $('#messages').animate({
               scrollTop: $('#messages')[0].scrollHeight
