@@ -271,7 +271,9 @@ Lstn.prototype.addToRoster = function(user) {
   roster[this.roomId].users[this.userId] = user;
   roster[this.roomId].mentionNames[this.userId] = {
     id: this.userId,
-    label: this.getMentionName(user.name)
+    label: this.getMentionName(user.name),
+    name: user.name,
+    picture: user.picture
   };
 };
 
@@ -298,6 +300,8 @@ Lstn.prototype.updateRoster = function(user) {
   }
 
   roster[this.roomId].mentionNames[this.userId].label = this.getMentionName(user.name);
+  roster[this.roomId].mentionNames[this.userId].name = user.name;
+  roster[this.roomId].mentionNames[this.userId].picture = user.picture;
 };
 
 Lstn.prototype.removeFromRoster = function() {
@@ -756,6 +760,20 @@ Lstn.prototype.onControllerDownvote = function() {
 };
 
 Lstn.prototype.onChatMessage = function(message) {
+  if (!message) {
+    return;
+  }
+
+  var user = this.getUser();
+  if (user) {
+    var mentionName = this.getMentionName(user.name);
+    if (mentionName &&
+      message.text.toUpperCase().indexOf('@' + mentionName.toUpperCase()) >= 0) {
+
+      message.mention = true;
+    }
+  }
+
   this.sendChatMessage(message);
 };
 
