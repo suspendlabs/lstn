@@ -565,7 +565,7 @@ footer .container .text-muted {
   border-color: #428bca;
 }
 
-.nav-tabs > li.mentioned > a {
+.mentioned {
   -moz-animation: mentioned 5s infinite ease;
   -webkit-animation: mentioned 5s infinite ease;
   animation: mentioned 5s infinite ease;
@@ -573,43 +573,52 @@ footer .container .text-muted {
 
 @-moz-keyframes mentioned {
   0% {
-    background: white;
-    color: #337ab7;
+    background: #337ab7;
   }
-  50% {
-    background: #b92c28;
+  40% {
+    background: #FF0000;
+    color: white;
+  }
+  60% {
+    background: #FF0000;
     color: white;
   }
   100% {
-    background: white;
-    color: #337ab7;
+    background: #337ab7;
+    color: white;
   }
 }
 @-webkit-keyframes mentioned {
   0% {
-    background: white;
-    color: #337ab7;
+    background: #337ab7;
   }
-  50% {
-    background: #b92c28;
+  40% {
+    background: #FF0000;
+    color: white;
+  }
+  60% {
+    background: #FF0000;
     color: white;
   }
   100% {
-    background: white;
-    color: #337ab7;
+    background: #337ab7;
+    color: white;
   }
 }
 @keyframes mentioned {
   0% {
-    background: white;
-    color: #337ab7;
+    background: #337ab7;
   }
-  50% {
-    background: #b92c28;
+  40% {
+    background: #FF0000;
+    color: white;
+  }
+  60% {
+    background: #FF0000;
     color: white;
   }
   100% {
-    background: white;
-    color: #337ab7;
+    background: #337ab7;
+    color: white;
   }
 }
