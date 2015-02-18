@@ -1,8 +1,7 @@
 module.exports = (grunt) ->
   jsFiles = ['lstn/static/js/**/*.js']
-  cssFiles = ['lstn/static/css/**/*.css']
-
   grunt.initConfig
+
     ngconstant:
       options:
         space: '  '
@@ -16,6 +15,7 @@ module.exports = (grunt) ->
         options:
           dest: 'lstn/static/js/config.js'
         constants: 'config/production.json'
+
     ngtemplates:
       lstn:
         src: 'lstn/static/partials/**/*.html'
@@ -26,11 +26,7 @@ module.exports = (grunt) ->
           prefix: '/',
           url: (path) ->
             return path.substring('/lstn'.length);
-    concat:
-      lstn:
-        files:
-          'lstn/static/js/lstn.js': jsFiles
-          'lstn/static/css/lstn.css': cssFiles
+
     jshint:
       files: jsFiles
       options:
@@ -39,10 +35,12 @@ module.exports = (grunt) ->
         browser: true
         devel: true
         jquery: true
+
     jsbeautifier:
       files: jsFiles
       options:
         indent_size: 2
+
     compass:
       lstn:
         options:
@@ -50,6 +48,7 @@ module.exports = (grunt) ->
           cssDir: 'lstn/static/css'
           noLineComments: true
           force: true
+
     watch:
       ngtemplates:
         files: ['lstn/static/partials/**/*.html']
@@ -58,6 +57,11 @@ module.exports = (grunt) ->
         files: ['sass/**/*.scss']
         tasks: ['compass']
 
+    wiredep:
+      lstn:
+        src: ['lstn/templates/index.html']
+        ignorePath: '..'
+
     useminPrepare:
       html: 'lstn/templates/index.html'
       options:
@@ -65,29 +69,25 @@ module.exports = (grunt) ->
 
     usemin:
       html: 'lstn/templates/index.html'
-      
-    wiredep:
-      lstn:
-        src: ['lstn/templates/index.html']
-        ignorePath: '..'
-    uglify:
-      lstn:
-        options:
-          sourceMap: true
+
+    copy:
+      dist:
         files: [
-          expand: true
-          cwd: 'lstn/static/js'
-          src: ['**/*.js', '!**/*.min.js', '!**/*.src.js']
-          dest: 'lstn/static/js'
+          { cwd: 'lstn/static/bower_components/bootstrap/fonts/', src:['**'], dest: 'lstn/static/dist/fonts', expand: true},
+          { cwd: 'lstn/static/bower_components/fontawesome/fonts/', src:['**'], dest: 'lstn/static/dist/fonts', expand: true}
         ]
-    cssmin:
-      lstn:
-        expand: true
-        cwd: 'lstn/static/css'
-        src: '**/*.css'
-        dest: 'lstn/static/css'
+
+    htmlmin:
+      dist:
+        files: 
+          'lstn/templates/index.html': 'lstn/templates/index.html'
+        options:
+          removeComments: true,
+          collapseWhitespace: true
+      
 
   grunt.loadNpmTasks 'grunt-contrib-jshint'
+  grunt.loadNpmTasks 'grunt-contrib-copy'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-jsbeautifier'
@@ -95,13 +95,20 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
+  grunt.loadNpmTasks 'grunt-contrib-htmlmin'
   grunt.loadNpmTasks 'grunt-angular-templates'
   grunt.loadNpmTasks 'grunt-ng-constant'
   grunt.loadNpmTasks 'grunt-wiredep'
   grunt.loadNpmTasks 'grunt-usemin'
   
-
-  grunt.registerTask 'build', ['useminPrepare', 'concat:generated', 'uglify:generated', 'usemin']
   grunt.registerTask 'default', ['wiredep', 'ngconstant:development', 'jshint', 'compass', 'ngtemplates']
-  grunt.registerTask 'precommit', ['jshint', 'compass', 'ngtemplates']
-  grunt.registerTask 'deploy', ['ngconstant:production', 'concat', 'uglify', 'cssmin']
+  grunt.registerTask 'build', [
+    'copy:dist',
+    'useminPrepare', 
+    'concat:generated', 
+    'cssmin:generated', 
+    'uglify:generated', 
+    'usemin',
+    'htmlmin:dist'
+  ]
+  grunt.registerTask 'deploy', ['ngconstant:production', 'build']
