@@ -296,10 +296,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "          <h3>See the upcoming songs from each broadcaster</h3>\n" +
     "        </div>\n" +
     "      </tab>\n" +
-    "      <tab id=\"chat-tab\" data-select=\"selectQueueTab('chat')\" data-ng-class=\"{'mentioned': mentioned}\">\n" +
+    "      <tab id=\"chat-tab\" data-select=\"selectQueueTab('chat')\">\n" +
     "        <tab-heading>\n" +
     "          Chat\n" +
-    "          <span class=\"label label-danger label-as-badge\" data-ng-show=\"trackUnseenChatMessages && unseenChatMessages > 0\" data-ng-bind=\"unseenChatMessages\"></span>\n" +
+    "          <span data-ng-class=\"{'mentioned': mentioned}\" class=\"label label-primary label-as-badge\" data-ng-show=\"trackUnseenChatMessages && unseenChatMessages > 0\" data-ng-bind=\"unseenChatMessages\"></span>\n" +
     "        </tab-heading>\n" +
     "        <ul id=\"messages\" class=\"messages list-group\">\n" +
     "          <lstn-chat-message\n" +

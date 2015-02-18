@@ -27,10 +27,10 @@
           <h3>See the upcoming songs from each broadcaster</h3>
         </div>
       </tab>
-      <tab id="chat-tab" data-select="selectQueueTab('chat')" data-ng-class="{'mentioned': mentioned}">
+      <tab id="chat-tab" data-select="selectQueueTab('chat')">
         <tab-heading>
           Chat
-          <span class="label label-danger label-as-badge" data-ng-show="trackUnseenChatMessages && unseenChatMessages > 0" data-ng-bind="unseenChatMessages"></span>
+          <span data-ng-class="{'mentioned': mentioned}" class="label label-primary label-as-badge" data-ng-show="trackUnseenChatMessages && unseenChatMessages > 0" data-ng-bind="unseenChatMessages"></span>
         </tab-heading>
         <ul id="messages" class="messages list-group">
           <lstn-chat-message
