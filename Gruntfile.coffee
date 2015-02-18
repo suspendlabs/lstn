@@ -200,8 +200,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'build', [
     'clean:dist'
-    'copy',
-    'ngconstant:dist'
+    'copy'
     'ngtemplates:dist'
     'useminPrepare'
     'concat:generated'
@@ -209,4 +208,7 @@ module.exports = (grunt) ->
     'uglify:generated'
     'filerev'
     'usemin'
+    'htmlmin'
   ]
+
+  grunt.registerTask 'deploy', ['ngconstant:dist', 'build']
