@@ -282,11 +282,18 @@ Lstn.prototype.addToRoster = function(user) {
     roster[this.roomId] = {
       controllers: {},
       controllerOrder: [],
-      users: {}
+      users: {},
+      mentionNames: {}
     };
   }
 
   roster[this.roomId].users[this.userId] = user;
+  roster[this.roomId].mentionNames[this.userId] = {
+    id: this.userId,
+    label: user.mention,
+    name: user.name,
+    picture: user.picture
+  };
 };
 
 Lstn.prototype.updateRoster = function(user) {
@@ -294,7 +301,8 @@ Lstn.prototype.updateRoster = function(user) {
     roster[this.roomId] = {
       controllers: {},
       controllerOrder: [],
-      users: {}
+      users: {},
+      mentionNames: {}
     };
   }
 
@@ -303,6 +311,16 @@ Lstn.prototype.updateRoster = function(user) {
   } else {
     roster[this.roomId].users[this.userId] = user;
   }
+
+  if (!(this.userId in roster[this.roomId].mentionNames)) {
+    roster[this.roomId].mentionNames[this.userId] = {
+      id: this.userId
+    };
+  }
+
+  roster[this.roomId].mentionNames[this.userId].label = user.mention;
+  roster[this.roomId].mentionNames[this.userId].name = user.name;
+  roster[this.roomId].mentionNames[this.userId].picture = user.picture;
 };
 
 Lstn.prototype.removeFromRoster = function() {
@@ -312,6 +330,8 @@ Lstn.prototype.removeFromRoster = function() {
   } else if (this.userId in roster[this.roomId].users) {
     this.removeFromUsers();
   }
+
+  delete roster[this.roomId].mentionNames[this.userId];
 };
 
 Lstn.prototype.removeFromControllers = function() {
@@ -343,7 +363,14 @@ Lstn.prototype.addToUsers = function() {
 };
 
 Lstn.prototype.sendRoster = function() {
-  io.sockets.in(this.roomId).emit('room:roster:update', roster[this.roomId]);
+  var currentRoster = JSON.parse(JSON.stringify(roster[this.roomId]));
+  if (currentRoster) {
+    currentRoster.mentionNames = Object.keys(currentRoster.mentionNames || {}).map(function(key) {
+      return currentRoster.mentionNames[key];
+    });
+  }
+
+  io.sockets.in(this.roomId).emit('room:roster:update', currentRoster);
 };
 
 Lstn.prototype.getChatHistory = function() {
@@ -721,7 +748,10 @@ Lstn.prototype.onControllerPlayingSkipped = function(data) {
 
 Lstn.prototype.onControllerUpvote = function() {
   var votes = this.incrPlayingVotes();
-  io.sockets.in(this.roomId).emit('room:upvote', votes);
+  io.sockets.in(this.roomId).emit('room:upvote', {
+    user: this.userId,
+    votes: votes
+  });
 
   var user = this.getUser();
 
@@ -737,7 +767,10 @@ Lstn.prototype.onControllerUpvote = function() {
 
 Lstn.prototype.onControllerDownvote = function() {
   var votes = this.decrPlayingVotes();
-  io.sockets.in(this.roomId).emit('room:downvote', votes);
+  io.sockets.in(this.roomId).emit('room:downvote', {
+    user: this.userId,
+    votes: votes
+  });
 
   var user = this.getUser();
 
@@ -752,6 +785,25 @@ Lstn.prototype.onControllerDownvote = function() {
 };
 
 Lstn.prototype.onChatMessage = function(message) {
+  if (!message) {
+    return;
+  }
+
+  message.mentionedNames = [];
+
+  var mentioned = message.text.match(/@(\S+)/ig);
+  if (mentioned) {
+    // Populate mentioned names
+    var mentionedNames = {};
+
+    mentioned.forEach(function(value) {
+      console.log(value);
+      mentionedNames[value.toLowerCase().substring(1)] = 1;
+    }, this);
+
+    message.mentionedNames = Object.keys(mentionedNames);
+  }
+
   this.sendChatMessage(message);
 };
 

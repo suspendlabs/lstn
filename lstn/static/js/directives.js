@@ -166,14 +166,21 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnRoomQueue', ['CurrentUser', 'socket',
-  function(CurrentUser, socket) {
+.directive('lstnRoomQueue', ['$timeout', 'CurrentUser', 'socket', 'emojiMap',
+  function($timeout, CurrentUser, socket, emojiMap) {
     return {
       restrict: 'E',
       replace: true,
       templateUrl: '/static/partials/directives/room-queue.html',
       link: function($scope, $element, $attrs) {
         $scope.oldQueue = null;
+        $scope.mentionNames = [];
+        $scope.emoticons = [];
+        $scope.mentioned = false;
+
+        $scope.$on('mentioned', function(e) {
+          $scope.mentioned = true;
+        });
 
         $scope.sortableOptions = {
           'ui-floating': false,
@@ -203,6 +210,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.message = {
           sender: $scope.current_user.id,
           user: $scope.current_user.name,
+          picture: $scope.current_user.picture,
           text: null,
           type: 'message',
         };
@@ -220,11 +228,55 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.trackUnseenChatMessages = tab !== 'chat';
           if (!$scope.trackUnseenChatMessages) {
             $scope.unseenChatMessages = 0;
+            $scope.mentioned = false;
 
-            $('#messages').animate({
-              scrollTop: $('#messages')[0].scrollHeight
-            }, 200);
+            $timeout(function() {
+              $('#messages').animate({
+                scrollTop: $('#messages')[0].scrollHeight
+              }, 200);
+            }, 100);
           }
+        };
+
+        $scope.searchRoster = function(term) {
+          if (!$scope.roster || !$scope.roster.mentionNames) {
+            return;
+          }
+
+          var mentionNames = [];
+          angular.forEach($scope.roster.mentionNames, function(user) {
+            if (user.label.toUpperCase().indexOf(term.toUpperCase()) >= 0) {
+              this.push(user);
+            }
+          }, mentionNames);
+          $scope.mentionNames = mentionNames;
+        };
+
+        $scope.getUser = function(user) {
+          return '@' + user.label;
+        };
+
+        $scope.searchEmoticons = function(term) {
+          var emoticons = [];
+
+          if (term && term.length > 2) {
+            angular.forEach(emojiMap, function(value, text) {
+              var name = text.substr(1, text.length - 2).toUpperCase();
+
+              if (name.indexOf(term.toUpperCase()) >= 0) {
+                this.push({
+                  text: text,
+                  value: value
+                });
+              }
+            }, emoticons);
+          }
+
+          $scope.emoticons = emoticons;
+        };
+
+        $scope.getEmoticon = function(emoticon) {
+          return emoticon.text;
         };
       }
     };

@@ -1,6 +1,8 @@
 @import "compass/css3/background-size";
 @import "compass/css3/border-radius";
 @import "compass/css3/box-shadow";
+@import "compass/css3/animation";
+@import "compass/css3/transform";
 @import "compass/css3/opacity";
 
 $rdio-red: #E84961;
@@ -61,27 +63,16 @@ body {
 }
 
 .glyphicon.spinning {
-  animation: spin 1s infinite linear;
-  -webkit-animation: spin2 1s infinite linear;
+  @include animation('spin 1s infinite linear');
 }
 
-@keyframes spin {
-    from {
-      transform: scale(1) rotate(0deg);
-    }
-
-    to {
-      transform: scale(1) rotate(360deg);
-    }
-}
-
-@-webkit-keyframes spin2 {
+@include keyframes(spin) {
   from {
-    -webkit-transform: rotate(0deg);
+    @include transform(rotate(0deg));
   }
 
   to {
-    -webkit-transform: rotate(360deg);
+    @include transform(rotate(360deg));
   }
 }
 
@@ -611,4 +602,69 @@ footer {
 
 .error-message {
     margin-top: 1em;
+}
+
+.user-search {
+  .user-photo {
+    max-width: 30px;
+    max-height: 30px;
+    border-radius: 15px;
+  }
+
+  .list-group-item {
+    padding: 5px;
+
+    &.active {
+      color: #fff;
+      background-color: #428bca;
+      border-color: #428bca;
+
+      .text-muted {
+        color: #ccc;
+      }
+
+      .text-primary {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.emoticon-list {
+  .list-group-item {
+    padding: 5px;
+    display: inline-block;
+    float: left;
+
+    &:nth-child(15n) {
+      clear: left;
+    }
+
+    &.active {
+      background-color: #428bca;
+      border-color: #428bca;
+    }
+  }
+}
+
+.mentioned {
+  @include animation(mentioned 5s infinite ease);
+}
+
+@include keyframes(mentioned) {
+  0% {
+    background: #777;
+  }
+  40% {
+    background: #FF0000;
+    color: white;
+  }
+  60% {
+    background: #FF0000;
+    color: white;
+  }
+  100% {
+    background: #777;
+    color: white;
+  }
 }
