@@ -1,6 +1,56 @@
 module.exports = (grunt) ->
-  jsFiles = ['lstn/static/js/**/*.js']
   grunt.initConfig
+    lstn:
+      static: 'lstn/static'
+      dist: 'dist'
+
+    clean:
+      dist:
+        files: [
+          {
+            dot: true
+            src: [
+              '.tmp'
+              '<%= lstn.dist %>/**/*'
+            ]
+          }
+        ]
+      lstn: '.tmp'
+
+    copy:
+      dist:
+        files: [
+          {
+            expand: true
+            cwd: '<%= lstn.static %>'
+            dest: '<%= lstn.dist %>'
+            src: '*.{png,xml,ico,json,txt}'
+          }
+          {
+            expand: true
+            cwd: '<%= lstn.static %>/css'
+            dest: '<%= lstn.dist %>/css'
+            src: '**/*.css'
+          }
+          {
+            expand: true
+            cwd: '<%= lstn.static %>/js'
+            dest: '<%= lstn.dist %>/js'
+            src: '**/*.js'
+          }
+          {
+            expand: true
+            cwd: '<%= lstn.static %>/images'
+            dest: '<%= lstn.dist %>/images'
+            src: '**/*'
+          }
+          {
+            expand: true
+            cwd: '<%= lstn.static %>/bower_components'
+            dest: '<%= lstn.dist %>/bower_components'
+            src: '**/*'
+          }
+        ]
 
     ngconstant:
       options:
@@ -9,53 +59,77 @@ module.exports = (grunt) ->
         name: 'lstn.config'
       development:
         options:
-          dest: 'lstn/static/js/config.js'
+          dest: '<%= lstn.static %>/js/config.js'
         constants: 'config/development.json'
       production:
         options:
-          dest: 'lstn/static/js/config.js'
+          dest: '<%= lstn.dist %>/js/config.js'
         constants: 'config/production.json'
 
     ngtemplates:
+      options:
+        standalone: true,
+        module: 'lstn.templates',
+        prefix: '/',
+        url: (path) ->
+          return path.substring('/lstn'.length);
+      dist:
+        src: '<%= lstn.static %>/partials/**/*.html'
+        dest: '<%= lstn.dist %>/js/templates.js'
       lstn:
-        src: 'lstn/static/partials/**/*.html'
-        dest: 'lstn/static/js/templates.js'
-        options:
-          standalone: true,
-          module: 'lstn.templates',
-          prefix: '/',
-          url: (path) ->
-            return path.substring('/lstn'.length);
+        src: '<%= lstn.static %>/partials/**/*.html'
+        dest: '<%= lstn.static %>/js/templates.js'
 
     jshint:
-      files: jsFiles
       options:
-        globalstrict: true
-        '-W117': true
-        browser: true
-        devel: true
-        jquery: true
+        jshintrc: '.jshintrc'
+        reporter: require('jshint-stylish')
+      all:
+        src: ['<%= lstn.static %>/js/**/*.js']
 
     jsbeautifier:
-      files: jsFiles
+      files: ['<%= lstn.static %>/js/**/*.js']
       options:
         indent_size: 2
 
     compass:
+      options:
+        sassDir: '<%= lstn.static %>/sass'
+        httpImagesPath: '/images',
+        httpGeneratedImagesPath: '/images/generated',
+        relativeAssets: false,
+        assetCacheBuster: false,
+        raw: 'Sass::Script::Number.precision = 10\n'
+        noLineComments: true
+      dist:
+        options:
+          cssDir: '<%= lstn.dist %>/css'
+          imagesDir: '<%= lstn.dist %>/images'
+          javascriptsDir: '<%= lstn.dist %>/js'
+          importPath: '<%= lstn.dist %>/bower_components',
+          generatedImagesDir: '<%= lstn.dist %>/images/generated'
+
       lstn:
         options:
-          sassDir: 'sass'
-          cssDir: 'lstn/static/css'
-          noLineComments: true
-          force: true
+          cssDir: '<%= lstn.static %>/css'
+          imagesDir: '<%= lstn.static %>/images'
+          javascriptsDir: '<%= lstn.static %>/js'
+          importPath: '<%= lstn.static %>/bower_components',
+          generatedImagesDir: '<%= lstn.static %>/images/generated'
 
     watch:
+      bower:
+        files: ['bower.json']
+        tasks: ['wiredep']
+      js:
+        files: ['<%= lstn.static %>/js/**/*.js']
+        tasks: ['jshint']
       ngtemplates:
-        files: ['lstn/static/partials/**/*.html']
-        tasks: ['ngtemplates']
+        files: ['<%= lstn.static %>/partials/**/*.html']
+        tasks: ['ngtemplates:lstn']
       sass:
-        files: ['sass/**/*.scss']
-        tasks: ['compass']
+        files: ['<%= lstn.static %>/sass/**/*.scss']
+        tasks: ['compass:lstn']
 
     wiredep:
       lstn:
@@ -65,16 +139,27 @@ module.exports = (grunt) ->
     useminPrepare:
       html: 'lstn/templates/layout.html'
       options:
-        dest: 'lstn'
+        root: '<%= lstn.dist %>'
+        dest: '<%= lstn.dist %>'
 
     usemin:
       html: 'lstn/templates/layout.html'
+      options:
+        assetsDirs: [
+          '<%= lstn.dist %>'
+        ]
 
-    copy:
+    filerev:
       dist:
         files: [
-          { cwd: 'lstn/static/bower_components/bootstrap/fonts/', src:['**'], dest: 'lstn/static/dist/fonts', expand: true},
-          { cwd: 'lstn/static/bower_components/fontawesome/fonts/', src:['**'], dest: 'lstn/static/dist/fonts', expand: true}
+          {
+            src: ['<%= lstn.dist %>/js/**/*.js']
+            dest: '<%= lstn.dist %>/js'
+          }
+          {
+            src: ['<%= lstn.dist %>/css/**/*.css']
+            dest: '<%= lstn.dist %>/css'
+          }
         ]
 
     htmlmin:
@@ -82,9 +167,12 @@ module.exports = (grunt) ->
         files: 
           'lstn/templates/layout.html': 'lstn/templates/layout.html'
         options:
-          removeComments: true,
           collapseWhitespace: true
-      
+          conservativeCollapse: true
+          collapseBooleanAttributes: true
+          removeCommentsFromCDATA: true
+          removeOptionalTags: true
+          removeComments: true
 
   grunt.loadNpmTasks 'grunt-contrib-jshint'
   grunt.loadNpmTasks 'grunt-contrib-copy'
@@ -100,15 +188,27 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-ng-constant'
   grunt.loadNpmTasks 'grunt-wiredep'
   grunt.loadNpmTasks 'grunt-usemin'
+  grunt.loadNpmTasks 'grunt-filerev'
   
-  grunt.registerTask 'default', ['wiredep', 'ngconstant:development', 'jshint', 'compass', 'ngtemplates']
-  grunt.registerTask 'build', [
-    'copy:dist',
-    'useminPrepare', 
-    'concat:generated', 
-    'cssmin:generated', 
-    'uglify:generated', 
-    'usemin',
-    'htmlmin:dist'
+  grunt.registerTask 'default', [
+    'wiredep'
+    'ngconstant:development'
+    'jshint'
+    'compass:lstn'
+    'ngtemplates:lstn'
   ]
+
+  grunt.registerTask 'build', [
+    'clean:dist'
+    'copy',
+    'ngconstant:production'
+    'ngtemplates:dist'
+    'useminPrepare'
+    'concat:generated'
+    'cssmin:generated'
+    'uglify:generated'
+    'filerev'
+    'usemin'
+  ]
+
   grunt.registerTask 'deploy', ['ngconstant:production', 'build']
