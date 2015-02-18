@@ -1,6 +1,6 @@
 <ul class="list-group user-search">
-  <li mentio-menu-item="person" ng-repeat="person in items" class="list-group-item">
-    <img ng-src="{{ person.picture }}" class="user-photo">
-    <span class="text-primary" ng-bind-html="person.name | mentioHighlight:typedTerm:'menu-highlighted' | unsafe"></span>
+  <li data-mentio-menu-item="person" data-ng-repeat="person in items" class="list-group-item">
+    <img data-ng-src="{{ person.picture }}" class="user-photo">
+    <span class="text-primary" data-ng-bind-html="person.name | mentioHighlight:typedTerm:'menu-highlighted' | unsafe"></span>
   </li>
 </ul>

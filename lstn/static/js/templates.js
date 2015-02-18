@@ -37,6 +37,15 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
+  $templateCache.put('/static/partials/directives/emoticon-list.html',
+    "<ul class=\"list-group emoticon-list\">\n" +
+    "  <li data-mentio-menu-item=\"emoticon\" data-ng-repeat=\"emoticon in items\" class=\"list-group-item\">\n" +
+    "    <span tooltip-placement=\"bottom\" tooltip=\"{{ emoticon.text }}\" data-ng-bind-html=\"emoticon.value|twemoji\"></span>\n" +
+    "  </li>\n" +
+    "</ul>\n"
+  );
+
+
   $templateCache.put('/static/partials/directives/music-categories.html',
     "<div id=\"categories\" class=\"categories\">\n" +
     "  <div class=\"search__container category panel panel-primary\" data-ng-show=\"searchResults && searchResults.length > 0\">\n" +
@@ -306,6 +315,16 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "          mentio-template-url=\"/static/partials/directives/roster-mention.html\"\n" +
     "          mentio-search=\"searchRoster(term)\"\n" +
     "          mentio-select=\"getUser(item)\"></mentio-menu>\n" +
+    "\n" +
+    "        <mentio-menu\n" +
+    "          class=\"emoticon-menu\"\n" +
+    "          mentio-for=\"'chat-input'\"\n" +
+    "          mentio-trigger-char=\"':'\"\n" +
+    "          mentio-items=\"emoticons\"\n" +
+    "          mentio-template-url=\"/static/partials/directives/emoticon-list.html\"\n" +
+    "          mentio-search=\"searchEmoticons(term)\"\n" +
+    "          mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
+    "\n" +
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
@@ -354,9 +373,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/roster-mention.html',
     "<ul class=\"list-group user-search\">\n" +
-    "  <li mentio-menu-item=\"person\" ng-repeat=\"person in items\" class=\"list-group-item\">\n" +
-    "    <img ng-src=\"{{ person.picture }}\" class=\"user-photo\">\n" +
-    "    <span class=\"text-primary\" ng-bind-html=\"person.name | mentioHighlight:typedTerm:'menu-highlighted' | unsafe\"></span>\n" +
+    "  <li data-mentio-menu-item=\"person\" data-ng-repeat=\"person in items\" class=\"list-group-item\">\n" +
+    "    <img data-ng-src=\"{{ person.picture }}\" class=\"user-photo\">\n" +
+    "    <span class=\"text-primary\" data-ng-bind-html=\"person.name | mentioHighlight:typedTerm:'menu-highlighted' | unsafe\"></span>\n" +
     "  </li>\n" +
     "</ul>\n"
   );

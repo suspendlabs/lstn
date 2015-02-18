@@ -46,6 +46,16 @@
           mentio-template-url="/static/partials/directives/roster-mention.html"
           mentio-search="searchRoster(term)"
           mentio-select="getUser(item)"></mentio-menu>
+
+        <mentio-menu
+          class="emoticon-menu"
+          mentio-for="'chat-input'"
+          mentio-trigger-char="':'"
+          mentio-items="emoticons"
+          mentio-template-url="/static/partials/directives/emoticon-list.html"
+          mentio-search="searchEmoticons(term)"
+          mentio-select="getEmoticon(item)"></mentio-menu>
+
       </tab>
     </tabset>
   </div>
