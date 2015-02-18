@@ -59,16 +59,16 @@ module.exports = (grunt) ->
 
     wiredep:
       lstn:
-        src: ['lstn/templates/index.html']
+        src: ['lstn/templates/layout.html']
         ignorePath: '..'
 
     useminPrepare:
-      html: 'lstn/templates/index.html'
+      html: 'lstn/templates/layout.html'
       options:
         dest: 'lstn'
 
     usemin:
-      html: 'lstn/templates/index.html'
+      html: 'lstn/templates/layout.html'
 
     copy:
       dist:
@@ -80,7 +80,7 @@ module.exports = (grunt) ->
     htmlmin:
       dist:
         files: 
-          'lstn/templates/index.html': 'lstn/templates/index.html'
+          'lstn/templates/layout.html': 'lstn/templates/layout.html'
         options:
           removeComments: true,
           collapseWhitespace: true

@@ -1,10 +1,10 @@
-from flask import Flask, request, redirect, url_for, session
+from flask import Flask, request, redirect, url_for, session, render_template
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.json import jsonify
 
 from lstn.local import LSTN_CONFIG
-from lstn.exceptions import APIException
+from lstn.exceptions import APIException, WebException
 
 import redis
 
@@ -60,6 +60,10 @@ def after_request(response):
 def handle_api_exception(error):
   print 'APIException %s (%d)' % (error.message, error.status_code)
   return jsonify(error=error.message), error.status_code
+
+@app.errorhandler(WebException)
+def handle_web_exception(error):
+  return render_template('%s.html' % error.status_code, message=error.message), error.status_code
 
 @app.errorhandler(Exception)
 def handle_exception(error):

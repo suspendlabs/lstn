@@ -3,13 +3,18 @@ var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var moment = require('moment');
 var nconf = require('nconf');
+var redis = require('redis').createClient;
+var adapter = require('socket.io-redis');
 
+// Read the command line and environment variables
 nconf.argv().env();
 
+// Read the config file
 nconf.file({
   file: 'config.json'
 });
 
+// Set some development defaults
 nconf.defaults({
   http: {
     port: 3000,
@@ -23,9 +28,32 @@ nconf.defaults({
 
 //io.set('origins', nconf.get('http:origins'));
 
-server.listen(nconf.get('http:port'));
+// Setup Redis Cache
+var cache = redis(nconf.get('redis:port'), nconf.get('redis:host'));
+cache.on('error', function(err) {
+  console.log('Error connecting to redis cache', err);
+});
 
-var redis = require('redis').createClient(nconf.get('redis:port'), nconf.get('redis:host'));
+// Setup Redis Pub/Sub connections for Socket.IO
+var pub = redis(nconf.get('redis:port'), nconf.get('redis:host'));
+pub.on('error', function(err) {
+  console.log('Error connecting to redis publish', err);
+});
+
+var sub = redis(nconf.get('redis:port'), nconf.get('redis:host'), {
+  detect_buffers: true
+});
+sub.on('error', function(err) {
+  console.log('Error connecting to redis subscribe', err);
+});
+
+io.adapter(adapter({
+  pubClient: pub,
+  subClient: sub
+}));
+
+// Start Listening
+server.listen(nconf.get('http:port'));
 
 var PLAYING_REQUEST_TIMEOUT = 2 * 1000;
 var playing = {};
@@ -442,7 +470,7 @@ Lstn.prototype.sendPlaying = function(broadcast) {
     data.controller = this.getCurrentController();
     if (data.key && data.controller) {
       var votingKey = 'vote_' + this.userId + '_' + data.controller + '_' + this.roomId + '_' + data.key;
-      var direction = redis.get(votingKey);
+      var direction = cache.get(votingKey);
       
       if (direction === 'upvote') {
         data.voted = 1;
@@ -548,12 +576,12 @@ Lstn.prototype.onRoomConnect = function(data) {
   // Register room for user in Redis
   var userKey = 'user_' + this.userId;
   var currentTime = Math.floor(Date.now() / 1000);
-  redis.zadd(userKey, currentTime, this.roomId);
+  cache.zadd(userKey, currentTime, this.roomId);
 
   // Purge expired rooms
   var expiration = currentTime - (60 * 60 * 24 * 7);
   console.log('expiring to ' + expiration);
-  redis.zremrangebyscore(userKey, '-inf', expiration);
+  cache.zremrangebyscore(userKey, '-inf', expiration);
 
   // Send the updated roster
   this.sendRoster();
