@@ -647,25 +647,24 @@ footer {
   }
 }
 
-.nav-tabs {
-  > li.mentioned {
-    > a {
-      @include animation(mentioned 5s infinite ease);
-    }
-  }
+.mentioned {
+  @include animation(mentioned 5s infinite ease);
 }
 
 @include keyframes(mentioned) {
   0% {
-    background: white;
-    color: #337ab7;
+    background: #337ab7;
   }
-  50% {
-    background: #b92c28;
+  40% {
+    background: #FF0000;
+    color: white;
+  }
+  60% {
+    background: #FF0000;
     color: white;
   }
   100% {
-    background: white;
-    color: #337ab7;
+    background: #337ab7;
+    color: white;
   }
 }
