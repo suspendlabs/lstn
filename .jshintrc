@@ -1,0 +1,7 @@
+{
+    "eqnull": false,
+    "bitwise": false,
+    "eqeqeq": false,
+    "forin": false,
+    "maxerr": 1000
+}
