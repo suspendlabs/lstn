@@ -176,6 +176,11 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.oldQueue = null;
         $scope.mentionNames = [];
         $scope.emoticons = [];
+        $scope.mentioned = false;
+
+        $scope.$on('mentioned', function(e) {
+          $scope.mentioned = true;
+        });
 
         $scope.sortableOptions = {
           'ui-floating': false,
