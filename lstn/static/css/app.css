@@ -532,3 +532,16 @@ footer .container .text-muted {
 .user-search .list-group-item.active .text-primary {
   color: #fff;
 }
+
+.emoticon-list .list-group-item {
+  padding: 5px;
+  display: inline-block;
+  float: left;
+}
+.emoticon-list .list-group-item:nth-child(15n) {
+  clear: left;
+}
+.emoticon-list .list-group-item.active {
+  background-color: #428bca;
+  border-color: #428bca;
+}
