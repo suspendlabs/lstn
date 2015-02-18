@@ -638,3 +638,20 @@ footer {
     }
   }
 }
+
+.emoticon-list {
+  .list-group-item {
+    padding: 5px;
+    display: inline-block;
+    float: left;
+
+    &:nth-child(15n) {
+      clear: left;
+    }
+
+    &.active {
+      background-color: #428bca;
+      border-color: #428bca;
+    }
+  }
+}
