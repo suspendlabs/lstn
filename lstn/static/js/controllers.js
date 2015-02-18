@@ -157,7 +157,6 @@ angular.module('lstn.controllers', [])
 
     $scope.trackUnseenChatMessages = true;
     $scope.unseenChatMessages = 0;
-    $scope.mentioned = false;
 
     // Notifications
     $scope.notificationPermission = 'default';
@@ -190,7 +189,7 @@ angular.module('lstn.controllers', [])
         options.icon = icon;
       }
 
-      var notification = new Notification(title, options);
+      var notification = new Notification(title + ' on Lstn.fm', options);
 
       if (timeout) {
         notification.onshow = function() {
@@ -345,9 +344,11 @@ angular.module('lstn.controllers', [])
       if ($scope.trackUnseenChatMessages) {
         $scope.unseenChatMessages += 1;
       }
-      
-      if (message.mention) {
+
+      if (message.mentionedNames.indexOf($scope.current_user.mention) !== -1) {
+        console.log('mentioned');
         $scope.sendNotification(message.user, message.text, message.picture, 5000);
+        $scope.$broadcast('mentioned', true);
       }
 
       $timeout(function() {
