@@ -277,6 +277,18 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:chat:message', function(message) {
+      
+      // Keep track of who's upvoted and downvoted the current song.
+      // TODO: is this a hack since we're using the chat fucntionality for this?
+      // might be better to have a socket that push votes to the clients?
+      if (message.type == 'upvote' || message.type == 'downvote') {
+        var key = message.type + 's';
+        if (!$scope.playing[key]) {
+          $scope.playing[key] = {};
+        }
+        $scope.playing[key][message.sender] = true;
+      }
+
       $scope.chat.messages.push(message);
       if ($scope.trackUnseenChatMessages) {
         $scope.unseenChatMessages += 1;
