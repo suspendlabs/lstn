@@ -594,3 +594,29 @@ footer {
 .error-message {
     margin-top: 1em;
 }
+
+.user-search {
+  .user-photo {
+    max-width: 30px;
+    max-height: 30px;
+    border-radius: 15px;
+  }
+
+  .list-group-item {
+    padding: 5px;
+
+    &.active {
+      color: #fff;
+      background-color: #428bca;
+      border-color: #428bca;
+
+      .text-muted {
+        color: #ccc;
+      }
+
+      .text-primary {
+        color: #fff;
+      }
+    }
+  }
+}
