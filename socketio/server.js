@@ -772,6 +772,12 @@ Lstn.prototype.onChatMessage = function(message) {
 
       message.mention = true;
     }
+
+    /*
+    if (message.text.toUpperCase().indexOf('@ALL') >= 0) {
+      message.mention = true;
+    }
+    */
   }
 
   this.sendChatMessage(message);
