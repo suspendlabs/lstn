@@ -26,7 +26,7 @@ nconf.defaults({
   }
 });
 
-//io.set('origins', nconf.get('http:origins'));
+io.set('origins', nconf.get('http:origins'));
 
 // Setup Redis Cache
 var cache = redis(nconf.get('redis:port'), nconf.get('redis:host'));
