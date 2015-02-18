@@ -59,7 +59,7 @@ module.exports = (grunt) ->
 
     wiredep:
       lstn:
-        files: ['lstn/templates/index.html']
+        src: ['lstn/templates/index.html']
         ignorePath: '..'
 
     useminPrepare:
