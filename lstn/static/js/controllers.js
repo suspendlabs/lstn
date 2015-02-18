@@ -156,6 +156,7 @@ angular.module('lstn.controllers', [])
     };
     $scope.trackUnseenChatMessages = true;
     $scope.unseenChatMessages = 0;
+    $scope.mentioned = false;
 
     // Setup sockets
     socket.on('connect', function() {
