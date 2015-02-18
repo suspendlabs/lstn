@@ -8,6 +8,7 @@ from lstn import db, r
 from flask import current_app
 from flask.ext.login import UserMixin, current_user
 from sqlalchemy.ext.declarative import declarative_base
+from slugify import slugify
 
 class ModelMixin(object):
   def to_array(self):
@@ -66,6 +67,8 @@ class User(db.Model, ModelMixin, UserMixin):
       data.pop('oauth_token', None)
       data.pop('oauth_token_secret', None)
       data.pop('settings', None)
+
+    data['mention'] = slugify(self.name)
 
     return data
 
