@@ -58,24 +58,43 @@ body > .container {
 }
 
 .glyphicon.spinning {
-  animation: spin 1s infinite linear;
-  -webkit-animation: spin2 1s infinite linear;
+  -moz-animation: "spin 1s infinite linear";
+  -webkit-animation: "spin 1s infinite linear";
+  animation: "spin 1s infinite linear";
 }
 
-@keyframes spin {
+@-moz-keyframes spin {
   from {
-    transform: scale(1) rotate(0deg);
+    -moz-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   to {
-    transform: scale(1) rotate(360deg);
+    -moz-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
-@-webkit-keyframes spin2 {
+@-webkit-keyframes spin {
   from {
     -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   to {
     -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 .label-as-badge {
@@ -511,4 +530,95 @@ footer .container .text-muted {
 
 .error-message {
   margin-top: 1em;
+}
+
+.user-search .user-photo {
+  max-width: 30px;
+  max-height: 30px;
+  border-radius: 15px;
+}
+.user-search .list-group-item {
+  padding: 5px;
+}
+.user-search .list-group-item.active {
+  color: #fff;
+  background-color: #428bca;
+  border-color: #428bca;
+}
+.user-search .list-group-item.active .text-muted {
+  color: #ccc;
+}
+.user-search .list-group-item.active .text-primary {
+  color: #fff;
+}
+
+.emoticon-list .list-group-item {
+  padding: 5px;
+  display: inline-block;
+  float: left;
+}
+.emoticon-list .list-group-item:nth-child(15n) {
+  clear: left;
+}
+.emoticon-list .list-group-item.active {
+  background-color: #428bca;
+  border-color: #428bca;
+}
+
+.mentioned {
+  -moz-animation: mentioned 5s infinite ease;
+  -webkit-animation: mentioned 5s infinite ease;
+  animation: mentioned 5s infinite ease;
+}
+
+@-moz-keyframes mentioned {
+  0% {
+    background: #777;
+  }
+  40% {
+    background: #FF0000;
+    color: white;
+  }
+  60% {
+    background: #FF0000;
+    color: white;
+  }
+  100% {
+    background: #777;
+    color: white;
+  }
+}
+@-webkit-keyframes mentioned {
+  0% {
+    background: #777;
+  }
+  40% {
+    background: #FF0000;
+    color: white;
+  }
+  60% {
+    background: #FF0000;
+    color: white;
+  }
+  100% {
+    background: #777;
+    color: white;
+  }
+}
+@keyframes mentioned {
+  0% {
+    background: #777;
+  }
+  40% {
+    background: #FF0000;
+    color: white;
+  }
+  60% {
+    background: #FF0000;
+    color: white;
+  }
+  100% {
+    background: #777;
+    color: white;
+  }
 }

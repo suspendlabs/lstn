@@ -37,6 +37,15 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
+  $templateCache.put('/static/partials/directives/emoticon-list.html',
+    "<ul class=\"list-group emoticon-list\">\n" +
+    "  <li data-mentio-menu-item=\"emoticon\" data-ng-repeat=\"emoticon in items\" class=\"list-group-item\">\n" +
+    "    <span tooltip-placement=\"bottom\" tooltip=\"{{ emoticon.text }}\" data-ng-bind-html=\"emoticon.value|twemoji\"></span>\n" +
+    "  </li>\n" +
+    "</ul>\n"
+  );
+
+
   $templateCache.put('/static/partials/directives/music-categories.html',
     "<div id=\"categories\" class=\"categories\">\n" +
     "  <div class=\"search__container category panel panel-primary\" data-ng-show=\"searchResults && searchResults.length > 0\">\n" +
@@ -261,12 +270,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div class=\"playing__queue col-md-12\">\n" +
     "  <div class=\"playing__queue__container panel panel-success\">\n" +
     "    <tabset class=\"queue__tabs\">\n" +
-    "      <tab heading=\"Your Queue\" data-select=\"selectQueueTab('personal')\">\n" +
+    "      <tab id=\"your-queue-tab\" heading=\"Your Queue\" data-select=\"selectQueueTab('personal')\">\n" +
     "        <ul id=\"queue\" class=\"queue queue--full track__list\" data-ng-show=\"queue && queue.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue\">\n" +
-    "          <lstn-track \n" +
-    "            data-ng-class-even=\"'track--even'\" \n" +
-    "            data-ng-class-odd=\"'track--odd'\" \n" +
-    "            data-ng-repeat=\"song in queue\" \n" +
+    "          <lstn-track\n" +
+    "            data-ng-class-even=\"'track--even'\"\n" +
+    "            data-ng-class-odd=\"'track--odd'\"\n" +
+    "            data-ng-repeat=\"song in queue\"\n" +
     "            data-context=\"queue\"\n" +
     "            data-cutoff=\"50\"></lstn-track>\n" +
     "        </ul>\n" +
@@ -274,12 +283,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "          <h3>Select songs from your playlists on the left to add songs to your queue</h3>\n" +
     "        </div>\n" +
     "      </tab>\n" +
-    "      <tab heading=\"Room Queue\" data-select=\"selectQueueTab('room')\">\n" +
+    "      <tab id=\"room-queue-tab\" heading=\"Room Queue\" data-select=\"selectQueueTab('room')\">\n" +
     "        <ul id=\"room-queue\" class=\"queue queue--full track__list\" data-ng-show=\"roomQueue && roomQueue.length > 0\">\n" +
-    "          <lstn-track \n" +
-    "            data-ng-class-even=\"'track--even'\" \n" +
-    "            data-ng-class-odd=\"'track--odd'\" \n" +
-    "            data-ng-repeat=\"song in roomQueue\" \n" +
+    "          <lstn-track\n" +
+    "            data-ng-class-even=\"'track--even'\"\n" +
+    "            data-ng-class-odd=\"'track--odd'\"\n" +
+    "            data-ng-repeat=\"song in roomQueue\"\n" +
     "            data-context=\"queue\"\n" +
     "            data-cutoff=\"50\"></lstn-track>\n" +
     "        </ul>\n" +
@@ -287,10 +296,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "          <h3>See the upcoming songs from each broadcaster</h3>\n" +
     "        </div>\n" +
     "      </tab>\n" +
-    "      <tab data-select=\"selectQueueTab('chat')\">\n" +
+    "      <tab id=\"chat-tab\" data-select=\"selectQueueTab('chat')\">\n" +
     "        <tab-heading>\n" +
     "          Chat\n" +
-    "          <span class=\"label label-danger label-as-badge\" data-ng-show=\"trackUnseenChatMessages && unseenChatMessages > 0\" data-ng-bind=\"unseenChatMessages\"></span>\n" +
+    "          <span data-ng-class=\"{'mentioned': mentioned}\" class=\"label label-default label-as-badge\" data-ng-show=\"trackUnseenChatMessages && unseenChatMessages > 0\" data-ng-bind=\"unseenChatMessages\"></span>\n" +
     "        </tab-heading>\n" +
     "        <ul id=\"messages\" class=\"messages list-group\">\n" +
     "          <lstn-chat-message\n" +
@@ -298,7 +307,24 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "            data-ng-repeat=\"message in chat.messages\"\n" +
     "            data-ng-class=\"getMessageClass()\"></lstn-chat-message>\n" +
     "        </ul>\n" +
-    "        <input class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
+    "        <input data-mentio data-mentio-id=\"'chat-input'\" ng-trim=\"false\" class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
+    "        <mentio-menu\n" +
+    "          mentio-for=\"'chat-input'\"\n" +
+    "          mentio-trigger-char=\"'@'\"\n" +
+    "          mentio-items=\"mentionNames\"\n" +
+    "          mentio-template-url=\"/static/partials/directives/roster-mention.html\"\n" +
+    "          mentio-search=\"searchRoster(term)\"\n" +
+    "          mentio-select=\"getUser(item)\"></mentio-menu>\n" +
+    "\n" +
+    "        <mentio-menu\n" +
+    "          class=\"emoticon-menu\"\n" +
+    "          mentio-for=\"'chat-input'\"\n" +
+    "          mentio-trigger-char=\"':'\"\n" +
+    "          mentio-items=\"emoticons\"\n" +
+    "          mentio-template-url=\"/static/partials/directives/emoticon-list.html\"\n" +
+    "          mentio-search=\"searchEmoticons(term)\"\n" +
+    "          mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
+    "\n" +
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
@@ -342,6 +368,16 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </ul>\n" +
     "  </div>\n" +
     "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/roster-mention.html',
+    "<ul class=\"list-group user-search\">\n" +
+    "  <li data-mentio-menu-item=\"person\" data-ng-repeat=\"person in items\" class=\"list-group-item\">\n" +
+    "    <img data-ng-src=\"{{ person.picture }}\" class=\"user-photo\">\n" +
+    "    <span class=\"text-primary\" data-ng-bind-html=\"person.name | mentioHighlight:typedTerm:'menu-highlighted' | unsafe\"></span>\n" +
+    "  </li>\n" +
+    "</ul>\n"
   );
 
 

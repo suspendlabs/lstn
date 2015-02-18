@@ -154,8 +154,53 @@ angular.module('lstn.controllers', [])
     $scope.chat = {
       messages: []
     };
+
     $scope.trackUnseenChatMessages = true;
     $scope.unseenChatMessages = 0;
+
+    // Notifications
+    $scope.notificationPermission = 'default';
+    if (window.Notification) {
+      Notification.requestPermission(function(status) {
+        console.log(status);
+        $scope.notificationPermission = status;
+
+        if (Notification.permission !== status) {
+          Notification.permission = status;
+        }
+      });
+    }
+
+    $scope.sendNotification = function(title, body, icon, timeout, handler) {
+      if (!window.Notification || $scope.notificationPermission !== 'granted') {
+        return;
+      }
+
+      if (!title) {
+        return;
+      }
+
+      var options = {};
+      if (body) {
+        options.body = body;
+      }
+
+      if (icon) {
+        options.icon = icon;
+      }
+
+      var notification = new Notification(title + ' on Lstn.fm', options);
+
+      if (timeout) {
+        notification.onshow = function() {
+          setTimeout(notification.close.bind(notification), timeout);
+        };
+      }
+
+      if (handler) {
+        notification.onclick = handler;
+      }
+    };
 
     // Setup sockets
     socket.on('connect', function() {
@@ -234,7 +279,15 @@ angular.module('lstn.controllers', [])
       $scope.playSong(data);
     });
 
-    socket.on('room:upvote', function(score) {
+    socket.on('room:upvote', function(upvote) {
+      if ($scope.playing) {
+        if (!$scope.playing.upvotes) {
+          $scope.playing.upvotes = {};
+        }
+
+        $scope.playing.upvotes[upvote.user] = true;
+      }
+
       if (!$scope.isCurrentController) {
         return;
       }
@@ -253,7 +306,15 @@ angular.module('lstn.controllers', [])
       });
     });
 
-    socket.on('room:downvote', function(score) {
+    socket.on('room:downvote', function(downvote) {
+      if ($scope.playing) {
+        if (!$scope.playing.downvotes) {
+          $scope.playing.downvotes = {};
+        }
+
+        $scope.playing.downvotes[upvote.user] = true;
+      }
+
       if (!$scope.isCurrentController) {
         return;
       }
@@ -277,21 +338,17 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:chat:message', function(message) {
+      console.log(message);
       
-      // Keep track of who's upvoted and downvoted the current song.
-      // TODO: is this a hack since we're using the chat fucntionality for this?
-      // might be better to have a socket that push votes to the clients?
-      if (message.type == 'upvote' || message.type == 'downvote') {
-        var key = message.type + 's';
-        if (!$scope.playing[key]) {
-          $scope.playing[key] = {};
-        }
-        $scope.playing[key][message.sender] = true;
-      }
-
       $scope.chat.messages.push(message);
       if ($scope.trackUnseenChatMessages) {
         $scope.unseenChatMessages += 1;
+      }
+
+      if (message.mentionedNames.indexOf($scope.current_user.mention) !== -1) {
+        console.log('mentioned');
+        $scope.sendNotification(message.user, message.text, message.picture, 5000);
+        $scope.$broadcast('mentioned', true);
       }
 
       $timeout(function() {
