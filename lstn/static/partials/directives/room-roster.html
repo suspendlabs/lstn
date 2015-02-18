@@ -7,7 +7,11 @@
       </li>
       <li data-ng-show="roster && roster.controllersCount > 0" data-ng-repeat="user_id in roster.controllerOrder" class="list-group-item" data-ng-class="{'list-group-item-success': current_user.id === user_id}">
         <span class="badge" data-ng-bind="roster.controllers[user_id].points" data-ng-show="user_id !== currentController"></span>
-        <a data-ng-href="http://www.rdio.com{{ roster.controllers[user_id].profile }}" data-ng-bind="roster.controllers[user_id].name" target="_blank"></a>
+        <a data-ng-href="http://www.rdio.com{{ roster.controllers[user_id].profile }}" target="_blank">
+          <img data-ng-src="{{ roster.controllers[user_id].picture }}" class="avatar xs" 
+            data-ng-class="{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}"
+            alt="{{ roster.controllers[user_id].name }}"/> {{ roster.controllers[user_id].name }}
+        </a>
         <span class="glyphicon glyphicon-music pull-right" aria-hidden="true" data-ng-show="user_id === currentController"></span>
       </li>
     </ul>
@@ -20,7 +24,11 @@
       </li>
       <li data-ng-show="roster && roster.usersCount > 0" data-ng-repeat="(user_id, user) in roster.users | orderBy:name" class="list-group-item" data-ng-class="{'list-group-item-success': current_user.id === user.id}">
         <span class="badge" data-ng-bind="user.points"></span>
-        <a data-ng-href="http://www.rdio.com{{ user.profile }}" data-ng-bind="user.name" target="_blank"></a>
+        <a data-ng-href="http://www.rdio.com{{ user.profile }}"target="_blank">
+          <img data-ng-src="{{ user.picture }}" 
+            data-ng-class="{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}"
+            class="avatar xs" alt="{{ user.name }}"/> {{ user.name }}
+        </a>
       </li>
     </ul>
   </div>

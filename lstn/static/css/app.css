@@ -12,6 +12,24 @@
   /* IE */
 }
 
+img.avatar {
+  border-radius: 50%;
+}
+img.avatar.upvoted {
+  border: 2px solid #4cae4c;
+}
+img.avatar.downvoted {
+  border: 2px solid #d43f3a;
+}
+img.avatar.xs {
+  width: 32px;
+  height: 32px;
+}
+img.avatar.sm {
+  width: 50px;
+  height: 50px;
+}
+
 /* http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/ */
 .row.no-gutters {
   margin-right: 0;

@@ -28,11 +28,16 @@
   <meta name="msapplication-TileImage" content="%% url_for('static', filename='/mstile-144x144.png') %%">
   <meta name="theme-color" content="#ffffff">
 
-  <link rel="stylesheet" href="%% url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.css') %%">
-  <link rel="stylesheet" href="%% url_for('static', filename='bower_components/fontawesome/css/font-awesome.css') %%">
   <link href='//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
-
-  <link rel="stylesheet" href="%% url_for('static', filename='css/app.css') %%" />
+  <!-- build:css(lstn) /static/dist/css/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="/static/bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="/static/bower_components/fontawesome/css/font-awesome.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  <!-- build:css(lstn) /static/dist/css/lstn.css -->
+  <link rel="stylesheet" href="/static/css/app.css" />
+  <!-- endbuild -->
 </head>
 <body data-ng-controller="AppController">
   <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -90,33 +95,40 @@
 
   <div id="content" class="container"><% block body %><% endblock %></div>
 
-  <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
-  <script src="%% url_for('static', filename='bower_components/jquery/dist/jquery.min.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/jquery-ui/jquery-ui.min.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/modernizr/modernizr.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/angular/angular.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/angular-sanitize/angular-sanitize.min.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/angular-route/angular-route.min.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/angular-resource/angular-resource.min.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/angular-cookies/angular-cookies.min.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/angular-socket-io/socket.min.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/angular-ui-sortable/sortable.min.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/angular-twemoji/dist/angular-twemoji.min.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/angular-bootstrap/ui-bootstrap-tpls.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/swfobject/swfobject/swfobject.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/holderjs/holder.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/moment/min/moment-with-locales.min.js') %%"></script>
-  <script src="%% url_for('static', filename='bower_components/angular-emoji-map/angular-emoji-map.js') %%"></script>
-  <script src="/socket.io/socket.io.js"></script>
+  <!-- build:js(lstn) /static/dist/js/vendor.js -->
+  <!-- bower:js -->
+  <script src="/static/bower_components/modernizr/modernizr.js"></script>
+  <script src="/static/bower_components/jquery/dist/jquery.js"></script>
+  <script src="/static/bower_components/angular/angular.js"></script>
+  <script src="/static/bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="/static/bower_components/angular-resource/angular-resource.js"></script>
+  <script src="/static/bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="/static/bower_components/angular-route/angular-route.js"></script>
+  <script src="/static/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="/static/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="/static/bower_components/swfobject/swfobject/swfobject.js"></script>
+  <script src="/static/bower_components/holderjs/holder.js"></script>
+  <script src="/static/bower_components/angular-socket-io/socket.js"></script>
+  <script src="/static/bower_components/jquery-ui/jquery-ui.js"></script>
+  <script src="/static/bower_components/angular-ui-sortable/sortable.js"></script>
+  <script src="/static/bower_components/moment/moment.js"></script>
+  <script src="/static/bower_components/angular-twemoji/dist/angular-twemoji.min.js"></script>
+  <script src="/static/bower_components/angular-emoji-map/angular-emoji-map.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
 
-  <script src="%% url_for('static', filename='js/config.js') %%"></script>
-  <script src="%% url_for('static', filename='js/controllers.js') %%"></script>
-  <script src="%% url_for('static', filename='js/services.js') %%"></script>
-  <script src="%% url_for('static', filename='js/filters.js') %%"></script>
-  <script src="%% url_for('static', filename='js/directives.js') %%"></script>
-  <script src="%% url_for('static', filename='js/templates.js') %%"></script>
-  <script src="%% url_for('static', filename='js/app.js') %%"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
+
+  <!-- build:js(lstn) /static/dist/js/lstn.js -->
+  <script src="/static/js/config.js"></script>
+  <script src="/static/js/controllers.js"></script>
+  <script src="/static/js/services.js"></script>
+  <script src="/static/js/filters.js"></script>
+  <script src="/static/js/directives.js"></script>
+  <script src="/static/js/templates.js"></script>
+  <script src="/static/js/app.js"></script>
+  <!-- endbuild -->
 
   <div id="user" style="display: none;">%% user_json | safe %%</div>
   </body>

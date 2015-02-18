@@ -316,7 +316,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      </li>\n" +
     "      <li data-ng-show=\"roster && roster.controllersCount > 0\" data-ng-repeat=\"user_id in roster.controllerOrder\" class=\"list-group-item\" data-ng-class=\"{'list-group-item-success': current_user.id === user_id}\">\n" +
     "        <span class=\"badge\" data-ng-bind=\"roster.controllers[user_id].points\" data-ng-show=\"user_id !== currentController\"></span>\n" +
-    "        <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" data-ng-bind=\"roster.controllers[user_id].name\" target=\"_blank\"></a>\n" +
+    "        <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" target=\"_blank\">\n" +
+    "          <img data-ng-src=\"{{ roster.controllers[user_id].picture }}\" class=\"avatar xs\" \n" +
+    "            data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
+    "            alt=\"{{ roster.controllers[user_id].name }}\"/> {{ roster.controllers[user_id].name }}\n" +
+    "        </a>\n" +
     "        <span class=\"glyphicon glyphicon-music pull-right\" aria-hidden=\"true\" data-ng-show=\"user_id === currentController\"></span>\n" +
     "      </li>\n" +
     "    </ul>\n" +
@@ -329,7 +333,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      </li>\n" +
     "      <li data-ng-show=\"roster && roster.usersCount > 0\" data-ng-repeat=\"(user_id, user) in roster.users | orderBy:name\" class=\"list-group-item\" data-ng-class=\"{'list-group-item-success': current_user.id === user.id}\">\n" +
     "        <span class=\"badge\" data-ng-bind=\"user.points\"></span>\n" +
-    "        <a data-ng-href=\"http://www.rdio.com{{ user.profile }}\" data-ng-bind=\"user.name\" target=\"_blank\"></a>\n" +
+    "        <a data-ng-href=\"http://www.rdio.com{{ user.profile }}\"target=\"_blank\">\n" +
+    "          <img data-ng-src=\"{{ user.picture }}\" \n" +
+    "            data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
+    "            class=\"avatar xs\" alt=\"{{ user.name }}\"/> {{ user.name }}\n" +
+    "        </a>\n" +
     "      </li>\n" +
     "    </ul>\n" +
     "  </div>\n" +
