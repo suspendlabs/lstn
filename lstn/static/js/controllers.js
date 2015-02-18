@@ -279,7 +279,15 @@ angular.module('lstn.controllers', [])
       $scope.playSong(data);
     });
 
-    socket.on('room:upvote', function(score) {
+    socket.on('room:upvote', function(upvote) {
+      if ($scope.playing) {
+        if (!$scope.playing.upvotes) {
+          $scope.playing.upvotes = {};
+        }
+
+        $scope.playing.upvotes[upvote.user] = true;
+      }
+
       if (!$scope.isCurrentController) {
         return;
       }
@@ -298,7 +306,15 @@ angular.module('lstn.controllers', [])
       });
     });
 
-    socket.on('room:downvote', function(score) {
+    socket.on('room:downvote', function(downvote) {
+      if ($scope.playing) {
+        if (!$scope.playing.downvotes) {
+          $scope.playing.downvotes = {};
+        }
+
+        $scope.playing.downvotes[upvote.user] = true;
+      }
+
       if (!$scope.isCurrentController) {
         return;
       }
@@ -323,7 +339,7 @@ angular.module('lstn.controllers', [])
 
     socket.on('room:chat:message', function(message) {
       console.log(message);
-
+      
       $scope.chat.messages.push(message);
       if ($scope.trackUnseenChatMessages) {
         $scope.unseenChatMessages += 1;
