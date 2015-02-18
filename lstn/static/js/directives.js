@@ -223,6 +223,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.trackUnseenChatMessages = tab !== 'chat';
           if (!$scope.trackUnseenChatMessages) {
             $scope.unseenChatMessages = 0;
+            $scope.mentioned = false;
 
             $timeout(function() {
               $('#messages').animate({

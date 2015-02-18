@@ -1,6 +1,8 @@
 @import "compass/css3/background-size";
 @import "compass/css3/border-radius";
 @import "compass/css3/box-shadow";
+@import "compass/css3/animation";
+@import "compass/css3/transform";
 @import "compass/css3/opacity";
 
 $rdio-red: #E84961;
@@ -61,27 +63,16 @@ body {
 }
 
 .glyphicon.spinning {
-  animation: spin 1s infinite linear;
-  -webkit-animation: spin2 1s infinite linear;
+  @include animation('spin 1s infinite linear');
 }
 
-@keyframes spin {
-    from {
-      transform: scale(1) rotate(0deg);
-    }
-
-    to {
-      transform: scale(1) rotate(360deg);
-    }
-}
-
-@-webkit-keyframes spin2 {
+@include keyframes(spin) {
   from {
-    -webkit-transform: rotate(0deg);
+    @include transform(rotate(0deg));
   }
 
   to {
-    -webkit-transform: rotate(360deg);
+    @include transform(rotate(360deg));
   }
 }
 
@@ -653,5 +644,28 @@ footer {
       background-color: #428bca;
       border-color: #428bca;
     }
+  }
+}
+
+.nav-tabs {
+  > li.mentioned {
+    > a {
+      @include animation(mentioned 5s infinite ease);
+    }
+  }
+}
+
+@include keyframes(mentioned) {
+  0% {
+    background: white;
+    color: #337ab7;
+  }
+  50% {
+    background: #b92c28;
+    color: white;
+  }
+  100% {
+    background: white;
+    color: #337ab7;
   }
 }
