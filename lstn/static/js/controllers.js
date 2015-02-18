@@ -154,8 +154,53 @@ angular.module('lstn.controllers', [])
     $scope.chat = {
       messages: []
     };
+
     $scope.trackUnseenChatMessages = true;
     $scope.unseenChatMessages = 0;
+
+    // Notifications
+    $scope.notificationPermission = 'default';
+    if (window.Notification) {
+      Notification.requestPermission(function(status) {
+        console.log(status);
+        $scope.notificationPermission = status;
+
+        if (Notification.permission !== status) {
+          Notification.permission = status;
+        }
+      });
+    }
+
+    $scope.sendNotification = function(title, body, icon, timeout, handler) {
+      if (!window.Notification || $scope.notificationPermission !== 'granted') {
+        return;
+      }
+
+      if (!title) {
+        return;
+      }
+
+      var options = {};
+      if (body) {
+        options.body = body;
+      }
+
+      if (icon) {
+        options.icon = icon;
+      }
+
+      var notification = new Notification(title, options);
+
+      if (timeout) {
+        notification.onshow = function() {
+          setTimeout(notification.close.bind(notification), timeout);
+        };
+      }
+
+      if (handler) {
+        notification.onclick = handler;
+      }
+    };
 
     // Setup sockets
     socket.on('connect', function() {
@@ -277,9 +322,15 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:chat:message', function(message) {
+      console.log(message);
+
       $scope.chat.messages.push(message);
       if ($scope.trackUnseenChatMessages) {
         $scope.unseenChatMessages += 1;
+      }
+      
+      if (message.mention) {
+        $scope.sendNotification(message.user, message.text, message.picture, 5000);
       }
 
       $timeout(function() {
