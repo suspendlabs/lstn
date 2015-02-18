@@ -244,11 +244,16 @@ angular.module('lstn.directives', ['sc.twemoji'])
           }
 
           var mentionNames = [];
-          angular.forEach($scope.roster.mentionNames, function(user) {
-            if (user.label.toUpperCase().indexOf(term.toUpperCase()) >= 0) {
-              this.push(user);
-            }
-          }, mentionNames);
+          if (term) {
+            angular.forEach($scope.roster.mentionNames, function(user) {
+              if (user &&
+                user.label &&
+                user.label.toUpperCase().indexOf(term.toUpperCase()) >= 0) {
+
+                this.push(user);
+              }
+            }, mentionNames);
+          }
           $scope.mentionNames = mentionNames;
         };
 
