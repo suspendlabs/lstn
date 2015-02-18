@@ -58,24 +58,43 @@ body > .container {
 }
 
 .glyphicon.spinning {
-  animation: spin 1s infinite linear;
-  -webkit-animation: spin2 1s infinite linear;
+  -moz-animation: "spin 1s infinite linear";
+  -webkit-animation: "spin 1s infinite linear";
+  animation: "spin 1s infinite linear";
 }
 
-@keyframes spin {
+@-moz-keyframes spin {
   from {
-    transform: scale(1) rotate(0deg);
+    -moz-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   to {
-    transform: scale(1) rotate(360deg);
+    -moz-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
-@-webkit-keyframes spin2 {
+@-webkit-keyframes spin {
   from {
     -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   to {
     -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  from {
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 .label-as-badge {
@@ -511,4 +530,53 @@ footer .container .text-muted {
 
 .error-message {
   margin-top: 1em;
+}
+
+.nav-tabs > li.mentioned > a {
+  -moz-animation: mentioned 5s infinite ease;
+  -webkit-animation: mentioned 5s infinite ease;
+  animation: mentioned 5s infinite ease;
+}
+
+@-moz-keyframes mentioned {
+  0% {
+    background: white;
+    color: #337ab7;
+  }
+  50% {
+    background: #b92c28;
+    color: white;
+  }
+  100% {
+    background: white;
+    color: #337ab7;
+  }
+}
+@-webkit-keyframes mentioned {
+  0% {
+    background: white;
+    color: #337ab7;
+  }
+  50% {
+    background: #b92c28;
+    color: white;
+  }
+  100% {
+    background: white;
+    color: #337ab7;
+  }
+}
+@keyframes mentioned {
+  0% {
+    background: white;
+    color: #337ab7;
+  }
+  50% {
+    background: #b92c28;
+    color: white;
+  }
+  100% {
+    background: white;
+    color: #337ab7;
+  }
 }
