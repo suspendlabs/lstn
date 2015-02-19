@@ -1,7 +1,9 @@
 {
     "eqnull": false,
     "bitwise": false,
-    "eqeqeq": false,
     "forin": false,
-    "maxerr": 1000
+    "maxerr": 1000,
+    "immed": true,
+    "indent": 2,
+    "jquery": true
 }
