@@ -5,7 +5,7 @@ angular.module('lstn.filters', [])
 
 .filter('timeFromNow', [function() {
   return function(date) {
-    return moment(date).fromNow();
+    return moment(date).fromNow(true);
   };
 }])
 .filter('truncate', function() {

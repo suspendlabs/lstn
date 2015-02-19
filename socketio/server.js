@@ -26,7 +26,7 @@ nconf.defaults({
   }
 });
 
-//io.set('origins', nconf.get('http:origins'));
+io.set('origins', nconf.get('http:origins'));
 
 // Setup Redis Cache
 var cache = redis(nconf.get('redis:port'), nconf.get('redis:host'));
@@ -388,6 +388,12 @@ Lstn.prototype.sendChatHistory = function() {
 Lstn.prototype.sendChatMessage = function(message) {
 
   message.created = moment().format();
+
+  var user = this.getUser();
+  if (user) { 
+    message.picture = user.picture;
+  }
+
   io.sockets.in(this.roomId).emit('room:chat:message', message);
 
   if (!(this.roomId in chatHistory)) {
@@ -520,7 +526,8 @@ Lstn.prototype.sendPlaying = function(broadcast) {
     if (controller && user && name && artist) {
       this.sendChatMessage({
         sender: this.getCurrentController(),
-        text: 'has started playing ' + name + ' by ' + artist,
+        name: name,
+        artist: artist,
         user: user.name,
         type: 'playing',
       });
@@ -732,7 +739,8 @@ Lstn.prototype.onControllerPlayingSkipped = function(data) {
   if (controller && user && name && artist) {
     this.sendChatMessage({
       sender: this.getCurrentController(),
-      text: 'has skipped ' + name + ' by ' + artist,
+      name: name,
+      artist: artist,
       user: user.name,
       type: 'skipped',
     });
@@ -758,7 +766,6 @@ Lstn.prototype.onControllerUpvote = function() {
   if (user) {
     this.sendChatMessage({
       sender: this.userId,
-      text: 'upvoted this song',
       user: user.name,
       type: 'upvote'
     });
@@ -777,7 +784,6 @@ Lstn.prototype.onControllerDownvote = function() {
   if (user) {
     this.sendChatMessage({
       sender: this.userId,
-      text: 'downvoted this song',
       user: user.name,
       type: 'downvote'
     });
