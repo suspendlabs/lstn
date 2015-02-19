@@ -309,6 +309,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        </ul>\n" +
     "        <input data-mentio data-mentio-id=\"'chat-input'\" ng-trim=\"false\" class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
     "        <mentio-menu\n" +
+    "          id=\"mention-menu\"\n" +
     "          mentio-for=\"'chat-input'\"\n" +
     "          mentio-trigger-char=\"'@'\"\n" +
     "          mentio-items=\"mentionNames\"\n" +
@@ -317,6 +318,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "          mentio-select=\"getUser(item)\"></mentio-menu>\n" +
     "\n" +
     "        <mentio-menu\n" +
+    "          id=\"emoticon-menu\"\n" +
     "          class=\"emoticon-menu\"\n" +
     "          mentio-for=\"'chat-input'\"\n" +
     "          mentio-trigger-char=\"':'\"\n" +
