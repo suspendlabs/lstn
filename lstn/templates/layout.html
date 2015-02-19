@@ -28,7 +28,13 @@
   <meta name="msapplication-TileImage" content="/mstile-144x144.png">
   <meta name="theme-color" content="#ffffff">
 
-  <link href='//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <script src="//use.typekit.net/btu3rlc.js"></script>
+  <script>
+    try {
+      Typekit.load();
+    } catch(e) {}
+  </script>
+
   <!-- bower:css -->
   <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
   <link rel="stylesheet" href="/bower_components/fontawesome/css/font-awesome.css" />
@@ -68,15 +74,21 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/"><img src="/images/lstn.png" alt="Lstn"></a>
+        <a class="navbar-logo" href="/">LSTN</a>
       </div>
 
       <div class="collapse navbar-collapse" id="navbar-collapse-1">
         <% if current_user.is_authenticated() %>
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="/rooms">Rooms</a></li>
+          <li><p class="navbar__rooms navbar-text"><a class="navbar-link" href="/rooms">All Rooms</a></p></li>
+          <li data-ng-show="currentRoom" data-ng-cloak><p class="navbar__divider navbar-text">&gt;</p></li>
+          <li data-ng-show="currentRoom" data-ng-cloak><p class="navbar__room navbar-text"><a class="navbar-link" data-ng-href="/room/{{ currentRoom.slug }}" data-ng-bind="currentRoom.name"></a></p></li>
           <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">%% current_user.name %% <span class="caret"></span></a>
+            <a class="navbar__name dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+              <img data-ng-src="{{ current_user.picture }}" class="navbar__photo avatar xs" alt="{{ current_user.name }}">
+              %% current_user.name %%
+              <span class="caret"></span>
+            </a>
             <ul class="dropdown-menu" role="menu">
               <li><a href="http://www.rdio.com%% current_user.profile %%" target="_blank">Profile</a></li>
               <li class="divider"></li>
