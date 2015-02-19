@@ -741,8 +741,6 @@ footer {
   .messages {
     height: 90%;
     width: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
 
     .chat__message {
       background-color: $front-layer;
