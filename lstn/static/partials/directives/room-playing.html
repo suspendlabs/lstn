@@ -1,17 +1,9 @@
 <div class="playing__container room__container">
   <div class="row no-gutters">
-    <div class="col-md-5 col-sm-4">
-      <lstn-playing-image></lstn-playing-image>
-    </div>
-    <div class="col-md-7 col-sm-8">
-      <lstn-playing-info></lstn-playing-info>
-      <lstn-visualizer data-ng-show="visualize && playing.song"></lstn-visualizer>
-    </div>
+    <lstn-playing-info></lstn-playing-info>
+    <lstn-visualizer data-ng-show="visualize && playing.song"></lstn-visualizer>
   </div>
   <div class="row">
     <lstn-room-controls></lstn-room-controls>
-  </div>
-  <div class="row">
-    <lstn-room-queue></lstn-room-queue>
   </div>
 </div>

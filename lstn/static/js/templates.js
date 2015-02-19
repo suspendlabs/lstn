@@ -300,19 +300,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-playing.html',
     "<div class=\"playing__container room__container\">\n" +
     "  <div class=\"row no-gutters\">\n" +
-    "    <div class=\"col-md-5 col-sm-4\">\n" +
-    "      <lstn-playing-image></lstn-playing-image>\n" +
-    "    </div>\n" +
-    "    <div class=\"col-md-7 col-sm-8\">\n" +
-    "      <lstn-playing-info></lstn-playing-info>\n" +
-    "      <lstn-visualizer data-ng-show=\"visualize && playing.song\"></lstn-visualizer>\n" +
-    "    </div>\n" +
+    "    <lstn-playing-info></lstn-playing-info>\n" +
+    "    <lstn-visualizer data-ng-show=\"visualize && playing.song\"></lstn-visualizer>\n" +
     "  </div>\n" +
     "  <div class=\"row\">\n" +
     "    <lstn-room-controls></lstn-room-controls>\n" +
-    "  </div>\n" +
-    "  <div class=\"row\">\n" +
-    "    <lstn-room-queue></lstn-room-queue>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -355,39 +347,33 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-roster.html',
     "<div class=\"roster__container room__container\">\n" +
-    "  <div class=\"panel panel-primary\">\n" +
-    "    <div class=\"panel-heading\">Broadcasters</div>\n" +
-    "    <ul class=\"roster roster--controllers list-group\">\n" +
-    "      <li class=\"list-group-item\" data-ng-show=\"!roster || roster.controllersCount === 0\">\n" +
-    "        <div class=\"text-center\"><strong>No Broadcasters</strong></div>\n" +
-    "      </li>\n" +
-    "      <li data-ng-show=\"roster && roster.controllersCount > 0\" data-ng-repeat=\"user_id in roster.controllerOrder\" class=\"list-group-item\" data-ng-class=\"{'list-group-item-success': current_user.id === user_id}\">\n" +
-    "        <span class=\"badge\" data-ng-bind=\"roster.controllers[user_id].points\" data-ng-show=\"user_id !== currentController\"></span>\n" +
-    "        <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" target=\"_blank\">\n" +
-    "          <img data-ng-src=\"{{ roster.controllers[user_id].picture }}\" class=\"avatar xs\" \n" +
-    "            data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
-    "            alt=\"{{ roster.controllers[user_id].name }}\"/> {{ roster.controllers[user_id].name }}\n" +
-    "        </a>\n" +
-    "        <span class=\"glyphicon glyphicon-music pull-right\" aria-hidden=\"true\" data-ng-show=\"user_id === currentController\"></span>\n" +
-    "      </li>\n" +
-    "    </ul>\n" +
-    "  </div>\n" +
-    "  <div class=\"panel panel-default\">\n" +
-    "    <div class=\"panel-heading\">Listeners</div>\n" +
-    "    <ul class=\"roster list-group\">\n" +
-    "      <li class=\"list-group-item\" data-ng-show=\"!roster || roster.usersCount === 0\">\n" +
-    "        <div class=\"text-center\"><strong>No Listeners</strong></div>\n" +
-    "      </li>\n" +
-    "      <li data-ng-show=\"roster && roster.usersCount > 0\" data-ng-repeat=\"(user_id, user) in roster.users | orderBy:name\" class=\"list-group-item\" data-ng-class=\"{'list-group-item-success': current_user.id === user.id}\">\n" +
-    "        <span class=\"badge\" data-ng-bind=\"user.points\"></span>\n" +
-    "        <a data-ng-href=\"http://www.rdio.com{{ user.profile }}\"target=\"_blank\">\n" +
-    "          <img data-ng-src=\"{{ user.picture }}\" \n" +
-    "            data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
-    "            class=\"avatar xs\" alt=\"{{ user.name }}\"/> {{ user.name }}\n" +
-    "        </a>\n" +
-    "      </li>\n" +
-    "    </ul>\n" +
-    "  </div>\n" +
+    "  <div>BROADCASTERS</div>\n" +
+    "  <ul class=\"roster roster--controllers\">\n" +
+    "    <li data-ng-show=\"!roster || roster.controllersCount === 0\">\n" +
+    "      <div class=\"text-center\"><strong>No Broadcasters</strong></div>\n" +
+    "    </li>\n" +
+    "    <li data-ng-show=\"roster && roster.controllersCount > 0\" data-ng-repeat=\"user_id in roster.controllerOrder\"\n" +
+    "      <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" target=\"_blank\">\n" +
+    "        <img data-ng-src=\"{{ roster.controllers[user_id].picture }}\" class=\"avatar xs\"\n" +
+    "          data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
+    "          alt=\"{{ roster.controllers[user_id].name }}\"/> {{ roster.controllers[user_id].name }}\n" +
+    "      </a>\n" +
+    "    </li>\n" +
+    "  </ul>\n" +
+    "  <div>LISTENERS<div>\n" +
+    "  <span class=\"listeners\" data-ng-show=\"roster && roster.usersCount > 0\">\n" +
+    "    <a\n" +
+    "      class=\"roster__user\"\n" +
+    "      data-ng-repeat=\"(user_id, user) in roster.users | orderBy:name\"\n" +
+    "      data-ng-href=\"http://www.rdio.com{{ user.profile }}\"\n" +
+    "      target=\"_blank\"\n" +
+    "      tooltip=\"{{ user.name }}\">\n" +
+    "\n" +
+    "      <img data-ng-src=\"{{ user.picture }}\"\n" +
+    "        data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
+    "        class=\"avatar sm\" alt=\"{{ user.name }}\" />\n" +
+    "    </a>\n" +
+    "  </span>\n" +
     "</div>\n"
   );
 
@@ -488,7 +474,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <lstn-room-queue></lstn-room-queue>\n" +
     "  </div>\n" +
     "  <div class=\"room__left col-md-3 col-md-pull-5\">\n" +
-    "    <div class=\"column__header\">Room Users</div>\n" +
+    "    <lstn-room-playing></lstn-room-playing>\n" +
     "    <lstn-room-roster></lstn-room-roster>\n" +
     "  </div>\n" +
     "  <div class=\"room__right col-md-4\">\n" +

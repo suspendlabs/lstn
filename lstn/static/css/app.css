@@ -269,13 +269,11 @@ body > .container > div {
 }
 
 .roster__container {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
+  border: none;
+  border-radius: 0;
 }
-.roster__container > * {
-  margin-bottom: 5px;
+.roster__container .roster__user img {
+  margin: 5px;
 }
 
 .playing__container {

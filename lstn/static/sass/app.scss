@@ -292,13 +292,16 @@ body {
 }
 
 .roster__container {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
+  border: none;
+  border-radius: 0;
 
-  > * {
-      margin-bottom: 5px;
+  .listeners {
+  }
+
+  .roster__user {
+    img {
+      margin: 5px;
+    }
   }
 }
 
