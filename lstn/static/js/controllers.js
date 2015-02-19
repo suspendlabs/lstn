@@ -30,6 +30,11 @@ angular.module('lstn.controllers', [])
 
     $scope.alerts[type].push(message);
   };
+
+  $scope.currentRoom = null;
+  $scope.$on('room', function(e, room) {
+    $scope.currentRoom = room;
+  });
 }])
 
 .controller('RoomsController', ['$scope', '$location', 'Room', function($scope, $location, Room) {
@@ -832,6 +837,8 @@ angular.module('lstn.controllers', [])
   
       $scope.room = response.room;
       $scope.playback = response.playback;
+
+      $scope.$emit('room', $scope.room);
 
       if (response.queue) {
         $scope.queue = response.queue;
