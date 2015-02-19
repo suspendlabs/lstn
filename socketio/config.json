@@ -1,7 +1,7 @@
 {
     "http": {
         "port": 3000,
-        "origins": "http://lstn.dev"
+        "origins": "http://lstn.dev:8088"
     },
     "redis": {
         "host": "127.0.0.1",
