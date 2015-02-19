@@ -1,12 +1,34 @@
 <li>
   <div class="row">
-    <div class="col-xs-3">
-      <div class="chat__user" data-ng-bind="message.user"></div>
+    <div class="chat__message__photo col-xs-3">
+      <img data-ng-src="{{ message.picture }}" class="avatar sm" src="http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg" />
     </div>
-    <div data-ng-class="{'col-xs-6': message.created, 'col-xs-9': !message.created}">
-      <div class="chat__message wordwrap" data-ng-bind-html="message.text|twemoji"></div>
+    <div class="chat__message__body col-xs-7">
+      <div class="chat__message__headline row">
+        <span class="chat__message__user" data-ng-bind="message.user"></span>
+        <span data-ng-switch="message.type">
+          <span class="chat__message--playing" data-ng-switch-when="playing">started playing</span>
+          <span class="chat__message--upvoted" data-ng-switch-when="upvote">upvoted</span>
+          <span class="chat__message--downvoted" data-ng-switch-when="downvote">downvoted</span>
+          <span class="chat__message--skipped" data-ng-switch-when="skipped">skipped</span>
+          <span class="chat__message--said" data-ng-switch-when="message">said</span>
+        </span>
+      </div>
+      <div class="chat__message__message row" data-ng-if="message.type === 'message'">
+        <div class="wordwrap" data-ng-bind-html="message.text|twemoji"></div>
+      </div>
+      <div class="chat__message__song-info row" data-ng-if="message.type !== 'message'">
+        <div class="col-xs-12">
+          <div class="row">
+            <div class="col-xs-12" data-ng-bind="message.track"></div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" data-ng-bind="message.artist"></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-xs-3" data-ng-if="message.created">
+    <div class="chat__message__timestamp col-xs-2">
       <div class="chat__timestamp text-muted" data-time-from-now="message.created"></div>
     </div>
   </div>

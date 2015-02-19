@@ -1,63 +1,30 @@
 <div class="playing__queue col-md-12">
-  <div class="playing__queue__container panel panel-success">
+  <div class="playing__queue__container">
     <tabset class="queue__tabs">
-      <tab id="your-queue-tab" heading="Your Queue" data-select="selectQueueTab('personal')">
+      <tab id="upcoming-queue-tab" data-select="selectQueueTab('upcoming')">
+        <tab-heading>UPCOMING TRACKS</tab-heading>
+        <ul id="upcoming-queue" class="queue queue--full track__list" data-ng-show="upcomingQueue && upcomingQueue.length > 0">
+          <lstn-track
+            data-ng-repeat="song in upcomingQueue"
+            data-context="upcomingQueue"
+            data-cutoff="50"></lstn-track>
+        </ul>
+        <div class="queue--empty text-center" data-ng-show="!upcomingQueue || upcomingQueue.length === 0">
+          <p>Upcoming Tracks</p>
+        </div>
+      </tab>
+
+      <tab id="my-queue-tab" data-select="selectQueueTab('my')">
+      <tab-heading>MY QUEUE</tab-heading>
         <ul id="queue" class="queue queue--full track__list" data-ng-show="queue && queue.length > 0" data-ui-sortable="sortableOptions" ng-model="queue">
           <lstn-track
-            data-ng-class-even="'track--even'"
-            data-ng-class-odd="'track--odd'"
             data-ng-repeat="song in queue"
             data-context="queue"
             data-cutoff="50"></lstn-track>
         </ul>
-        <div class="queue--empty alert alert-info text-center" data-ng-show="!queue || queue.length === 0">
-          <h3>Select songs from your playlists on the left to add songs to your queue</h3>
+        <div class="queue--empty text-center" data-ng-show="!queue || queue.length === 0">
+          <p>My Queue</p>
         </div>
-      </tab>
-      <tab id="room-queue-tab" heading="Room Queue" data-select="selectQueueTab('room')">
-        <ul id="room-queue" class="queue queue--full track__list" data-ng-show="roomQueue && roomQueue.length > 0">
-          <lstn-track
-            data-ng-class-even="'track--even'"
-            data-ng-class-odd="'track--odd'"
-            data-ng-repeat="song in roomQueue"
-            data-context="queue"
-            data-cutoff="50"></lstn-track>
-        </ul>
-        <div class="queue--empty alert alert-info text-center" data-ng-show="!roomQueue || roomQueue.length === 0">
-          <h3>See the upcoming songs from each broadcaster</h3>
-        </div>
-      </tab>
-      <tab id="chat-tab" data-select="selectQueueTab('chat')">
-        <tab-heading>
-          Chat
-          <span data-ng-class="{'mentioned': mentioned}" class="label label-default label-as-badge" data-ng-show="trackUnseenChatMessages && unseenChatMessages > 0" data-ng-bind="unseenChatMessages"></span>
-        </tab-heading>
-        <ul id="messages" class="messages list-group">
-          <lstn-chat-message
-            class="list-group-item"
-            data-ng-repeat="message in chat.messages"
-            data-ng-class="getMessageClass()"></lstn-chat-message>
-        </ul>
-        <input data-mentio data-mentio-id="'chat-input'" ng-trim="false" class="form-control" type="text" data-ng-model="message.text" data-lstn-enter="sendMessage()" placeholder="Send message..."></input>
-        <mentio-menu
-          id="mention-menu"
-          mentio-for="'chat-input'"
-          mentio-trigger-char="'@'"
-          mentio-items="mentionNames"
-          mentio-template-url="/static/partials/directives/roster-mention.html"
-          mentio-search="searchRoster(term)"
-          mentio-select="getUser(item)"></mentio-menu>
-
-        <mentio-menu
-          id="emoticon-menu"
-          class="emoticon-menu"
-          mentio-for="'chat-input'"
-          mentio-trigger-char="':'"
-          mentio-items="emoticons"
-          mentio-template-url="/static/partials/directives/emoticon-list.html"
-          mentio-search="searchEmoticons(term)"
-          mentio-select="getEmoticon(item)"></mentio-menu>
-
       </tab>
     </tabset>
   </div>

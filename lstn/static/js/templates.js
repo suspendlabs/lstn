@@ -23,13 +23,35 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/chat-message.html',
     "<li>\n" +
     "  <div class=\"row\">\n" +
-    "    <div class=\"col-xs-3\">\n" +
-    "      <div class=\"chat__user\" data-ng-bind=\"message.user\"></div>\n" +
+    "    <div class=\"chat__message__photo col-xs-3\">\n" +
+    "      <img data-ng-src=\"{{ message.picture }}\" class=\"avatar sm\" src=\"http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg\" />\n" +
     "    </div>\n" +
-    "    <div data-ng-class=\"{'col-xs-6': message.created, 'col-xs-9': !message.created}\">\n" +
-    "      <div class=\"chat__message wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
+    "    <div class=\"chat__message__body col-xs-7\">\n" +
+    "      <div class=\"chat__message__headline row\">\n" +
+    "        <span class=\"chat__message__user\" data-ng-bind=\"message.user\"></span>\n" +
+    "        <span data-ng-switch=\"message.type\">\n" +
+    "          <span class=\"chat__message--playing\" data-ng-switch-when=\"playing\">started playing</span>\n" +
+    "          <span class=\"chat__message--upvoted\" data-ng-switch-when=\"upvote\">upvoted</span>\n" +
+    "          <span class=\"chat__message--downvoted\" data-ng-switch-when=\"downvote\">downvoted</span>\n" +
+    "          <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped\">skipped</span>\n" +
+    "          <span class=\"chat__message--said\" data-ng-switch-when=\"message\">said</span>\n" +
+    "        </span>\n" +
+    "      </div>\n" +
+    "      <div class=\"chat__message__message row\" data-ng-if=\"message.type === 'message'\">\n" +
+    "        <div class=\"wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
+    "      </div>\n" +
+    "      <div class=\"chat__message__song-info row\" data-ng-if=\"message.type !== 'message'\">\n" +
+    "        <div class=\"col-xs-12\">\n" +
+    "          <div class=\"row\">\n" +
+    "            <div class=\"col-xs-12\" data-ng-bind=\"message.track\"></div>\n" +
+    "          </div>\n" +
+    "          <div class=\"row\">\n" +
+    "            <div class=\"col-xs-12\" data-ng-bind=\"message.artist\"></div>\n" +
+    "          </div>\n" +
+    "        </div>\n" +
+    "      </div>\n" +
     "    </div>\n" +
-    "    <div class=\"col-xs-3\" data-ng-if=\"message.created\">\n" +
+    "    <div class=\"chat__message__timestamp col-xs-2\">\n" +
     "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "    </div>\n" +
     "  </div>\n" +
@@ -140,6 +162,36 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <lstn-track-list data-cutoff=\"28\"></lstn-track-list>\n" +
     "    </div>\n" +
     "  </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/room-activity.html',
+    "<div class=\"room-activity\">\n" +
+    "  <ul id=\"messages\" class=\"messages list-group\">\n" +
+    "    <lstn-chat-message\n" +
+    "      class=\"list-group-item chat__message\"\n" +
+    "      data-ng-repeat=\"message in chat.messages\"></lstn-chat-message>\n" +
+    "  </ul>\n" +
+    "  <input data-mentio data-mentio-id=\"'chat-input'\" ng-trim=\"false\" class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
+    "  <mentio-menu\n" +
+    "    id=\"mention-menu\"\n" +
+    "    mentio-for=\"'chat-input'\"\n" +
+    "    mentio-trigger-char=\"'@'\"\n" +
+    "    mentio-items=\"mentionNames\"\n" +
+    "    mentio-template-url=\"/static/partials/directives/roster-mention.html\"\n" +
+    "    mentio-search=\"searchRoster(term)\"\n" +
+    "    mentio-select=\"getUser(item)\"></mentio-menu>\n" +
+    "\n" +
+    "  <mentio-menu\n" +
+    "    id=\"emoticon-menu\"\n" +
+    "    class=\"emoticon-menu\"\n" +
+    "    mentio-for=\"'chat-input'\"\n" +
+    "    mentio-trigger-char=\"':'\"\n" +
+    "    mentio-items=\"emoticons\"\n" +
+    "    mentio-template-url=\"/static/partials/directives/emoticon-list.html\"\n" +
+    "    mentio-search=\"searchEmoticons(term)\"\n" +
+    "    mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
     "</div>\n"
   );
 
@@ -268,65 +320,32 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-queue.html',
     "<div class=\"playing__queue col-md-12\">\n" +
-    "  <div class=\"playing__queue__container panel panel-success\">\n" +
+    "  <div class=\"playing__queue__container\">\n" +
     "    <tabset class=\"queue__tabs\">\n" +
-    "      <tab id=\"your-queue-tab\" heading=\"Your Queue\" data-select=\"selectQueueTab('personal')\">\n" +
+    "      <tab id=\"upcoming-queue-tab\" data-select=\"selectQueueTab('upcoming')\">\n" +
+    "        <tab-heading>UPCOMING TRACKS</tab-heading>\n" +
+    "        <ul id=\"upcoming-queue\" class=\"queue queue--full track__list\" data-ng-show=\"upcomingQueue && upcomingQueue.length > 0\">\n" +
+    "          <lstn-track\n" +
+    "            data-ng-repeat=\"song in upcomingQueue\"\n" +
+    "            data-context=\"upcomingQueue\"\n" +
+    "            data-cutoff=\"50\"></lstn-track>\n" +
+    "        </ul>\n" +
+    "        <div class=\"queue--empty text-center\" data-ng-show=\"!upcomingQueue || upcomingQueue.length === 0\">\n" +
+    "          <p>Upcoming Tracks</p>\n" +
+    "        </div>\n" +
+    "      </tab>\n" +
+    "\n" +
+    "      <tab id=\"my-queue-tab\" data-select=\"selectQueueTab('my')\">\n" +
+    "      <tab-heading>MY QUEUE</tab-heading>\n" +
     "        <ul id=\"queue\" class=\"queue queue--full track__list\" data-ng-show=\"queue && queue.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue\">\n" +
     "          <lstn-track\n" +
-    "            data-ng-class-even=\"'track--even'\"\n" +
-    "            data-ng-class-odd=\"'track--odd'\"\n" +
     "            data-ng-repeat=\"song in queue\"\n" +
     "            data-context=\"queue\"\n" +
     "            data-cutoff=\"50\"></lstn-track>\n" +
     "        </ul>\n" +
-    "        <div class=\"queue--empty alert alert-info text-center\" data-ng-show=\"!queue || queue.length === 0\">\n" +
-    "          <h3>Select songs from your playlists on the left to add songs to your queue</h3>\n" +
+    "        <div class=\"queue--empty text-center\" data-ng-show=\"!queue || queue.length === 0\">\n" +
+    "          <p>My Queue</p>\n" +
     "        </div>\n" +
-    "      </tab>\n" +
-    "      <tab id=\"room-queue-tab\" heading=\"Room Queue\" data-select=\"selectQueueTab('room')\">\n" +
-    "        <ul id=\"room-queue\" class=\"queue queue--full track__list\" data-ng-show=\"roomQueue && roomQueue.length > 0\">\n" +
-    "          <lstn-track\n" +
-    "            data-ng-class-even=\"'track--even'\"\n" +
-    "            data-ng-class-odd=\"'track--odd'\"\n" +
-    "            data-ng-repeat=\"song in roomQueue\"\n" +
-    "            data-context=\"queue\"\n" +
-    "            data-cutoff=\"50\"></lstn-track>\n" +
-    "        </ul>\n" +
-    "        <div class=\"queue--empty alert alert-info text-center\" data-ng-show=\"!roomQueue || roomQueue.length === 0\">\n" +
-    "          <h3>See the upcoming songs from each broadcaster</h3>\n" +
-    "        </div>\n" +
-    "      </tab>\n" +
-    "      <tab id=\"chat-tab\" data-select=\"selectQueueTab('chat')\">\n" +
-    "        <tab-heading>\n" +
-    "          Chat\n" +
-    "          <span data-ng-class=\"{'mentioned': mentioned}\" class=\"label label-default label-as-badge\" data-ng-show=\"trackUnseenChatMessages && unseenChatMessages > 0\" data-ng-bind=\"unseenChatMessages\"></span>\n" +
-    "        </tab-heading>\n" +
-    "        <ul id=\"messages\" class=\"messages list-group\">\n" +
-    "          <lstn-chat-message\n" +
-    "            class=\"list-group-item\"\n" +
-    "            data-ng-repeat=\"message in chat.messages\"\n" +
-    "            data-ng-class=\"getMessageClass()\"></lstn-chat-message>\n" +
-    "        </ul>\n" +
-    "        <input data-mentio data-mentio-id=\"'chat-input'\" ng-trim=\"false\" class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
-    "        <mentio-menu\n" +
-    "          id=\"mention-menu\"\n" +
-    "          mentio-for=\"'chat-input'\"\n" +
-    "          mentio-trigger-char=\"'@'\"\n" +
-    "          mentio-items=\"mentionNames\"\n" +
-    "          mentio-template-url=\"/static/partials/directives/roster-mention.html\"\n" +
-    "          mentio-search=\"searchRoster(term)\"\n" +
-    "          mentio-select=\"getUser(item)\"></mentio-menu>\n" +
-    "\n" +
-    "        <mentio-menu\n" +
-    "          id=\"emoticon-menu\"\n" +
-    "          class=\"emoticon-menu\"\n" +
-    "          mentio-for=\"'chat-input'\"\n" +
-    "          mentio-trigger-char=\"':'\"\n" +
-    "          mentio-items=\"emoticons\"\n" +
-    "          mentio-template-url=\"/static/partials/directives/emoticon-list.html\"\n" +
-    "          mentio-search=\"searchEmoticons(term)\"\n" +
-    "          mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
-    "\n" +
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
@@ -464,25 +483,16 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/room.html',
-    "<div>\n" +
-    "  <div class=\"page-header\">\n" +
-    "    <h1>\n" +
-    "      {{ room.name }}\n" +
-    "    </h1>\n" +
+    "<div class=\"room row\">\n" +
+    "  <div class=\"room__middle col-md-5 col-md-push-3\">\n" +
+    "    <lstn-room-queue></lstn-room-queue>\n" +
     "  </div>\n" +
-    "\n" +
-    "  <div class=\"room row\">\n" +
-    "    <div class=\"room__middle col-md-6 col-md-push-3\">\n" +
-    "      <lstn-room-playing></lstn-room-playing>\n" +
-    "    </div>\n" +
-    "    <div class=\"room__left col-md-3 col-md-pull-6\">\n" +
-    "      <div class=\"column__header\">Room Users</div>\n" +
-    "      <lstn-room-roster></lstn-room-roster>\n" +
-    "    </div>\n" +
-    "    <div class=\"room__right col-md-3\">\n" +
-    "      <div class=\"column__header\">Music</div>\n" +
-    "      <lstn-room-music></lstn-room-music>\n" +
-    "    </div>\n" +
+    "  <div class=\"room__left col-md-3 col-md-pull-5\">\n" +
+    "    <div class=\"column__header\">Room Users</div>\n" +
+    "    <lstn-room-roster></lstn-room-roster>\n" +
+    "  </div>\n" +
+    "  <div class=\"room__right col-md-4\">\n" +
+    "    <lstn-room-activity></lstn-room-activity>\n" +
     "  </div>\n" +
     "</div>\n"
   );
