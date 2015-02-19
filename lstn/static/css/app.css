@@ -663,8 +663,6 @@ footer .container .text-muted {
 .room-activity .messages {
   height: 90%;
   width: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
 }
 .room-activity .messages .chat__message {
   background-color: #eee;
