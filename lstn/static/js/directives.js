@@ -57,6 +57,16 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
+.directive('lstnRoomActivity', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-activity.html'
+    };
+  }
+])
+
 .directive('lstnRoomMusic', [
   function() {
     return {

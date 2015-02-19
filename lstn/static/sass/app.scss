@@ -1,12 +1,20 @@
 @import "compass/css3/background-size";
 @import "compass/css3/border-radius";
-@import "compass/css3/box-shadow";
 @import "compass/css3/animation";
 @import "compass/css3/transform";
 @import "compass/css3/opacity";
 
 $rdio-red: #E84961;
 $rdio-blue: #008fd5;
+$activity-success: #2ecc71;
+$activity-primary: #2573a6;
+$activity-default: #777;
+$activity-danger: #e74c3c;
+$background-color: #333;
+$accent-color: #3d3d3d;
+$active-color: #d24242;
+$front-layer: #eee;
+
 
 /* Source: http://snipplr.com/view/10979/css-cross-browser-word-wrap */
 .wordwrap { 
@@ -47,10 +55,15 @@ img.avatar {
 }
 
 body {
-  font-family: Roboto, sans-serif;
+  font-family: "proxima-nova", sans-serif;
+  background-color: $background-color;
 
   > .container {
-    padding: 60px 15px 0;
+    padding: 70px 15px 0;
+
+    > div {
+      margin-top: 15px;
+    }
   }
 }
 
@@ -80,16 +93,75 @@ body {
   border-radius: 1em;
 }
 
-.navbar-brand {
-  padding: 5px 0 0 0;
+.navbar-inverse {
+  background-color: $accent-color;
+  min-height: 60px;
+  font-size: 16px;
 
-  img {
-    margin-left: 15px;
+  .navbar-text {
+    margin-top: 18px;
+  }
+
+  .navbar-nav {
+    > li {
+      > a {
+        padding-top: 15px;
+
+        &.navbar__name {
+          color: #FFFFFF;
+          padding-left: 10px;
+        }
+      }
+    }
   }
 }
 
-.navbar-right.navbar--login {
-  margin-right: 5px;
+.navbar-logo {
+  font-family: 'signo';
+  font-size: 2em;
+  color: #FFFFFF;
+  text-decoration: none;
+  display: block;
+  margin-top: 8px;
+
+  &:link {
+    color: #FFFFFF;
+    text-decoration: none;
+  }
+}
+
+.navbar-right {
+  &.navbar--login {
+    margin-right: 5px;
+  }
+
+  .navbar__rooms {
+    margin-right: 5px;
+
+    a {
+      color: white;
+    }
+  }
+
+  .navbar__divider {
+    margin-left: 0;
+    margin-right: 0;
+    color: #FFFFFF;
+  }
+
+  .navbar__room {
+    margin-left: 5px;
+
+    a {
+      font-weight: bold;
+      color: #FFFFFF;
+    }
+  }
+
+  .navbar__photo {
+    border: 2px solid #FFFFFF;
+    margin-right: 5px;
+  }
 }
 
 .alerts {
@@ -220,13 +292,16 @@ body {
 }
 
 .roster__container {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
+  border: none;
+  border-radius: 0;
 
-  > * {
-      margin-bottom: 5px;
+  .listeners {
+  }
+
+  .roster__user {
+    img {
+      margin: 5px;
+    }
   }
 }
 
@@ -313,46 +388,39 @@ body {
     .playing__queue__container {
       height: 235px;
 
-      .queue__tabs {
-        height: 100%;
+    }
+  }
+}
 
-        .nav-tabs {
-          height: 17%;
-        }
+.queue__tabs {
+  height: 100%;
 
-        .tab-content {
-          height: 83%;
+  .nav-tabs {
+    > li {
+      width: 50%;
+      background-color: $accent-color;
 
-          .tab-pane {
-            height: 100%;
+      &.active {
+        background-color: $active-color;
 
-            .messages {
-              height: 82%;
-              width: 100%;
-              overflow-y: scroll;
-              overflow-x: hidden;
-              border-width: 1px 1px 0 1px;
-              border-color: #ddd;
-              border-style: solid;
-
-              .list-group-item {
-                padding: 0;
-                font-size: 0.85em;
-                border-radius: 0;
-
-                padding: 5px;
-                .chat__user {
-                  text-align: right;
-                }
-              }
-            }
-
-            .form-control {
-              border-top-right-radius: 0;
-              border-top-left-radius: 0;
-            }
+        > a {
+          &:hover, &:focus {
+            background-color: $active-color;
+            border: 0;
+            color: white;
           }
         }
+      }
+
+      > a {
+          margin: 0;
+          padding: 8px 0 8px 0;
+          border-radius: 0;
+          border: 0;
+          text-align: center;
+          background: none;
+          color: #FFFFFF;
+          font-weight: 700;
       }
     }
   }
@@ -414,6 +482,7 @@ body {
   margin-bottom: 0;
 
   .track {
+    background-color: $front-layer;
     padding: 0;
     border-top: 1px solid #ddd;
 
@@ -490,7 +559,6 @@ body {
   
     .track__info {
       float: left;
-      font-family: 'Inconsolata', monospace, sans-serif;
 
       padding: 3px 0 0 3px;
 
@@ -531,35 +599,35 @@ body {
 
 
   &.queue {
-    height: 194px;
     width: 100%;
     overflow-x: hidden;
     overflow-y: auto;
 
     .track {
       cursor: move;
+      border-bottom: 4px solid $background-color;
 
       .track__image {
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
   
         img {
-          width: 50px;
-          height: 50px;
+          width: 60px;
+          height: 60px;
         }
   
         .overlay {
-          top: -50px;
-          width: 50px;
-          height: 50px;
-          line-height: 50px;
+          top: -60px;
+          width: 60px;
+          height: 60px;
+          line-height: 60px;
         }
   
         .glyphicon, .fa {
-          top: -100px;
-          width: 50px;
-          height: 50px;
-          line-height: 50px;
+          top: -120px;
+          width: 60px;
+          height: 60px;
+          line-height: 60px;
         }
       }
     
@@ -666,5 +734,81 @@ footer {
   100% {
     background: #777;
     color: white;
+  }
+}
+
+.room-activity {
+  .messages {
+    height: 90%;
+    width: 100%;
+
+    .chat__message {
+      background-color: $front-layer;
+      padding: 10px 10px 15px 10px;
+      border: 0;
+      border-bottom: 2px solid #ddd;
+
+      @include border-radius(0);
+
+      .chat__message__headline {
+        font-weight: 700;
+
+        .chat__message__user {
+          color: #333;
+          font-weight: 800;
+        }
+      }
+
+      .chat__message--playing {
+        color: $activity-primary;
+      }
+
+      .chat__message--upvoted {
+        color: $activity-success;
+      }
+
+      .chat__message--downvoted {
+        color: $activity-danger;
+      }
+
+      .chat__message--skipped {
+        color: $activity-danger;
+      }
+
+      .chat__message--said {
+        color: $activity-default;
+      }
+
+      .chat__message__photo {
+        padding-left: 20px;
+        padding-top: 5px;
+        width: 23%;
+      }
+
+      .chat__message__body {
+        width: 57%;
+        color: #999;
+        font-weight: 700;
+      }
+
+      .chat__message__message {
+        line-height: 0.9;
+        color: #333;
+      }
+
+      .chat__message__timestamp {
+        width: 19%;
+        padding-right: 0;
+        color: #aaa;
+        font-weight: 700;
+        padding-top: 35px;
+        padding-left: 8px;
+      }
+    }
+  }
+
+  .form-control {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
   }
 }
