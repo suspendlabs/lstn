@@ -108,18 +108,46 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/playing-info.html',
     "<div class=\"playing__info-container\">\n" +
-    "  <div data-ng-show=\"!visualize && !playing.song\" class=\"playing__info playing__info--stopped text-center\">\n" +
-    "    <h3 class=\"text-muted\">Add music to your queue and click Broadcast to start playing</h3>\n" +
-    "  </div>\n" +
-    "  <div data-ng-show=\"!visualize && playing.song\" class=\"playing__info playing__info--playing text-center\">\n" +
-    "    <h3 class=\"playing__title\" data-ng-bind=\"playing.song.title | truncate:28\"></h3>\n" +
-    "    <h4 class=\"playing__artist\" data-ng-bind=\"playing.song.artist | truncate:35\"></h4>\n" +
-    "    <p class=\"playing__album\" data-ng-bind=\"playing.song.album | truncate: 40\"></p>\n" +
-    "    <p class=\"playing__warning text-warning\" data-ng-show=\"!playing.song.canStream\"><strong>This song can't be played in your region.</strong></p>\n" +
-    "    <div class=\"progress\" data-ng-show=\"playing.song.duration && playing.song.canStream\">\n" +
-    "      <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.song.duration }}\"></div>\n" +
-    "      <span id=\"time\" class=\"time\"></span>\n" +
+    "  <div data-ng-show=\"playing.song\" class=\"playing__info playing__info--playing\" data-album-cover-background>\n" +
+    "    <div class=\"playing__info\">\n" +
+    "      <h3 class=\"playing__title\" data-ng-bind=\"playing.song.title | truncate:28\"></h3>\n" +
+    "      <h4 class=\"playing__artist\" data-ng-bind=\"playing.song.artist | truncate:35\"></h4>\n" +
+    "      <p class=\"playing__warning text-warning\" data-ng-show=\"!playing.song.canStream\"><strong>This song can't be played in your region.</strong></p>\n" +
     "    </div>\n" +
+    "\n" +
+    "  <!-- mute -->\n" +
+    "    <button data-ng-show=\"!mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Unmute\" data-ng-click=\"toggleMute()\" title=\"Unmute\">\n" +
+    "      <span class=\"glyphicon glyphicon-volume-off\" aria-hidden=\"true\"></span> \n" +
+    "    </button>\n" +
+    "    <button data-ng-show=\"mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Mute\" data-ng-click=\"toggleMute()\" title=\"Mute\">\n" +
+    "      <span class=\"glyphicon glyphicon-volume-up\" aria-hidden=\"true\"></span> \n" +
+    "    </button>\n" +
+    "\n" +
+    "    <!-- downvote -->\n" +
+    "    <button data-ng-show=\"!playing.downvoted && !isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key || playing.song.voted\" class=\"btn btn-danger btn-lg\" aria-label=\"Downvote\" data-ng-click=\"downvote()\" title=\"Downvote\">\n" +
+    "      <span class=\"glyphicon glyphicon-thumbs-down\" aria-hidden=\"true\"></span> \n" +
+    "    </button>\n" +
+    "    <button data-ng-show=\"playing.downvoted\" type=\"button\" disabled=\"disabled\" class=\"btn btn-danger btn-lg\" aria-label=\"Downvoted\" title=\"Downvoted\">\n" +
+    "      <span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> \n" +
+    "    </button>\n" +
+    "\n" +
+    "    <!-- skip -->\n" +
+    "    <button data-ng-show=\"isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key\" class=\"btn btn-danger btn-lg\" aria-label=\"Skip Song\" data-ng-click=\"skipSong()\" title=\"Skip Song\">\n" +
+    "      <span class=\"glyphicon glyphicon-step-forward\" aria-hidden=\"true\"></span> \n" +
+    "    </button>\n" +
+    "\n" +
+    "    <!-- upvote -->\n" +
+    "    <button data-ng-show=\"!playing.upvoted\" type=\"button\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
+    "      <span class=\"glyphicon glyphicon-thumbs-up\" aria-hidden=\"true\"></span> \n" +
+    "    </button>\n" +
+    "    <button data-ng-show=\"playing.upvoted\" type=\"button\" disabled=\"disabled\" class=\"btn btn-success btn-lg\" aria-label=\"Upvoted\" title=\"Upvoted\">\n" +
+    "      <span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> \n" +
+    "    </button>\n" +
+    "\n" +
+    "  </div>\n" +
+    "  <div class=\"progress\" data-ng-show=\"playing.song.duration && playing.song.canStream\">\n" +
+    "    <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.song.duration }}\"></div>\n" +
+    "    <span id=\"time\" class=\"time\"></span>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -147,32 +175,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-controls.html',
     "<div class=\"playing__actions col-md-12 text-center\">\n" +
     "  <div class=\"playing__actions__container panel panel-default\">\n" +
-    "    <button data-ng-show=\"!mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Unmute\" data-ng-click=\"toggleMute()\" title=\"Unmute\">\n" +
-    "      <span class=\"glyphicon glyphicon-volume-off\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Mute\" data-ng-click=\"toggleMute()\" title=\"Mute\">\n" +
-    "      <span class=\"glyphicon glyphicon-volume-up\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"!playing.downvoted && !isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key || playing.song.voted\" class=\"btn btn-danger btn-lg\" aria-label=\"Downvote\" data-ng-click=\"downvote()\" title=\"Downvote\">\n" +
-    "      <span class=\"glyphicon glyphicon-thumbs-down\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"playing.downvoted\" type=\"button\" disabled=\"disabled\" class=\"btn btn-danger btn-lg\" aria-label=\"Downvoted\" title=\"Downvoted\">\n" +
-    "      <span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key\" class=\"btn btn-danger btn-lg\" aria-label=\"Skip Song\" data-ng-click=\"skipSong()\" title=\"Skip Song\">\n" +
-    "      <span class=\"glyphicon glyphicon-step-forward\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
     "    <button data-ng-show=\"isController\" type=\"button\" class=\"btn btn-primary btn-lg\" aria-label=\"Stop Broadcasting\" data-ng-click=\"toggleBroadcast()\" title=\"Stop Broadcasting\">\n" +
     "      <span class=\"glyphicon glyphicon-headphones\" aria-hidden=\"true\"></span>\n" +
     "    </button>\n" +
     "    <button data-ng-show=\"!isController\" data-ng-disabled=\"!queue || queue.length === 0\" type=\"button\" class=\"btn btn-primary btn-lg\" aria-label=\"Start Broadcasting\" data-ng-click=\"toggleBroadcast()\" title=\"Start Broadcasting\">\n" +
     "      <span class=\"glyphicon glyphicon-cd\" aria-hidden=\"true\"></span>\n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"!playing.upvoted\" type=\"button\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
-    "      <span class=\"glyphicon glyphicon-thumbs-up\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"playing.upvoted\" type=\"button\" disabled=\"disabled\" class=\"btn btn-success btn-lg\" aria-label=\"Upvoted\" title=\"Upvoted\">\n" +
-    "      <span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> \n" +
     "    </button>\n" +
     "\n" +
     "    <button data-ng-show=\"visualize\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Show Visualizer\" data-ng-click=\"toggleVisualize()\" title=\"Show Visualizer\">\n" +
@@ -247,10 +254,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-playing.html',
     "<div class=\"playing__container room__container\">\n" +
-    "  <div class=\"row no-gutters\">\n" +
-    "    <div class=\"col-md-5 col-sm-4\">\n" +
-    "      <lstn-playing-image></lstn-playing-image>\n" +
-    "    </div>\n" +
+    "  <div class=\"row\">\n" +
     "    <div class=\"col-md-7 col-sm-8\">\n" +
     "      <lstn-playing-info></lstn-playing-info>\n" +
     "      <lstn-visualizer data-ng-show=\"visualize && playing.song\"></lstn-visualizer>\n" +

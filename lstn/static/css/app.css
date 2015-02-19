@@ -230,42 +230,21 @@ body > .container {
   margin-bottom: 5px;
 }
 
-.playing__container {
-  height: 542px;
+.playing__container .playing__info--playing {
+  padding: 20px;
 }
-.playing__container .no-gutters {
-  padding: 12px;
-  background: #f5f5f5;
+.playing__container .playing__info--playing .playing__title {
+  color: #fff;
 }
-.playing__container .playing__info-container {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-.playing__container .playing__art {
-  text-align: center;
-}
-.playing__container .playing__art img {
-  width: 100%;
-  max-width: 180px;
-  height: auto;
-  border: 1px solid #333;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-}
-.playing__container .playing__art .playing__placeholder {
-  font-size: 8em;
-  text-align: center;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
+.playing__container .playing__info--playing .playing__artist {
+  color: #fff;
 }
 .playing__container .progress {
-  border: 1px solid #aaa;
+  border-radius: 0;
+  border: none;
 }
 .playing__container .progress .time {
   display: block;
-  width: 93%;
   position: absolute;
 }
 .playing__container .playing__visualization {
