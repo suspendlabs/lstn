@@ -12,9 +12,14 @@ angular.module('lstn.directives', ['sc.twemoji'])
         return;
       }
 
-      $scope.$apply(function(){
-        $scope.$eval($attrs.lstnEnter);
-      });
+      var mentionMenuVisible = $('#mention-menu').is(':visible');
+      var emoticonMenuVisible = $('#emoticon-menu').is(':visible');
+
+      if (!mentionMenuVisible && !emoticonMenuVisible) {
+        $scope.$apply(function(){
+          $scope.$eval($attrs.lstnEnter);
+        });
+      }
 
       event.preventDefault();
     });
