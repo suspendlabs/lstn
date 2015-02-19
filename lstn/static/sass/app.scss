@@ -438,8 +438,7 @@ body {
     }
   
     .track__image {
-      width: 40px;
-      height: 40px;
+      width: 17%;
       float: left;
 
       img {
@@ -489,6 +488,8 @@ body {
     }
   
     .track__info {
+      width: 82%;
+
       float: left;
       font-family: 'Inconsolata', monospace, sans-serif;
 
@@ -506,6 +507,10 @@ body {
       }
 
       .track__artist {
+        font-size: 11px;
+      }
+
+      .track__duration {
         font-size: 11px;
       }
     }
@@ -540,8 +545,7 @@ body {
       cursor: move;
 
       .track__image {
-        width: 50px;
-        height: 50px;
+        width: 10%;
   
         img {
           width: 50px;
@@ -564,14 +568,21 @@ body {
       }
     
       .track__info {
+        width: 89%;
         padding: 3px 0 0 5px;
-    
+        
         .track__title {
           font-size: 16px;
         }
   
         .track__artist {
           font-size: 14px;
+          padding-right: 5px;
+        }
+
+        .track__duration {
+          font-size: 14px;
+          padding-left: 5px;
         }
       }
     }
