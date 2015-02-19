@@ -120,7 +120,7 @@ module.exports = (grunt) ->
     watch:
       bower:
         files: ['bower.json']
-        tasks: ['wiredep']
+        tasks: ['wiredep:lstn']
       js:
         files: ['<%= lstn.static %>/js/**/*.js']
         tasks: ['jshint']
