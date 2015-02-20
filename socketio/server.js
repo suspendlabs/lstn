@@ -17,16 +17,13 @@ nconf.file({
 // Set some development defaults
 nconf.defaults({
   http: {
-    port: 3000,
-    origins: 'http://lstn.dev'
+    port: 3000
   },
   redis: {
     host: '127.0.0.1',
     port: 6379
   }
 });
-
-io.set('origins', nconf.get('http:origins'));
 
 // Setup Redis Cache
 var cache = redis(nconf.get('redis:port'), nconf.get('redis:host'));

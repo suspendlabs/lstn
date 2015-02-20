@@ -63,7 +63,7 @@ module.exports = (grunt) ->
         constants: 'config/development.json'
       dist:
         options:
-          dest: '<%= lstn.dist %>/js/config.js'
+          dest: '<%= lstn.static %>/js/config.js'
         constants: 'config/production.json'
 
     ngtemplates:
@@ -200,8 +200,7 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'build', [
     'clean:dist'
-    'copy',
-    'ngconstant:dist'
+    'copy'
     'ngtemplates:dist'
     'useminPrepare'
     'concat:generated'
@@ -209,4 +208,7 @@ module.exports = (grunt) ->
     'uglify:generated'
     'filerev'
     'usemin'
+    'htmlmin'
   ]
+
+  grunt.registerTask 'deploy', ['ngconstant:dist', 'build']
