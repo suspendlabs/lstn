@@ -312,7 +312,7 @@ angular.module('lstn.controllers', [])
           $scope.playing.downvotes = {};
         }
 
-        $scope.playing.downvotes[upvote.user] = true;
+        $scope.playing.downvotes[downvote.user] = true;
       }
 
       if (!$scope.isCurrentController) {
@@ -332,7 +332,7 @@ angular.module('lstn.controllers', [])
         console.log('CurrentUser.get', response);
       });
 
-      if (score <= -2) {
+      if (downvote.votes <= -2) {
         $scope.skipSong();
       }
     });
