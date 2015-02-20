@@ -63,7 +63,7 @@ module.exports = (grunt) ->
         constants: 'config/development.json'
       dist:
         options:
-          dest: '<%= lstn.dist %>/js/config.js'
+          dest: '<%= lstn.static %>/js/config.js'
         constants: 'config/production.json'
 
     ngtemplates:
