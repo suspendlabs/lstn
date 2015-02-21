@@ -1,5 +1,5 @@
 <span>
-  <button data-ng-show="!playing.downvoted && !isCurrentController" type="button" data-ng-disabled="!playing.song.key || playing.song.voted" class="control__button btn btn-danger btn-lg" aria-label="Downvote" data-ng-click="downvote()" title="Downvote">
+  <button data-ng-show="!playing.downvoted && !isCurrentController" type="button" data-ng-disabled="!playing.track.key || playing.track.voted" class="control__button btn btn-danger btn-lg" aria-label="Downvote" data-ng-click="downvote()" title="Downvote">
     <i class="fa fa-fw fa-lg fa-thumbs-down" aria-hidden="true"></i>
   </button>
   <button data-ng-show="playing.downvoted" type="button" disabled="disabled" class="control__button btn btn-danger btn-lg" aria-label="Downvoted" title="Downvoted">
