@@ -4,7 +4,17 @@
     <lstn-room-roster></lstn-room-roster>
   </div>
   <div class="col-md-5">
-    <lstn-room-queue></lstn-room-queue>
+    <tabset class="queue__tabs">
+      <tab id="my-queue-tab" data-select="selectQueueTab('queue')">
+        <tab-heading>MY QUEUE</tab-heading>
+        <lstn-room-queue></lstn-room-queue>
+      </tab>
+      <tab>
+        <tab-heading>MORE MUSIC</tab-heading>
+        <lstn-more-music></lstn-more-music>
+        </tab-heading>
+      </tab>
+    </tabset>
   </div>
   <div class="col-md-4">
     <lstn-room-activity></lstn-room-activity>
