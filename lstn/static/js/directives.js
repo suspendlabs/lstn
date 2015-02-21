@@ -192,6 +192,49 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
+.directive('lstnRoomControlSkip', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-skip.html'
+    };
+  }
+])
+
+.directive('lstnRoomControlVolume', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-skip.html'
+    };
+  }
+])
+
+
+.directive('lstnRoomControlUpvote', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-upvote.html'
+    };
+  }
+])
+
+.directive('lstnRoomControlDownvote', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-downvote.html'
+    };
+  }
+])
+
+
+
 .directive('lstnRoomQueue', ['$timeout', 'CurrentUser', 'socket', 'emojiMap',
   function($timeout, CurrentUser, socket, emojiMap) {
     return {
@@ -528,6 +571,20 @@ angular.module('lstn.directives', ['sc.twemoji'])
     };
   }
 ])
+.directive('albumCoverBackground', [function() {
+  return {
+    link: function($scope, $element) {
+      $scope.$watch('playing.song.image', function(imageUrl) {
+        if (imageUrl) {
+          $element.css('background-image', 'url(' + imageUrl + ')');
+          $element.css('background-size', 'cover');
+        } else {
+
+        }
+      });
+    }
+  };
+}])
 .directive('timeFromNow', ['$timeout', '$filter', function($timeout, $filter) {
   return {
     scope: {
