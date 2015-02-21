@@ -26,17 +26,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
   };
 })
 
-.directive('holder', [
-  function() {
-    return {
-      link: function(scope, element, attrs) {
-        attrs.$set('data-src', attrs.holder);
-        Holder.run({images:element[0]});
-      }
-    };
-  }
-])
-
 .directive('lstnRoomRoster', [
   function() {
     return {
@@ -150,7 +139,10 @@ angular.module('lstn.directives', ['sc.twemoji'])
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/static/partials/directives/playing-info.html'
+      templateUrl: '/static/partials/directives/playing-info.html',
+      link: function($scope, $element, $attrs) {
+        $scope.playingStyle = '';
+      }
     };
   }
 ])
