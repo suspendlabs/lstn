@@ -207,7 +207,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/static/partials/directives/room-control-skip.html'
+      templateUrl: '/static/partials/directives/room-control-volume.html'
     };
   }
 ])
@@ -572,12 +572,11 @@ angular.module('lstn.directives', ['sc.twemoji'])
 .directive('albumCoverBackground', [function() {
   return {
     link: function($scope, $element) {
-      $scope.$watch('playing.song.image', function(imageUrl) {
+      $scope.$watch('playing.track.image', function(imageUrl) {
         if (imageUrl) {
           $element.css('background-image', 'url(' + imageUrl + ')');
           $element.css('background-size', 'cover');
         } else {
-
         }
       });
     }
