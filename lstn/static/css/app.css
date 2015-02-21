@@ -229,6 +229,10 @@ body > .container > div {
   min-height: 180px;
 }
 
+.playing__meta {
+  background: #000;
+}
+
 .control__button {
   -moz-border-radius: 0;
   -webkit-border-radius: 0;

@@ -267,6 +267,10 @@ body {
   min-height:180px;
 }
 
+.playing__meta {
+  background:#000;
+}
+
 .control__button {
   @include border-radius(0);
 }

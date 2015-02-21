@@ -173,6 +173,49 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
+.directive('lstnRoomControlSkip', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-skip.html'
+    };
+  }
+])
+
+.directive('lstnRoomControlVolume', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-skip.html'
+    };
+  }
+])
+
+
+.directive('lstnRoomControlUpvote', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-upvote.html'
+    };
+  }
+])
+
+.directive('lstnRoomControlDownvote', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-downvote.html'
+    };
+  }
+])
+
+
+
 .directive('lstnRoomQueue', ['$timeout', 'CurrentUser', 'socket', 'emojiMap',
   function($timeout, CurrentUser, socket, emojiMap) {
     return {
