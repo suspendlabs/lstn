@@ -66,8 +66,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnMusicSearch', ['CurrentUser',
-  function(CurrentUser) {
+.directive('lstnMusicSearch', ['$timeout', 'CurrentUser', 'Artist', 'Album',
+  function($timeout, CurrentUser, Artist, Album) {
     return {
       restrict: 'E',
       replace: true,
@@ -80,6 +80,25 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.searchResults = [];
           $scope.searchQuery = null;
         };
+
+        $scope.albums = [];
+        $scope.loadAlbums = function(artistId) {
+          console.log('loadAlbums', artistId);
+
+          Artist.getAlbums(artistId).then(function(albums) {
+            $scope.albums = albums;
+
+            $timeout(function() {
+              var controller = angular.element('#search-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[1];
+              controller.select(nextSlide, 'next');
+            }, 100);
+          });
+        };
+
+        $scope.tracks = [];
 
         $scope.$watch('searchQuery', function(newVal, oldVal) {
           if (newVal === oldVal) {
@@ -338,6 +357,16 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
+.directive('lstnMoreMusic', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/more-music.html'
+    };
+  }
+])
+
 .directive('lstnCategory', ['$parse', 'CurrentUser',
   function($parse, CurrentUser) {
     return {
@@ -438,6 +467,33 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
+.directive('lstnArtist', ['$parse',
+  function($parse) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/artist.html',
+      link: function($scope, $element, $attrs) {
+        $scope.cutoff = $parse($attrs.cutoff)($scope) || 50;
+        $scope.context = $parse($attrs.context)($scope) || 'playlist';
+      }
+    };
+  }
+])
+
+.directive('lstnAlbum', ['$parse',
+  function($parse) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/album.html',
+      link: function($scope, $element, $attrs) {
+        $scope.cutoff = $parse($attrs.cutoff)($scope) || 50;
+        $scope.context = $parse($attrs.context)($scope) || 'playlist';
+      }
+    };
+  }
+])
 
 .directive('lstnTrack', ['$parse',
   function($parse) {
@@ -446,9 +502,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       templateUrl: '/static/partials/directives/track.html',
       link: function($scope, $element, $attrs) {
-        $scope.cutoff  = $parse($attrs.cutoff || 25)($scope);
-        $scope.context = $attrs.context || 'playlist';
-        
+        $scope.cutoff = $parse($attrs.cutoff)($scope) || 50;
+        $scope.context = $parse($attrs.context)($scope) || 'playlist';
       }
     };
   }

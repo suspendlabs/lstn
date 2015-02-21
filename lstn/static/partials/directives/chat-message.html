@@ -17,7 +17,7 @@
       <div class="chat__message__message row" data-ng-if="message.type === 'message'">
         <div class="wordwrap" data-ng-bind-html="message.text|twemoji"></div>
       </div>
-      <div class="chat__message__song-info row" data-ng-if="message.type !== 'message'">
+      <div class="chat__message__track-info row" data-ng-if="message.type !== 'message'">
         <div class="col-xs-12">
           <div class="row">
             <div class="col-xs-12" data-ng-bind="message.track"></div>

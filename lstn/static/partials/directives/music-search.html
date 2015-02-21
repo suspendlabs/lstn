@@ -1,3 +1,36 @@
 <div>
-  <input type="text" class="form-control" data-ng-model="searchQuery" placeholder="Search music...">
+  <div>
+    <input type="search" class="form-control" data-ng-model="searchQuery" placeholder="Search music...">
+  </div>
+  <div class="search__container" data-ng-show="searchResults && searchResults.length > 0">
+    <div class="search__contents">
+      <carousel id="search-carousel" interval="false">
+        <slide>
+          <ul class="search search--full track__list music__list">
+            <li data-ng-repeat="item in searchResults">
+              <div data-ng-switch="item.type">
+                <lstn-album data-ng-switch-when="a" data-cutoff="35"  data-context="search"></lstn-album>
+                <lstn-artist data-ng-switch-when="r" data-cutoff="35" data-context="search"></lstn-artist>
+                <lstn-track data-ng-switch-when="t" data-cutoff="35" data-context="search"></lstn-track>
+              </div>
+            </li>
+          </ul>
+        </slide>
+        <slide>
+          <ul class="albums album--full album__list music__list">
+            <li data-ng-repeat="item in albums">
+              <lstn-album data-cutoff="35" data-context="artist"></lstn-track>
+            </li>
+          </ul>
+        </slide>
+        <slide>
+          <ul class="tracks track--full track__list music__list">
+            <li data-ng-repeat="item in tracks">
+              <lstn-track data-cutoff="35" data-context="album"></lstn-track>
+            </li>
+          </ul>
+        </slide>
+      </carousel>
+    </div>
+  </div>
 </div>
