@@ -266,10 +266,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-control-downvote.html',
     "<span>\n" +
     "  <button data-ng-show=\"!playing.downvoted && !isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.track.key || playing.track.voted\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Downvote\" data-ng-click=\"downvote()\" title=\"Downvote\">\n" +
-    "    <i class=\"fa fa-fw fa-lg fa-thumbs-down\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-thumbs-down\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button data-ng-show=\"playing.downvoted\" type=\"button\" disabled=\"disabled\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Downvoted\" title=\"Downvoted\">\n" +
-    "    <i class=\"fa fa-fw fa-lg fa-check\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-check\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
   );
@@ -278,7 +278,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-control-skip.html',
     "<span>\n" +
     "  <button data-ng-show=\"isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.track.key\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Skip Song\" data-ng-click=\"skipSong()\" title=\"Skip Song\">\n" +
-    "    <span class=\"glyphicon glyphicon-step-forward\" aria-hidden=\"true\"></span>\n" +
+    "    <span class=\"fa fa-step-forward\" aria-hidden=\"true\"></span>\n" +
     "  </button>\n" +
     "</span>\n"
   );
@@ -286,11 +286,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-control-upvote.html',
     "<span>\n" +
-    "  <button type=\"button\" data-ng-hide=\"playing.upvoted\" data-ng-disabled=\"!playing.track.key || isCurrentController || playing.track.voted\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
-    "    <i class=\"fa fa-fw fa-lg fa-thumbs-up\" aria-hidden=\"true\"></i>\n" +
+    "  <button type=\"button\" data-ng-hide=\"playing.upvoted || isCurrentController\" data-ng-disabled=\"!playing.track.key || isCurrentController || playing.track.voted\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
+    "    <i class=\"fa fa-thumbs-up\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button data-ng-show=\"playing.upvoted\" type=\"button\" disabled=\"disabled\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvoted\" title=\"Upvoted\">\n" +
-    "    <i class=\"fa fa-fw fa-lg fa-check\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-check\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
   );
@@ -298,11 +298,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-control-volume.html',
     "<span>\n" +
-    "  <button data-ng-show=\"!mute\" data-ng-disabled=\"!playing.track.key\" type=\"button\" class=\"control__button btn btn-default btn-lg\" aria-label=\"Unmute\" data-ng-click=\"toggleMute()\" title=\"Unmute\">\n" +
-    "    <i class=\"fa fa-fw fa-lg fa-volume-off\" aria-hidden=\"true\"></i>\n" +
+    "  <button data-ng-show=\"!mute\" data-ng-disabled=\"!playing.track.key\" type=\"button\" class=\"control__button btn btn-default btn-lg\" aria-label=\"Mute\" data-ng-click=\"toggleMute()\" title=\"Mute\">\n" +
+    "    <i class=\"fa fa-volume-off\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
-    "  <button data-ng-show=\"mute\" data-ng-disabled=\"!playing.track.key\" type=\"button\" class=\"control__button btn btn-default btn-lg\" aria-label=\"Mute\" data-ng-click=\"toggleMute()\" title=\"Mute\">\n" +
-    "    <i class=\"fa fa-fw fa-lg fa-volume-up\" aria-hidden=\"true\"></i>\n" +
+    "  <button data-ng-show=\"mute\" data-ng-disabled=\"!playing.track.key\" type=\"button\" class=\"control__button btn btn-default btn-lg\" aria-label=\"Unmute\" data-ng-click=\"toggleMute()\" title=\"Unmute\">\n" +
+    "    <i class=\"fa fa-lg fa-volume-up\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
   );
