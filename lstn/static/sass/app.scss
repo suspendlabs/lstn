@@ -263,6 +263,10 @@ body {
   font-weight: 700;
 }
 
+.playing__info--playing {
+  min-height:180px;
+}
+
 .control__button {
   @include border-radius(0);
 }

@@ -225,6 +225,10 @@ body > .container > div {
   font-weight: 700;
 }
 
+.playing__info--playing {
+  min-height: 180px;
+}
+
 .control__button {
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
