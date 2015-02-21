@@ -218,7 +218,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-control-upvote.html',
     "<span>\n" +
-    "  <button type=\"button\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
+    "  <button type=\"button\" data-ng-hide=\"playing.upvoted\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
     "    <i class=\"fa fa-fw fa-lg fa-thumbs-up\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button data-ng-show=\"playing.upvoted\" type=\"button\" disabled=\"disabled\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvoted\" title=\"Upvoted\">\n" +
