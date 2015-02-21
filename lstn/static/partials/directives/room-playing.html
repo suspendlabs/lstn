@@ -1,9 +1,9 @@
-<div class="playing__container room__container">
+<div>
   <div class="row no-gutters">
     <lstn-playing-info></lstn-playing-info>
-    <lstn-visualizer data-ng-show="visualize && playing.song"></lstn-visualizer>
   </div>
-  <div class="row">
-    <lstn-room-controls></lstn-room-controls>
+  <div class="progress" data-ng-show="playing.song.duration && playing.song.canStream">
+    <div id="progress" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ playing.song.duration }}"></div>
+    <span id="time" class="time"></span>
   </div>
 </div>
