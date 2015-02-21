@@ -2,8 +2,8 @@
   <div class="row no-gutters">
     <lstn-playing-info></lstn-playing-info>
   </div>
-  <div class="progress" data-ng-show="playing.song.duration && playing.song.canStream">
-    <div id="progress" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ playing.song.duration }}"></div>
+  <div class="progress" data-ng-show="playing.track.duration && playing.track.canStream">
+    <div id="progress" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ playing.track.duration }}"></div>
     <span id="time" class="time"></span>
   </div>
 </div>
