@@ -750,7 +750,6 @@ Lstn.prototype.onControllerPlayingSkipped = function(data) {
   }
 };
 
-
 Lstn.prototype.onControllerUpvote = function() {
   var votes = this.incrPlayingVotes();
   io.sockets.in(this.roomId).emit('room:upvote', {
