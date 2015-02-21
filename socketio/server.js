@@ -102,7 +102,7 @@ Lstn.prototype.getUser = function(user) {
   return null;
 };
 
-Lstn.prototype.getSongName = function() {
+Lstn.prototype.getTrackName = function() {
   if (!(this.roomId in playing)) {
     return null;
   }
@@ -118,7 +118,7 @@ Lstn.prototype.getSongName = function() {
   return playing[this.roomId].name;
 };
 
-Lstn.prototype.getSongArtist = function() {
+Lstn.prototype.getTrackArtist = function() {
   if (!(this.roomId in playing)) {
     return null;
   }
@@ -517,8 +517,8 @@ Lstn.prototype.sendPlaying = function(broadcast) {
 
     var controller = this.getCurrentController();
     var user = this.getUser(controller);
-    var name = this.getSongName();
-    var artist = this.getSongArtist();
+    var name = this.getTrackName();
+    var artist = this.getTrackArtist();
 
     if (controller && user && name && artist) {
       this.sendChatMessage({
@@ -716,7 +716,7 @@ Lstn.prototype.onControllerPlayingPosition = function(data) {
 };
 
 Lstn.prototype.onControllerPlayingFinished = function(data) {
-  console.log(this.userId + ' says song in ' + this.roomId + ' has finished');
+  console.log(this.userId + ' says track in ' + this.roomId + ' has finished');
 
   // If the user is the current controller, process controllers
   if (this.isCurrentController()) {
@@ -726,12 +726,12 @@ Lstn.prototype.onControllerPlayingFinished = function(data) {
 };
 
 Lstn.prototype.onControllerPlayingSkipped = function(data) {
-  console.log(this.userId + ' says song in ' + this.roomId + ' was skipped');
+  console.log(this.userId + ' says track in ' + this.roomId + ' was skipped');
 
   var controller = this.getCurrentController();
   var user = this.getUser(controller);
-  var name = this.getSongName();
-  var artist = this.getSongArtist();
+  var name = this.getTrackName();
+  var artist = this.getTrackArtist();
 
   if (controller && user && name && artist) {
     this.sendChatMessage({
@@ -749,7 +749,6 @@ Lstn.prototype.onControllerPlayingSkipped = function(data) {
     this.initController(this.getNextController());
   }
 };
-
 
 Lstn.prototype.onControllerUpvote = function() {
   var votes = this.incrPlayingVotes();

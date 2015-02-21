@@ -195,6 +195,48 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }
     }
   });
+}])
+
+.factory('Artist', ['$resource', function($resource) {
+  var Artist = $resource('/api/artist/:id/:action', {
+    id: '@id'
+  },{
+    albums: {
+      method: 'GET',
+      params: {
+        action: 'albums'
+      }
+    }
+  });
+
+  Artist.getAlbums = function(artistId) {
+    return Artist.albums({
+      id: artistId
+    }).$promise;
+  };
+
+  return Artist;
+}])
+
+.factory('Album', ['$resource', function($resource) {
+  var Album = $resource('/api/album/:id/:action', {
+    id: '@id'
+  },{
+    albums: {
+      method: 'GET',
+      params: {
+        actions: 'tracks'
+      }
+    }
+  });
+
+  Album.getTracks = function(artistId) {
+    return this.albums({
+      id: artistId
+    });
+  };
+
+  return Album;
 }]);
 
 })();

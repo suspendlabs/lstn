@@ -1,22 +1,4 @@
 <div id="categories" class="categories">
-  <div class="search__container category panel panel-primary" data-ng-show="searchResults && searchResults.length > 0">
-    <div class="panel-heading" role="tab" id="search-heading">
-      <h4 class="panel-title">
-        <a data-ng-click="clearSearchResults()">
-          Search Results
-          <span class="pull-right glyphicon glyphicon-remove-circle"></span>
-        </a>
-      </h4>
-    </div>
-    <div id="search-content" class="tabpanel" aria-labeledby="search-heading">
-      <div class="search__contents panel-body">
-        <ul class="track__list">
-          <lstn-track data-ng-class-even="'track--even'" data-ng-class-odd="'track--odd'" data-ng-repeat="song in searchResults" data-cutoff="28"></lstn-track>
-        </ul>
-      </div>
-    </div>
-  </div>
-
   <lstn-category data-ng-show="playlists.owned && playlists.owned.length > 0" data-name="'Your Playlists'" data-type="'owned'" data-open="true">
     <lstn-playlist data-ng-repeat="playlist in playlists.owned"></lstn-playlist>
   </lstn-category>

@@ -1,6 +1,52 @@
 angular.module('lstn.templates', []).run(['$templateCache', function($templateCache) {
   'use strict';
 
+  $templateCache.put('/static/partials/directives/album.html',
+    "<li id=\"album-{{ $id }}-{{ $index }}-{{ item.key }}\" class=\"music__item album clearfix\">\n" +
+    "  <div class=\"music__image\">\n" +
+    "    <img data-ng-src=\"{{ item.icon }}\" alt=\"{{ item.album }}\" title=\"{{ item.album }}\">\n" +
+    "  </div>\n" +
+    "  <div class=\"music__info\">\n" +
+    "    <div\n" +
+    "      class=\"music__title\"\n" +
+    "      title=\"{{ item.name }}\"\n" +
+    "      data-ng-bind=\"item.name | truncate:cutoff\"></div>\n" +
+    "    <div\n" +
+    "      class=\"music__artist\"\n" +
+    "      title=\"{{ item.artist }}\"\n" +
+    "      data-ng-bind=\"item.artist | truncate:cutoff\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"music__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-click=\"loadAlbum($index)\"\n" +
+    "      title=\"View Tracks\"></a>\n" +
+    "  </div>\n" +
+    "</li>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/artist.html',
+    "<li id=\"artist-{{ $id }}-{{ $index }}-{{ item.key }}\" class=\"music__item artist clearfix\">\n" +
+    "  <div class=\"music__image\">\n" +
+    "    <img data-ng-src=\"{{ item.icon }}\" alt=\"{{ item.artist }}\" title=\"{{ item.artist }}\">\n" +
+    "  </div>\n" +
+    "  <div class=\"music__info\">\n" +
+    "    <div\n" +
+    "      class=\"music__title\"\n" +
+    "      title=\"{{ item.name }}\"\n" +
+    "      data-ng-bind=\"item.name | truncate:cutoff\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"music__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-click=\"loadAlbums(item.key)\"\n" +
+    "      title=\"View Albums\"></a>\n" +
+    "  </div>\n" +
+    "</li>\n"
+  );
+
+
   $templateCache.put('/static/partials/directives/category.html',
     "<div id=\"category{{ $id }}\" class=\"category panel panel-primary\">\n" +
     "  <div class=\"panel-heading\" role=\"tab\" id=\"heading{{ $id }}\">\n" +
@@ -40,7 +86,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <div class=\"chat__message__message row\" data-ng-if=\"message.type === 'message'\">\n" +
     "        <div class=\"wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
     "      </div>\n" +
-    "      <div class=\"chat__message__song-info row\" data-ng-if=\"message.type !== 'message'\">\n" +
+    "      <div class=\"chat__message__track-info row\" data-ng-if=\"message.type !== 'message'\">\n" +
     "        <div class=\"col-xs-12\">\n" +
     "          <div class=\"row\">\n" +
     "            <div class=\"col-xs-12\" data-ng-bind=\"message.track\"></div>\n" +
@@ -68,26 +114,15 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
+  $templateCache.put('/static/partials/directives/more-music.html',
+    "<div>\n" +
+    "  <lstn-music-search></lstn-music-search>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('/static/partials/directives/music-categories.html',
     "<div id=\"categories\" class=\"categories\">\n" +
-    "  <div class=\"search__container category panel panel-primary\" data-ng-show=\"searchResults && searchResults.length > 0\">\n" +
-    "    <div class=\"panel-heading\" role=\"tab\" id=\"search-heading\">\n" +
-    "      <h4 class=\"panel-title\">\n" +
-    "        <a data-ng-click=\"clearSearchResults()\">\n" +
-    "          Search Results\n" +
-    "          <span class=\"pull-right glyphicon glyphicon-remove-circle\"></span>\n" +
-    "        </a>\n" +
-    "      </h4>\n" +
-    "    </div>\n" +
-    "    <div id=\"search-content\" class=\"tabpanel\" aria-labeledby=\"search-heading\">\n" +
-    "      <div class=\"search__contents panel-body\">\n" +
-    "        <ul class=\"track__list\">\n" +
-    "          <lstn-track data-ng-class-even=\"'track--even'\" data-ng-class-odd=\"'track--odd'\" data-ng-repeat=\"song in searchResults\" data-cutoff=\"28\"></lstn-track>\n" +
-    "        </ul>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "\n" +
     "  <lstn-category data-ng-show=\"playlists.owned && playlists.owned.length > 0\" data-name=\"'Your Playlists'\" data-type=\"'owned'\" data-open=\"true\">\n" +
     "    <lstn-playlist data-ng-repeat=\"playlist in playlists.owned\"></lstn-playlist>\n" +
     "  </lstn-category>\n" +
@@ -113,15 +148,48 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/music-search.html',
     "<div>\n" +
-    "  <input type=\"text\" class=\"form-control\" data-ng-model=\"searchQuery\" placeholder=\"Search music...\">\n" +
+    "  <div>\n" +
+    "    <input type=\"search\" class=\"form-control\" data-ng-model=\"searchQuery\" placeholder=\"Search music...\">\n" +
+    "  </div>\n" +
+    "  <div class=\"search__container\" data-ng-show=\"searchResults && searchResults.length > 0\">\n" +
+    "    <div class=\"search__contents\">\n" +
+    "      <carousel id=\"search-carousel\" interval=\"false\">\n" +
+    "        <slide>\n" +
+    "          <ul class=\"search search--full track__list music__list\">\n" +
+    "            <li data-ng-repeat=\"item in searchResults\">\n" +
+    "              <div data-ng-switch=\"item.type\">\n" +
+    "                <lstn-album data-ng-switch-when=\"a\" data-cutoff=\"35\"  data-context=\"search\"></lstn-album>\n" +
+    "                <lstn-artist data-ng-switch-when=\"r\" data-cutoff=\"35\" data-context=\"search\"></lstn-artist>\n" +
+    "                <lstn-track data-ng-switch-when=\"t\" data-cutoff=\"35\" data-context=\"search\"></lstn-track>\n" +
+    "              </div>\n" +
+    "            </li>\n" +
+    "          </ul>\n" +
+    "        </slide>\n" +
+    "        <slide>\n" +
+    "          <ul class=\"albums album--full album__list music__list\">\n" +
+    "            <li data-ng-repeat=\"item in albums\">\n" +
+    "              <lstn-album data-cutoff=\"35\" data-context=\"artist\"></lstn-track>\n" +
+    "            </li>\n" +
+    "          </ul>\n" +
+    "        </slide>\n" +
+    "        <slide>\n" +
+    "          <ul class=\"tracks track--full track__list music__list\">\n" +
+    "            <li data-ng-repeat=\"item in tracks\">\n" +
+    "              <lstn-track data-cutoff=\"35\" data-context=\"album\"></lstn-track>\n" +
+    "            </li>\n" +
+    "          </ul>\n" +
+    "        </slide>\n" +
+    "      </carousel>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 
 
   $templateCache.put('/static/partials/directives/playing-image.html',
     "<div class=\"playing__art\" class=\"text-center\">\n" +
-    "  <img data-ng-show=\"playing.song.image\" data-ng-src=\"{{ playing.song.image }}\" alt=\"{{ playing.song.title }} - {{ playing.song.artist }}\">\n" +
-    "  <div data-ng-show=\"!playing.song.image\" class=\"text-center\">\n" +
+    "  <img data-ng-show=\"playing.track.image\" data-ng-src=\"{{ playing.track.image }}\" alt=\"{{ playing.track.title }} - {{ playing.track.artist }}\">\n" +
+    "  <div data-ng-show=\"!playing.track.image\" class=\"text-center\">\n" +
     "    <i class=\"glyphicon glyphicon-music playing__placeholder text-muted\"></i>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -132,14 +200,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div class=\"playing__info-container\">\n" +
     "  <div class=\"playing__info playing__info--playing\" data-album-cover-background data-ng-style=\"playingStyle\">\n" +
     "    <div class=\"playing__meta\">\n" +
-    "      <h3 class=\"playing__title\" data-ng-bind=\"playing.song.title | truncate:28\"></h3>\n" +
-    "      <h4 class=\"playing__artist\" data-ng-bind=\"playing.song.artist | truncate:35\"></h4>\n" +
+    "      <h3 class=\"playing__title\" data-ng-bind=\"playing.track.title | truncate:28\"></h3>\n" +
+    "      <h4 class=\"playing__artist\" data-ng-bind=\"playing.track.artist | truncate:35\"></h4>\n" +
     "    </div>\n" +
     "    <lstn-room-controls></lstn-room-controls>\n" +
-    "  </div>  \n" +
+    "  </div>\n" +
     "  <!-- TOOD: why is there a gap here? (fixed by negative top margin). -->\n" +
-    "  <div style=\"margin-top:-10px\" class=\"progress\" data-ng-show=\"playing.song.duration && playing.song.canStream\">\n" +
-    "    <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.song.duration }}\"></div>\n" +
+    "  <div style=\"margin-top:-10px\" class=\"progress\" data-ng-show=\"playing.track.duration && playing.track.canStream\">\n" +
+    "    <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.track.duration }}\"></div>\n" +
     "    <span id=\"time\" class=\"time\"></span>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -197,7 +265,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-control-downvote.html',
     "<span>\n" +
-    "  <button data-ng-show=\"!playing.downvoted && !isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key || playing.song.voted\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Downvote\" data-ng-click=\"downvote()\" title=\"Downvote\">\n" +
+    "  <button data-ng-show=\"!playing.downvoted && !isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.track.key || playing.track.voted\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Downvote\" data-ng-click=\"downvote()\" title=\"Downvote\">\n" +
     "    <i class=\"fa fa-fw fa-lg fa-thumbs-down\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button data-ng-show=\"playing.downvoted\" type=\"button\" disabled=\"disabled\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Downvoted\" title=\"Downvoted\">\n" +
@@ -209,7 +277,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-control-skip.html',
     "<span>\n" +
-    "  <button data-ng-show=\"isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Skip Song\" data-ng-click=\"skipSong()\" title=\"Skip Song\">\n" +
+    "  <button data-ng-show=\"isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.track.key\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Skip Song\" data-ng-click=\"skipSong()\" title=\"Skip Song\">\n" +
     "    <span class=\"glyphicon glyphicon-step-forward\" aria-hidden=\"true\"></span>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -218,7 +286,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-control-upvote.html',
     "<span>\n" +
-    "  <button type=\"button\" data-ng-hide=\"playing.upvoted\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
+    "  <button type=\"button\" data-ng-hide=\"playing.upvoted\" data-ng-disabled=\"!playing.track.key || isCurrentController || playing.track.voted\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
     "    <i class=\"fa fa-fw fa-lg fa-thumbs-up\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button data-ng-show=\"playing.upvoted\" type=\"button\" disabled=\"disabled\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvoted\" title=\"Upvoted\">\n" +
@@ -230,10 +298,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-control-volume.html',
     "<span>\n" +
-    "  <button data-ng-show=\"!mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"control__button btn btn-default btn-lg\" aria-label=\"Unmute\" data-ng-click=\"toggleMute()\" title=\"Unmute\">\n" +
+    "  <button data-ng-show=\"!mute\" data-ng-disabled=\"!playing.track.key\" type=\"button\" class=\"control__button btn btn-default btn-lg\" aria-label=\"Unmute\" data-ng-click=\"toggleMute()\" title=\"Unmute\">\n" +
     "    <i class=\"fa fa-fw fa-lg fa-volume-off\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
-    "  <button data-ng-show=\"mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"control__button btn btn-default btn-lg\" aria-label=\"Mute\" data-ng-click=\"toggleMute()\" title=\"Mute\">\n" +
+    "  <button data-ng-show=\"mute\" data-ng-disabled=\"!playing.track.key\" type=\"button\" class=\"control__button btn btn-default btn-lg\" aria-label=\"Mute\" data-ng-click=\"toggleMute()\" title=\"Mute\">\n" +
     "    <i class=\"fa fa-fw fa-lg fa-volume-up\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -309,33 +377,16 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
-  $templateCache.put('/static/partials/directives/room-playing.html',
-    ""
-  );
-
-
   $templateCache.put('/static/partials/directives/room-queue.html',
-    "<div class=\"playing__queue col-md-12\">\n" +
-    "  <div class=\"playing__queue__container\">\n" +
-    "    <tabset class=\"queue__tabs\">\n" +
-    "      <tab id=\"my-queue-tab\" data-select=\"selectQueueTab('queue')\">\n" +
-    "        <tab-heading>MY QUEUE</tab-heading>\n" +
-    "        <ul id=\"queue\" class=\"queue queue--full track__list\" data-ng-show=\"queue && queue.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue\">\n" +
-    "          <lstn-track\n" +
-    "            data-ng-repeat=\"song in queue\"\n" +
-    "            data-context=\"queue\"\n" +
-    "            data-cutoff=\"50\"></lstn-track>\n" +
-    "        </ul>\n" +
-    "        <div class=\"queue--empty text-center\" data-ng-show=\"!queue || queue.length === 0\">\n" +
-    "          <p>My Queue</p>\n" +
-    "        </div>\n" +
-    "      </tab>\n" +
-    "      <tab>\n" +
-    "        <tab-heading>\n" +
-    "          MORE MUSIC\n" +
-    "        </tab-heading>\n" +
-    "      </tab>\n" +
-    "    </tabset>\n" +
+    "<div>\n" +
+    "  <ul id=\"queue\" class=\"queue queue--full track__list music__list\" data-ng-show=\"queue && queue.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue\">\n" +
+    "    <lstn-track\n" +
+    "      data-ng-repeat=\"item in queue\"\n" +
+    "      data-context=\"queue\"\n" +
+    "      data-cutoff=\"50\"></lstn-track>\n" +
+    "  </ul>\n" +
+    "  <div class=\"queue--empty text-center\" data-ng-show=\"!queue || queue.length === 0\">\n" +
+    "    <p>My Queue</p>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -386,37 +437,52 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/track-list.html',
     "<ul class=\"track__list\">\n" +
-    "  <lstn-track data-ng-class-even=\"'track--even'\" data-ng-class-odd=\"'track--odd'\" data-ng-repeat=\"song in tracks\" data-cutoff=\"cutoff\"></lstn-track>\n" +
+    "  <lstn-track data-ng-repeat=\"item in tracks\" data-cutoff=\"cutoff\"></lstn-track>\n" +
     "</ul>\n"
   );
 
 
   $templateCache.put('/static/partials/directives/track.html',
-    "<li id=\"track-{{ $id }}-{{ $index }}-{{ song.key }}\" class=\"track\">\n" +
-    "<div class=\"track__image\">\n" +
-    "  <img data-ng-src=\"{{ song.icon }}\" alt=\"{{ song.album }}\" title=\"{{ song.album }}\">\n" +
-    "  <div class=\"overlay\"></div>\n" +
-    "  <i class=\"fa fa-circle-o-notch fa-spin\" data-ng-show=\"song.addingToQueue || song.removingFromQueue\"></i>\n" +
-    "  <span data-ng-hide=\"song.addingToQueue || song.in_queue || queueBitset[song.key]\" \n" +
-    "    class=\"glyphicon glyphicon-plus-sign\" data-ng-click=\"addSongToQueue(song)\" title=\"Add to Queue\"></span>\n" +
-    "  <span data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context==='queue' && !song.removingFromQueue\" \n" +
-    "    class=\"glyphicon glyphicon-minus-sign\" data-ng-click=\"removeSongFromQueue(song, $index)\" title=\"Remove from Queue\"></span>\n" +
-    "  <span data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context==='playlist'\" \n" +
-    "    class=\"glyphicon glyphicon-ok\" title=\"This song is already in your queue\"></span>\n" +
-    "</div>\n" +
-    "<div class=\"track__info\">\n" +
-    "  <div class=\"track__title\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\" \n" +
-    "    title=\"{{ song.name }}\" data-ng-bind=\"song.name | truncate:cutoff\"></div>\n" +
-    "  <div class=\"track__artist\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\"\n" +
-    "    data-ng-bind=\"song.artist | truncate:cutoff\" title=\"{{ song.artist }}\"></div>\n" +
-    "</div>\n" +
-    "<div class=\"track__actions--queued\">\n" +
-    "  <a data-ng-click=\"moveToTopOfQueue($index)\">\n" +
-    "    <i data-ng-show=\"song.in_queue && context==='queue'\" class=\"track__top glyphicon glyphicon-chevron-up\" \n" +
-    "      data-ng-click=\"moveToTopOfQueue($index)\" title=\"Move to Top of Queue\"></i>\n" +
-    "  </a>\n" +
-    "</div>\n" +
-    "<div class=\"clear\"></div>\n" +
+    "<li id=\"track-{{ $id }}-{{ $index }}-{{ item.key }}\" class=\"music__item track clearfix\">\n" +
+    "  <div class=\"music__image\">\n" +
+    "    <img data-ng-src=\"{{ item.icon }}\" alt=\"{{ item.album }}\" title=\"{{ item.album }}\">\n" +
+    "  </div>\n" +
+    "  <div class=\"music__info\">\n" +
+    "    <div\n" +
+    "      class=\"music__title\"\n" +
+    "      data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[item.key]}\"\n" +
+    "      title=\"{{ item.name }}\"\n" +
+    "      data-ng-bind=\"item.name | truncate:cutoff\"></div>\n" +
+    "    <div\n" +
+    "      class=\"music__artist\"\n" +
+    "      data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[item.key]}\"\n" +
+    "      title=\"{{ item.artist }}\"\n" +
+    "      data-ng-bind=\"item.artist | truncate:cutoff\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"music__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-up\"\n" +
+    "      data-ng-show=\"item.in_queue && context === 'queue'\"\n" +
+    "      data-ng-click=\"moveToTopOfQueue($index)\"\n" +
+    "      title=\"Move to Top of Queue\"></a>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"item.addingToQueue || item.removingFromQueue\"></i>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-plus\"\n" +
+    "      data-ng-hide=\"item.addingToQueue || item.in_queue || queueBitset[item.key]\"\n" +
+    "      data-ng-click=\"addTrackToQueue(track)\"\n" +
+    "      title=\"Add to Queue\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-minus\"\n" +
+    "      data-ng-show=\"(item.in_queue || queueBitset[item.key]) && context==='queue' && !item.removingFromQueue\"\n" +
+    "      data-ng-click=\"removeTrackFromQueue(track, $index)\"\n" +
+    "      title=\"Remove from Queue\"></a>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-check\"\n" +
+    "      data-ng-show=\"(item.in_queue || queueBitset[item.key]) && context==='playlist'\"\n" +
+    "      title=\"This track is already in your queue\"></i>\n" +
+    "  </div>\n" +
     "</li>\n"
   );
 
@@ -472,7 +538,17 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <lstn-room-roster></lstn-room-roster>\n" +
     "  </div>\n" +
     "  <div class=\"col-md-5\">\n" +
-    "    <lstn-room-queue></lstn-room-queue>\n" +
+    "    <tabset class=\"queue__tabs\">\n" +
+    "      <tab id=\"my-queue-tab\" data-select=\"selectQueueTab('queue')\">\n" +
+    "        <tab-heading>MY QUEUE</tab-heading>\n" +
+    "        <lstn-room-queue></lstn-room-queue>\n" +
+    "      </tab>\n" +
+    "      <tab>\n" +
+    "        <tab-heading>MORE MUSIC</tab-heading>\n" +
+    "        <lstn-more-music></lstn-more-music>\n" +
+    "        </tab-heading>\n" +
+    "      </tab>\n" +
+    "    </tabset>\n" +
     "  </div>\n" +
     "  <div class=\"col-md-4\">\n" +
     "    <lstn-room-activity></lstn-room-activity>\n" +

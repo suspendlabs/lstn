@@ -253,22 +253,22 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      var song = $scope.queue.shift();
-      $scope.queue.push(song);
+      var track = $scope.queue.shift();
+      $scope.queue.push(track);
 
-      console.log('room:controller:playing', song);
-      socket.emit('room:controller:playing', song);
+      console.log('room:controller:playing', track);
+      socket.emit('room:controller:playing', track);
 
       CurrentUser.updateQueue({
         queue: $scope.queue
       }, function(response) {
         if (!response || !response.success) {
-          $scope.addAlert('Something went wrong while trying to move the song to the bottom of your queue.', 'danger');
+          $scope.addAlert('Something went wrong while trying to move the track to the bottom of your queue.', 'danger');
           console.log('moveToBottomOfQueue', response);
           return;
         }
       }, function(response) {
-        $scope.addAlert('Something went wrong while trying to move the song to the bottom of your queue.', 'danger');
+        $scope.addAlert('Something went wrong while trying to move the track to the bottom of your queue.', 'danger');
         console.log('moveToBottomOfQueue', response);
       });
     });
@@ -281,7 +281,7 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      $scope.playSong(data);
+      $scope.playTrack(data);
     });
 
     socket.on('room:upvote', function(upvote) {
@@ -338,7 +338,7 @@ angular.module('lstn.controllers', [])
       });
 
       if (downvote.votes <= -2) {
-        $scope.skipSong();
+        $scope.skipTrack();
       }
     });
 
@@ -367,13 +367,13 @@ angular.module('lstn.controllers', [])
     });
 
     // TODO: Move these to Room service (badjokeeel) if possible
-    $scope.playSong = function(data) {
+    $scope.playTrack = function(data) {
       if (!$scope.rdioReady) {
         $scope.rdioPlay = data;
         return;
       }
 
-      console.log('playSong', data);
+      console.log('playTrack', data);
 
       if (!data || !data.key) {
         $scope.isCurrentController = false;
@@ -405,8 +405,8 @@ angular.module('lstn.controllers', [])
       $scope.updateTimeout = $timeout($scope.updatePosition, 1 * 2000, false);
     };
 
-    $scope.songFinished = function() {
-      console.log('songFinished');
+    $scope.trackFinished = function() {
+      console.log('trackFinished');
 
       $scope.isCurrentController = false;
       socket.sendFinished();
@@ -417,7 +417,7 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      if (window.playingPosition >= $scope.playing.song.duration) {
+      if (window.playingPosition >= $scope.playing.track.duration) {
         return;
       }
 
@@ -466,7 +466,7 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      var remaining = Math.floor($scope.playing.song.duration - window.playingPosition);
+      var remaining = Math.floor($scope.playing.track.duration - window.playingPosition);
       if (remaining <= 0) {
         return;
       }
@@ -476,13 +476,13 @@ angular.module('lstn.controllers', [])
       User.upvote({
         id: $scope.currentController,
         room: $scope.room.id,
-        song: $scope.playing.song.key,
+        track: $scope.playing.track.key,
         remaining: remaining
       }, function(response) {
         $scope.voting = false;
 
         if (!response || !response.success) {
-          $scope.addAlert('Something went wrong while trying to upvote the song.', 'danger');
+          $scope.addAlert('Something went wrong while trying to upvote the track.', 'danger');
           console.log('User.upvote', response);
           return;
         }
@@ -498,7 +498,7 @@ angular.module('lstn.controllers', [])
       }, function(response) {
         $scope.voting = false;
 
-        $scope.addAlert('Something went wrong while trying to upvote the song.', 'danger');
+        $scope.addAlert('Something went wrong while trying to upvote the track.', 'danger');
         console.log('User.upvote', response);
       });
     };
@@ -514,7 +514,7 @@ angular.module('lstn.controllers', [])
       }
 
       // This is to give us a target expiration for the Redis key
-      var remaining = Math.floor($scope.playing.song.duration - window.playingPosition);
+      var remaining = Math.floor($scope.playing.track.duration - window.playingPosition);
       if (remaining <= 0) {
         return;
       }
@@ -524,13 +524,13 @@ angular.module('lstn.controllers', [])
       User.downvote({
         id: $scope.currentController,
         room: $scope.room.id,
-        song: $scope.playing.song.key,
+        track: $scope.playing.track.key,
         remaining: remaining
       }, function(response) {
         $scope.voting = false;
 
         if (!response || !response.success) {
-          $scope.addAlert('Something went wrong while trying to downvote the song.', 'danger');
+          $scope.addAlert('Something went wrong while trying to downvote the track.', 'danger');
           console.log('User.downvote', response);
           return false;
         }
@@ -546,36 +546,36 @@ angular.module('lstn.controllers', [])
       }, function(response) {
         $scope.voting = false;
 
-        $scope.addAlert('Something went wrong while trying to downvote the song.', 'danger');
+        $scope.addAlert('Something went wrong while trying to downvote the track.', 'danger');
         console.log('User.downvote', response);
       });
     };
   
-    window.skipSong = $scope.skipSong = function() {
+    window.skipTrack = $scope.skipTrack = function() {
       if (!$scope.isCurrentController) {
         return;
       }
 
-      console.log('skipSong');
+      console.log('skipTrack');
       $scope.isCurrentController = false;
       socket.sendSkipped();
     };
 
-    $scope.rdioToLstn = function(rdioSong) {
-      var lstnSong = {
-        key: rdioSong.key,
-        link: rdioSong.shortUrl,
-        image: rdioSong.icon,
-        title: rdioSong.name,
-        artist: rdioSong.artist,
-        album: rdioSong.album,
+    $scope.rdioToLstn = function(rdioTrack) {
+      var lstnTrack = {
+        key: rdioTrack.key,
+        link: rdioTrack.shortUrl,
+        image: rdioTrack.icon,
+        title: rdioTrack.name,
+        artist: rdioTrack.artist,
+        album: rdioTrack.album,
         position: 0,
-        duration: rdioSong.duration,
-        canStream: rdioSong.canStream,
+        duration: rdioTrack.duration,
+        canStream: rdioTrack.canStream,
         user: 0
       };
 
-      return lstnSong;
+      return lstnTrack;
     };
 
     // Watches
@@ -590,13 +590,13 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      // If we don't have a song to play, return
+      // If we don't have a track to play, return
       if (!$scope.rdioPlay) {
         return;
       }
 
-      // Play the song
-      $scope.playSong($scope.rdioPlay);
+      // Play the track
+      $scope.playTrack($scope.rdioPlay);
     });
   
     $scope.$watch('playingTrack', function(newVal, oldVal) {
@@ -605,28 +605,28 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      // Signal that the song is finished
+      // Signal that the track is finished
       if (!newVal) {
         $scope.playing = null;
 
         // If we're the current controller, tell the server we finished
         if (oldVal && $scope.isCurrentController) {
-          $scope.songFinished(oldVal.key);
+          $scope.trackFinished(oldVal.key);
         }
 
         return;
       }
 
-      // Skip auto play songs from Rdio
+      // Skip auto play tracks from Rdio
       if (newVal.type === 'ap') {
-        console.log('trying to play auto-play song', newVal);
+        console.log('trying to play auto-play track', newVal);
         $scope.playing = null;
         return;
       }
 
       $scope.playing = {
         status: 'playing',
-        song: $scope.rdioToLstn(newVal),
+        track: $scope.rdioToLstn(newVal),
         voted: 0,
         upvoted: 0,
         downvoted: 0
@@ -655,7 +655,7 @@ angular.module('lstn.controllers', [])
         },
         freeRemainingChanged: function(remaining) {
           $scope.$evalAsync(function() {
-            $scope.addAlert('You have ' + remaining + ' remaining songs left on your free account.', 'info');
+            $scope.addAlert('You have ' + remaining + ' remaining tracks left on your free account.', 'info');
           });
         },
         playStateChanged: function(playState) {
@@ -745,14 +745,14 @@ angular.module('lstn.controllers', [])
         flashVars, params, {});
     };
   
-    $scope.addSongToQueue = function(song) {
-      song.addingToQueue = true;
+    $scope.addTrackToQueue = function(track) {
+      track.addingToQueue = true;
       CurrentUser.addToQueue({
-        id: song.key
+        id: track.key
       }, function(response) {
-        song.addingToQueue = false;
+        track.addingToQueue = false;
         if (!response || !response.success || !response.queue) {
-          $scope.addAlert('Something went wrong while trying to add the song to your queue.', 'danger');
+          $scope.addAlert('Something went wrong while trying to add the track to your queue.', 'danger');
           console.log('CurrentUser.addToQueue', response);
           return;
         }
@@ -764,8 +764,8 @@ angular.module('lstn.controllers', [])
           }, 500);
         }, 10);
       }, function(response) {
-        song.addingToQueue = false;
-        $scope.addAlert('Something went wrong while trying to add the song to your queue.', 'danger');
+        track.addingToQueue = false;
+        $scope.addAlert('Something went wrong while trying to add the track to your queue.', 'danger');
         console.log('CurrentUser.addToQueue', response);
       });
     };
@@ -778,31 +778,30 @@ angular.module('lstn.controllers', [])
       $scope.queueBitset = set;
     });
   
-    $scope.removeSongFromQueue = function(song, index) {
-      song.removingFromQueue = true;
+    $scope.removeTrackFromQueue = function(track, index) {
+      track.removingFromQueue = true;
       CurrentUser.removeFromQueue({
-        id: song.key,
+        id: track.key,
         index: index
       }, function(response) {
-        song.removingFromQueue = false;
+        track.removingFromQueue = false;
         if (!response || !response.success || !response.queue) {
-          $scope.addAlert('Something went wrong while trying to remove the song from your queue.', 'danger');
+          $scope.addAlert('Something went wrong while trying to remove the track from your queue.', 'danger');
           console.log('CurrentUser.removeFromQueue', response);
           return;
         }
         $scope.queue = response.queue;
       }, function(response) {
-        song.removingFromQueue = false;
-        $scope.addAlert('Something went wrong while trying to remove the song from your queue.', 'danger');
+        track.removingFromQueue = false;
+        $scope.addAlert('Something went wrong while trying to remove the track from your queue.', 'danger');
         console.log('CurrentUser.removeFromQueue', response);
       });
     };
-
     
     $scope.moveToTopOfQueue = function(index) {
       var tracks = $scope.queue.splice(index, 1);
       if (!tracks || tracks.length === 0) {
-        $scope.addAlert('Something went wrong while trying to move the song to the top of your queue.', 'danger');
+        $scope.addAlert('Something went wrong while trying to move the track to the top of your queue.', 'danger');
         console.log('moveToTopOfQueue', 'no tracks to move');
         return;
       }
@@ -813,22 +812,16 @@ angular.module('lstn.controllers', [])
         queue: $scope.queue
       }, function(response) {
         if (!response || !response.success) {
-          $scope.addAlert('Something went wrong while trying to move the song to the top of your queue.', 'danger');
+          $scope.addAlert('Something went wrong while trying to move the track to the top of your queue.', 'danger');
           console.log('moveToTopOfQueue', response);
           return;
         }
-
-        $timeout(function() {
-          $('#queue').animate({
-            scrollTop: 0
-          }, 500);
-        }, 10);
       }, function(response) {
-        $scope.addAlert('Something went wrong while trying to move the song to the top of your queue.', 'danger');
+        $scope.addAlert('Something went wrong while trying to move the track to the top of your queue.', 'danger');
         console.log('moveToTopOfQueue', response);
       });
     };
-  
+
     Room.get({
       id: $routeParams.id
     }, function(response) {
