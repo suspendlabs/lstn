@@ -39,17 +39,17 @@ def vote(user_id, direction):
   if not room:
     raise APIException('Unable to find room', 404)
 
-  song_id = request.json.get('song', None)
-  if not song_id:
-    raise APIException('You must specify a song id')
+  track_id = request.json.get('track', None)
+  if not track_id:
+    raise APIException('You must specify a track id')
 
   remaining = request.json.get('remaining', None)
   if not remaining:
-    raise APIException('You must specify a song remaining time')
+    raise APIException('You must specify a track remaining time')
 
   remaining = int(remaining)
 
-  voting_key = 'vote_%s_%s_%s_%s' % (current_user.id, user_id, room_id, song_id)
+  voting_key = 'vote_%s_%s_%s_%s' % (current_user.id, user_id, room_id, track_id)
   voted = r.get(voting_key)
   if voted and voted == direction:
     raise APIException('You have already voted')
@@ -181,13 +181,13 @@ def add_queue(track_id):
       rdio_manager.add_to_playlist(queue_playlist, [track_id])
     except Exception as e:
       current_app.logger.debug(e)
-      raise APIException('Unable to add the song to your queue: %s' % str(e))
+      raise APIException('Unable to add the track to your queue: %s' % str(e))
   else:
     try:
       playlist = rdio_manager.create_playlist('Lstn to Rdio', 'User Queue for Lstn', [track_id])
     except Exception as e:
       current_app.logger.debug(e)
-      raise APIException('Unable to add the song to your queue: %s' % str(e))
+      raise APIException('Unable to add the track to your queue: %s' % str(e))
 
     # Throw an error if we couldn't create it
     if not playlist:
@@ -218,7 +218,7 @@ def delete_queue(track_id):
     rdio_manager.remove_from_playlist(current_user.queue, [track_id], index)
   except Exception as e:
     current_app.logger.debug(e)
-    raise APIException('Unable to remove that song from your queue: %s' % str(e))
+    raise APIException('Unable to remove that track from your queue: %s' % str(e))
 
   queue = current_user.get_queue()
   return jsonify(success=True, queue=queue)
@@ -240,7 +240,7 @@ def search():
   data = {
     'method': 'search',
     'query': query,
-    'types': 'track',
+    'types': 'track,artist,album',
   }
 
   try:
