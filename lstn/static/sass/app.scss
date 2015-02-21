@@ -253,22 +253,26 @@ body {
   }
 }
 
-.playing__title {
-  color: #FFFFFF;
-  font-weight: 700;
-}
-
-.playing__artist {
-  color: #FFFFFF;
-  font-weight: 700;
-}
-
 .playing__info--playing {
+  padding: 20px;
   min-height:180px;
 }
 
 .playing__meta {
-  background:#000;
+  background: rgba(0, 0, 0, 0.5);
+  padding:12px;
+  h3, h4 {
+    font-weight: 700;
+    color: #fff;
+    margin:0;
+  }
+  h3 {
+    font-size:22px;
+  }
+  h4, {
+    font-weight: 100;
+  }
+  margin-bottom:12px;
 }
 
 .control__button {

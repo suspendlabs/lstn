@@ -207,7 +207,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/static/partials/directives/room-control-skip.html'
+      templateUrl: '/static/partials/directives/room-control-volume.html'
     };
   }
 ])
