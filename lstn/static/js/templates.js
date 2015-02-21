@@ -130,11 +130,17 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/playing-info.html',
     "<div class=\"playing__info-container\">\n" +
-    "  <div class=\"playing__info playing__info--playing\" data-ng-style=\"playingStyle\">\n" +
-    "    <h3 class=\"playing__title\" data-ng-bind=\"playing.song.title | truncate:28\"></h3>\n" +
-    "    <h4 class=\"playing__artist\" data-ng-bind=\"playing.song.artist | truncate:35\"></h4>\n" +
-    "\n" +
+    "  <div class=\"playing__info playing__info--playing\" data-album-cover-background data-ng-style=\"playingStyle\">\n" +
+    "    <div class=\"playing__meta\">\n" +
+    "      <h3 class=\"playing__title\" data-ng-bind=\"playing.song.title | truncate:28\"></h3>\n" +
+    "      <h4 class=\"playing__artist\" data-ng-bind=\"playing.song.artist | truncate:35\"></h4>\n" +
+    "    </div>\n" +
     "    <lstn-room-controls></lstn-room-controls>\n" +
+    "  </div>  \n" +
+    "  <!-- TOOD: why is there a gap here? (fixed by negative top margin). -->\n" +
+    "  <div style=\"margin-top:-10px\" class=\"progress\" data-ng-show=\"playing.song.duration && playing.song.canStream\">\n" +
+    "    <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.song.duration }}\"></div>\n" +
+    "    <span id=\"time\" class=\"time\"></span>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -212,7 +218,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-control-upvote.html',
     "<span>\n" +
-    "  <button data-ng-show=\"!playing.upvoted\" type=\"button\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
+    "  <button type=\"button\" data-ng-hide=\"playing.upvoted\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
     "    <i class=\"fa fa-fw fa-lg fa-thumbs-up\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button data-ng-show=\"playing.upvoted\" type=\"button\" disabled=\"disabled\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvoted\" title=\"Upvoted\">\n" +
@@ -304,15 +310,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/room-playing.html',
-    "<div>\n" +
-    "  <div class=\"row no-gutters\">\n" +
-    "    <lstn-playing-info></lstn-playing-info>\n" +
-    "  </div>\n" +
-    "  <div class=\"progress\" data-ng-show=\"playing.song.duration && playing.song.canStream\">\n" +
-    "    <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.song.duration }}\"></div>\n" +
-    "    <span id=\"time\" class=\"time\"></span>\n" +
-    "  </div>\n" +
-    "</div>\n"
+    ""
   );
 
 
@@ -469,7 +467,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/room.html',
     "<div class=\"room row\">\n" +
     "  <div class=\"col-md-3\">\n" +
-    "    <lstn-room-playing></lstn-room-playing>\n" +
+    "    <a href=\"\" data-ng-click=\"toggleBroadcast()\">Broadcast<a/>\n" +
+    "    <lstn-playing-info></lstn-playing-info>\n" +
     "    <lstn-room-roster></lstn-room-roster>\n" +
     "  </div>\n" +
     "  <div class=\"col-md-5\">\n" +
