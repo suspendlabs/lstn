@@ -3,26 +3,19 @@
 @import "compass/css3/animation";
 @import "compass/css3/transform";
 @import "compass/css3/opacity";
+@import "variables";
 
-$rdio-red: #E84961;
-$rdio-blue: #008fd5;
-$activity-success: #2ecc71;
-$activity-primary: #2573a6;
-$activity-default: #777;
-$activity-danger: #e74c3c;
-$background-color: #333;
-$accent-color: #3d3d3d;
-$active-color: #d24242;
-$front-layer: #eee;
-
+html, body {
+  height: 100%;
+}
 
 /* Source: http://snipplr.com/view/10979/css-cross-browser-word-wrap */
 .wordwrap { 
-   white-space: pre-wrap;      /* CSS3 */   
-   white-space: -moz-pre-wrap; /* Firefox */    
-   white-space: -pre-wrap;     /* Opera <7 */   
-   white-space: -o-pre-wrap;   /* Opera 7 */    
-   word-wrap: break-word;      /* IE */
+  white-space: pre-wrap;      /* CSS3 */   
+  white-space: -moz-pre-wrap; /* Firefox */    
+  white-space: -pre-wrap;     /* Opera <7 */   
+  white-space: -o-pre-wrap;   /* Opera 7 */    
+  word-wrap: break-word;      /* IE */
 }
 
 img.avatar {
@@ -40,6 +33,14 @@ img.avatar {
   &.sm {
     width: 50px;
     height:50px;
+  }
+  &.md {
+    width: 64px;
+    height: 64px;
+  }
+  &.lg {
+    width: 75px;
+    height: 75px;
   }
 }
 
@@ -59,7 +60,7 @@ body {
   background-color: $background-color;
 
   > .container {
-    padding: 70px 15px 0;
+    padding: 90px 15px 0;
 
     > div {
       margin-top: 15px;
@@ -75,37 +76,24 @@ body {
   cursor: pointer;
 }
 
-.glyphicon.spinning {
-  @include animation('spin 1s infinite linear');
-}
-
-@include keyframes(spin) {
-  from {
-    @include transform(rotate(0deg));
-  }
-
-  to {
-    @include transform(rotate(360deg));
-  }
-}
-
 .label-as-badge {
   border-radius: 1em;
 }
 
 .navbar-inverse {
+  border: none;
   background-color: $accent-color;
-  min-height: 60px;
-  font-size: 16px;
+  min-height: 75px;
+  font-size: 1.4em;
 
   .navbar-text {
-    margin-top: 18px;
+    margin-top: 1.2em;
   }
 
   .navbar-nav {
     > li {
       > a {
-        padding-top: 15px;
+        padding-top: 1.2em;
 
         &.navbar__name {
           color: #FFFFFF;
@@ -118,11 +106,11 @@ body {
 
 .navbar-logo {
   font-family: 'signo';
-  font-size: 2em;
+  font-size: 3.5rem;
   color: #FFFFFF;
   text-decoration: none;
   display: block;
-  margin-top: 8px;
+  margin-top: 1.3rem;
 
   &:link {
     color: #FFFFFF;
@@ -175,15 +163,6 @@ body {
   .alert {
     padding: 9px 35px 9px 9px;
     text-align: center;
-  }
-}
-
-.page-header {
-  margin-top: 5px;
-  margin-bottom: 10px;
-
-  .alert {
-    font-size: 14px;
   }
 }
 
@@ -265,8 +244,8 @@ body {
   }
 
   .room__middle {
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .room__right {
@@ -274,21 +253,18 @@ body {
   }
 }
 
-.room__container {
-  border: 1px solid #ddd;
-  padding: 5px;
-  height: 500px;
-    
-  @include border-radius(4px);
+.playing__title {
+  color: #FFFFFF;
+  font-weight: 700;
 }
 
-.column__header {
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  border-bottom: 1px solid transparent;
-  background-color: #f5f5f5;
+.playing__artist {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.control__button {
+  @include border-radius(0);
 }
 
 .roster__container {
@@ -305,90 +281,21 @@ body {
   }
 }
 
-.playing__container {
+.no-gutters {
+  padding:12px;
+  background:#f5f5f5;
+}
 
-  height: 542px;
+.progress {
+  border: none;
+  background-color: $front-layer;
 
-  .no-gutters {
-    padding:12px;
-    background:#f5f5f5;
-  }
-  
+  @include border-radius(0);
 
-  .playing__info-container {
-    padding-left:10px;
-    padding-right:10px;
-  }
-
-  .playing__art {
-    text-align:center;
-    img {
-      width: 100%;
-      max-width:180px;
-      height: auto;
-      border: 1px solid #333;
-
-      @include border-radius(4px);
-    }
-
-    .playing__placeholder {
-      font-size: 8em;
-      text-align: center;
-      @include border-radius(4px);
-    }
-  }
-
-  .progress {
-    border: 1px solid #aaa;
-    .time {
-      display: block;
-      width: 93%;
-      position: absolute;
-    }
-  }
-
-  .playing__visualization {
-    height: 180px;
-    padding-left: 0;
-    padding-right: 0;
-
-    @include border-radius(4px);
-    
-    &:first-child { 
-      border-left: 1px solid #c2c2c2;
-    }
-
-    div {
-        width: 31px;
-        background-color: #dcdcdc;
-        border-top: 1px solid #c2c2c2;
-        border-right: 1px solid #c2c2c2;
-        display: inline-block;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-    }
-  }
-
-  .playing__actions {
-    .playing__actions__container {
-      padding: 10px 0;
-      margin-bottom: 5px;
-
-      .btn {
-        .glyphicon {
-          font-size: 2.3em;
-          line-height: 1;
-          padding: 10px;
-        }
-      }
-    }
-  }
-
-  .playing__queue {
-    .playing__queue__container {
-      height: 235px;
-
-    }
+  .time {
+    display: block;
+    width: 93%;
+    position: absolute;
   }
 }
 
@@ -424,10 +331,6 @@ body {
       }
     }
   }
-}
-
-.search__contents {
-  padding: 0;
 }
 
 .music__container {
