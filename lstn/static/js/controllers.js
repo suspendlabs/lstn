@@ -426,7 +426,7 @@ angular.module('lstn.controllers', [])
       $scope.updateTimeout = $timeout($scope.updatePosition, 1 * 1000, false);
     };
   
-    $scope.toggleBroadcast = function() {
+    window.toggleBroadcast = $scope.toggleBroadcast = function() {
       $scope.isController = !$scope.isController;
 
       if ($scope.isController) {
@@ -438,12 +438,12 @@ angular.module('lstn.controllers', [])
       }
     };
   
-    $scope.toggleMute = function() {
+    window.toggleMute = $scope.toggleMute = function() {
       $scope.mute = !$scope.mute;
       apiswf.rdio_setMute($scope.mute);
     };
   
-    $scope.toggleVisualize = function() {
+    window.toggleVisualize = $scope.toggleVisualize = function() {
       $scope.visualize = !$scope.visualize;
   
       if ($scope.visualize) {
@@ -456,7 +456,7 @@ angular.module('lstn.controllers', [])
       }
     };
   
-    $scope.upvote = function() {
+    window.upvote = $scope.upvote = function() {
       if (!$scope.playing ||
         $scope.playing.voted ||
         $scope.voting ||
@@ -503,7 +503,7 @@ angular.module('lstn.controllers', [])
       });
     };
 
-    $scope.downvote = function() {
+    window.downvote = $scope.downvote = function() {
       if (!$scope.playing ||
         $scope.playing.voted ||
         $scope.voting ||
@@ -551,7 +551,7 @@ angular.module('lstn.controllers', [])
       });
     };
   
-    $scope.skipSong = function() {
+    window.skipSong = $scope.skipSong = function() {
       if (!$scope.isCurrentController) {
         return;
       }
