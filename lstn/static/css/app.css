@@ -1,3 +1,7 @@
+html, body {
+  height: 100%;
+}
+
 /* Source: http://snipplr.com/view/10979/css-cross-browser-word-wrap */
 .wordwrap {
   white-space: pre-wrap;
@@ -29,6 +33,14 @@ img.avatar.sm {
   width: 50px;
   height: 50px;
 }
+img.avatar.md {
+  width: 64px;
+  height: 64px;
+}
+img.avatar.lg {
+  width: 75px;
+  height: 75px;
+}
 
 /* http://julienmelissas.com/no-gutter-column-trick-for-bootstrap/ */
 .row.no-gutters {
@@ -47,7 +59,7 @@ body {
   background-color: #333;
 }
 body > .container {
-  padding: 70px 15px 0;
+  padding: 90px 15px 0;
 }
 body > .container > div {
   margin-top: 15px;
@@ -61,60 +73,21 @@ body > .container > div {
   cursor: pointer;
 }
 
-.glyphicon.spinning {
-  -moz-animation: "spin 1s infinite linear";
-  -webkit-animation: "spin 1s infinite linear";
-  animation: "spin 1s infinite linear";
-}
-
-@-moz-keyframes spin {
-  from {
-    -moz-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  to {
-    -moz-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@-webkit-keyframes spin {
-  from {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  to {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@keyframes spin {
-  from {
-    -moz-transform: rotate(0deg);
-    -ms-transform: rotate(0deg);
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  to {
-    -moz-transform: rotate(360deg);
-    -ms-transform: rotate(360deg);
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
 .label-as-badge {
   border-radius: 1em;
 }
 
 .navbar-inverse {
+  border: none;
   background-color: #3d3d3d;
-  min-height: 60px;
-  font-size: 16px;
+  min-height: 75px;
+  font-size: 1.4em;
 }
 .navbar-inverse .navbar-text {
-  margin-top: 18px;
+  margin-top: 1.2em;
 }
 .navbar-inverse .navbar-nav > li > a {
-  padding-top: 15px;
+  padding-top: 1.2em;
 }
 .navbar-inverse .navbar-nav > li > a.navbar__name {
   color: #FFFFFF;
@@ -123,11 +96,11 @@ body > .container > div {
 
 .navbar-logo {
   font-family: 'signo';
-  font-size: 2em;
+  font-size: 3.5rem;
   color: #FFFFFF;
   text-decoration: none;
   display: block;
-  margin-top: 8px;
+  margin-top: 1.3rem;
 }
 .navbar-logo:link {
   color: #FFFFFF;
@@ -170,14 +143,6 @@ body > .container > div {
 .alerts .alert {
   padding: 9px 35px 9px 9px;
   text-align: center;
-}
-
-.page-header {
-  margin-top: 5px;
-  margin-bottom: 10px;
-}
-.page-header .alert {
-  font-size: 14px;
 }
 
 .lstn {
@@ -243,29 +208,27 @@ body > .container > div {
   padding-right: 0;
 }
 .room .room__middle {
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 0;
+  padding-right: 0;
 }
 .room .room__right {
   padding-left: 0;
 }
 
-.room__container {
-  border: 1px solid #ddd;
-  padding: 5px;
-  height: 500px;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
+.playing__title {
+  color: #FFFFFF;
+  font-weight: 700;
 }
 
-.column__header {
-  padding: 10px 15px;
-  border: 1px solid #ddd;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  border-bottom: 1px solid transparent;
-  background-color: #f5f5f5;
+.playing__artist {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+
+.control__button {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
 }
 
 .roster__container {
@@ -276,75 +239,22 @@ body > .container > div {
   margin: 5px;
 }
 
-.playing__container {
-  height: 542px;
-}
-.playing__container .no-gutters {
+.no-gutters {
   padding: 12px;
   background: #f5f5f5;
 }
-.playing__container .playing__info-container {
-  padding-left: 10px;
-  padding-right: 10px;
+
+.progress {
+  border: none;
+  background-color: #eee;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
 }
-.playing__container .playing__art {
-  text-align: center;
-}
-.playing__container .playing__art img {
-  width: 100%;
-  max-width: 180px;
-  height: auto;
-  border: 1px solid #333;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-}
-.playing__container .playing__art .playing__placeholder {
-  font-size: 8em;
-  text-align: center;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-}
-.playing__container .progress {
-  border: 1px solid #aaa;
-}
-.playing__container .progress .time {
+.progress .time {
   display: block;
   width: 93%;
   position: absolute;
-}
-.playing__container .playing__visualization {
-  height: 180px;
-  padding-left: 0;
-  padding-right: 0;
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-}
-.playing__container .playing__visualization:first-child {
-  border-left: 1px solid #c2c2c2;
-}
-.playing__container .playing__visualization div {
-  width: 31px;
-  background-color: #dcdcdc;
-  border-top: 1px solid #c2c2c2;
-  border-right: 1px solid #c2c2c2;
-  display: inline-block;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-}
-.playing__container .playing__actions .playing__actions__container {
-  padding: 10px 0;
-  margin-bottom: 5px;
-}
-.playing__container .playing__actions .playing__actions__container .btn .glyphicon {
-  font-size: 2.3em;
-  line-height: 1;
-  padding: 10px;
-}
-.playing__container .playing__queue .playing__queue__container {
-  height: 235px;
 }
 
 .queue__tabs {
@@ -371,10 +281,6 @@ body > .container > div {
   background: none;
   color: #FFFFFF;
   font-weight: 700;
-}
-
-.search__contents {
-  padding: 0;
 }
 
 .music__container {
