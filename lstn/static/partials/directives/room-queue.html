@@ -1,21 +1,8 @@
 <div class="playing__queue col-md-12">
   <div class="playing__queue__container">
     <tabset class="queue__tabs">
-      <tab id="upcoming-queue-tab" data-select="selectQueueTab('upcoming')">
-        <tab-heading>UPCOMING TRACKS</tab-heading>
-        <ul id="upcoming-queue" class="queue queue--full track__list" data-ng-show="upcomingQueue && upcomingQueue.length > 0">
-          <lstn-track
-            data-ng-repeat="song in upcomingQueue"
-            data-context="upcomingQueue"
-            data-cutoff="50"></lstn-track>
-        </ul>
-        <div class="queue--empty text-center" data-ng-show="!upcomingQueue || upcomingQueue.length === 0">
-          <p>Upcoming Tracks</p>
-        </div>
-      </tab>
-
-      <tab id="my-queue-tab" data-select="selectQueueTab('my')">
-      <tab-heading>MY QUEUE</tab-heading>
+      <tab id="my-queue-tab" data-select="selectQueueTab('queue')">
+        <tab-heading>MY QUEUE</tab-heading>
         <ul id="queue" class="queue queue--full track__list" data-ng-show="queue && queue.length > 0" data-ui-sortable="sortableOptions" ng-model="queue">
           <lstn-track
             data-ng-repeat="song in queue"
@@ -25,6 +12,11 @@
         <div class="queue--empty text-center" data-ng-show="!queue || queue.length === 0">
           <p>My Queue</p>
         </div>
+      </tab>
+      <tab>
+        <tab-heading>
+          MORE MUSIC
+        </tab-heading>
       </tab>
     </tabset>
   </div>
