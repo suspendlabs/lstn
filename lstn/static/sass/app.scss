@@ -379,173 +379,72 @@ body {
   padding-top: 40px;
 }
 
-.track__list {
+.music__list {
   list-style: none;
   padding: 0;
   margin-bottom: 0;
+}
 
-  .track {
-    background-color: $front-layer;
-    padding: 0;
-    border-top: 1px solid #ddd;
+.music__item {
+  background-color: $front-layer;
+  padding: 0;
+  border-bottom: 4px solid $background-color;
 
-    &:first-child {
-      border-top: none;
-    }
+  &:first-child {
+    border-top: none;
+  }
 
-    &:last-child {
-      .track__image {
-        img {
-          border-bottom-left-radius: 4px;
-        }
-      }
-    }
-
-    &.track--even {
-      background-color: #F5F5F5;
-    }
-
-    &.track--odd {
-      background-color: #FFFFFF;
-    }
-  
-    .track__image {
-      width: 40px;
-      height: 40px;
-      float: left;
-
+  &:last-child {
+    .music__image {
       img {
-        width: 40px;
-        height: 40px;
-      }
-
-      .overlay {
-        display: none;
-
-        background-color: #333;
-        position: relative;
-        top: -40px;
-        left: 0;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-
-        @include opacity(0.65);
-      }
-
-      .glyphicon, .fa {
-        display: none;
-
-        position: relative;
-        top: -80px;
-        left: 0;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        font-size: 2em;
-        text-align: center;
-        color: #ddd;
-
-        cursor: pointer;
-      }
-
-      &:hover {
-        .overlay {
-          display: block;
-        }
-
-        .glyphicon, .fa {
-          display: block;
-        }
-      }
-    }
-  
-    .track__info {
-      float: left;
-
-      padding: 3px 0 0 3px;
-
-      .track__top {
-          float: right;
-          margin: 12px 10px 0px 5px;
-          cursor: pointer;
-      }
-  
-      .track__title {
-        font-weight: bold;
-        font-size: 12px;
-      }
-
-      .track__artist {
-        font-size: 11px;
-      }
-    }
-
-    .track__actions--queued {
-      float: right;
-      margin-right: 22px;
-      line-height: 50px;
-      a {
-        display:none;
-        cursor:pointer;
-      }
-    }
-
-    &:hover {
-      .track__actions--queued {
-        a {
-          display:inline;
-        }
+        border-bottom-left-radius: 4px;
       }
     }
   }
+}
 
+.music__image {
+  width: 60px;
+  height: 60px;
+  float: left;
 
-  &.queue {
-    width: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
+  img {
+    width: 60px;
+    height: 60px;
+  }
+}
 
-    .track {
-      cursor: move;
-      border-bottom: 4px solid $background-color;
+.music__info {
+  float: left;
 
-      .track__image {
-        width: 60px;
-        height: 60px;
+  padding: 3px 0 0 5px;
   
-        img {
-          width: 60px;
-          height: 60px;
-        }
-  
-        .overlay {
-          top: -60px;
-          width: 60px;
-          height: 60px;
-          line-height: 60px;
-        }
-  
-        .glyphicon, .fa {
-          top: -120px;
-          width: 60px;
-          height: 60px;
-          line-height: 60px;
-        }
-      }
-    
-      .track__info {
-        padding: 3px 0 0 5px;
-    
-        .track__title {
-          font-size: 16px;
-        }
-  
-        .track__artist {
-          font-size: 14px;
-        }
-      }
-    }
+  .music__top {
+    float: right;
+    margin: 12px 10px 0px 5px;
+    cursor: pointer;
+  }
+
+  .music__title {
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  .music__artist {
+    font-size: 14px;
+  }
+}
+
+.music__actions {
+  float: right;
+  margin-right: 22px;
+  line-height: 50px;
+
+  a {
+    cursor:pointer;
+    color: $active-color;
+    text-decoration: none;
+    line-height: 60px;
   }
 }
 
@@ -713,5 +612,15 @@ footer {
   .form-control {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
+  }
+}
+
+.search__contents {
+  .carousel-control {
+    display: none;
+  }
+
+  .carousel-indicators {
+    display: none;
   }
 }
