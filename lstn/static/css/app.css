@@ -324,133 +324,61 @@ body > .container > div {
   padding-top: 40px;
 }
 
-.track__list {
+.music__list {
   list-style: none;
   padding: 0;
   margin-bottom: 0;
 }
-.track__list .track {
+
+.music__item {
   background-color: #eee;
   padding: 0;
-  border-top: 1px solid #ddd;
+  border-bottom: 4px solid #333;
 }
-.track__list .track:first-child {
+.music__item:first-child {
   border-top: none;
 }
-.track__list .track:last-child .track__image img {
+.music__item:last-child .music__image img {
   border-bottom-left-radius: 4px;
 }
-.track__list .track.track--even {
-  background-color: #F5F5F5;
-}
-.track__list .track.track--odd {
-  background-color: #FFFFFF;
-}
-.track__list .track .track__image {
-  width: 40px;
-  height: 40px;
+
+.music__image {
+  width: 60px;
+  height: 60px;
   float: left;
 }
-.track__list .track .track__image img {
-  width: 40px;
-  height: 40px;
+.music__image img {
+  width: 60px;
+  height: 60px;
 }
-.track__list .track .track__image .overlay {
-  display: none;
-  background-color: #333;
-  position: relative;
-  top: -40px;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=65);
-  opacity: 0.65;
-}
-.track__list .track .track__image .glyphicon, .track__list .track .track__image .fa {
-  display: none;
-  position: relative;
-  top: -80px;
-  left: 0;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  font-size: 2em;
-  text-align: center;
-  color: #ddd;
-  cursor: pointer;
-}
-.track__list .track .track__image:hover .overlay {
-  display: block;
-}
-.track__list .track .track__image:hover .glyphicon, .track__list .track .track__image:hover .fa {
-  display: block;
-}
-.track__list .track .track__info {
+
+.music__info {
   float: left;
-  padding: 3px 0 0 3px;
+  padding: 3px 0 0 5px;
 }
-.track__list .track .track__info .track__top {
+.music__info .music__top {
   float: right;
   margin: 12px 10px 0px 5px;
   cursor: pointer;
 }
-.track__list .track .track__info .track__title {
+.music__info .music__title {
   font-weight: bold;
-  font-size: 12px;
+  font-size: 16px;
 }
-.track__list .track .track__info .track__artist {
-  font-size: 11px;
+.music__info .music__artist {
+  font-size: 14px;
 }
-.track__list .track .track__actions--queued {
+
+.music__actions {
   float: right;
   margin-right: 22px;
   line-height: 50px;
 }
-.track__list .track .track__actions--queued a {
-  display: none;
+.music__actions a {
   cursor: pointer;
-}
-.track__list .track:hover .track__actions--queued a {
-  display: inline;
-}
-.track__list.queue {
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-.track__list.queue .track {
-  cursor: move;
-  border-bottom: 4px solid #333;
-}
-.track__list.queue .track .track__image {
-  width: 60px;
-  height: 60px;
-}
-.track__list.queue .track .track__image img {
-  width: 60px;
-  height: 60px;
-}
-.track__list.queue .track .track__image .overlay {
-  top: -60px;
-  width: 60px;
-  height: 60px;
+  color: #d24242;
+  text-decoration: none;
   line-height: 60px;
-}
-.track__list.queue .track .track__image .glyphicon, .track__list.queue .track .track__image .fa {
-  top: -120px;
-  width: 60px;
-  height: 60px;
-  line-height: 60px;
-}
-.track__list.queue .track .track__info {
-  padding: 3px 0 0 5px;
-}
-.track__list.queue .track .track__info .track__title {
-  font-size: 16px;
-}
-.track__list.queue .track .track__info .track__artist {
-  font-size: 14px;
 }
 
 .messages {
@@ -626,4 +554,11 @@ footer .container .text-muted {
 .room-activity .form-control {
   border-top-right-radius: 0;
   border-top-left-radius: 0;
+}
+
+.search__contents .carousel-control {
+  display: none;
+}
+.search__contents .carousel-indicators {
+  display: none;
 }
