@@ -233,8 +233,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-
-
 .directive('lstnRoomQueue', ['$timeout', 'CurrentUser', 'socket', 'emojiMap',
   function($timeout, CurrentUser, socket, emojiMap) {
     return {
