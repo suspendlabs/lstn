@@ -19,24 +19,19 @@ angular.module('lstn', [
 .config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
   var routes = {
     '/': {
-      templateUrl: 'static/partials/index.html',
+      templateUrl: '/static/partials/index.html',
       controller: 'AppController',
       controllerAs: 'appCtrl'
     },
     '/rooms': {
-      templateUrl: 'static/partials/rooms.html',
+      templateUrl: '/static/partials/rooms.html',
       controller: 'RoomsController',
       controllerAs: 'roomsCtrl'
     },
     '/room/:id': {
-      templateUrl: 'static/partials/room.html',
+      templateUrl: '/static/partials/room.html',
       controller: 'RoomController',
       controllerAs: 'roomCtrl'
-    },
-    '/profile': {
-      templateUrl: 'static/partials/profile.html',
-      controller: 'UserController',
-      controllerAs: 'userCtrl'
     }
   };
 

@@ -402,8 +402,7 @@ body > .container {
   background-color: #FFFFFF;
 }
 .track__list .track .track__image {
-  width: 40px;
-  height: 40px;
+  width: 17%;
   float: left;
 }
 .track__list .track .track__image img {
@@ -442,6 +441,7 @@ body > .container {
   display: block;
 }
 .track__list .track .track__info {
+  width: 82%;
   float: left;
   font-family: 'Inconsolata', monospace, sans-serif;
   padding: 3px 0 0 3px;
@@ -456,6 +456,9 @@ body > .container {
   font-size: 12px;
 }
 .track__list .track .track__info .track__artist {
+  font-size: 11px;
+}
+.track__list .track .track__info .track__duration {
   font-size: 11px;
 }
 .track__list .track .track__actions--queued {
@@ -480,8 +483,7 @@ body > .container {
   cursor: move;
 }
 .track__list.queue .track .track__image {
-  width: 50px;
-  height: 50px;
+  width: 10%;
 }
 .track__list.queue .track .track__image img {
   width: 50px;
@@ -500,6 +502,7 @@ body > .container {
   line-height: 50px;
 }
 .track__list.queue .track .track__info {
+  width: 89%;
   padding: 3px 0 0 5px;
 }
 .track__list.queue .track .track__info .track__title {
@@ -507,6 +510,11 @@ body > .container {
 }
 .track__list.queue .track .track__info .track__artist {
   font-size: 14px;
+  padding-right: 5px;
+}
+.track__list.queue .track .track__info .track__duration {
+  font-size: 14px;
+  padding-left: 5px;
 }
 
 .messages {
