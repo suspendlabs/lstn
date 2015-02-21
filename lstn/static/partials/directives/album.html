@@ -1,0 +1,21 @@
+<li id="album-{{ $id }}-{{ $index }}-{{ item.key }}" class="music__item album clearfix">
+  <div class="music__image">
+    <img data-ng-src="{{ item.icon }}" alt="{{ item.album }}" title="{{ item.album }}">
+  </div>
+  <div class="music__info">
+    <div
+      class="music__title"
+      title="{{ item.name }}"
+      data-ng-bind="item.name | truncate:cutoff"></div>
+    <div
+      class="music__artist"
+      title="{{ item.artist }}"
+      data-ng-bind="item.artist | truncate:cutoff"></div>
+  </div>
+  <div class="music__actions">
+    <a
+      class="fa fa-fw fa-chevron-right"
+      data-ng-click="loadAlbum($index)"
+      title="View Tracks"></a>
+  </div>
+</li>
