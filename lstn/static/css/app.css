@@ -373,9 +373,16 @@ body > .container > div {
 }
 
 .queue--empty {
-  margin: 10px;
-  height: 170px;
-  padding-top: 40px;
+  font-size: 10em;
+  color: #333;
+  line-height: 400px;
+}
+
+.messages--empty {
+  min-height: 400px;
+  font-size: 10em;
+  color: #333;
+  line-height: 400px;
 }
 
 .drilldown__list {
@@ -446,9 +453,8 @@ body > .container > div {
 }
 
 .messages {
+  width: 100%;
   margin-bottom: 0;
-  min-height: 400px;
-  background-color: #3d3d3d;
   list-style: none;
 }
 
@@ -563,9 +569,9 @@ footer .container .text-muted {
     color: white;
   }
 }
-.room-activity .messages {
-  height: 90%;
-  width: 100%;
+.room-activity {
+  min-height: 400px;
+  background-color: #3d3d3d;
 }
 .room-activity .form-control {
   -moz-border-radius: 0;

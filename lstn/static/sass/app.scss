@@ -427,9 +427,16 @@ body {
 }
 
 .queue--empty {
-  margin: 10px;
-  height: 170px;
-  padding-top: 40px;
+  font-size: 10em;
+  color: $background-color;
+  line-height: 400px;
+}
+
+.messages--empty {
+  min-height: 400px;
+  font-size: 10em;
+  color: $background-color;
+  line-height: 400px;
 }
 
 .drilldown__list {
@@ -508,9 +515,8 @@ body {
 }
 
 .messages {
+  width: 100%;
   margin-bottom: 0;
-  min-height: 400px;
-  background-color: $accent-color;
   list-style: none;
 }
 
@@ -602,10 +608,8 @@ footer {
 }
 
 .room-activity {
-  .messages {
-    height: 90%;
-    width: 100%;
-  }
+  min-height: 400px;
+  background-color: $accent-color;
 
   .form-control {
     @include border-radius(0);
