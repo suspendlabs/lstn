@@ -742,7 +742,7 @@ angular.module('lstn.controllers', [])
         allowScriptAccess: 'always'
       };
 
-     var flashCheck = function(e) {
+      var flashCheck = function(e) {
         $timeout(function() {
             if ($scope.flashEnabled === false) {
               Alert.error('Flash doesn\'t appear to be enabled. Make sure it\'s installed and you\'ve enabled it.');
