@@ -739,10 +739,20 @@ angular.module('lstn.controllers', [])
       var params = {
         allowScriptAccess: 'always'
       };
-  
+
+      var flashCheck = function(e) {
+        $timeout(function() {
+            if ($scope.flashEnabled === false) {
+              Alert.error('Flash doesn\'t appear to be enabled. Make sure it\'s installed and you\'ve enabled it.');
+            }
+          }, 5000
+        );
+      };
+
       swfobject.embedSWF('//www.rdio.com/api/swf/',
         'apiswf', 1, 1, '9.0.0', 'expressInstall.swf',
-        flashVars, params, {});
+        flashVars, params, {}, flashCheck);
+
     };
 
     Room.get({
