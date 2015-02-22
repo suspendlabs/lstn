@@ -1,5 +1,6 @@
 @import "compass/css3/background-size";
 @import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
 @import "compass/css3/animation";
 @import "compass/css3/transform";
 @import "compass/css3/opacity";
@@ -241,16 +242,18 @@ body {
 
 .room {
   .room__left {
+    padding-left: 0;
     padding-right: 0;
   }
 
   .room__middle {
-    padding-left: 0;
-    padding-right: 0;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 
   .room__right {
     padding-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -349,7 +352,7 @@ body {
 
 .progress {
   border: none;
-  background-color: $front-layer;
+  background-color: $first-layer;
 
   @include border-radius(0);
 
@@ -424,7 +427,7 @@ body {
 
 .drilldown__item {
   min-height: 60px;
-  background-color: $front-layer;
+  background-color: $first-layer;
   padding: 0;
   border-bottom: 4px solid $accent-color;
 }
@@ -494,6 +497,7 @@ body {
   margin-bottom: 0;
   min-height: 400px;
   background-color: $accent-color;
+  list-style: none;
 }
 
 footer {
@@ -587,81 +591,91 @@ footer {
   .messages {
     height: 90%;
     width: 100%;
-
-    .chat__message {
-      background-color: $front-layer;
-      padding: 10px 10px 15px 10px;
-      border: 0;
-      border-bottom: 2px solid #ddd;
-
-      @include border-radius(0);
-
-      .chat__message__headline {
-        font-weight: 700;
-
-        .chat__message__user {
-          color: #333;
-          font-weight: 800;
-        }
-      }
-
-      .chat__message--playing {
-        color: $activity-primary;
-      }
-
-      .chat__message--upvoted {
-        color: $activity-success;
-      }
-
-      .chat__message--downvoted {
-        color: $activity-danger;
-      }
-
-      .chat__message--skipped {
-        color: $activity-danger;
-      }
-
-      .chat__message--said {
-        color: $activity-default;
-      }
-
-      .chat__message__photo {
-        padding-left: 20px;
-        padding-top: 5px;
-        width: 23%;
-      }
-
-      .chat__message__body {
-        width: 57%;
-        color: #999;
-        font-weight: 700;
-      }
-
-      .chat__message__message {
-        line-height: 0.9;
-        color: #333;
-      }
-
-      .chat__message__timestamp {
-        width: 19%;
-        padding-right: 0;
-        color: #aaa;
-        font-weight: 700;
-        padding-top: 35px;
-        padding-left: 8px;
-      }
-    }
   }
 
   .form-control {
     @include border-radius(0);
+    @include box-shadow(none);
+
+    border-color: #FFFFFF;
   }
 }
 
+.chat__message {
+  min-height: 60px;
+  background-color: $first-layer;
+  padding: 0;
+  border-bottom: 2px solid $accent-color;
+  font-weight: 700;
+}
+
+.chat__message__user {
+  color: $first-layer-text-color;
+  font-weight: 800;
+}
+
+.chat__message--playing {
+  color: $activity-primary;
+}
+
+.chat__message--upvoted {
+  color: $activity-success;
+}
+
+.chat__message--downvoted {
+  color: $activity-danger;
+}
+
+.chat__message--skipped {
+  color: $activity-danger;
+}
+
+.chat__message--said {
+  color: $activity-default;
+}
+
+.chat__message__message {
+  color: $first-layer-text-color;
+}
+
+.chat__image {
+  width: 16%;
+}
+
+.chat__user-info {
+  width: 83%;
+  position: relative;
+  line-height: 1.23;
+  font-size: 14px;
+  padding: 3px 0 0 3px;
+
+  .item__title {
+    font-size: 14px;
+  }
+}
+
+.chat__track {
+  display: block;
+}
+
+.chat__artist {
+  display: inline;
+}
+
+.chat__timestamp {
+  display: inline-block;
+  position: absolute;
+  top: 3px;
+  right: 2px;
+}
+
 .search__box {
-  &.form-control {
+  border-bottom: 4px solid $accent-color;
+
+  .form-control {
     @include border-radius(0);
-    border-bottom: 4px solid $accent-color;
+    @include box-shadow(none);
+    border-color: #FFFFFF;
   }
 }
 
