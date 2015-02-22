@@ -154,7 +154,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "            <lstn-playlist\n" +
     "              data-context=\"category\"\n" +
     "              data-playlist=\"item\"\n" +
-    "              data-index=\"$index\"></lstn-playlist>\n" +
+    "              data-index=\"$index\"\n" +
+    "              data-load-tracks=\"loadTracks\"></lstn-playlist>\n" +
     "          </li>\n" +
     "        </ul>\n" +
     "      </slide>\n" +
@@ -164,29 +165,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "            <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentPlaylist.name\"></span>\n" +
     "          </a>\n" +
     "        </div>\n" +
-    "        <ul class=\"playlist__children drilldown__list text-left\">\n" +
-    "          <li data-ng-repeat=\"item in children\">\n" +
-    "            <div data-ng-switch=\"item.type\">\n" +
-    "              <lstn-album\n" +
-    "                data-ng-switch-when=\"a\"\n" +
-    "                data-context=\"search\"\n" +
-    "                data-album=\"item\"\n" +
-    "                data-index=\"$index\"\n" +
-    "                data-load-tracks=\"loadTracks\"></lstn-album>\n" +
-    "\n" +
-    "              <lstn-artist\n" +
-    "                data-ng-switch-when=\"r\"\n" +
-    "                data-context=\"search\"\n" +
-    "                data-artist=\"item\"\n" +
-    "                data-index=\"$index\"\n" +
-    "                data-load-albums=\"loadAlbums\"></lstn-artist>\n" +
-    "\n" +
-    "              <lstn-track\n" +
-    "                data-ng-switch-when=\"t\"\n" +
-    "                data-context=\"search\"\n" +
-    "                data-track=\"item\"\n" +
-    "                data-index=\"$index\"></lstn-track>\n" +
-    "            </div>\n" +
+    "        <ul class=\"tracks drilldown__list text-left\">\n" +
+    "          <li data-ng-repeat=\"item in tracks\">\n" +
+    "            <lstn-track\n" +
+    "              data-context=\"playlist\"\n" +
+    "              data-track=\"item\"\n" +
+    "              data-index=\"$index\"></lstn-track>\n" +
     "          </li>\n" +
     "        </ul>\n" +
     "      </slide>\n" +
@@ -343,11 +327,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <div class=\"item__actions\">\n" +
     "    <a\n" +
     "      class=\"fa fa-fw fa-chevron-right\"\n" +
-    "      data-ng-show=\"!playlist.loadingChildren\"\n" +
-    "      data-ng-click=\"loadChildren(playlist)\"></a>\n" +
+    "      data-ng-show=\"!playlist.loadingTracks\"\n" +
+    "      data-ng-click=\"loadTracks(playlist)\"></a>\n" +
     "    <a\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"playlist.loadingChildren\"></a>\n" +
+    "      data-ng-show=\"playlist.loadingTracks\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
   );
