@@ -379,10 +379,14 @@ body > .container > div {
 }
 
 .messages--empty {
-  min-height: 400px;
+  min-height: 436px;
   font-size: 10em;
   color: #333;
   line-height: 400px;
+  padding-top: 36px;
+}
+.messages--empty .fa {
+  display: inline-block;
 }
 
 .drilldown__list {

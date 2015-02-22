@@ -433,10 +433,11 @@ body {
 }
 
 .messages--empty {
-  min-height: 400px;
+  min-height: 436px;
   font-size: 10em;
   color: $background-color;
   line-height: 400px;
+  padding-top: 36px;
 }
 
 .drilldown__list {
