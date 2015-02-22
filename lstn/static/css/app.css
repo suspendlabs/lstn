@@ -402,6 +402,7 @@ body > .container > div {
 .item__info {
   float: left;
   width: 75%;
+  line-height: 1.23;
   padding: 3px 0 0 5px;
 }
 .item__info .item__top {
@@ -613,7 +614,6 @@ footer .container .text-muted {
 .chat__user-info {
   width: 83%;
   position: relative;
-  line-height: 1.23;
   font-size: 14px;
   padding: 3px 0 0 3px;
 }
