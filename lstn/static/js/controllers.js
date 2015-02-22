@@ -646,8 +646,9 @@ angular.module('lstn.controllers', [])
       window.playbackHandler = {
         ready: function(user) {
           window.apiswf = $('#apiswf').get(0);
-  
+
           $scope.$evalAsync(function() {
+            $scope.flashEnabled = true;
             $scope.rdioReady = true;
             $scope.rdioUser = user;
           });
