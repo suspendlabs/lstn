@@ -273,7 +273,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             angular.forEach(emojiMap, function(value, text) {
               var name = text.substr(1, text.length - 2).toUpperCase();
 
-              if (name.indexOf(term.toUpperCase()) >= 0) {
+              if (name && name.indexOf(term.toUpperCase()) >= 0) {
                 this.push({
                   text: text,
                   value: value

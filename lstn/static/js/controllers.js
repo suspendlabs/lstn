@@ -312,7 +312,7 @@ angular.module('lstn.controllers', [])
           $scope.playing.downvotes = {};
         }
 
-        $scope.playing.downvotes[upvote.user] = true;
+        $scope.playing.downvotes[downvote.user] = true;
       }
 
       if (!$scope.isCurrentController) {
@@ -332,7 +332,7 @@ angular.module('lstn.controllers', [])
         console.log('CurrentUser.get', response);
       });
 
-      if (score <= -2) {
+      if (downvote.votes <= -2) {
         $scope.skipSong();
       }
     });
@@ -345,7 +345,10 @@ angular.module('lstn.controllers', [])
         $scope.unseenChatMessages += 1;
       }
 
-      if (message.mentionedNames.indexOf($scope.current_user.mention.toLowerCase()) !== -1) {
+      if (message &&
+        message.mentionNames &&
+        message.mentionedNames.indexOf($scope.current_user.mention.toLowerCase()) !== -1) {
+
         console.log('mentioned');
         $scope.sendNotification(message.user, message.text, message.picture, 5000);
         $scope.$broadcast('mentioned', true);
