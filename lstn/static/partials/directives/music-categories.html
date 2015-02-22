@@ -1,18 +1,34 @@
 <div class="playlist__container">
   <carousel id="category-carousel" interval="false">
-    <slide>
+    <slide id="categories">
       <ul class="categories categories--full category__list drilldown__list text-left">
         <li data-ng-repeat="item in categories">
           <lstn-category
             data-category="item"
-            data-load-lists="loadLists"></lstn-category>
+            data-load-children="loadChildren"></lstn-category>
         </li>
       </ul>
     </slide>
-    <slide>
+
+    <slide id="playlist_types">
       <div class="carousel__back text-left">
         <a data-ng-click="closeCategory()">
           <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentCategory.name"></span>
+        </a>
+      </div>
+      <ul class="playlist-types playlist-types--full playlist-type__list drilldown__list text-left">
+        <li data-ng-repeat="item in playlistTypes">
+          <lstn-playlist-type
+            data-playlist-type="item"
+            data-load-playlists="loadPlaylists"></lstn-playlist-type>
+        </li>
+      </ul>
+    </slide>
+
+    <slide id="playlists">
+      <div class="carousel__back text-left">
+        <a data-ng-click="closePlaylistType()">
+          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentPlaylistType.name"></span>
         </a>
       </div>
       <ul class="playlists drilldown__list text-left">
@@ -25,7 +41,8 @@
         </li>
       </ul>
     </slide>
-    <slide>
+
+    <slide id="playlist_tracks">
       <div class="carousel__back text-left">
         <a data-ng-click="closePlaylist()">
           <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentPlaylist.name"></span>
