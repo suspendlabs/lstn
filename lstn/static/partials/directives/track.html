@@ -1,17 +1,15 @@
 <div id="track-{{ $id }}-{{ index }}-{{ track.key }}" class="drilldown__item track clearfix">
   <div class="item__image">
-    <img data-ng-src="{{ track.icon }}" alt="{{ track.album }}" title="{{ track.album }}">
+    <img data-ng-src="{{ track.icon }}" alt="{{ track.album }}">
   </div>
   <div class="item__info">
     <div
       class="item__title"
       data-ng-class="{'text-muted': context !== 'queue' && queue.bitset[track.key]}"
-      title="{{ track.name }}"
       data-ng-bind="track.name"></div>
     <div
       class="item__artist"
       data-ng-class="{'text-muted': context !== 'queue' && queue.bitset[track.key]}"
-      title="{{ track.artist }}"
       data-ng-bind="track.artist"></div>
   </div>
   <div class="item__actions">
@@ -19,7 +17,9 @@
       class="fa fa-fw fa-chevron-up"
       data-ng-show="track.in_queue && context === 'queue'"
       data-ng-click="queue.moveToTop(index)"
-      title="Move to Top of Queue"></a>
+      data-tooltip="Move to Top of Queue"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
     <i
       class="fa fa-fw fa-circle-o-notch fa-spin"
       data-ng-show="track.addingToQueue || track.removingFromQueue"></i>
@@ -27,15 +27,21 @@
       class="fa fa-fw fa-plus"
       data-ng-hide="track.addingToQueue || track.in_queue || queue.bitset[track.key]"
       data-ng-click="queue.addTrack(track)"
-      title="Add to Queue"></a>
+      data-tooltip="Add To Queue"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
     <a
       class="fa fa-fw fa-minus"
       data-ng-show="(track.in_queue || queue.bitset[track.key]) && context === 'queue' && !track.removingFromQueue"
       data-ng-click="queue.removeTrack(track, index)"
-      title="Remove from Queue"></a>
+      data-tooltip="Remove From Queue"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
     <i
       class="fa fa-fw fa-check"
       data-ng-show="(track.in_queue || queue.bitset[track.key]) && context !== 'queue'"
-      title="This track is already in your queue"></i>
+      data-tooltip="This track is already in your queue"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></i>
   </div>
 </div>

@@ -5,16 +5,21 @@
   <div class="item__info">
     <div
       class="item__title"
-      title="{{ category.name }}"
       data-ng-bind="category.name"></div>
   </div>
   <div class="item__actions">
     <a
       class="fa fa-fw fa-chevron-right"
       data-ng-show="!category.loadingLists"
-      data-ng-click="loadLists(category)"></a>
+      data-ng-click="loadLists(category)"
+      data-tooltip="Load Playlists"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
     <a
       class="fa fa-fw fa-circle-o-notch fa-spin"
-      data-ng-show="category.loadingLists"></a>
+      data-ng-show="category.loadingLists"
+      data-tooltip="Loading Playlists"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
   </div>
 </div>

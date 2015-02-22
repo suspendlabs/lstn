@@ -1,15 +1,13 @@
 <div id="album-{{ $id }}-{{ index }}-{{ album.key }}" class="drilldown__item album clearfix">
   <div class="item__image">
-    <img data-ng-src="{{ album.icon }}" alt="{{ album.album }}" title="{{ album.album }}">
+    <img data-ng-src="{{ album.icon }}" alt="{{ album.album }}">
   </div>
   <div class="item__info">
     <div
       class="item__title"
-      title="{{ album.name }}"
       data-ng-bind="album.name"></div>
     <div
       class="item__artist"
-      title="{{ album.artist }}"
       data-ng-bind="album.artist"></div>
   </div>
   <div class="item__actions">
@@ -17,10 +15,14 @@
       class="fa fa-fw fa-chevron-right"
       data-ng-show="!album.loadingTracks"
       data-ng-click="loadAlbumTracks(album)"
-      title="View Tracks"></a>
+      data-tooltip="Load Tracks"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
     <a
       class="fa fa-fw fa-circle-o-notch fa-spin"
       data-ng-show="album.loadingTracks"
-      title="Loading Tracks"></a>
+      data-tooltip="Loading Tracks"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
   </div>
 </div>
