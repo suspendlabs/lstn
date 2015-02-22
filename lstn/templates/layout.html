@@ -49,21 +49,21 @@
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div class="alerts">
-        <div class="alert alert-danger alert-dismissable" data-ng-show="alerts.danger.length > 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="dismissAlert('danger')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.danger[0]"></span>
+        <div class="alert alert-danger alert-dismissable" data-ng-show="alerts.messages.error.length > 0" data-ng-cloak>
+          <button type="button" class="close" data-ng-click="dismissAlert('error')" data-dismiss="alert">&times;</button>
+          <span data-ng-bind="alerts.messages.error[0]"></span>
         </div>
-        <div class="alert alert-warning alert-dismissable" data-ng-show="alerts.warning.length > 0 && alerts.danger.length === 0" data-ng-cloak>
+        <div class="alert alert-warning alert-dismissable" data-ng-show="alerts.messages.warning.length > 0 && alerts.messages.error.length === 0" data-ng-cloak>
           <button type="button" class="close" data-ng-click="dismissAlert('warning')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.warning[0]"></span>
+          <span data-ng-bind="alerts.messages.warning[0]"></span>
         </div>
-        <div class="alert alert-info alert-dismissable" data-ng-show="alerts.info.length > 0 && alerts.warning.length === 0 && alerts.danger.length === 0" data-ng-cloak>
+        <div class="alert alert-info alert-dismissable" data-ng-show="alerts.messages.info.length > 0 && alerts.messages.warning.length === 0 && alerts.messages.error.length === 0" data-ng-cloak>
           <button type="button" class="close" data-ng-click="dismissAlert('info')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.info[0]"></span>
+          <span data-ng-bind="alerts.messages.info[0]"></span>
         </div>
-        <div class="alert alert-success alert-dismissable" data-ng-show="alerts.success.length > 0 && alerts.info.length === 0 && alerts.warning.length === 0 && alerts.danger.length === 0" data-ng-cloak>
+        <div class="alert alert-success alert-dismissable" data-ng-show="alerts.messages.success.length > 0 && alerts.messages.info.length === 0 && alerts.messages.warning.length === 0 && alerts.messages.error.length === 0" data-ng-cloak>
           <button type="button" class="close" data-ng-click="dismissAlert('success')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.success[0]"></span>
+          <span data-ng-bind="alerts.messages.success[0]"></span>
         </div>
       </div>
 
@@ -81,11 +81,15 @@
         <% if current_user.is_authenticated() %>
         <ul class="nav navbar-nav navbar-right">
           <li><p class="navbar__rooms navbar-text"><a class="navbar-link" href="/rooms">All Rooms</a></p></li>
-          <li data-ng-show="currentRoom" data-ng-cloak><p class="navbar__divider navbar-text"><i class="fa fa-fw fa-angle-right"></i></p></li>
-          <li data-ng-show="currentRoom" data-ng-cloak><p class="navbar__room navbar-text"><a class="navbar-link" data-ng-href="/room/{{ currentRoom.slug }}" data-ng-bind="currentRoom.name"></a></p></li>
+          <li data-ng-show="currentRoom" class="hidden-sm"><p class="navbar__divider navbar-text"><i class="fa fa-fw fa-angle-right"></i></p></li>
+          <li data-ng-show="currentRoom">
+            <p class="navbar__room navbar-text">
+              <a class="navbar-link" data-ng-href="/room/{{ currentRoom.slug }}" data-ng-bind="currentRoom.name"></a>
+            </p>
+          </li>
           <li class="dropdown">
             <a class="navbar__name dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-              <img data-ng-src="{{ current_user.picture }}" class="navbar__photo avatar xs" alt="{{ current_user.name }}">
+              <img data-ng-src="{{ current_user.picture }}" class="navbar__photo avatar xs ng-cloak" alt="{{ current_user.name }}">
               %% current_user.name %%
               <span class="caret"></span>
             </a>

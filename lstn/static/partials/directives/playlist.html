@@ -1,15 +1,22 @@
-<div id="playlist{{ $id }}" class="playlist panel panel-success">
-  <div class="panel-heading" role="tab" id="heading{{ $id }}">
-    <h4 class="panel-title">
-      <a data-ng-click="toggleOpen()" aria-expanded="{{ status.open }}" aria-controls="content{{ $id }}" data-parent="#{{ category }}">
-        <span data-ng-bind="playlist.name | truncate:28" title="{{ playlist.name }}"></span>
-        <span class="pull-right glyphicon glyphicon-chevron-right" data-ng-class="{'glyphicon-chevron-down': status.open && !showLoading, 'glyphicon-chevron-right': !status.open && !showLoading, 'glyphicon-refresh spinning': showLoading}"></span>
-      </a>
-    </h4>
+<div id="playlist{{ $id }}" class="drilldown__item playlist clearfix">
+  <div class="item__image">
+    <img data-ng-src="{{ playlist.icon }}" alt="{{ playlist.name }}" title="{{ playlist.name }}">
   </div>
-  <div id="content{{ $id }}" class="panel-collapse" collapse="!status.open" role="tabpanel" aria-labeledby="heading{{ $id }}">
-    <div class="playlist__tracks panel-body">
-      <lstn-track-list data-cutoff="28"></lstn-track-list>
-    </div>
+  <div class="item__info">
+    <div
+      class="item__title"
+      title="{{ playlist.name }}"
+      data-ng-bind="playlist.name"></div>
+    <div
+      class="item__length">{{ playlist.length }} items</div>
+  </div>
+  <div class="item__actions">
+    <a
+      class="fa fa-fw fa-chevron-right"
+      data-ng-show="!playlist.loadingTracks"
+      data-ng-click="loadTracks(playlist)"></a>
+    <a
+      class="fa fa-fw fa-circle-o-notch fa-spin"
+      data-ng-show="playlist.loadingTracks"></a>
   </div>
 </div>

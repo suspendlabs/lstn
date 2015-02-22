@@ -19,7 +19,8 @@ html, body {
 }
 
 img.avatar {
-  border-radius: 50%;
+  @include border-radius(50%);
+
   &.upvoted {
     border: 2px solid #4cae4c;
   }
@@ -77,7 +78,7 @@ body {
 }
 
 .label-as-badge {
-  border-radius: 1em;
+  @include border-radius(1em);
 }
 
 .navbar-inverse {
@@ -179,7 +180,7 @@ body {
   text-align: center;
 
   background: url(/static/images/hero.jpg) no-repeat center center;
-  background-size: cover;
+  @include background-size(cover);
 
   margin-bottom: 60px;
 
@@ -205,7 +206,7 @@ body {
 
 .rooms__container {
   border: 1px solid #DDD;
-  border-radius: 4px;
+  @include border-radius(4px);
 }
 
 .rooms {
@@ -309,7 +310,6 @@ body {
 .roster__container {
   border: none;
   border-radius: 0;
-  
   .roster__category-label {
     color:#fff;
     text-transform:uppercase;
@@ -317,7 +317,6 @@ body {
     .fa.fa-stop {
       color: #d9534f;
     }
-
     .fa.fa-play-circle {
       color:#5cb85c;
     }
@@ -362,7 +361,8 @@ body {
 }
 
 .queue__tabs {
-  height: 100%;
+  min-height: 400px;
+  background-color: $accent-color;
 
   .nav-tabs {
     > li {
@@ -384,11 +384,11 @@ body {
       > a {
           margin: 0;
           padding: 8px 0 8px 0;
-          border-radius: 0;
+          @include border-radius(0);
           border: 0;
           text-align: center;
           background: none;
-          color: #FFFFFF;
+          color: $active-text-color;
           font-weight: 700;
       }
     }
@@ -410,94 +410,74 @@ body {
   }
 }
 
-.categories {
-    overflow: auto;
-    height: 450px;
-}
-
-.category {
-  margin-bottom: 5px;
-}
-
-.category__contents {
-  padding: 5px;
-}
-
-.playlist {
-  margin-bottom: 5px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-}
-
-.playlist__tracks {
-  padding: 0;
-}
-
 .queue--empty {
   margin: 10px;
   height: 170px;
   padding-top: 40px;
 }
 
-.music__list {
+.drilldown__list {
   list-style: none;
   padding: 0;
   margin-bottom: 0;
 }
 
-.music__item {
+.drilldown__item {
+  min-height: 60px;
   background-color: $front-layer;
   padding: 0;
-  border-bottom: 4px solid $background-color;
-
-  &:first-child {
-    border-top: none;
-  }
-
-  &:last-child {
-    .music__image {
-      img {
-        border-bottom-left-radius: 4px;
-      }
-    }
-  }
+  border-bottom: 4px solid $accent-color;
 }
 
-.music__image {
-  width: 60px;
-  height: 60px;
+.item__image {
+  width: 13%;
+  min-height: 60px;
   float: left;
 
   img {
     width: 60px;
     height: 60px;
   }
+
+  .fa {
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+  }
 }
 
-.music__info {
+.item__info {
   float: left;
+  width: 75%;
 
   padding: 3px 0 0 5px;
   
-  .music__top {
+  .item__top {
     float: right;
     margin: 12px 10px 0px 5px;
     cursor: pointer;
   }
 
-  .music__title {
+  .item__title {
     font-weight: bold;
     font-size: 16px;
+
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 
-  .music__artist {
+  .item__artist {
+    width: 100%;
     font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }
 
-.music__actions {
+.item__actions {
   float: right;
   margin-right: 22px;
   line-height: 50px;
@@ -512,6 +492,8 @@ body {
 
 .messages {
   margin-bottom: 0;
+  min-height: 400px;
+  background-color: $accent-color;
 }
 
 footer {
@@ -540,7 +522,7 @@ footer {
   .user-photo {
     max-width: 30px;
     max-height: 30px;
-    border-radius: 15px;
+    @include border-radius(15px);
   }
 
   .list-group-item {
@@ -672,17 +654,42 @@ footer {
   }
 
   .form-control {
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
+    @include border-radius(0);
   }
 }
 
-.search__contents {
+.search__box {
+  &.form-control {
+    @include border-radius(0);
+    border: 1px solid transparent;
+    border-bottom: 4px solid $accent-color;
+  }
+}
+
+.more-music {
   .carousel-control {
     display: none;
   }
 
   .carousel-indicators {
     display: none;
+  }
+}
+
+.carousel__back {
+  padding-left: 5px;
+  line-height: 40px;
+  background-color: $active-color;
+
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  a {
+    color: $active-text-color;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
   }
 }

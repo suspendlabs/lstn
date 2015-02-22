@@ -66,8 +66,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnMusicSearch', ['$timeout', 'CurrentUser', 'Artist', 'Album',
-  function($timeout, CurrentUser, Artist, Album) {
+.directive('lstnMusicSearch', ['$timeout', 'Alert', 'CurrentUser', 'Artist', 'Album',
+  function($timeout, Alert, CurrentUser, Artist, Album) {
     return {
       restrict: 'E',
       replace: true,
@@ -81,24 +81,92 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.searchQuery = null;
         };
 
-        $scope.albums = [];
-        $scope.loadAlbums = function(artistId) {
-          console.log('loadAlbums', artistId);
+        $scope.currentArtist = null;
 
-          Artist.getAlbums(artistId).then(function(albums) {
-            $scope.albums = albums;
+        $scope.albums = [];
+        $scope.loadAlbums = function(artist) {
+          artist.loadingAlbums = true;
+
+          Artist.getAlbums(artist.key).then(function(response) {
+            if (!response || !response.albums) {
+              artist.loadingAlbums = false;
+              Alert.error('Something happened while trying to load albums for the artist.');
+              return;
+            }
+
+            $scope.albums = response.albums;
+            $scope.currentArtist = artist;
 
             $timeout(function() {
+              artist.loadingAlbums = false;
+
               var controller = angular.element('#search-carousel')
                 .controller('carousel');
 
               var nextSlide = controller.slides[1];
               controller.select(nextSlide, 'next');
             }, 100);
+          }, function(response) {
+            artist.loadingAlbums = false;
+            Alert.error('Something happened while trying to load albums for the artist.');
           });
         };
 
+        $scope.closeArtist = function() {
+          var controller = angular.element('#search-carousel')
+            .controller('carousel');
+
+          var prevSlide = controller.slides[0];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentArtist = null;
+        };
+
+        $scope.currentAlbum = null;
+
         $scope.tracks = [];
+        $scope.loadTracks = function(album) {
+          album.loadingTracks = true;
+
+          Album.getTracks(album.key).then(function(response) {
+            if (!response || !response.tracks) {
+              album.loadingTracks = false;
+              Alert.error('Something happened while trying to load tracks for the album.');
+              return;
+            }
+
+            $scope.tracks = response.tracks;
+            $scope.currentAlbum = album;
+
+            $timeout(function() {
+              album.loadingTracks = false;
+
+              var controller = angular.element('#search-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[2];
+              controller.select(nextSlide, 'next');
+            }, 100);
+          }, function(response) {
+            album.loadingTracks = false;
+            Alert.error('Something happened while trying to load tracks for the album.');
+          });
+        };
+
+        $scope.closeAlbum = function() {
+          var controller = angular.element('#search-carousel')
+            .controller('carousel');
+
+          var targetSlide = 1; // Artist Slide
+          if (!$scope.currentArtist) {
+            targetSlide = 0; // Search Result Slide
+          }
+
+          var prevSlide = controller.slides[targetSlide];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentAlbum = null;
+        };
 
         $scope.$watch('searchQuery', function(newVal, oldVal) {
           if (newVal === oldVal) {
@@ -355,68 +423,199 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnMoreMusic', [
-  function() {
+.directive('lstnMoreMusic', ['$timeout', 'Alert', 'CurrentUser', 'Playlist',
+  function($timeout, Alert, CurrentUser, Playlist) {
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/static/partials/directives/more-music.html'
+      templateUrl: '/static/partials/directives/more-music.html',
+      link: function($scope, $element, $attrs) {
+        $scope.categories = [{
+          name: 'Your Playlists',
+          type: 'owned'
+        },{
+          name: 'Collaborative Playlists',
+          type: 'collab'
+        },{
+          name: 'Subscribed Playlists',
+          type: 'subscribed'
+        },{
+          name: 'Favorited Playlists',
+          type: 'favorites'
+        },{
+          name: 'Stations',
+          type: 'stations'
+        },{
+          name: 'Collections',
+          type: 'collections'
+        }];
+
+        $scope.currentCategory = null;
+        $scope.playlists = [];
+
+        $scope.loadLists = function(category) {
+          category.loadingLists = true;
+
+          CurrentUser.getPlaylists(category.type).then(function(response) {
+            if (!response || !response.playlists || !response.playlists[category.type]) {
+              console.log('LoadLists', response);
+
+              category.loadingLists = false;
+              Alert.error('Something went wrong while trying to load the category.');
+              return;
+            }
+
+            $scope.playlists = response.playlists[category.type];
+            $scope.currentCategory = category;
+
+            $timeout(function() {
+              category.loadingLists = false;
+
+              var controller = angular.element('#category-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[1];
+              controller.select(nextSlide, 'next');
+            }, 100);
+          }, function(response) {
+            category.loadingLists = false;
+            Alert.error('Something went wrong while trying to load the category.');
+          });
+        };
+
+        $scope.closeCategory = function() {
+          var controller = angular.element('#category-carousel')
+            .controller('carousel');
+
+          var prevSlide = controller.slides[0];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentCategory = null;
+        };
+
+        $scope.currentPlaylist = null;
+        $scope.tracks = [];
+
+        $scope.loadTracks = function(playlist) {
+          playlist.loadingTracks = true;
+
+          Playlist.getTracks(playlist.key).then(function(response) {
+            if (!response || !response.tracks) {
+              console.log('LoadTracks', response);
+
+              playlist.loadingTracks = false;
+              Alert.error('Something went wrong while trying to load the playlist tracks.');
+              return;
+            }
+
+            $scope.tracks = response.tracks;
+            $scope.currentPlaylist = playlist;
+
+            $timeout(function() {
+              playlist.loadingTracks = false;
+
+              var controller = angular.element('#category-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[2];
+              controller.select(nextSlide, 'next');
+            }, 100);
+          }, function(response) {
+            playlist.loadingTracks = false;
+            Alert.error('Something went wrong while trying to load the playlist tracks.');
+          });
+        };
+
+        $scope.closePlaylist = function() {
+          var controller = angular.element('#category-carousel')
+            .controller('carousel');
+
+          var prevSlide = controller.slides[1];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentPlaylist = null;
+        };
+      }
     };
   }
 ])
 
-.directive('lstnCategory', ['$parse', 'CurrentUser',
-  function($parse, CurrentUser) {
+.directive('lstnCategory', [
+  function() {
     return {
       restrict: 'E',
-      transclude: true,
       replace: true,
-      scope: true,
-      templateUrl: '/static/partials/directives/category.html',
-      link: function($scope, $element, $attrs) {
-        $scope.name = $parse($attrs.name)($scope);
-        $scope.type = $parse($attrs.type)($scope);
-        $scope.open = $parse($attrs.open)($scope);
+      scope: {
+        category: '=',
+        loadLists: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/category.html'
+    };
+  }
+])
 
-        // TODO: We should consider passing this in
-        $scope.group = $element.parent().attr('id');
+.directive('lstnPlaylist', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        playlist: '=',
+        loadTracks: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/playlist.html'
+    };
+  }
+])
 
-        $scope.categoryId = Date.now();
-        $scope.refreshingList = false;
+.directive('lstnArtist', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        artist: '=',
+        loadAlbums: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/artist.html'
+    };
+  }
+])
 
-        $scope.categoryStatus = {
-          open: $scope.open || false
-        };
+.directive('lstnAlbum', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        album: '=',
+        loadTracks: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/album.html'
+    };
+  }
+])
 
-        $scope.toggleCategoryOpen = function() {
-          $scope.categoryStatus.open = !$scope.categoryStatus.open;
-        };
-
-        $scope.refreshList = function() {
-          console.log('refreshList', $scope.type);
-
-          $scope.refreshingList = true;
-          $scope.categoryStatus.open = false;
-
-          CurrentUser.playlists({
-            id: $scope.type
-          }, function(response) {
-            $scope.refreshingList = false;
-
-            if (!response || !response.success || !response.playlists) {
-              // TODO: Error
-              return;
-            }
-
-            $scope.playlists[type] = response.playlists[type];
-
-            $scope.categoryStatus.open = true;
-          }, function(response) {
-            $scope.refreshingList = false;
-            // TODO: Error
-          });
-        };
-      }
+.directive('lstnTrack', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        track: '=',
+        queue: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/track.html'
     };
   }
 ])
@@ -465,110 +664,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnArtist', ['$parse',
-  function($parse) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/artist.html',
-      link: function($scope, $element, $attrs) {
-        $scope.cutoff = $parse($attrs.cutoff)($scope) || 50;
-        $scope.context = $parse($attrs.context)($scope) || 'playlist';
-      }
-    };
-  }
-])
-
-.directive('lstnAlbum', ['$parse',
-  function($parse) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/album.html',
-      link: function($scope, $element, $attrs) {
-        $scope.cutoff = $parse($attrs.cutoff)($scope) || 50;
-        $scope.context = $parse($attrs.context)($scope) || 'playlist';
-      }
-    };
-  }
-])
-
-.directive('lstnTrack', ['$parse',
-  function($parse) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/track.html',
-      link: function($scope, $element, $attrs) {
-        $scope.cutoff = $parse($attrs.cutoff)($scope) || 50;
-        $scope.context = $parse($attrs.context)($scope) || 'playlist';
-      }
-    };
-  }
-])
-
-.directive('lstnTrackList', ['$parse',
-  function($parse) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/track-list.html',
-      link: function($scope, $element, $attrs) {
-        $scope.cutoff = $parse($attrs.cutoff || 25)($scope);
-      }
-    };
-  }
-])
-
-.directive('lstnPlaylist', ['$timeout', 'Playlist',
-  function($timeout, Playlist) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/playlist.html',
-      link: function($scope, $element, $attrs) {
-        $scope.category = $element.parent().attr('id');
-
-        $scope.status = {
-          open: false
-        };
-
-        $scope.toggleOpen = function() {
-          // Prevent a double click of the toggle
-          if ($scope.showLoading) {
-            return;
-          }
-
-          if (typeof $scope.tracks === 'undefined') {
-            $scope.showLoading = true;
-
-            Playlist.tracks({
-              id: $scope.playlist.key
-            }, function(response) {
-              $scope.showLoading = false;
-
-              if (!response || !response.success || !response.tracks) {
-                // TODO: Error
-                return;
-              }
-
-              $scope.tracks = response.tracks;
-
-              $timeout(function() {
-                $scope.status.open = !$scope.status.open;
-              }, 100);
-            }, function(response) {
-              $scope.showLoading = false;
-              // TODO: Error
-            });
-          } else {
-            $scope.status.open = !$scope.status.open;
-          }
-        };
-      }
-    };
-  }
-])
 .directive('albumCoverBackground', [function() {
   return {
     link: function($scope, $element) {

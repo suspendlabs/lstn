@@ -17,6 +17,8 @@ html, body {
 }
 
 img.avatar {
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
   border-radius: 50%;
 }
 img.avatar.upvoted {
@@ -74,6 +76,8 @@ body > .container > div {
 }
 
 .label-as-badge {
+  -moz-border-radius: 1em;
+  -webkit-border-radius: 1em;
   border-radius: 1em;
 }
 
@@ -157,6 +161,9 @@ body > .container > div {
   color: white;
   text-align: center;
   background: url(/static/images/hero.jpg) no-repeat center center;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  -webkit-background-size: cover;
   background-size: cover;
   margin-bottom: 60px;
 }
@@ -180,6 +187,8 @@ body > .container > div {
 
 .rooms__container {
   border: 1px solid #DDD;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
   border-radius: 4px;
 }
 
@@ -315,7 +324,8 @@ body > .container > div {
 }
 
 .queue__tabs {
-  height: 100%;
+  min-height: 400px;
+  background-color: #3d3d3d;
 }
 .queue__tabs .nav-tabs > li {
   width: 50%;
@@ -332,11 +342,13 @@ body > .container > div {
 .queue__tabs .nav-tabs > li > a {
   margin: 0;
   padding: 8px 0 8px 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
   border-radius: 0;
   border: 0;
   text-align: center;
   background: none;
-  color: #FFFFFF;
+  color: #ffffff;
   font-weight: 700;
 }
 
@@ -351,87 +363,72 @@ body > .container > div {
   height: 450px;
 }
 
-.categories {
-  overflow: auto;
-  height: 450px;
-}
-
-.category {
-  margin-bottom: 5px;
-}
-
-.category__contents {
-  padding: 5px;
-}
-
-.playlist {
-  margin-bottom: 5px;
-}
-.playlist:last-child {
-  margin-bottom: 0;
-}
-
-.playlist__tracks {
-  padding: 0;
-}
-
 .queue--empty {
   margin: 10px;
   height: 170px;
   padding-top: 40px;
 }
 
-.music__list {
+.drilldown__list {
   list-style: none;
   padding: 0;
   margin-bottom: 0;
 }
 
-.music__item {
+.drilldown__item {
+  min-height: 60px;
   background-color: #eee;
   padding: 0;
-  border-bottom: 4px solid #333;
-}
-.music__item:first-child {
-  border-top: none;
-}
-.music__item:last-child .music__image img {
-  border-bottom-left-radius: 4px;
+  border-bottom: 4px solid #3d3d3d;
 }
 
-.music__image {
-  width: 60px;
-  height: 60px;
+.item__image {
+  width: 13%;
+  min-height: 60px;
   float: left;
 }
-.music__image img {
+.item__image img {
   width: 60px;
   height: 60px;
 }
+.item__image .fa {
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+}
 
-.music__info {
+.item__info {
   float: left;
+  width: 75%;
   padding: 3px 0 0 5px;
 }
-.music__info .music__top {
+.item__info .item__top {
   float: right;
   margin: 12px 10px 0px 5px;
   cursor: pointer;
 }
-.music__info .music__title {
+.item__info .item__title {
   font-weight: bold;
   font-size: 16px;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
-.music__info .music__artist {
+.item__info .item__artist {
+  width: 100%;
   font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-.music__actions {
+.item__actions {
   float: right;
   margin-right: 22px;
   line-height: 50px;
 }
-.music__actions a {
+.item__actions a {
   cursor: pointer;
   color: #d24242;
   text-decoration: none;
@@ -440,6 +437,8 @@ body > .container > div {
 
 .messages {
   margin-bottom: 0;
+  min-height: 400px;
+  background-color: #3d3d3d;
 }
 
 footer {
@@ -464,6 +463,8 @@ footer .container .text-muted {
 .user-search .user-photo {
   max-width: 30px;
   max-height: 30px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
   border-radius: 15px;
 }
 .user-search .list-group-item {
@@ -609,13 +610,38 @@ footer .container .text-muted {
   padding-left: 8px;
 }
 .room-activity .form-control {
-  border-top-right-radius: 0;
-  border-top-left-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
 }
 
-.search__contents .carousel-control {
+.search__box.form-control {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  border: 1px solid transparent;
+  border-bottom: 4px solid #3d3d3d;
+}
+
+.more-music .carousel-control {
   display: none;
 }
-.search__contents .carousel-indicators {
+.more-music .carousel-indicators {
   display: none;
+}
+
+.carousel__back {
+  padding-left: 5px;
+  line-height: 40px;
+  background-color: #d24242;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.carousel__back a {
+  color: #ffffff;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
 }
