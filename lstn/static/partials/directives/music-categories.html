@@ -1,21 +1,44 @@
-<div id="categories" class="categories">
-  <lstn-category data-ng-show="playlists.owned && playlists.owned.length > 0" data-name="'Your Playlists'" data-type="'owned'" data-open="true">
-    <lstn-playlist data-ng-repeat="playlist in playlists.owned"></lstn-playlist>
-  </lstn-category>
-  <lstn-category data-ng-show="playlists.collab && playlists.collab.length > 0" data-name="'Collaborative Playlists'" data-type="'collab'">
-    <lstn-playlist data-ng-repeat="playlist in playlists.collab"></lstn-playlist>
-  </lstn-category>
-  <lstn-category data-ng-show="playlists.subscribed && playlists.subscribed.length > 0" data-name="'Subscribed Playlists'" data-type="'subscribed'">
-    <lstn-playlist data-ng-repeat="playlist in playlists.subscribed"></lstn-playlist>
-  </lstn-category>
-  <lstn-category data-ng-show="playlists.favorites && playlists.favorites.length > 0" data-name="'Favorited Playlists'" data-type="'favorites'">
-    <lstn-playlist data-ng-repeat="playlist in playlists.favorites"></lstn-playlist>
-  </lstn-category>
-  <lstn-category data-name="'Collections'" data-type="'collections'">
-    Albums / Tracks
-    Artists / Tracks
-  </lstn-category>
-  <lstn-category data-name="'Stations'" data-type="'stations'">
-    Stations
-  </lstn-category>
+<div class="playlist__container">
+  <carousel id="category-carousel" interval="false">
+    <slide>
+      <ul class="categories categories--full category__list drilldown__list text-left">
+        <li data-ng-repeat="item in categories">
+          <lstn-category
+            data-category="item"
+            data-load-lists="loadLists"></lstn-category>
+        </li>
+      </ul>
+    </slide>
+    <slide>
+      <div class="carousel__back text-left">
+        <a data-ng-click="closeCategory()">
+          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentCategory.name"></span>
+        </a>
+      </div>
+      <ul class="playlists drilldown__list text-left">
+        <li data-ng-repeat="item in playlists">
+          <lstn-playlist
+            data-context="'category'"
+            data-playlist="item"
+            data-index="$index"
+            data-load-playlist-tracks="loadPlaylistTracks"></lstn-playlist>
+        </li>
+      </ul>
+    </slide>
+    <slide>
+      <div class="carousel__back text-left">
+        <a data-ng-click="closePlaylist()">
+          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentPlaylist.name"></span>
+        </a>
+      </div>
+      <ul class="tracks drilldown__list text-left">
+        <li data-ng-repeat="item in tracks">
+          <lstn-track
+            data-context="'playlist'"
+            data-track="item"
+            data-index="$index"></lstn-track>
+        </li>
+      </ul>
+    </slide>
+  </carousel>
 </div>
