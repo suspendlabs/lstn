@@ -717,7 +717,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           upvote: 'list-group-item-success',
           downvote: 'list-group-item-danger'
         };
-        
+
         $scope.getMessageClass = function() {
           if (!$scope.message) {
             return null;
@@ -757,13 +757,13 @@ angular.module('lstn.directives', ['sc.twemoji'])
   return {
     scope: {
       timeFromNow: '='
-    }, 
+    },
     link: function($scope, element) {
 
       var timeoutId;
       var intervalLength = 1000 * 60;
       var filter = $filter('timeFromNow');
-        
+
       function updateTime() {
         element.text(filter($scope.timeFromNow));
       }
@@ -782,7 +782,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       updateTime();
       updateLater();
     }
-  };  
+  };
 }
 ]);
 })();
