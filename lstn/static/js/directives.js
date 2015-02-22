@@ -125,7 +125,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.currentAlbum = null;
 
         $scope.tracks = [];
-        $scope.loadTracks = function(album) {
+        $scope.loadAlbumTracks = function(album) {
           album.loadingTracks = true;
 
           Album.getTracks(album.key).then(function(response) {
@@ -196,16 +196,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
           });
         });
       }
-    };
-  }
-])
-
-.directive('lstnMusicCategories', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/music-categories.html'
     };
   }
 ])
@@ -423,12 +413,22 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnMoreMusic', ['$timeout', 'Alert', 'CurrentUser', 'Playlist',
+.directive('lstnMoreMusic', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/more-music.html'
+    };
+  }
+])
+
+.directive('lstnMusicCategories', ['$timeout', 'Alert', 'CurrentUser', 'Playlist',
   function($timeout, Alert, CurrentUser, Playlist) {
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/static/partials/directives/more-music.html',
+      templateUrl: '/static/partials/directives/music-categories.html',
       link: function($scope, $element, $attrs) {
         $scope.categories = [{
           name: 'Your Playlists',
@@ -496,7 +496,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.currentPlaylist = null;
         $scope.tracks = [];
 
-        $scope.loadTracks = function(playlist) {
+        $scope.loadPlaylistTracks = function(playlist) {
           playlist.loadingTracks = true;
 
           Playlist.getTracks(playlist.key).then(function(response) {
@@ -540,6 +540,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
+
 .directive('lstnCategory', [
   function() {
     return {
@@ -563,7 +564,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         playlist: '=',
-        loadTracks: '=',
+        loadPlaylistTracks: '=',
         index: '=',
         context: '='
       },
@@ -595,7 +596,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         album: '=',
-        loadTracks: '=',
+        loadAlbumTracks: '=',
         index: '=',
         context: '='
       },
@@ -604,18 +605,20 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnTrack', [
-  function() {
+.directive('lstnTrack', ['Queue',
+  function(Queue) {
     return {
       restrict: 'E',
       replace: true,
       scope: {
         track: '=',
-        queue: '=',
         index: '=',
         context: '='
       },
-      templateUrl: '/static/partials/directives/track.html'
+      templateUrl: '/static/partials/directives/track.html',
+      link: function($scope, $element, $attrs) {
+        $scope.queue = Queue;
+      }
     };
   }
 ])

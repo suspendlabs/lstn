@@ -431,10 +431,10 @@ body {
 
 .item__actions {
   float: right;
-  margin-right: 22px;
+  margin-right: 15px;
   line-height: 50px;
 
-  a {
+  .fa {
     cursor:pointer;
     color: $active-color;
     text-decoration: none;
@@ -613,7 +613,6 @@ footer {
 .search__box {
   &.form-control {
     @include border-radius(0);
-    border: 1px solid transparent;
     border-bottom: 4px solid $accent-color;
   }
 }
