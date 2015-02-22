@@ -323,7 +323,7 @@ body > .container > div {
   min-height: 60px;
   background-color: #eee;
   padding: 0;
-  border-bottom: 4px solid #333;
+  border-bottom: 4px solid #3d3d3d;
 }
 
 .item__image {
@@ -556,8 +556,11 @@ footer .container .text-muted {
 }
 
 .search__box.form-control {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
   border-radius: 0;
   border: 1px solid transparent;
+  border-bottom: 4px solid #3d3d3d;
 }
 
 .more-music .carousel-control {

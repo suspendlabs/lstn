@@ -378,7 +378,7 @@ body {
   min-height: 60px;
   background-color: $front-layer;
   padding: 0;
-  border-bottom: 4px solid $background-color;
+  border-bottom: 4px solid $accent-color;
 }
 
 .item__image {
@@ -612,8 +612,9 @@ footer {
 
 .search__box {
   &.form-control {
-    border-radius: 0;
+    @include border-radius(0);
     border: 1px solid transparent;
+    border-bottom: 4px solid $accent-color;
   }
 }
 
