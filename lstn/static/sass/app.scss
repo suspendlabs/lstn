@@ -62,7 +62,7 @@ body {
   background-color: $background-color;
 
   > .container {
-    padding: 0px 15px 0;
+    padding: 0 15px 0;
 
     > div {
       margin-top: 15px;
@@ -88,6 +88,11 @@ body {
   min-height: 70px;
   font-size: 1.4em;
 
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   .navbar-text {
     margin-top: 0.95em;
   }
@@ -98,6 +103,16 @@ body {
         &.navbar__name {
           color: #FFFFFF;
           padding-left: 10px;
+        }
+      }
+    }
+
+    > .open {
+      > a {
+        background-color: $background-color;
+
+        &:focus, &:hover {
+          background-color: $background-color;
         }
       }
     }

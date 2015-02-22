@@ -61,7 +61,7 @@ body {
   background-color: #333;
 }
 body > .container {
-  padding: 0px 15px 0;
+  padding: 0 15px 0;
 }
 body > .container > div {
   margin-top: 15px;
@@ -87,12 +87,22 @@ body > .container > div {
   min-height: 70px;
   font-size: 1.4em;
 }
+.navbar-inverse .container {
+  padding-left: 0;
+  padding-right: 0;
+}
 .navbar-inverse .navbar-text {
   margin-top: 0.95em;
 }
 .navbar-inverse .navbar-nav > li > a.navbar__name {
   color: #FFFFFF;
   padding-left: 10px;
+}
+.navbar-inverse .navbar-nav > .open > a {
+  background-color: #333;
+}
+.navbar-inverse .navbar-nav > .open > a:focus, .navbar-inverse .navbar-nav > .open > a:hover {
+  background-color: #333;
 }
 
 .navbar-logo {
