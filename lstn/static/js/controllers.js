@@ -9,10 +9,10 @@ angular.module('lstn.controllers', [])
       console.log('socket:error', ev, data);
     });
 
-    $scope.alert = Alert;
-
-  $scope.currentRoom = CurrentRoom;
-}])
+    $scope.alerts = Alert;
+    $scope.currentRoom = CurrentRoom;
+  }
+])
 
 .controller('RoomsController', ['$scope', '$location', 'Room', function($scope, $location, Room, Alert) {
   $scope.loading = true;
