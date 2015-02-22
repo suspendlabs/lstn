@@ -11,6 +11,9 @@
       class="item__artist"
       data-ng-class="{'text-muted': context !== 'queue' && queue.bitset[track.key]}"
       data-ng-bind="track.artist"></div>
+    <div
+      class="item__duration text-muted"
+      data-ng-bind="track.duration | duration"></div>
   </div>
   <div class="item__actions">
     <a
