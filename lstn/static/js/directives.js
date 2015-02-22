@@ -577,6 +577,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $element.css('background-image', 'url(' + imageUrl + ')');
           $element.css('background-size', 'cover');
         } else {
+
         }
       });
     }

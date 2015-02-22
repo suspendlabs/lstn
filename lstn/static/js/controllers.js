@@ -235,7 +235,6 @@ angular.module('lstn.controllers', [])
 
     socket.on('room:roster:update', function(data) {
       console.log('room:roster:update', data);
-
       $scope.roster = data;
       $scope.roster.controllersCount = $scope.roster.controllerOrder.length;
       $scope.roster.usersCount = Object.keys($scope.roster.users).length;

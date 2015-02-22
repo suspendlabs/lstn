@@ -198,7 +198,15 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/playing-info.html',
     "<div class=\"playing__info-container\">\n" +
-    "  <div class=\"playing__info playing__info--playing\" data-album-cover-background data-ng-style=\"playingStyle\">\n" +
+    "  \n" +
+    "  <div data-ng-hide=\"playing\" class=\"playing__info--stopped\">\n" +
+    "    <a data-ng-show=\"queue.length\" href=\"\" data-ng-click=\"toggleBroadcast()\">\n" +
+    "      <i class=\"fa fa-play-circle\" />\n" +
+    "    </a>\n" +
+    "    <p data-ng-show=\"!queue.length\">Waiting for a broadcaster&hellip;</p>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div data-ng-show=\"playing\" class=\"playing__info playing__info--playing\" data-album-cover-background>\n" +
     "    <div class=\"playing__meta\">\n" +
     "      <h3 class=\"playing__title\" data-ng-bind=\"playing.track.title | truncate:28\"></h3>\n" +
     "      <h4 class=\"playing__artist\" data-ng-bind=\"playing.track.artist | truncate:35\"></h4>\n" +
@@ -394,33 +402,45 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-roster.html',
     "<div class=\"roster__container room__container\">\n" +
-    "  <div>BROADCASTERS</div>\n" +
-    "  <ul class=\"roster roster--controllers\">\n" +
-    "    <li data-ng-show=\"!roster || roster.controllersCount === 0\">\n" +
-    "      <div class=\"text-center\"><strong>No Broadcasters</strong></div>\n" +
-    "    </li>\n" +
-    "    <li data-ng-show=\"roster && roster.controllersCount > 0\" data-ng-repeat=\"user_id in roster.controllerOrder\"\n" +
-    "      <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" target=\"_blank\">\n" +
-    "        <img data-ng-src=\"{{ roster.controllers[user_id].picture }}\" class=\"avatar xs\"\n" +
-    "          data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
-    "          alt=\"{{ roster.controllers[user_id].name }}\"/> {{ roster.controllers[user_id].name }}\n" +
-    "      </a>\n" +
-    "    </li>\n" +
-    "  </ul>\n" +
-    "  <div>LISTENERS<div>\n" +
-    "  <span class=\"listeners\" data-ng-show=\"roster && roster.usersCount > 0\">\n" +
-    "    <a\n" +
-    "      class=\"roster__user\"\n" +
-    "      data-ng-repeat=\"(user_id, user) in roster.users | orderBy:name\"\n" +
-    "      data-ng-href=\"http://www.rdio.com{{ user.profile }}\"\n" +
-    "      target=\"_blank\"\n" +
-    "      tooltip=\"{{ user.name }}\">\n" +
     "\n" +
-    "      <img data-ng-src=\"{{ user.picture }}\"\n" +
+    "  <div class=\"roster__category\">\n" +
+    "    <div class=\"roster__category-label\">Broadcasters \n" +
+    "      <a href=\"\" data-ng-click=\"toggleBroadcast();\">\n" +
+    "        <i class=\"fa\" data-ng-class=\"{'fa-play-circle': !isController, 'fa-stop': isController }\"></i>\n" +
+    "      </a>\n" +
+    "    </div>\n" +
+    "    <ul class=\"roster roster--controllers\">\n" +
+    "      <li class=\"empty\" data-ng-show=\"!roster || roster.controllersCount === 0\">\n" +
+    "        No Broadcasters\n" +
+    "      </li>\n" +
+    "      <li data-ng-show=\"roster && roster.controllersCount > 0\" data-ng-repeat=\"user_id in roster.controllerOrder\">\n" +
+    "        <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" target=\"_blank\">\n" +
+    "          <img data-ng-src=\"{{ roster.controllers[user_id].picture }}\" class=\"avatar xs\"\n" +
+    "            data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
+    "            alt=\"{{ roster.controllers[user_id].name }}\" />\n" +
+    "        </a>\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div class=\"roster__category\">\n" +
+    "    <div class=\"roster__category-label\">Listeners</div>\n" +
+    "    <ul class=\"roster roster--listeners\" data-ng-show=\"roster && roster.usersCount > 0\">\n" +
+    "      <li class=\"empty\" data-ng-show=\"!roster || roster.users.length === 0\">\n" +
+    "        No one is listening\n" +
+    "      </li>\n" +
+    "      <li data-ng-repeat=\"(user_id, user) in roster.users | orderBy:name\">\n" +
+    "      <a class=\"roster__user\"\n" +
+    "        data-ng-href=\"http://www.rdio.com{{ user.profile }}\"\n" +
+    "        target=\"_blank\"\n" +
+    "        tooltip=\"{{ user.name }}\">\n" +
+    "        <img data-ng-src=\"{{ user.picture }}\"\n" +
     "        data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
-    "        class=\"avatar sm\" alt=\"{{ user.name }}\" />\n" +
-    "    </a>\n" +
-    "  </span>\n" +
+    "        class=\"avatar xs\" alt=\"{{ user.name }}\" />\n" +
+    "      </a>\n" +
+    "      </li>\n" +
+    "    </ul>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 
@@ -533,7 +553,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/room.html',
     "<div class=\"room row\">\n" +
     "  <div class=\"col-md-3\">\n" +
-    "    <a href=\"\" data-ng-click=\"toggleBroadcast()\">Broadcast<a/>\n" +
     "    <lstn-playing-info></lstn-playing-info>\n" +
     "    <lstn-room-roster></lstn-room-roster>\n" +
     "  </div>\n" +
