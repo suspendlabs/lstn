@@ -523,7 +523,7 @@ Lstn.prototype.sendPlaying = function(broadcast) {
     if (controller && user && name && artist) {
       this.sendChatMessage({
         sender: this.getCurrentController(),
-        name: name,
+        track: name,
         artist: artist,
         user: user.name,
         type: 'playing',
@@ -736,7 +736,7 @@ Lstn.prototype.onControllerPlayingSkipped = function(data) {
   if (controller && user && name && artist) {
     this.sendChatMessage({
       sender: this.getCurrentController(),
-      name: name,
+      track: name,
       artist: artist,
       user: user.name,
       type: 'skipped',
