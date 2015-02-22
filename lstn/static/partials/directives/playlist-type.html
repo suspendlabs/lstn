@@ -1,0 +1,25 @@
+<div id="playlist-type{{ $id }}" class="drilldown__item playlist-type clearfix">
+  <div class="item__image">
+    <i class="fa fa-fw fa-music fa-3x"></i>
+  </div>
+  <div class="item__info">
+    <div
+      class="item__title"
+      data-ng-bind="playlistType.name"></div>
+  </div>
+  <div class="item__actions">
+    <a
+      class="fa fa-fw fa-chevron-right"
+      data-ng-show="!playlistType.loadingPlaylists"
+      data-ng-click="loadPlaylists(playlistType)"
+      data-tooltip="Load Playlists"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
+    <a
+      class="fa fa-fw fa-circle-o-notch fa-spin"
+      data-ng-show="playlistType.loadingPlaylists"
+      data-tooltip="Loading Playlists"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
+  </div>
+</div>
