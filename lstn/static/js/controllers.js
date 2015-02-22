@@ -3,58 +3,36 @@
 
 angular.module('lstn.controllers', [])
 
-.controller('AppController', ['$scope', function($scope) {
-  $scope.$on('socket:error', function(ev, data) {
-    console.log('socket:error', ev, data);
-  });
+.controller('AppController', ['$scope', 'Alert', 'CurrentRoom',
+  function($scope, Alert, CurrentRoom) {
+    $scope.$on('socket:error', function(ev, data) {
+      console.log('socket:error', ev, data);
+    });
 
-  $scope.alerts = {
-    success: [],
-    info: [],
-    warning: [],
-    danger: []
-  };
+    $scope.alert = Alert;
 
-  $scope.dismissAlert = function(type) {
-    $scope.alerts[type].splice(0, 1);
-    console.log($scope.alerts);
-  };
-
-  $scope.addAlert = function(message, type) {
-    type = type || 'info';
-
-    if (!(type in $scope.alerts)) {
-      console.log(type, message);
-      return;
-    }
-
-    $scope.alerts[type].push(message);
-  };
-
-  $scope.currentRoom = null;
-  $scope.$on('room', function(e, room) {
-    $scope.currentRoom = room;
-  });
+  $scope.currentRoom = CurrentRoom;
 }])
 
-.controller('RoomsController', ['$scope', '$location', 'Room', function($scope, $location, Room) {
+.controller('RoomsController', ['$scope', '$location', 'Room', function($scope, $location, Room, Alert) {
   $scope.loading = true;
   $scope.showCreateRoom = false;
 
   Room.list({}, function(response) {
     $scope.loading = false;
     if (!response || !response.success || !response.rooms) {
-      $scope.addAlert('Something went wrong while trying to load the rooms list.', 'danger');
       console.log('Room.list', response);
+
+      Alert.error('Something went wrong while trying to load the rooms list.');
       return;
     }
 
     $scope.rooms = response.rooms;
   }, function(response) {
-    $scope.loading = false;
-
-    $scope.addAlert('Something went wrong while trying to load the rooms list.', 'danger');
     console.log('Room.list', response);
+
+    $scope.loading = false;
+    Alert.error('Something went wrong while trying to load the rooms list.');
   });
 
   $scope.newRoom = {
@@ -68,15 +46,17 @@ angular.module('lstn.controllers', [])
   $scope.saveCreateRoom = function() {
     Room.save({}, $scope.newRoom, function(response) {
       if (!response || !response.success || !response.slug) {
-        $scope.addAlert('Something went wrong while trying to create the new room.', 'danger');
         console.log('Room.save', response);
+
+        Alert.error('Something went wrong while trying to create the new room.');
         return false;
       }
 
       $location.path('/room/' + response.slug);
     }, function(response) {
-      $scope.addAlert('Something went wrong while trying to create the new room.', 'danger');
       console.log('Room.save', response);
+
+      Alert.error('Something went wrong while trying to create the new room.');
     });
   };
 
@@ -96,15 +76,17 @@ angular.module('lstn.controllers', [])
       id: $scope.rooms[index].id
     }, $scope.rooms[index], function(response) {
       if (!response || !response.success || !response.room) {
-        $scope.addAlert('Something went wrong while trying to save the room.', 'danger');
         console.log('Room.update', response);
+
+        Alert.error('Something went wrong while trying to save the room.');
         return false;
       }
 
       $scope.rooms[index] = response.room;
     }, function(response) {
-      $scope.addAlert('Something went wrong while trying to save the room.', 'danger');
       console.log('Room.update', response);
+
+      Alert.error('Something went wrong while trying to save the room.');
     });
   };
 
@@ -121,21 +103,23 @@ angular.module('lstn.controllers', [])
       id: $scope.rooms[index].id
     }, function(response) {
       if (!response || !response.success) {
-        $scope.addAlert('Something went wrong while trying to delete the room.', 'danger');
         console.log('Room.delete', response);
+
+        Alert.error('Something went wrong while trying to delete the room.');
         return;
       }
 
       $scope.rooms.splice(index, 1);
     }, function(response) {
-      $scope.addAlert('Something went wrong while trying to delete the room.', 'danger');
       console.log('Room.delete', response);
+
+      Alert.error('Something went wrong while trying to delete the room.');
     });
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'Room', 'CurrentUser', 'User', 'Playlist',
-  function($scope, $routeParams, $timeout, socket, Rdio, Room, CurrentUser, User, Playlist) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Playlist', 'Queue', 'Alert',
+  function($scope, $routeParams, $timeout, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Playlist, Queue) {
     $scope.playingTrack = null;
     $scope.isController = false;
     $scope.isCurrentController = false;
@@ -153,12 +137,21 @@ angular.module('lstn.controllers', [])
     $scope.remaining = 0;
     $scope.hideRemaining = false;
 
-    $scope.queue = [];    
-    $scope.roomQueue = [];
-
     $scope.chat = {
       messages: []
     };
+
+    $scope.queue = Queue;
+    $scope.room = CurrentRoom;
+
+    $scope.$watch('queue.tracks', function() {
+      var set = {};
+      for (var i = 0; i < $scope.queue.tracks.length; i++) {
+        set[$scope.queue.tracks[i].key] = true;
+      }
+
+      $scope.queue.bitset = set;
+    });
 
     $scope.trackUnseenChatMessages = true;
     $scope.unseenChatMessages = 0;
@@ -218,8 +211,9 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:connect:error', function(data) {
-      $scope.addAlert('Something went wrong while trying to connect to the room.', 'danger');
       console.log('room:connect:error', data);
+
+      Alert.error('Something went wrong while trying to connect to the room.');
     });
 
     socket.on('room:chat:history', function(data) {
@@ -245,31 +239,35 @@ angular.module('lstn.controllers', [])
       console.log('room:controller:playing:request', data);
 
       $scope.isCurrentController = true;
-      if (!$scope.queue || $scope.queue.length === 0) {
-        $scope.addAlert("You've been made a listener because your queue ran out of music.", 'info');
-        $scope.isController = false;
+      if (!$scope.queue.tracks || $scope.queue.tracks.length === 0) {
         console.log('room:controller:empty');
+
+        $scope.isController = false;
         socket.emit('room:controller:empty');
+
+        Alert.info("You've been made a listener because your queue ran out of music.");
         return;
       }
 
-      var track = $scope.queue.shift();
-      $scope.queue.push(track);
+      var track = $scope.queue.tracks.shift();
+      $scope.queue.tracks.push(track);
 
       console.log('room:controller:playing', track);
       socket.emit('room:controller:playing', track);
 
       CurrentUser.updateQueue({
-        queue: $scope.queue
+        queue: $scope.queue.tracks
       }, function(response) {
         if (!response || !response.success) {
-          $scope.addAlert('Something went wrong while trying to move the track to the bottom of your queue.', 'danger');
           console.log('moveToBottomOfQueue', response);
+
+          Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
           return;
         }
       }, function(response) {
-        $scope.addAlert('Something went wrong while trying to move the track to the bottom of your queue.', 'danger');
         console.log('moveToBottomOfQueue', response);
+
+        Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
       });
     });
 
@@ -299,15 +297,17 @@ angular.module('lstn.controllers', [])
 
       CurrentUser.get({}, function(response) {
         if (!response || !response.success || !response.user) {
-          $scope.addAlert('Something went wrong while trying to get your latest score.', 'warning');
           console.log('CurrentUser.get', response);
+
+          Alert.warning('Something went wrong while trying to get your latest score.');
           return;
         }
 
         socket.roomUpdate(response.user);
       }, function(response) {
-        $scope.addAlert('Something went wrong while trying to get your latest score.', 'warning');
         console.log('CurrentUser.get', response);
+
+        Alert.warning('Something went wrong while trying to get your latest score.');
       });
     });
 
@@ -326,15 +326,17 @@ angular.module('lstn.controllers', [])
 
       CurrentUser.get({}, function(response) {
         if (!response || !response.success || !response.user) {
-          $scope.addAlert('Something went wrong while trying to get your latest score.', 'warning');
           console.log('CurrentUser.get', response);
+
+          Alert.warning('Something went wrong while trying to get your latest score.');
           return;
         }
 
         socket.roomUpdate(response.user);
       }, function(response) {
-        $scope.addAlert('Something went wrong while trying to get your latest score.', 'warning');
         console.log('CurrentUser.get', response);
+
+        Alert.warning('Something went wrong while trying to get your latest score.');
       });
 
       if (downvote.votes <= -2) {
@@ -482,8 +484,9 @@ angular.module('lstn.controllers', [])
         $scope.voting = false;
 
         if (!response || !response.success) {
-          $scope.addAlert('Something went wrong while trying to upvote the track.', 'danger');
           console.log('User.upvote', response);
+
+          Alert.error('Something went wrong while trying to upvote the track.');
           return;
         }
 
@@ -496,10 +499,10 @@ angular.module('lstn.controllers', [])
 
         socket.sendUpvote();
       }, function(response) {
-        $scope.voting = false;
-
-        $scope.addAlert('Something went wrong while trying to upvote the track.', 'danger');
         console.log('User.upvote', response);
+
+        $scope.voting = false;
+        Alert.error('Something went wrong while trying to upvote the track.');
       });
     };
 
@@ -530,8 +533,9 @@ angular.module('lstn.controllers', [])
         $scope.voting = false;
 
         if (!response || !response.success) {
-          $scope.addAlert('Something went wrong while trying to downvote the track.', 'danger');
           console.log('User.downvote', response);
+
+          Alert.error('Something went wrong while trying to downvote the track.');
           return false;
         }
 
@@ -544,10 +548,10 @@ angular.module('lstn.controllers', [])
 
         socket.sendDownvote();
       }, function(response) {
-        $scope.voting = false;
-
-        $scope.addAlert('Something went wrong while trying to downvote the track.', 'danger');
         console.log('User.downvote', response);
+
+        $scope.voting = false;
+        Alert.error('Something went wrong while trying to downvote the track.');
       });
     };
   
@@ -655,7 +659,7 @@ angular.module('lstn.controllers', [])
         },
         freeRemainingChanged: function(remaining) {
           $scope.$evalAsync(function() {
-            $scope.addAlert('You have ' + remaining + ' remaining tracks left on your free account.', 'info');
+            Alert.info('You have ' + remaining + ' remaining tracks left on your free account.');
           });
         },
         playStateChanged: function(playState) {
@@ -714,7 +718,7 @@ angular.module('lstn.controllers', [])
         repeatChanged: function(repeatMode) {},
         playingSomewhereElse: function() {
           $scope.$evalAsync(function() {
-            $scope.addAlert("You're playing music from a different source. Rdio only allows one source to play music at a time.", 'danger');
+            Alert.error("You're playing music from a different source. Rdio only allows one source to play music at a time.");
           });
         },
         updateFrequencyData: function(data) {
@@ -744,120 +748,45 @@ angular.module('lstn.controllers', [])
         'apiswf', 1, 1, '9.0.0', 'expressInstall.swf',
         flashVars, params, {});
     };
-  
-    $scope.addTrackToQueue = function(track) {
-      track.addingToQueue = true;
-      CurrentUser.addToQueue({
-        id: track.key
-      }, function(response) {
-        track.addingToQueue = false;
-        if (!response || !response.success || !response.queue) {
-          $scope.addAlert('Something went wrong while trying to add the track to your queue.', 'danger');
-          console.log('CurrentUser.addToQueue', response);
-          return;
-        }
-  
-        $scope.queue = response.queue;
-        $timeout(function() {
-          $('#queue').animate({
-            scrollTop: $('#queue')[0].scrollHeight
-          }, 500);
-        }, 10);
-      }, function(response) {
-        track.addingToQueue = false;
-        $scope.addAlert('Something went wrong while trying to add the track to your queue.', 'danger');
-        console.log('CurrentUser.addToQueue', response);
-      });
-    };
-
-    $scope.$watch('queue', function() {
-      var set = {};
-      for (var i = 0; i < $scope.queue.length; i++) {
-        set[$scope.queue[i].key] = true;
-      }
-      $scope.queueBitset = set;
-    });
-  
-    $scope.removeTrackFromQueue = function(track, index) {
-      track.removingFromQueue = true;
-      CurrentUser.removeFromQueue({
-        id: track.key,
-        index: index
-      }, function(response) {
-        track.removingFromQueue = false;
-        if (!response || !response.success || !response.queue) {
-          $scope.addAlert('Something went wrong while trying to remove the track from your queue.', 'danger');
-          console.log('CurrentUser.removeFromQueue', response);
-          return;
-        }
-        $scope.queue = response.queue;
-      }, function(response) {
-        track.removingFromQueue = false;
-        $scope.addAlert('Something went wrong while trying to remove the track from your queue.', 'danger');
-        console.log('CurrentUser.removeFromQueue', response);
-      });
-    };
-    
-    $scope.moveToTopOfQueue = function(index) {
-      var tracks = $scope.queue.splice(index, 1);
-      if (!tracks || tracks.length === 0) {
-        $scope.addAlert('Something went wrong while trying to move the track to the top of your queue.', 'danger');
-        console.log('moveToTopOfQueue', 'no tracks to move');
-        return;
-      }
-
-      $scope.queue.unshift(tracks[0]);
-
-      CurrentUser.updateQueue({
-        queue: $scope.queue
-      }, function(response) {
-        if (!response || !response.success) {
-          $scope.addAlert('Something went wrong while trying to move the track to the top of your queue.', 'danger');
-          console.log('moveToTopOfQueue', response);
-          return;
-        }
-      }, function(response) {
-        $scope.addAlert('Something went wrong while trying to move the track to the top of your queue.', 'danger');
-        console.log('moveToTopOfQueue', response);
-      });
-    };
 
     Room.get({
       id: $routeParams.id
     }, function(response) {
       if (!response || !response.success || !response.room) {
-        $scope.addAlert('Something went wrong while trying to load the room data.', 'danger');
         console.log('Room.get', response);
+
+        Alert.error('Something went wrong while trying to load the room data.');
         return;
       }
   
-      $scope.room = response.room;
+      $scope.room.update(response.room);
       $scope.playback = response.playback;
 
-      $scope.$emit('room', $scope.room);
-
       if (response.queue) {
-        $scope.queue = response.queue;
+        $scope.queue.tracks = response.queue;
       }
   
       socket.registerRoom($scope.room.id, $scope.current_user);
       initPlayback();
     }, function(response) {
-      $scope.addAlert('Something went wrong while trying to load the room data.', 'danger');
       console.log('Room.get', response);
+
+      Alert.error('Something went wrong while trying to load the room data.');
     });
   
     CurrentUser.playlists({}, function(response) {
       if (!response || !response.success || !response.playlists) {
-        $scope.addAlert('Something went wrong while trying to load your playlists.', 'danger');
         console.log('CurrentUser.playlists', response);
+
+        Alert.error('Something went wrong while trying to load your playlists.');
         return;
       }
 
       $scope.playlists = response.playlists;
     }, function(response) {
-      $scope.addAlert('Something went wrong while trying to load your playlists.', 'danger');
       console.log('CurrentUser.playlists', response);
+
+      Alert.error('Something went wrong while trying to load your playlists.');
     });
   }
 ])
