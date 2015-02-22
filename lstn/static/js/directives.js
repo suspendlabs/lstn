@@ -90,7 +90,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           Artist.getAlbums(artist.key).then(function(response) {
             if (!response || !response.albums) {
               artist.loadingAlbums = false;
-              Alert.error('Something happened while trying to load albums for that artist.');
+              Alert.error('Something happened while trying to load albums for the artist.');
               return;
             }
 
@@ -108,7 +108,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             }, 100);
           }, function(response) {
             artist.loadingAlbums = false;
-            Alert.error('Something happened while trying to load albums for that artist.');
+            Alert.error('Something happened while trying to load albums for the artist.');
           });
         };
 
@@ -131,7 +131,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           Album.getTracks(album.key).then(function(response) {
             if (!response || !response.tracks) {
               album.loadingTracks = false;
-              Alert.error('Something happened while trying to load tracks for that album.');
+              Alert.error('Something happened while trying to load tracks for the album.');
               return;
             }
 
@@ -149,7 +149,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             }, 100);
           }, function(response) {
             album.loadingTracks = false;
-            Alert.error('Something happened while trying to load tracks for that album.');
+            Alert.error('Something happened while trying to load tracks for the album.');
           });
         };
 
@@ -423,8 +423,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnMoreMusic', ['$timeout', 'Alert', 'CurrentUser',
-  function($timeout, Alert, CurrentUser) {
+.directive('lstnMoreMusic', ['$timeout', 'Alert', 'CurrentUser', 'Playlist',
+  function($timeout, Alert, CurrentUser, Playlist) {
     return {
       restrict: 'E',
       replace: true,
@@ -461,7 +461,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
               console.log('LoadLists', response);
 
               category.loadingLists = false;
-              Alert.error('Something went wrong while trying to load those lists.');
+              Alert.error('Something went wrong while trying to load the category.');
               return;
             }
 
@@ -479,7 +479,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             }, 100);
           }, function(response) {
             category.loadingLists = false;
-            Alert.error('Something went wrong while trying to load those lists.');
+            Alert.error('Something went wrong while trying to load the category.');
           });
         };
 
@@ -491,6 +491,49 @@ angular.module('lstn.directives', ['sc.twemoji'])
           controller.select(prevSlide, 'prev');
 
           $scope.currentCategory = null;
+        };
+
+        $scope.currentPlaylist = null;
+        $scope.tracks = [];
+
+        $scope.loadTracks = function(playlist) {
+          playlist.loadingTracks = true;
+
+          Playlist.getTracks(playlist.key).then(function(response) {
+            if (!response || !response.tracks) {
+              console.log('LoadTracks', response);
+
+              playlist.loadingTracks = false;
+              Alert.error('Something went wrong while trying to load the playlist tracks.');
+              return;
+            }
+
+            $scope.tracks = response.tracks;
+            $scope.currentPlaylist = playlist;
+
+            $timeout(function() {
+              playlist.loadingTracks = false;
+
+              var controller = angular.element('#category-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[2];
+              controller.select(nextSlide, 'next');
+            }, 100);
+          }, function(response) {
+            playlist.loadingTracks = false;
+            Alert.error('Something went wrong while trying to load the playlist tracks.');
+          });
+        };
+
+        $scope.closePlaylist = function() {
+          var controller = angular.element('#category-carousel')
+            .controller('carousel');
+
+          var prevSlide = controller.slides[1];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentPlaylist = null;
         };
       }
     };
@@ -520,7 +563,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         playlist: '=',
-        loadChildren: '=',
+        loadTracks: '=',
         index: '=',
         context: '='
       },
