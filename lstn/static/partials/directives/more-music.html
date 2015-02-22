@@ -1,3 +1,63 @@
-<div>
+<div class="more-music">
   <lstn-music-search></lstn-music-search>
+  <div class="playlist__container" data-ng-show="!searchResults || searchResults.length === 0">
+    <carousel id="category-carousel" interval="false">
+      <slide>
+        <ul class="categories categories--full category__list drilldown__list text-left">
+          <li data-ng-repeat="item in categories">
+            <lstn-category
+              data-category="item"
+              data-load-lists="loadLists"></lstn-category>
+          </li>
+        </ul>
+      </slide>
+      <slide>
+        <div class="carousel__back text-left">
+          <a data-ng-click="closeCategory()">
+            <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentCategory.name"></span>
+          </a>
+        </div>
+        <ul class="playlists drilldown__list text-left">
+          <li data-ng-repeat="item in playlists">
+            <lstn-playlist
+              data-context="category"
+              data-playlist="item"
+              data-index="$index"></lstn-playlist>
+          </li>
+        </ul>
+      </slide>
+      <slide>
+        <div class="carousel__back text-left">
+          <a data-ng-click="closePlaylist()">
+            <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentPlaylist.name"></span>
+          </a>
+        </div>
+        <ul class="playlist__children drilldown__list text-left">
+          <li data-ng-repeat="item in children">
+            <div data-ng-switch="item.type">
+              <lstn-album
+                data-ng-switch-when="a"
+                data-context="search"
+                data-album="item"
+                data-index="$index"
+                data-load-tracks="loadTracks"></lstn-album>
+
+              <lstn-artist
+                data-ng-switch-when="r"
+                data-context="search"
+                data-artist="item"
+                data-index="$index"
+                data-load-albums="loadAlbums"></lstn-artist>
+
+              <lstn-track
+                data-ng-switch-when="t"
+                data-context="search"
+                data-track="item"
+                data-index="$index"></lstn-track>
+            </div>
+          </li>
+        </ul>
+      </slide>
+    </carousel>
+  </div>
 </div>
