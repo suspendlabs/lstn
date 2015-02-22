@@ -13,6 +13,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <div\n" +
     "      class=\"item__artist\"\n" +
     "      data-ng-bind=\"album.artist\"></div>\n" +
+    "    <div class=\"item__count\" data-ng-pluralize count=\"album.length\" when=\"{'one': '{} track', 'other': '{} tracks'}\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
     "    <a\n" +
@@ -41,7 +42,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
     "      class=\"item__title\"\n" +
-    "      title=\"{{ artist.name }}\"></div>\n" +
+    "      data-ng-bind=\"artist.name\"></div>\n" +
+    "    <div class=\"item__count\" data-ng-pluralize count=\"artist.albumCount\" when=\"{'one': '{} album', 'other': '{} albums'}\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
     "    <a\n" +
@@ -312,8 +314,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <div\n" +
     "      class=\"item__title\"\n" +
     "      data-ng-bind=\"playlist.name\"></div>\n" +
-    "    <div\n" +
-    "      class=\"item__length\">{{ playlist.length }} items</div>\n" +
+    "    <div class=\"item__count\" data-ng-pluralize count=\"playlist.length\" when=\"{'one': '{} track', 'other': '{} tracks'}\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
     "    <a\n" +
@@ -578,6 +579,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      class=\"item__artist\"\n" +
     "      data-ng-class=\"{'text-muted': context !== 'queue' && queue.bitset[track.key]}\"\n" +
     "      data-ng-bind=\"track.artist\"></div>\n" +
+    "    <div\n" +
+    "      class=\"item__duration text-muted\"\n" +
+    "      data-ng-bind=\"track.duration | duration\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
     "    <a\n" +
