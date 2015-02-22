@@ -55,10 +55,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       bitset: '',
       tracks: []
     };
-  
+
     Queue.addTrack = function(track) {
       track.addingToQueue = true;
-  
+
       CurrentUser.addToQueue({
         id: track.key
       }, function(response) {
@@ -69,7 +69,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           Alert.error('Something went wrong while trying to add the track to your queue.');
           return;
         }
-  
+
         Queue.tracks = response.queue;
 
         $timeout(function() {
@@ -84,7 +84,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         Alert.error('Something went wrong while trying to add the track to your queue.');
       });
     };
-  
+
     Queue.removeTrack = function(track, index) {
       track.removingFromQueue = true;
       CurrentUser.removeFromQueue({
@@ -107,7 +107,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         Alert.error('Something went wrong while trying to remove the track from your queue.');
       });
     };
-    
+
     Queue.moveToTop = function(index) {
       var tracks = Queue.tracks.splice(index, 1);
       if (!tracks || tracks.length === 0) {
@@ -116,9 +116,9 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         Alert.error('Something went wrong while trying to move the track to the top of your queue.');
         return;
       }
-  
+
       Queue.tracks.unshift(tracks[0]);
-  
+
       CurrentUser.updateQueue({
         queue: Queue.tracks
       }, function(response) {
@@ -178,12 +178,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     console.log('sending room:controller:release');
     this.emit('room:controller:release');
   };
-  
+
   socket.requestControl = function(id, user) {
     console.log('sending room:controller:request');
     this.emit('room:controller:request');
   };
-  
+
   socket.roomConnect = function(id, user) {
     console.log('sending room:connect');
     this.emit('room:connect', {
