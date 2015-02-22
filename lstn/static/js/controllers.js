@@ -768,21 +768,6 @@ angular.module('lstn.controllers', [])
 
       Alert.error('Something went wrong while trying to load the room data.');
     });
-  
-    CurrentUser.playlists({}, function(response) {
-      if (!response || !response.success || !response.playlists) {
-        console.log('CurrentUser.playlists', response);
-
-        Alert.error('Something went wrong while trying to load your playlists.');
-        return;
-      }
-
-      $scope.playlists = response.playlists;
-    }, function(response) {
-      console.log('CurrentUser.playlists', response);
-
-      Alert.error('Something went wrong while trying to load your playlists.');
-    });
   }
 ])
 
