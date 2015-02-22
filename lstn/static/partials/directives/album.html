@@ -9,6 +9,7 @@
     <div
       class="item__artist"
       data-ng-bind="album.artist"></div>
+    <div class="item__count" data-ng-pluralize count="album.length" when="{'one': '{} track', 'other': '{} tracks'}"></div>
   </div>
   <div class="item__actions">
     <a
