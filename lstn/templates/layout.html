@@ -50,19 +50,19 @@
     <div class="container">
       <div class="alerts">
         <div class="alert alert-danger alert-dismissable" data-ng-show="alerts.messages.error.length > 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="dismissAlert('error')" data-dismiss="alert">&times;</button>
+          <button type="button" class="close" data-ng-click="alerts.dismiss('error')" data-dismiss="alert">&times;</button>
           <span data-ng-bind="alerts.messages.error[0]"></span>
         </div>
         <div class="alert alert-warning alert-dismissable" data-ng-show="alerts.messages.warning.length > 0 && alerts.messages.error.length === 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="dismissAlert('warning')" data-dismiss="alert">&times;</button>
+          <button type="button" class="close" data-ng-click="alerts.dismiss('warning')" data-dismiss="alert">&times;</button>
           <span data-ng-bind="alerts.messages.warning[0]"></span>
         </div>
         <div class="alert alert-info alert-dismissable" data-ng-show="alerts.messages.info.length > 0 && alerts.messages.warning.length === 0 && alerts.messages.error.length === 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="dismissAlert('info')" data-dismiss="alert">&times;</button>
+          <button type="button" class="close" data-ng-click="alerts.dismiss('info')" data-dismiss="alert">&times;</button>
           <span data-ng-bind="alerts.messages.info[0]"></span>
         </div>
         <div class="alert alert-success alert-dismissable" data-ng-show="alerts.messages.success.length > 0 && alerts.messages.info.length === 0 && alerts.messages.warning.length === 0 && alerts.messages.error.length === 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="dismissAlert('success')" data-dismiss="alert">&times;</button>
+          <button type="button" class="close" data-ng-click="alerts.dismiss('success')" data-dismiss="alert">&times;</button>
           <span data-ng-bind="alerts.messages.success[0]"></span>
         </div>
       </div>
