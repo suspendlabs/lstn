@@ -85,18 +85,16 @@ body {
 .navbar-inverse {
   border: none;
   background-color: $accent-color;
-  min-height: 75px;
+  min-height: 70px;
   font-size: 1.4em;
 
   .navbar-text {
-    margin-top: 1.2em;
+    margin-top: 0.95em;
   }
 
   .navbar-nav {
     > li {
       > a {
-        padding-top: 1.2em;
-
         &.navbar__name {
           color: #FFFFFF;
           padding-left: 10px;
@@ -108,11 +106,11 @@ body {
 
 .navbar-logo {
   font-family: 'signo';
-  font-size: 3.5rem;
+  font-size: 1.8em;
   color: #FFFFFF;
   text-decoration: none;
   display: block;
-  margin-top: 1.3rem;
+  margin-top: 0.26em;
 
   &:link {
     color: #FFFFFF;

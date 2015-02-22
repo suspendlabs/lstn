@@ -84,14 +84,11 @@ body > .container > div {
 .navbar-inverse {
   border: none;
   background-color: #3d3d3d;
-  min-height: 75px;
+  min-height: 70px;
   font-size: 1.4em;
 }
 .navbar-inverse .navbar-text {
-  margin-top: 1.2em;
-}
-.navbar-inverse .navbar-nav > li > a {
-  padding-top: 1.2em;
+  margin-top: 0.95em;
 }
 .navbar-inverse .navbar-nav > li > a.navbar__name {
   color: #FFFFFF;
@@ -100,11 +97,11 @@ body > .container > div {
 
 .navbar-logo {
   font-family: 'signo';
-  font-size: 3.5rem;
+  font-size: 1.8em;
   color: #FFFFFF;
   text-decoration: none;
   display: block;
-  margin-top: 1.3rem;
+  margin-top: 0.26em;
 }
 .navbar-logo:link {
   color: #FFFFFF;
