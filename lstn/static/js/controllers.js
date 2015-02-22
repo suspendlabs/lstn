@@ -153,9 +153,6 @@ angular.module('lstn.controllers', [])
       $scope.queue.bitset = set;
     });
 
-    $scope.trackUnseenChatMessages = true;
-    $scope.unseenChatMessages = 0;
-
     // Notifications
     $scope.notificationPermission = 'default';
     if (window.Notification) {
@@ -347,9 +344,6 @@ angular.module('lstn.controllers', [])
       console.log(message);
       
       $scope.chat.messages.push(message);
-      if ($scope.trackUnseenChatMessages) {
-        $scope.unseenChatMessages += 1;
-      }
 
       if (message &&
         message.mentionNames &&

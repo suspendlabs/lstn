@@ -102,7 +102,7 @@ Lstn.prototype.getUser = function(user) {
   return null;
 };
 
-Lstn.prototype.getTrackName = function() {
+Lstn.prototype.getTrack = function() {
   if (!(this.roomId in playing)) {
     return null;
   }
@@ -111,29 +111,12 @@ Lstn.prototype.getTrackName = function() {
     return null;
   }
 
-  if (!('name' in playing[this.roomId])) {
+  if (!('key' in playing[this.roomId])) {
     return null;
   }
 
-  return playing[this.roomId].name;
+  return playing[this.roomId];
 };
-
-Lstn.prototype.getTrackArtist = function() {
-  if (!(this.roomId in playing)) {
-    return null;
-  }
-
-  if (!playing[this.roomId]) {
-    return null;
-  }
-
-  if (!('artist' in playing[this.roomId])) {
-    return null;
-  }
-
-  return playing[this.roomId].artist;
-};
-
 
 Lstn.prototype.clearTimeouts = function() {
   if (!(this.roomId in timeouts)) {
@@ -383,13 +366,7 @@ Lstn.prototype.sendChatHistory = function() {
 };
 
 Lstn.prototype.sendChatMessage = function(message) {
-
   message.created = moment().format();
-
-  var user = this.getUser();
-  if (user) { 
-    message.picture = user.picture;
-  }
 
   io.sockets.in(this.roomId).emit('room:chat:message', message);
 
@@ -517,15 +494,13 @@ Lstn.prototype.sendPlaying = function(broadcast) {
 
     var controller = this.getCurrentController();
     var user = this.getUser(controller);
-    var name = this.getTrackName();
-    var artist = this.getTrackArtist();
+    var track = this.getTrack();
 
-    if (controller && user && name && artist) {
+    if (controller && user && track) {
       this.sendChatMessage({
         sender: this.getCurrentController(),
-        name: name,
-        artist: artist,
-        user: user.name,
+        track: track,
+        user: user,
         type: 'playing',
       });
     }
@@ -730,15 +705,13 @@ Lstn.prototype.onControllerPlayingSkipped = function(data) {
 
   var controller = this.getCurrentController();
   var user = this.getUser(controller);
-  var name = this.getTrackName();
-  var artist = this.getTrackArtist();
+  var track = this.getTrack();
 
-  if (controller && user && name && artist) {
+  if (controller && user && track) {
     this.sendChatMessage({
       sender: this.getCurrentController(),
-      name: name,
-      artist: artist,
-      user: user.name,
+      track: track,
+      user: user,
       type: 'skipped',
     });
   }
@@ -762,7 +735,7 @@ Lstn.prototype.onControllerUpvote = function() {
   if (user) {
     this.sendChatMessage({
       sender: this.userId,
-      user: user.name,
+      user: user,
       type: 'upvote'
     });
   }
@@ -780,7 +753,7 @@ Lstn.prototype.onControllerDownvote = function() {
   if (user) {
     this.sendChatMessage({
       sender: this.userId,
-      user: user.name,
+      user: user,
       type: 'downvote'
     });
   }
