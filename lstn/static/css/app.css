@@ -256,7 +256,7 @@ body > .container > div {
 }
 
 .playing__meta {
-  background: rgba(0, 0, 0, 0.33);
+  background: rgba(0, 0, 0, 0.4);
   padding: 1em;
   min-height: 180px;
 }
