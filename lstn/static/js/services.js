@@ -3,6 +3,142 @@
 
 angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
+.factory('Alert', [
+  function() {
+    var Alert = {
+      messages: {
+        success: [],
+        info: [],
+        warning: [],
+        error: []
+      }
+    };
+
+    Alert.dismiss = function(type) {
+      this.messages[type].splice(0, 1);
+    };
+
+    Alert.success = function(message) {
+      this.add(message, 'success');
+    };
+
+    Alert.info = function(message) {
+      this.add(message, 'info');
+    };
+
+    Alert.warning = function(message) {
+      this.add(message, 'warning');
+    };
+
+    Alert.error = function(message) {
+      this.add(message, 'error');
+    };
+
+    Alert.add = function(message, type) {
+      type = type || 'info';
+
+      if (!(type in Alert.messages)) {
+        console.log(type, message);
+        return;
+      }
+
+      this.messages[type].push(message);
+    };
+
+    return Alert;
+  }
+])
+
+.factory('Queue', ['CurrentUser', 'Alert',
+  function(CurrentUser, Alert) {
+    var Queue = {
+      bitset: '',
+      tracks: []
+    };
+  
+    Queue.addTrack = function(track) {
+      track.addingToQueue = true;
+  
+      CurrentUser.addToQueue({
+        id: track.key
+      }, function(response) {
+        track.addingToQueue = false;
+        if (!response || !response.success || !response.queue) {
+          console.log('CurrentUser.addToQueue', response);
+
+          Alert.error('Something went wrong while trying to add the track to your queue.');
+          return;
+        }
+  
+        this.tracks = response.queue;
+
+        $timeout(function() {
+          $('#queue').animate({
+            scrollTop: $('#queue')[0].scrollHeight
+          }, 500);
+        }, 10);
+      }, function(response) {
+        console.log('CurrentUser.addToQueue', response);
+
+        track.addingToQueue = false;
+        Alert.error('Something went wrong while trying to add the track to your queue.');
+      });
+    };
+  
+    Queue.removeTrack = function(track, index) {
+      track.removingFromQueue = true;
+      CurrentUser.removeFromQueue({
+        id: track.key,
+        index: index
+      }, function(response) {
+        track.removingFromQueue = false;
+        if (!response || !response.success || !response.queue) {
+          console.log('CurrentUser.removeFromQueue', response);
+
+          Alert.error('Something went wrong while trying to remove the track from your queue.');
+          return;
+        }
+
+        this.tracks = response.queue;
+      }, function(response) {
+        console.log('CurrentUser.removeFromQueue', response);
+
+        track.removingFromQueue = false;
+        Alert.error('Something went wrong while trying to remove the track from your queue.');
+      });
+    };
+    
+    Queue.moveToTop = function(index) {
+      var tracks = Queue.tracks.splice(index, 1);
+      if (!tracks || tracks.length === 0) {
+        console.log('moveToTopOfQueue', 'no tracks to move');
+
+        Alert.error('Something went wrong while trying to move the track to the top of your queue.');
+        return;
+      }
+  
+      this.tracks.unshift(tracks[0]);
+  
+      CurrentUser.updateQueue({
+        queue: this.tracks
+      }, function(response) {
+        if (!response || !response.success) {
+          console.log('moveToTopOfQueue', response);
+
+          Alert.error('Something went wrong while trying to move the track to the top of your queue.');
+          return;
+        }
+      }, function(response) {
+        console.log('moveToTopOfQueue', response);
+
+        Alert.error('Something went wrong while trying to move the track to the top of your queue.');
+      });
+    };
+
+    return Queue;
+  }
+])
+
 .factory('Rdio', [
   function() {
     var rdio = {
@@ -104,6 +240,20 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   return socket;
 }])
 
+.factory('CurrentRoom', ['$resource', function($resource) {
+  var Room = {
+    id: 0,
+    name: '',
+    slug: ''
+  };
+
+  Room.update = function(room) {
+    $.extend(this, this, room);
+  };
+
+  return Room;
+}])
+
 .factory('Room', ['$resource', function($resource) {
   var Room = $resource('/api/room/:id/:action/:target', {
     id: '@id',
@@ -148,7 +298,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 }])
 
 .factory('CurrentUser', ['$resource', function($resource) {
-  return $resource('/api/user/:action/:id', {
+  var CurrentUser = $resource('/api/user/:action/:id', {
     id: '@id'
   },{
     playlists: {
@@ -182,6 +332,14 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }
     }
   });
+
+  CurrentUser.getPlaylists = function(type) {
+    return CurrentUser.playlists({
+      id: type
+    }).$promise;
+  };
+
+  return CurrentUser;
 }])
 
 .factory('Playlist', ['$resource', function($resource) {
@@ -222,18 +380,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   var Album = $resource('/api/album/:id/:action', {
     id: '@id'
   },{
-    albums: {
+    tracks: {
       method: 'GET',
       params: {
-        actions: 'tracks'
+        action: 'tracks'
       }
     }
   });
 
   Album.getTracks = function(artistId) {
-    return this.albums({
+    return this.tracks({
       id: artistId
-    });
+    }).$promise;
   };
 
   return Album;
