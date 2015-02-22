@@ -49,8 +49,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   }
 ])
 
-.factory('Queue', ['CurrentUser', 'Alert',
-  function(CurrentUser, Alert) {
+.factory('Queue', ['$timeout', 'CurrentUser', 'Alert',
+  function($timeout, CurrentUser, Alert) {
     var Queue = {
       bitset: '',
       tracks: []
@@ -70,7 +70,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           return;
         }
   
-        this.tracks = response.queue;
+        Queue.tracks = response.queue;
 
         $timeout(function() {
           $('#queue').animate({
@@ -99,7 +99,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           return;
         }
 
-        this.tracks = response.queue;
+        Queue.tracks = response.queue;
       }, function(response) {
         console.log('CurrentUser.removeFromQueue', response);
 
@@ -117,10 +117,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         return;
       }
   
-      this.tracks.unshift(tracks[0]);
+      Queue.tracks.unshift(tracks[0]);
   
       CurrentUser.updateQueue({
-        queue: this.tracks
+        queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
           console.log('moveToTopOfQueue', response);
