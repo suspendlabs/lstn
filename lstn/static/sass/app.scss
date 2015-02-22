@@ -19,7 +19,7 @@ html, body {
 }
 
 img.avatar {
-  border-radius: 50%;
+  @include border-radius(50%);
 
   &.upvoted {
     border: 2px solid #4cae4c;
@@ -78,7 +78,7 @@ body {
 }
 
 .label-as-badge {
-  border-radius: 1em;
+  @include border-radius(1em);
 }
 
 .navbar-inverse {
@@ -180,7 +180,7 @@ body {
   text-align: center;
 
   background: url(/static/images/hero.jpg) no-repeat center center;
-  background-size: cover;
+  @include background-size(cover);
 
   margin-bottom: 60px;
 
@@ -206,7 +206,7 @@ body {
 
 .rooms__container {
   border: 1px solid #DDD;
-  border-radius: 4px;
+  @include border-radius(4px);
 }
 
 .rooms {
@@ -282,7 +282,7 @@ body {
 
 .roster__container {
   border: none;
-  border-radius: 0;
+  @include border-radius(0);
 
   .listeners {
   }
@@ -336,7 +336,7 @@ body {
       > a {
           margin: 0;
           padding: 8px 0 8px 0;
-          border-radius: 0;
+          @include border-radius(0);
           border: 0;
           text-align: center;
           background: none;
@@ -474,7 +474,7 @@ footer {
   .user-photo {
     max-width: 30px;
     max-height: 30px;
-    border-radius: 15px;
+    @include border-radius(15px);
   }
 
   .list-group-item {
@@ -606,7 +606,7 @@ footer {
   }
 
   .form-control {
-    border-radius: 0;
+    @include border-radius(0);
   }
 }
 
