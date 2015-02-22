@@ -343,7 +343,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 }])
 
 .factory('Playlist', ['$resource', function($resource) {
-  return $resource('/api/playlist/:id/:action', {
+  var Playlist = $resource('/api/playlist/:id/:action', {
     id: '@id'
   },{
     tracks: {
@@ -353,6 +353,14 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }
     }
   });
+
+  Playlist.getTracks = function(playlist) {
+    return this.tracks({
+      id: playlist
+    }).$promise;
+  };
+
+  return Playlist;
 }])
 
 .factory('Artist', ['$resource', function($resource) {
