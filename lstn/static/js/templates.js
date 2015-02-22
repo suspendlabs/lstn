@@ -521,7 +521,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        No Broadcasters\n" +
     "      </li>\n" +
     "      <li data-ng-show=\"roster && roster.controllersCount > 0\" data-ng-repeat=\"user_id in roster.controllerOrder\">\n" +
-    "        <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" target=\"_blank\">\n" +
+    "        <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" target=\"_blank\"\n" +
+    "          tooltip=\"{{ roster.controllers[user_id].name }}\" data-tooltip-placement=\"bottom\">\n" +
     "          <img data-ng-src=\"{{ roster.controllers[user_id].picture }}\" class=\"avatar xs\"\n" +
     "            data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
     "            alt=\"{{ roster.controllers[user_id].name }}\" />\n" +
@@ -540,7 +541,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <a class=\"roster__user\"\n" +
     "        data-ng-href=\"http://www.rdio.com{{ user.profile }}\"\n" +
     "        target=\"_blank\"\n" +
-    "        tooltip=\"{{ user.name }}\">\n" +
+    "        tooltip=\"{{ user.name }}\" data-tooltip-placement=\"bottom\">\n" +
     "        <img data-ng-src=\"{{ user.picture }}\"\n" +
     "        data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
     "        class=\"avatar xs\" alt=\"{{ user.name }}\" />\n" +
