@@ -1,5 +1,13 @@
 <div class="playing__info-container">
-  <div class="playing__info playing__info--playing" data-album-cover-background data-ng-style="playingStyle">
+  
+  <div data-ng-hide="playing" class="playing__info--stopped">
+    <a data-ng-show="queue.length" href="" data-ng-click="toggleBroadcast()">
+      <i class="fa fa-play-circle" />
+    </a>
+    <p data-ng-show="!queue.length">Waiting for a broadcaster&hellip;</p>
+  </div>
+
+  <div data-ng-show="playing" class="playing__info playing__info--playing" data-album-cover-background>
     <div class="playing__meta">
       <h3 class="playing__title" data-ng-bind="playing.track.title | truncate:28"></h3>
       <h4 class="playing__artist" data-ng-bind="playing.track.artist | truncate:35"></h4>

@@ -1,8 +1,8 @@
 <span>
-  <button type="button" data-ng-hide="playing.upvoted" data-ng-disabled="!playing.track.key || isCurrentController || playing.track.voted" class="control__button btn btn-success btn-lg" aria-label="Upvote" data-ng-click="upvote()" title="Upvote">
-    <i class="fa fa-fw fa-lg fa-thumbs-up" aria-hidden="true"></i>
+  <button type="button" data-ng-hide="playing.upvoted || isCurrentController" data-ng-disabled="!playing.track.key || isCurrentController || playing.track.voted" class="control__button btn btn-success btn-lg" aria-label="Upvote" data-ng-click="upvote()" title="Upvote">
+    <i class="fa fa-thumbs-up" aria-hidden="true"></i>
   </button>
   <button data-ng-show="playing.upvoted" type="button" disabled="disabled" class="control__button btn btn-success btn-lg" aria-label="Upvoted" title="Upvoted">
-    <i class="fa fa-fw fa-lg fa-check" aria-hidden="true"></i>
+    <i class="fa fa-check" aria-hidden="true"></i>
   </button>
 </span>
