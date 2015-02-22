@@ -62,7 +62,7 @@ body {
   background-color: $background-color;
 
   > .container {
-    padding: 90px 15px 0;
+    padding: 0px 15px 0;
 
     > div {
       margin-top: 15px;
@@ -652,14 +652,6 @@ footer {
   .item__title {
     font-size: 14px;
   }
-}
-
-.chat__track {
-  display: block;
-}
-
-.chat__artist {
-  display: inline;
 }
 
 .chat__timestamp {
