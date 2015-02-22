@@ -1,11 +1,10 @@
 <div id="playlist{{ $id }}" class="drilldown__item playlist clearfix">
   <div class="item__image">
-    <img data-ng-src="{{ playlist.icon }}" alt="{{ playlist.name }}" title="{{ playlist.name }}">
+    <img data-ng-src="{{ playlist.icon }}" alt="{{ playlist.name }}">
   </div>
   <div class="item__info">
     <div
       class="item__title"
-      title="{{ playlist.name }}"
       data-ng-bind="playlist.name"></div>
     <div
       class="item__length">{{ playlist.length }} items</div>
@@ -14,9 +13,15 @@
     <a
       class="fa fa-fw fa-chevron-right"
       data-ng-show="!playlist.loadingTracks"
-      data-ng-click="loadPlaylistTracks(playlist)"></a>
+      data-ng-click="loadPlaylistTracks(playlist)"
+      data-tooltip="Load Tracks"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
     <a
       class="fa fa-fw fa-circle-o-notch fa-spin"
-      data-ng-show="playlist.loadingTracks"></a>
+      data-ng-show="playlist.loadingTracks"
+      data-tooltip="Loading Tracks"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
   </div>
 </div>
