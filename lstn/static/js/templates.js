@@ -92,41 +92,31 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/chat-message.html',
-    "<li>\n" +
-    "  <div class=\"row\">\n" +
-    "    <div class=\"chat__message__photo col-xs-3\">\n" +
-    "      <img data-ng-src=\"{{ message.picture }}\" class=\"avatar sm\" src=\"http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg\" />\n" +
-    "    </div>\n" +
-    "    <div class=\"chat__message__body col-xs-7\">\n" +
-    "      <div class=\"chat__message__headline row\">\n" +
-    "        <span class=\"chat__message__user\" data-ng-bind=\"message.user\"></span>\n" +
-    "        <span data-ng-switch=\"message.type\">\n" +
-    "          <span class=\"chat__message--playing\" data-ng-switch-when=\"playing\">started playing</span>\n" +
-    "          <span class=\"chat__message--upvoted\" data-ng-switch-when=\"upvote\">upvoted</span>\n" +
-    "          <span class=\"chat__message--downvoted\" data-ng-switch-when=\"downvote\">downvoted</span>\n" +
-    "          <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped\">skipped</span>\n" +
-    "          <span class=\"chat__message--said\" data-ng-switch-when=\"message\">said</span>\n" +
-    "        </span>\n" +
-    "      </div>\n" +
-    "      <div class=\"chat__message__message row\" data-ng-if=\"message.type === 'message'\">\n" +
-    "        <div class=\"wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
-    "      </div>\n" +
-    "      <div class=\"chat__message__track-info row\" data-ng-if=\"message.type !== 'message'\">\n" +
-    "        <div class=\"col-xs-12\">\n" +
-    "          <div class=\"row\">\n" +
-    "            <div class=\"col-xs-12\" data-ng-bind=\"message.track\"></div>\n" +
-    "          </div>\n" +
-    "          <div class=\"row\">\n" +
-    "            <div class=\"col-xs-12\" data-ng-bind=\"message.artist\"></div>\n" +
-    "          </div>\n" +
-    "        </div>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "    <div class=\"chat__message__timestamp col-xs-2\">\n" +
-    "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
-    "    </div>\n" +
+    "<div id=\"message-{{ $id }}-{{ index }}-{{ message.user }}\" class=\"chat__message clearfix\">\n" +
+    "  <div class=\"chat__image item__image\">\n" +
+    "    <img data-ng-src=\"{{ message.picture }}\" src=\"http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg\" />\n" +
     "  </div>\n" +
-    "</li>\n"
+    "  <div class=\"chat__user-info item__info\">\n" +
+    "    <div class=\"item__title\">\n" +
+    "      <span class=\"chat__message__user\" data-ng-bind=\"message.user\"></span>\n" +
+    "      <span data-ng-switch=\"message.type\">\n" +
+    "        <span class=\"chat__message--playing\" data-ng-switch-when=\"playing\">started playing</span>\n" +
+    "        <span class=\"chat__message--upvoted\" data-ng-switch-when=\"upvote\">upvoted</span>\n" +
+    "        <span class=\"chat__message--downvoted\" data-ng-switch-when=\"downvote\">downvoted</span>\n" +
+    "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped\">skipped</span>\n" +
+    "        <span class=\"chat__message--said\" data-ng-switch-when=\"message\">said</span>\n" +
+    "      </span>\n" +
+    "    </div>\n" +
+    "    <div class=\"chat__message__message\" data-ng-if=\"message.type === 'message'\">\n" +
+    "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"chat__track-info text-muted\" data-ng-if=\"message.type !== 'message'\">\n" +
+    "      <div class=\"chat__track\" data-ng-bind=\"message.track\"></div>\n" +
+    "      <div class=\"chat__artist\" data-ng-bind=\"message.artist\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
+    "  </div>\n" +
+    "</div>\n"
   );
 
 
@@ -197,8 +187,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/music-search.html',
     "<div>\n" +
-    "  <div>\n" +
-    "    <input type=\"search\" class=\"search__box form-control\" data-ng-model=\"searchQuery\" placeholder=\"Search music...\">\n" +
+    "  <div class=\"search__box\">\n" +
+    "    <input type=\"search\" class=\"form-control\" data-ng-model=\"searchQuery\" placeholder=\"Search music...\">\n" +
     "  </div>\n" +
     "  <div class=\"search__container\" data-ng-show=\"searchResults && searchResults.length > 0\">\n" +
     "    <div class=\"search__contents\">\n" +
@@ -343,11 +333,24 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-activity.html',
     "<div class=\"room-activity\">\n" +
     "  <ul id=\"messages\" class=\"messages list-group\">\n" +
-    "    <lstn-chat-message\n" +
-    "      class=\"list-group-item chat__message\"\n" +
-    "      data-ng-repeat=\"message in chat.messages\"></lstn-chat-message>\n" +
+    "    <li data-ng-repeat=\"item in chat.messages\">\n" +
+    "      <lstn-chat-message\n" +
+    "        data-message=\"item\"\n" +
+    "        data-index=\"$index\"></lstn-chat-message>\n" +
+    "    </li>\n" +
     "  </ul>\n" +
-    "  <input data-mentio data-mentio-id=\"'chat-input'\" ng-trim=\"false\" class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
+    "\n" +
+    "  <input\n" +
+    "    id=\"chat-input\"\n" +
+    "    data-mentio\n" +
+    "    data-mentio-id=\"'chat-input'\"\n" +
+    "    ng-trim=\"false\"\n" +
+    "    class=\"form-control\"\n" +
+    "    type=\"text\"\n" +
+    "    data-ng-model=\"message.text\"\n" +
+    "    data-lstn-enter=\"sendMessage()\"\n" +
+    "    placeholder=\"Send message...\"></input>\n" +
+    "\n" +
     "  <mentio-menu\n" +
     "    id=\"mention-menu\"\n" +
     "    mentio-for=\"'chat-input'\"\n" +
@@ -653,11 +656,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/room.html',
     "<div class=\"room row\">\n" +
-    "  <div class=\"col-md-3\">\n" +
+    "  <div class=\"col-md-3 room__left\">\n" +
     "    <lstn-playing-info></lstn-playing-info>\n" +
     "    <lstn-room-roster></lstn-room-roster>\n" +
     "  </div>\n" +
-    "  <div class=\"col-md-5\">\n" +
+    "  <div class=\"col-md-5 room__middle\">\n" +
     "    <tabset class=\"queue__tabs\">\n" +
     "      <tab id=\"my-queue-tab\" data-select=\"selectQueueTab('queue')\">\n" +
     "        <tab-heading>MY QUEUE</tab-heading>\n" +
@@ -670,7 +673,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
-    "  <div class=\"col-md-4\">\n" +
+    "  <div class=\"col-md-4 room__right\">\n" +
     "    <lstn-room-activity></lstn-room-activity>\n" +
     "  </div>\n" +
     "</div>\n"
