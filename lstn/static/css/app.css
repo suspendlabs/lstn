@@ -215,22 +215,26 @@ body > .container > div {
   padding-left: 0;
 }
 
-.playing__title {
-  color: #FFFFFF;
-  font-weight: 700;
-}
-
-.playing__artist {
-  color: #FFFFFF;
-  font-weight: 700;
-}
-
 .playing__info--playing {
+  padding: 20px;
   min-height: 180px;
 }
 
 .playing__meta {
-  background: #000;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.playing__meta h3, .playing__meta h4 {
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+.playing__meta h3 {
+  font-size: 22px;
+}
+.playing__meta h4 {
+  font-weight: 100;
 }
 
 .control__button {
