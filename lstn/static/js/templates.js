@@ -300,7 +300,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/playing-info.html',
     "<div class=\"playing__info-container\">\n" +
-    "\n" +
+    "  \n" +
     "  <div data-ng-hide=\"playing\" class=\"playing__info--stopped\">\n" +
     "    <a data-ng-show=\"queue.length\" href=\"\" data-ng-click=\"toggleBroadcast()\">\n" +
     "      <i class=\"fa fa-play-circle\" />\n" +
