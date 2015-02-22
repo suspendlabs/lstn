@@ -119,7 +119,7 @@ angular.module('lstn.controllers', [])
 }])
 
 .controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Playlist', 'Queue', 'Alert',
-  function($scope, $routeParams, $timeout, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Playlist, Queue) {
+  function($scope, $routeParams, $timeout, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Playlist, Queue, Alert) {
     $scope.playingTrack = null;
     $scope.isController = false;
     $scope.isCurrentController = false;
