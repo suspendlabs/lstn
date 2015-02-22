@@ -514,12 +514,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <li class=\"empty\" data-ng-show=\"!roster || roster.controllersCount === 0\">\n" +
     "        No Broadcasters\n" +
     "      </li>\n" +
-    "      <li data-ng-show=\"roster && roster.controllersCount > 0\" data-ng-repeat=\"user_id in roster.controllerOrder\">\n" +
+    "      <li class=\"roster__item--controller\"\n" +
+    "        data-ng-show=\"roster && roster.controllersCount > 0\" data-ng-repeat=\"user_id in roster.controllerOrder\">\n" +
     "        <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" target=\"_blank\"\n" +
     "          tooltip=\"{{ roster.controllers[user_id].name }}\" data-tooltip-placement=\"bottom\">\n" +
     "          <img data-ng-src=\"{{ roster.controllers[user_id].picture }}\" class=\"avatar xs\"\n" +
     "            data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
     "            alt=\"{{ roster.controllers[user_id].name }}\" />\n" +
+    "            <i data-ng-if=\"user_id === currentController\" class=\"fa fa-volume-up\" />\n" +
     "        </a>\n" +
     "      </li>\n" +
     "    </ul>\n" +
