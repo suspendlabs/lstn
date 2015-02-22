@@ -337,14 +337,16 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-activity.html',
     "<div class=\"room-activity\">\n" +
-    "  <ul id=\"messages\" class=\"messages list-group\">\n" +
+    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading\">\n" +
     "    <li data-ng-repeat=\"item in chat.messages\">\n" +
     "      <lstn-chat-message\n" +
     "        data-message=\"item\"\n" +
     "        data-index=\"$index\"></lstn-chat-message>\n" +
     "    </li>\n" +
     "  </ul>\n" +
-    "\n" +
+    "  <div class=\"messages--empty text-center\" data-ng-show=\"chat.loading\">\n" +
+    "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
+    "  </div>\n" +
     "  <input\n" +
     "    id=\"chat-input\"\n" +
     "    data-mentio\n" +
@@ -503,7 +505,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </li>\n" +
     "  </ul>\n" +
     "  <div class=\"queue--empty text-center\" data-ng-show=\"!queue.tracks || queue.tracks.length === 0\">\n" +
-    "    <p>My Queue</p>\n" +
+    "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
     "  </div>\n" +
     "</div>\n"
   );
