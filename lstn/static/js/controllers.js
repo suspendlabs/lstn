@@ -137,6 +137,8 @@ angular.module('lstn.controllers', [])
     $scope.remaining = 0;
     $scope.hideRemaining = false;
 
+    $scope.flashEnabled = false;
+
     $scope.chat = {
       messages: []
     };
