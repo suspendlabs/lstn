@@ -20,7 +20,8 @@
     "angular-sanitize": "~1.3.13",
     "ment.io": "~0.9.23",
     "angular-twemoji": "~0.0.8",
-    "angular-emoji-map": "~1.0.1"
+    "angular-emoji-map": "~1.0.1",
+    "swfobject": "2.2"
   },
   "version": "0.1.0",
   "homepage": "http://lstn.in",
