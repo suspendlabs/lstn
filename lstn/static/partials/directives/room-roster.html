@@ -1,29 +1,42 @@
 <div class="roster__container room__container">
-  <div>BROADCASTERS</div>
-  <ul class="roster roster--controllers">
-    <li data-ng-show="!roster || roster.controllersCount === 0">
-      <div class="text-center"><strong>No Broadcasters</strong></div>
-    </li>
-    <li data-ng-show="roster && roster.controllersCount > 0" data-ng-repeat="user_id in roster.controllerOrder"
-      <a data-ng-href="http://www.rdio.com{{ roster.controllers[user_id].profile }}" target="_blank">
-        <img data-ng-src="{{ roster.controllers[user_id].picture }}" class="avatar xs"
-          data-ng-class="{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}"
-          alt="{{ roster.controllers[user_id].name }}"/> {{ roster.controllers[user_id].name }}
-      </a>
-    </li>
-  </ul>
-  <div>LISTENERS<div>
-  <span class="listeners" data-ng-show="roster && roster.usersCount > 0">
-    <a
-      class="roster__user"
-      data-ng-repeat="(user_id, user) in roster.users | orderBy:name"
-      data-ng-href="http://www.rdio.com{{ user.profile }}"
-      target="_blank"
-      tooltip="{{ user.name }}">
 
-      <img data-ng-src="{{ user.picture }}"
+  <div class="roster__category">
+    <div class="roster__category-label">Broadcasters 
+      <a href="" data-ng-click="toggleBroadcast();">
+        <i class="fa" data-ng-class="{'fa-play-circle': !isController, 'fa-stop': isController }"></i>
+      </a>
+    </div>
+    <ul class="roster roster--controllers">
+      <li class="empty" data-ng-show="!roster || roster.controllersCount === 0">
+        No Broadcasters
+      </li>
+      <li data-ng-show="roster && roster.controllersCount > 0" data-ng-repeat="user_id in roster.controllerOrder">
+        <a data-ng-href="http://www.rdio.com{{ roster.controllers[user_id].profile }}" target="_blank"
+          tooltip="{{ roster.controllers[user_id].name }}" data-tooltip-placement="bottom">
+          <img data-ng-src="{{ roster.controllers[user_id].picture }}" class="avatar xs"
+            data-ng-class="{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}"
+            alt="{{ roster.controllers[user_id].name }}" />
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="roster__category">
+    <div class="roster__category-label">Listeners</div>
+    <ul class="roster roster--listeners" data-ng-show="roster && roster.usersCount > 0">
+      <li class="empty" data-ng-show="!roster || roster.users.length === 0">
+        No one is listening
+      </li>
+      <li data-ng-repeat="(user_id, user) in roster.users | orderBy:name">
+      <a class="roster__user"
+        data-ng-href="http://www.rdio.com{{ user.profile }}"
+        target="_blank"
+        tooltip="{{ user.name }}" data-tooltip-placement="bottom">
+        <img data-ng-src="{{ user.picture }}"
         data-ng-class="{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}"
-        class="avatar sm" alt="{{ user.name }}" />
-    </a>
-  </span>
+        class="avatar xs" alt="{{ user.name }}" />
+      </a>
+      </li>
+    </ul>
+  </div>
 </div>

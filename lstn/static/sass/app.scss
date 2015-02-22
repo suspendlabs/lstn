@@ -28,8 +28,8 @@ img.avatar {
     border: 2px solid #d43f3a;
   }
   &.xs {
-    width:32px;
-    height:32px;
+    width:39px;
+    height:39px;
   }
   &.sm {
     width: 50px;
@@ -254,6 +254,24 @@ body {
   }
 }
 
+.playing__info-container {
+  margin-bottom:36px;
+}
+.playing__info--stopped {
+
+  background: #3d3d3d;
+  min-height: 180px;
+  line-height: 180px;
+  text-align: center;
+  color: #fff;
+  font-size: 1.7rem;
+
+  .fa.fa-play-circle {
+    font-size: 8rem;
+    line-height: 180px;
+    color: #5cb85c;
+  }
+}
 .playing__info--playing {
   padding: 20px;
   min-height:180px;
@@ -278,13 +296,47 @@ body {
 
 .control__button {
   @include border-radius(0);
+  opacity: 1;
+  width:50px;
+  height:50px;
+  font-size:18px;
+
+}
+
+.roster__category {
+  margin-bottom:36px;
 }
 
 .roster__container {
   border: none;
-  @include border-radius(0);
+  border-radius: 0;
+  .roster__category-label {
+    color:#fff;
+    text-transform:uppercase;
 
-  .listeners {
+    .fa.fa-stop {
+      color: #d9534f;
+    }
+    .fa.fa-play-circle {
+      color:#5cb85c;
+    }
+  }
+
+  ul.roster {
+    padding:0;
+    margin:0;
+    list-style-type: none;
+    li {  
+      display:inline;
+
+      &.empty {
+        display: inline-block;
+        width:100%;
+        background-color:#eee;
+        padding:6px;
+
+      }
+    }
   }
 
   .roster__user {
@@ -294,10 +346,6 @@ body {
   }
 }
 
-.no-gutters {
-  padding:12px;
-  background:#f5f5f5;
-}
 
 .progress {
   border: none;
