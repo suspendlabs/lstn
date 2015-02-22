@@ -94,11 +94,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/chat-message.html',
     "<div id=\"message-{{ $id }}-{{ index }}-{{ message.user }}\" class=\"chat__message clearfix\">\n" +
     "  <div class=\"chat__image item__image\">\n" +
-    "    <img data-ng-src=\"{{ message.picture }}\" src=\"http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg\" />\n" +
+    "    <img data-ng-src=\"{{ message.user.picture }}\" src=\"http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg\" />\n" +
     "  </div>\n" +
     "  <div class=\"chat__user-info item__info\">\n" +
     "    <div class=\"item__title\">\n" +
-    "      <span class=\"chat__message__user\" data-ng-bind=\"message.user\"></span>\n" +
+    "      <span class=\"chat__message__user\" data-ng-bind=\"message.user.name\"></span>\n" +
     "      <span data-ng-switch=\"message.type\">\n" +
     "        <span class=\"chat__message--playing\" data-ng-switch-when=\"playing\">started playing</span>\n" +
     "        <span class=\"chat__message--upvoted\" data-ng-switch-when=\"upvote\">upvoted</span>\n" +
@@ -111,8 +111,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"chat__track-info text-muted\" data-ng-if=\"message.type !== 'message'\">\n" +
-    "      <div class=\"chat__track\" data-ng-bind=\"message.track\"></div>\n" +
-    "      <div class=\"chat__artist\" data-ng-bind=\"message.artist\"></div>\n" +
+    "      <div class=\"chat__track\">\n" +
+    "        <a data-ng-href=\"http://rdio.com{{ message.track.url }}\" data-ng-bind=\"message.track.name\" target=\"_blank\"></a>\n" +
+    "      </div>\n" +
+    "      <div class=\"chat__artist\">\n" +
+    "        <a data-ng-href=\"http://rdio.com{{ message.track.artistUrl }}\" data-ng-bind=\"message.track.artist\" target=\"_blank\"></a>\n" +
+    "      </div>\n" +
     "    </div>\n" +
     "    <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "  </div>\n" +
@@ -662,7 +666,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "  <div class=\"col-md-5 room__middle\">\n" +
     "    <tabset class=\"queue__tabs\">\n" +
-    "      <tab id=\"my-queue-tab\" data-select=\"selectQueueTab('queue')\">\n" +
+    "      <tab id=\"my-queue-tab\">\n" +
     "        <tab-heading>MY QUEUE</tab-heading>\n" +
     "        <lstn-room-queue></lstn-room-queue>\n" +
     "      </tab>\n" +
