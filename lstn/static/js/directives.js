@@ -638,6 +638,10 @@ angular.module('lstn.directives', ['sc.twemoji'])
     return {
       restrict: 'E',
       replace: true,
+      scope: {
+        message: '=',
+        index: '='
+      },
       templateUrl: '/static/partials/directives/chat-message.html',
       link: function($scope, $element, $attrs) {
         var messageClasses = {
