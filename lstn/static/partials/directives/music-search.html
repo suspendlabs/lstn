@@ -16,21 +16,21 @@
               <div data-ng-switch="item.type">
                 <lstn-album
                   data-ng-switch-when="a"
-                  data-context="search"
+                  data-context="'search'"
                   data-album="item"
                   data-index="$index"
-                  data-load-tracks="loadTracks"></lstn-album>
+                  data-load-album-tracks="loadAlbumTracks"></lstn-album>
 
                 <lstn-artist
                   data-ng-switch-when="r"
-                  data-context="search"
+                  data-context="'search'"
                   data-artist="item"
                   data-index="$index"
                   data-load-albums="loadAlbums"></lstn-artist>
 
                 <lstn-track
                   data-ng-switch-when="t"
-                  data-context="search"
+                  data-context="'search'"
                   data-track="item"
                   data-index="$index"></lstn-track>
               </div>
@@ -46,10 +46,10 @@
           <ul class="albums album--full album__list drilldown__list text-left">
             <li data-ng-repeat="item in albums">
               <lstn-album
-                data-context="artist"
+                data-context="'artist'"
                 data-album="item"
                 data-index="$index"
-                data-load-tracks="loadTracks"></lstn-album>
+                data-load-album-tracks="loadAlbumTracks"></lstn-album>
             </li>
           </ul>
         </slide>
@@ -62,7 +62,7 @@
           <ul class="tracks track--full track__list drilldown__list text-left">
             <li data-ng-repeat="item in tracks">
               <lstn-track
-                data-context="album"
+                data-context="'album'"
                 data-track="item"
                 data-index="$index"></lstn-track>
             </li>
