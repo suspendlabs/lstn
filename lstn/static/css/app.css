@@ -61,7 +61,7 @@ body {
   background-color: #333;
 }
 body > .container {
-  padding: 90px 15px 0;
+  padding: 0px 15px 0;
 }
 body > .container > div {
   margin-top: 15px;
@@ -619,14 +619,6 @@ footer .container .text-muted {
 }
 .chat__user-info .item__title {
   font-size: 14px;
-}
-
-.chat__track {
-  display: block;
-}
-
-.chat__artist {
-  display: inline;
 }
 
 .chat__timestamp {
