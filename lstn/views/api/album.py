@@ -22,7 +22,7 @@ def get_tracks(album_id):
 
   albums = rdio_manager.get([album_id], ['tracks'])
   if len(albums) > 0:
-    if len(albums[0].track_keys) > 0:
+    if hasattr(albums[0], 'track_keys') && len(albums[0].track_keys) > 0:
       tracks = rdio_manager.get(albums[0].track_keys)
 
       if len(tracks) > 0:

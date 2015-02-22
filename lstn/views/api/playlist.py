@@ -21,7 +21,7 @@ def get_tracks(playlist_id):
   tracks = []
 
   playlists = rdio_manager.get([playlist_id], ['tracks'])
-  if len(playlists) > 0:
+  if len(playlists) > 0 and hasattr(playlists[0], 'tracks'):
       tracks = [track._data for track in playlists[0].tracks]
 
   response = {
