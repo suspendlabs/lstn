@@ -1,11 +1,14 @@
 <div>
-  <ul id="queue" class="queue queue--full track__list music__list" data-ng-show="queue && queue.length > 0" data-ui-sortable="sortableOptions" ng-model="queue">
-    <lstn-track
-      data-ng-repeat="item in queue"
-      data-context="queue"
-      data-cutoff="50"></lstn-track>
+  <ul id="queue" class="queue queue--full track__list drilldown__list" data-ng-show="queue.tracks && queue.tracks.length > 0" data-ui-sortable="sortableOptions" ng-model="queue.tracks">
+    <li data-ng-repeat="track in queue.tracks">
+      <lstn-track
+        data-track="track"
+        data-context="queue"
+        data-cutoff="50"
+        data-index="$index"></lstn-track>
+    </li>
   </ul>
-  <div class="queue--empty text-center" data-ng-show="!queue || queue.length === 0">
+  <div class="queue--empty text-center" data-ng-show="!queue.tracks || queue.tracks.length === 0">
     <p>My Queue</p>
   </div>
 </div>
