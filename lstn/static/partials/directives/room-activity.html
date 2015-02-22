@@ -1,12 +1,14 @@
 <div class="room-activity">
-  <ul id="messages" class="messages list-group">
+  <ul id="messages" class="messages list-group" data-ng-show="!chat.loading">
     <li data-ng-repeat="item in chat.messages">
       <lstn-chat-message
         data-message="item"
         data-index="$index"></lstn-chat-message>
     </li>
   </ul>
-
+  <div class="messages--empty text-center" data-ng-show="chat.loading">
+    <i class="fa fa-circle-o-notch fa-spin"></i>
+  </div>
   <input
     id="chat-input"
     data-mentio
