@@ -5,7 +5,7 @@
   <div class="search__container" data-ng-show="searchResults && searchResults.length > 0">
     <div class="search__contents">
       <carousel id="search-carousel" interval="false">
-        <slide>
+        <slide id="search_results">
           <div class="carousel__back text-left">
             <a data-ng-click="clearSearchResults()">
               <i class="fa fa-fw fa-times-circle-o"></i> Clear Search Results
@@ -37,7 +37,8 @@
             </li>
           </ul>
         </slide>
-        <slide>
+
+        <slide id="search_albums">
           <div class="carousel__back text-left">
             <a data-ng-click="closeArtist()">
               <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentArtist.name"></span>
@@ -53,7 +54,8 @@
             </li>
           </ul>
         </slide>
-        <slide>
+
+        <slide id="search_tracks">
           <div class="carousel__back text-left">
             <a data-ng-click="closeAlbum()">
               <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentAlbum.name"></span>

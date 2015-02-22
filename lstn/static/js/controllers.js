@@ -140,6 +140,7 @@ angular.module('lstn.controllers', [])
     $scope.flashEnabled = false;
 
     $scope.chat = {
+      loading: true,
       messages: []
     };
 
@@ -218,6 +219,7 @@ angular.module('lstn.controllers', [])
     socket.on('room:chat:history', function(data) {
       console.log('room:chat:history', data);
       $scope.chat.messages = data;
+      $scope.chat.loading = false;
 
       $timeout(function() {
         $('#messages').animate({
@@ -778,21 +780,6 @@ angular.module('lstn.controllers', [])
       console.log('Room.get', response);
 
       Alert.error('Something went wrong while trying to load the room data.');
-    });
-
-    CurrentUser.playlists({}, function(response) {
-      if (!response || !response.success || !response.playlists) {
-        console.log('CurrentUser.playlists', response);
-
-        Alert.error('Something went wrong while trying to load your playlists.');
-        return;
-      }
-
-      $scope.playlists = response.playlists;
-    }, function(response) {
-      console.log('CurrentUser.playlists', response);
-
-      Alert.error('Something went wrong while trying to load your playlists.');
     });
   }
 ])
