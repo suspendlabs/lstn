@@ -10,12 +10,14 @@
       <li class="empty" data-ng-show="!roster || roster.controllersCount === 0">
         No Broadcasters
       </li>
-      <li data-ng-show="roster && roster.controllersCount > 0" data-ng-repeat="user_id in roster.controllerOrder">
+      <li class="roster__item--controller"
+        data-ng-show="roster && roster.controllersCount > 0" data-ng-repeat="user_id in roster.controllerOrder">
         <a data-ng-href="http://www.rdio.com{{ roster.controllers[user_id].profile }}" target="_blank"
           tooltip="{{ roster.controllers[user_id].name }}" data-tooltip-placement="bottom">
           <img data-ng-src="{{ roster.controllers[user_id].picture }}" class="avatar xs"
             data-ng-class="{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}"
             alt="{{ roster.controllers[user_id].name }}" />
+            <i data-ng-if="user_id === currentController" class="fa fa-volume-up" />
         </a>
       </li>
     </ul>
