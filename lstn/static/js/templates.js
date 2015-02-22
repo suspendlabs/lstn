@@ -354,6 +354,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    ng-trim=\"false\"\n" +
     "    class=\"form-control\"\n" +
     "    type=\"text\"\n" +
+    "    data-ng-show=\"!chat.loading\"\n" +
     "    data-ng-model=\"message.text\"\n" +
     "    data-lstn-enter=\"sendMessage()\"\n" +
     "    placeholder=\"Send message...\"></input>\n" +
