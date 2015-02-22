@@ -3,6 +3,58 @@
 
 angular.module('lstn.filters', [])
 
+.filter('timediff', [function() {
+  return function(start, finish) {
+    start  = moment(start);
+    finish = moment(finish);
+
+    return finish.diff(start);
+  };
+}])
+
+.filter('duration', [function() {
+  return function(value) {
+    var output = [];
+    var duration = moment.duration(value, 'seconds');
+
+    var seconds = duration.seconds();
+    if (seconds) {
+      output.unshift(seconds + 's');
+    }
+
+    var minutes = duration.minutes();
+    if (minutes) {
+      output.unshift(minutes + 'm');
+    }
+
+    var hours = duration.hours();
+    if (hours) {
+      output.unshift(hours + 'h');
+    }
+
+    var days = duration.days();
+    if (days) {
+      output.unshift(days + 'd');
+    }
+
+    var months = duration.months();
+    if (months) {
+      output.unshift(months + 'mo');
+    }
+
+    var years = duration.years();
+    if (years) {
+      output.unshift(years + 'y');
+    }
+
+    if (output.length === 0) {
+      return '0s';
+    }
+
+    return output.join(' ');
+  };
+}])
+
 .filter('timeFromNow', [function() {
   return function(date) {
     return moment(date).fromNow(true);
