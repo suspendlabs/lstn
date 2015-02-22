@@ -241,6 +241,7 @@ def search():
     'method': 'search',
     'query': query,
     'types': 'track,artist,album',
+    'extras': 'albumCount',
   }
 
   try:

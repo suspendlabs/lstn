@@ -62,7 +62,7 @@ body {
   background-color: $background-color;
 
   > .container {
-    padding: 0px 15px 0;
+    padding: 0 15px 0;
 
     > div {
       margin-top: 15px;
@@ -85,21 +85,34 @@ body {
 .navbar-inverse {
   border: none;
   background-color: $accent-color;
-  min-height: 75px;
+  min-height: 70px;
   font-size: 1.4em;
 
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
   .navbar-text {
-    margin-top: 1.2em;
+    margin-top: 0.95em;
   }
 
   .navbar-nav {
     > li {
       > a {
-        padding-top: 1.2em;
-
         &.navbar__name {
           color: #FFFFFF;
           padding-left: 10px;
+        }
+      }
+    }
+
+    > .open {
+      > a {
+        background-color: $background-color;
+
+        &:focus, &:hover {
+          background-color: $background-color;
         }
       }
     }
@@ -108,11 +121,11 @@ body {
 
 .navbar-logo {
   font-family: 'signo';
-  font-size: 3.5rem;
+  font-size: 1.8em;
   color: #FFFFFF;
   text-decoration: none;
   display: block;
-  margin-top: 1.3rem;
+  margin-top: 0.26em;
 
   &:link {
     color: #FFFFFF;
@@ -436,9 +449,17 @@ body {
 }
 
 .queue--empty {
-  margin: 10px;
-  height: 170px;
-  padding-top: 40px;
+  font-size: 10em;
+  color: $background-color;
+  line-height: 400px;
+}
+
+.messages--empty {
+  min-height: 436px;
+  font-size: 10em;
+  color: $background-color;
+  line-height: 400px;
+  padding-top: 36px;
 }
 
 .drilldown__list {
@@ -474,6 +495,7 @@ body {
 .item__info {
   float: left;
   width: 75%;
+  line-height: 1.23;
 
   padding: 3px 0 0 5px;
   
@@ -516,9 +538,8 @@ body {
 }
 
 .messages {
+  width: 100%;
   margin-bottom: 0;
-  min-height: 400px;
-  background-color: $accent-color;
   list-style: none;
 }
 
@@ -610,10 +631,8 @@ footer {
 }
 
 .room-activity {
-  .messages {
-    height: 90%;
-    width: 100%;
-  }
+  min-height: 400px;
+  background-color: $accent-color;
 
   .form-control {
     @include border-radius(0);
@@ -667,7 +686,6 @@ footer {
 .chat__user-info {
   width: 83%;
   position: relative;
-  line-height: 1.23;
   font-size: 14px;
   padding: 3px 0 0 3px;
 

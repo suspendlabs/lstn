@@ -5,7 +5,8 @@
   <div class="item__info">
     <div
       class="item__title"
-      title="{{ artist.name }}"></div>
+      data-ng-bind="artist.name"></div>
+    <div class="item__count" data-ng-pluralize count="artist.albumCount" when="{'one': '{} album', 'other': '{} albums'}"></div>
   </div>
   <div class="item__actions">
     <a

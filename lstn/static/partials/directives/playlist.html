@@ -6,8 +6,7 @@
     <div
       class="item__title"
       data-ng-bind="playlist.name"></div>
-    <div
-      class="item__length">{{ playlist.length }} items</div>
+    <div class="item__count" data-ng-pluralize count="playlist.length" when="{'one': '{} track', 'other': '{} tracks'}"></div>
   </div>
   <div class="item__actions">
     <a

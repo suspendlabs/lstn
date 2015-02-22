@@ -138,6 +138,7 @@ angular.module('lstn.controllers', [])
     $scope.hideRemaining = false;
 
     $scope.chat = {
+      loading: true,
       messages: []
     };
 
@@ -216,6 +217,7 @@ angular.module('lstn.controllers', [])
     socket.on('room:chat:history', function(data) {
       console.log('room:chat:history', data);
       $scope.chat.messages = data;
+      $scope.chat.loading = false;
 
       $timeout(function() {
         $('#messages').animate({
