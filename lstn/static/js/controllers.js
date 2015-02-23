@@ -383,6 +383,7 @@ angular.module('lstn.controllers', [])
       }
 
       // Play the track through Rdio
+      apiswf.rdio_setVolume(0.7);
       apiswf.rdio_play(data.key, {
         initialPosition: data.position || 0
       });
