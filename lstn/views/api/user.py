@@ -128,6 +128,56 @@ def get_playlist_type(list_type):
 
   return jsonify(success=True, playlists=playlists)
 
+@user.route('/stations/<station_type>', methods=['GET'])
+@login_required
+def get_station_type(station_type):
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  methods = {
+    'you': {
+      'method': 'getStations',
+      'user': current_user.external_id,
+    },
+    'friends': {
+      'method': 'getFriendAndTastemakerStations',
+    },
+    'recent': {
+      'method': 'getRecentStationsHistoryForUser',
+      'user': current_user.external_id,
+    },
+    'genre': {
+      'method': 'getGenreStations',
+    },
+    'top': {
+      'method': 'getCuratedContent',
+      'curationType': 'top_stations',
+    },
+    'new': {
+      'method': 'getCuratedContent',
+      'curationType': 'new_releases_weekly_station',
+    },
+    'spotlight': {
+      'method': 'getCuratedContent',
+      'curationType': 'spotlight',
+    }
+  }
+
+  if station_type not in methods:
+    raise APIException('Invalid station type')
+
+  stations = {}
+
+  try:
+    stations = rdio_manager.call_api_authenticated(methods[station_type])
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to retrieve station: %s' % str(e))
+
+  return jsonify(success=True, stations=stations)
+
 @user.route('/queue', methods=['GET', 'PUT'])
 @login_required
 def user_queue():
