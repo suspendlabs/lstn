@@ -119,7 +119,7 @@ angular.module('lstn.controllers', [])
 }])
 
 .controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Playlist', 'Queue', 'Alert',
-  function($scope, $routeParams, $timeout, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Playlist, Queue) {
+  function($scope, $routeParams, $timeout, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Playlist, Queue, Alert) {
     $scope.playingTrack = null;
     $scope.isController = false;
     $scope.isCurrentController = false;
@@ -136,6 +136,8 @@ angular.module('lstn.controllers', [])
     $scope.hasRemaining = false;
     $scope.remaining = 0;
     $scope.hideRemaining = false;
+
+    $scope.flashEnabled = false;
 
     $scope.chat = {
       loading: true,
@@ -344,7 +346,7 @@ angular.module('lstn.controllers', [])
 
     socket.on('room:chat:message', function(message) {
       console.log(message);
-      
+
       $scope.chat.messages.push(message);
 
       if (message &&
@@ -422,7 +424,7 @@ angular.module('lstn.controllers', [])
 
       $scope.updateTimeout = $timeout($scope.updatePosition, 1 * 1000, false);
     };
-  
+
     window.toggleBroadcast = $scope.toggleBroadcast = function() {
       $scope.isController = !$scope.isController;
 
@@ -434,15 +436,15 @@ angular.module('lstn.controllers', [])
         socket.releaseControl($scope.room.id, $scope.current_user.id);
       }
     };
-  
+
     window.toggleMute = $scope.toggleMute = function() {
       $scope.mute = !$scope.mute;
       apiswf.rdio_setMute($scope.mute);
     };
-  
+
     window.toggleVisualize = $scope.toggleVisualize = function() {
       $scope.visualize = !$scope.visualize;
-  
+
       if ($scope.visualize) {
         apiswf.rdio_startFrequencyAnalyzer({
           frequencies: '10-band',
@@ -452,7 +454,7 @@ angular.module('lstn.controllers', [])
         apiswf.rdio_stopFrequencyAnalyzer();
       }
     };
-  
+
     window.upvote = $scope.upvote = function() {
       if (!$scope.playing ||
         $scope.playing.voted ||
@@ -549,7 +551,7 @@ angular.module('lstn.controllers', [])
         Alert.error('Something went wrong while trying to downvote the track.');
       });
     };
-  
+
     window.skipTrack = $scope.skipTrack = function() {
       if (!$scope.isCurrentController) {
         return;
@@ -597,7 +599,7 @@ angular.module('lstn.controllers', [])
       // Play the track
       $scope.playTrack($scope.rdioPlay);
     });
-  
+
     $scope.$watch('playingTrack', function(newVal, oldVal) {
       console.log('playingTrack', newVal, oldVal);
       if (newVal === oldVal) {
@@ -646,8 +648,9 @@ angular.module('lstn.controllers', [])
       window.playbackHandler = {
         ready: function(user) {
           window.apiswf = $('#apiswf').get(0);
-  
+
           $scope.$evalAsync(function() {
+            $scope.flashEnabled = true;
             $scope.rdioReady = true;
             $scope.rdioUser = user;
           });
@@ -683,26 +686,26 @@ angular.module('lstn.controllers', [])
         muteChanged: function(mute) {},
         positionChanged: function(position) {
           window.playingPosition = position;
-  
+
           var progressBar = $('#progress');
-  
+
           var maxValue = parseInt(progressBar.attr('aria-valuemax'), 10);
           var currentValue = parseInt(position, 10);
           var percentage = Math.ceil((currentValue / maxValue) * 100);
-  
+
           var currentSeconds = currentValue % 60;
           var currentMinutes = (currentValue - currentSeconds) / 60;
-  
+
           var maxSeconds = maxValue % 60;
           var maxMinutes = (maxValue - maxSeconds) / 60;
-  
+
           var time = currentMinutes + ':';
           time += (currentSeconds < 10) ? '0' + currentSeconds : currentSeconds;
           time += ' / ' + maxMinutes + ':';
           time += (maxSeconds < 10) ? '0' + maxSeconds : maxSeconds;
-  
+
           $('#time').html(time);
-  
+
           progressBar.attr('aria-valuenow', currentValue);
           progressBar.css('width', percentage + '%');
         },
@@ -718,30 +721,40 @@ angular.module('lstn.controllers', [])
         },
         updateFrequencyData: function(data) {
           var frequencies = data.split(',');
-  
+
           $('.playing__visualization div').each(function(i) {
             var height = Math.max(0, Math.min(parseInt(parseFloat(frequencies[i]) * 175, 10), 175));
             var marginTop = 175 - height;
-  
+
             $(this).height(height);
             $(this).css('margin-top', marginTop + 'px');
           });
         }
       };
-  
+
       var flashVars = {
         playbackToken: $scope.playback,
         domain: document.domain,
         listener: 'playbackHandler'
       };
-  
+
       var params = {
         allowScriptAccess: 'always'
       };
-  
+
+      var flashCheck = function(e) {
+        $timeout(function() {
+            if ($scope.flashEnabled === false) {
+              Alert.error('Flash doesn\'t appear to be enabled. Make sure it\'s installed and you\'ve enabled it.');
+            }
+          }, 5000
+        );
+      };
+
       swfobject.embedSWF('//www.rdio.com/api/swf/',
         'apiswf', 1, 1, '9.0.0', 'expressInstall.swf',
-        flashVars, params, {});
+        flashVars, params, {}, flashCheck);
+
     };
 
     Room.get({
@@ -753,14 +766,14 @@ angular.module('lstn.controllers', [])
         Alert.error('Something went wrong while trying to load the room data.');
         return;
       }
-  
+
       $scope.room.update(response.room);
       $scope.playback = response.playback;
 
       if (response.queue) {
         $scope.queue.tracks = response.queue;
       }
-  
+
       socket.registerRoom($scope.room.id, $scope.current_user);
       initPlayback();
     }, function(response) {
