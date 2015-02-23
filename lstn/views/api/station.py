@@ -9,28 +9,36 @@ from flask.ext.login import login_required, current_user
 from lstn import db
 from lstn.exceptions import APIException
 
-artist = Blueprint('artist', __name__, url_prefix='/api/artist')
+station = Blueprint('station', __name__, url_prefix='/api/station')
 
-@artist.route('/<artist_id>/albums', methods=['GET'])
+@station.route('/<station_id>/tracks', methods=['GET'])
 @login_required
-def get_albums(artist_id):
+def get_tracks(station_id):
   rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
     current_app.config['RDIO_CONSUMER_SECRET'],
     current_user.oauth_token,
     current_user.oauth_token_secret)
 
+  data = {
+    'method': 'generateStation',
+    'station_key': station_id,
+  }
+
   try:
-    albums = rdio_manager.get_albums_for_artist(artist_id)
+    station = rdio_manager.call_api_authenticated(data)
   except Exception as e:
     current_app.logger.debug(e)
-    raise APIException('Unable to retrieve albums: %s' % str(e))
+    raise APIException('Unable to retrieve station tracks: %s' % str(e))
 
-  if len(albums) > 0:
-      albums = [album._data for album in albums]
+  current_app.logger.debug(station)
+
+  tracks = []
+  if 'tracks' in station:
+      tracks = station['tracks']
 
   response = {
     'success': 1,
-    'albums': albums,
+    'tracks': tracks,
   }
 
   return jsonify(response)

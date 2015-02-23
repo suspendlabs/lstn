@@ -203,6 +203,54 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        </li>\n" +
     "      </ul>\n" +
     "    </slide>\n" +
+    "\n" +
+    "    <slide id=\"station_types\">\n" +
+    "      <div class=\"carousel__back text-left\">\n" +
+    "        <a data-ng-click=\"closeCategory()\">\n" +
+    "          <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentCategory.name\"></span>\n" +
+    "        </a>\n" +
+    "      </div>\n" +
+    "      <ul class=\"station-types station-types--full station-type__list drilldown__list text-left\">\n" +
+    "        <li data-ng-repeat=\"item in stationTypes\">\n" +
+    "          <lstn-station-type\n" +
+    "            data-station-type=\"item\"\n" +
+    "            data-load-stations=\"loadStations\"></lstn-station-type>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </slide>\n" +
+    "\n" +
+    "    <slide id=\"stations\">\n" +
+    "      <div class=\"carousel__back text-left\">\n" +
+    "        <a data-ng-click=\"closeStationType()\">\n" +
+    "          <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentStationType.name\"></span>\n" +
+    "        </a>\n" +
+    "      </div>\n" +
+    "      <ul class=\"stations drilldown__list text-left\">\n" +
+    "        <li data-ng-repeat=\"item in stations\">\n" +
+    "          <lstn-playlist\n" +
+    "            data-context=\"'category'\"\n" +
+    "            data-playlist=\"item\"\n" +
+    "            data-index=\"$index\"\n" +
+    "            data-load-playlist-tracks=\"loadStationTracks\"></lstn-playlist>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </slide>\n" +
+    "\n" +
+    "    <slide id=\"station_tracks\">\n" +
+    "      <div class=\"carousel__back text-left\">\n" +
+    "        <a data-ng-click=\"closeStation()\">\n" +
+    "          <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentStation.name\"></span>\n" +
+    "        </a>\n" +
+    "      </div>\n" +
+    "      <ul class=\"tracks drilldown__list text-left\">\n" +
+    "        <li data-ng-repeat=\"item in tracks\">\n" +
+    "          <lstn-track\n" +
+    "            data-context=\"'station'\"\n" +
+    "            data-track=\"item\"\n" +
+    "            data-index=\"$index\"></lstn-track>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </slide>\n" +
     "  </carousel>\n" +
     "</div>\n"
   );
@@ -615,6 +663,64 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <span class=\"text-primary\" data-ng-bind-html=\"person.name | mentioHighlight:typedTerm:'menu-highlighted' | unsafe\"></span>\n" +
     "  </li>\n" +
     "</ul>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/station-type.html',
+    "<div id=\"station-type{{ $id }}\" class=\"drilldown__item station-type clearfix\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <i class=\"fa fa-fw fa-music fa-3x\"></i>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title\"\n" +
+    "      data-ng-bind=\"stationType.name\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-show=\"!stationType.loadingStations\"\n" +
+    "      data-ng-click=\"loadStations(stationType)\"\n" +
+    "      data-tooltip=\"Load Stations\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"stationType.loadingStations\"\n" +
+    "      data-tooltip=\"Loading Stations\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "  </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/station.html',
+    "<div id=\"station{{ $id }}\" class=\"drilldown__item station clearfix\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <img data-ng-src=\"{{ station.icon }}\" alt=\"{{ station.name }}\">\n" +
+    "  </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title\"\n" +
+    "      data-ng-bind=\"station.name\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-show=\"!station.loadingTracks\"\n" +
+    "      data-ng-click=\"loadStationTracks(station)\"\n" +
+    "      data-tooltip=\"Load Tracks\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"station.loadingTracks\"\n" +
+    "      data-tooltip=\"Loading Tracks\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "  </div>\n" +
+    "</div>\n"
   );
 
 

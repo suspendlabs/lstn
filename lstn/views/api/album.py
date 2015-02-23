@@ -7,6 +7,7 @@ from flask import Flask, request, redirect, url_for, \
 from flask.ext.login import login_required, current_user
 
 from lstn import db
+from lstn.exceptions import APIException
 
 album = Blueprint('album', __name__, url_prefix='/api/album')
 
@@ -20,10 +21,19 @@ def get_tracks(album_id):
 
   tracks = []
 
-  albums = rdio_manager.get([album_id], ['tracks'])
+  try:
+    albums = rdio_manager.get([album_id], ['tracks'])
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to retrieve albums: %s' % str(e))
+
   if len(albums) > 0:
     if hasattr(albums[0], 'track_keys') and len(albums[0].track_keys) > 0:
-      tracks = rdio_manager.get(albums[0].track_keys)
+      try:
+        tracks = rdio_manager.get(albums[0].track_keys)
+      except Exception as e:
+        current_app.logger.debug(e)
+        raise APIException('Unable to retrieve album tracks: %s' % str(e))
 
       if len(tracks) > 0:
         tracks = [track._data for track in tracks]
