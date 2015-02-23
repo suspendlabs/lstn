@@ -307,6 +307,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         action: 'playlists'
       }
     },
+    stations: {
+      method: 'GET',
+      params: {
+        action: 'stations'
+      }
+    },
     addToQueue: {
       method: 'POST',
       params: {
@@ -335,6 +341,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
   CurrentUser.getPlaylists = function(type) {
     return CurrentUser.playlists({
+      id: type
+    }).$promise;
+  };
+
+  CurrentUser.getStations = function(type) {
+    return CurrentUser.stations({
       id: type
     }).$promise;
   };
@@ -403,6 +415,27 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   };
 
   return Album;
+}])
+
+.factory('Station', ['$resource', function($resource) {
+  var Station = $resource('/api/station/:id/:action', {
+    id: '@id'
+  },{
+    tracks: {
+      method: 'GET',
+      params: {
+        action: 'tracks'
+      }
+    }
+  });
+
+  Station.getTracks = function(station) {
+    return this.tracks({
+      id: station
+    }).$promise;
+  };
+
+  return Station;
 }]);
 
 })();
