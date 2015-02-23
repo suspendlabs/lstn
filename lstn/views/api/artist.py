@@ -7,6 +7,7 @@ from flask import Flask, request, redirect, url_for, \
 from flask.ext.login import login_required, current_user
 
 from lstn import db
+from lstn.exceptions import APIException
 
 artist = Blueprint('artist', __name__, url_prefix='/api/artist')
 
@@ -18,7 +19,12 @@ def get_albums(artist_id):
     current_user.oauth_token,
     current_user.oauth_token_secret)
 
-  albums = rdio_manager.get_albums_for_artist(artist_id)
+  try:
+    albums = rdio_manager.get_albums_for_artist(artist_id)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to retrieve albums: %s' % str(e))
+
   if len(albums) > 0:
       albums = [album._data for album in albums]
 
