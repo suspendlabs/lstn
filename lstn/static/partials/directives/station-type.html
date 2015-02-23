@@ -1,0 +1,25 @@
+<div id="station-type{{ $id }}" class="drilldown__item station-type clearfix">
+  <div class="item__image">
+    <i class="fa fa-fw fa-music fa-3x"></i>
+  </div>
+  <div class="item__info">
+    <div
+      class="item__title"
+      data-ng-bind="stationType.name"></div>
+  </div>
+  <div class="item__actions">
+    <a
+      class="fa fa-fw fa-chevron-right"
+      data-ng-show="!stationType.loadingStations"
+      data-ng-click="loadStations(stationType)"
+      data-tooltip="Load Stations"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
+    <a
+      class="fa fa-fw fa-circle-o-notch fa-spin"
+      data-ng-show="stationType.loadingStations"
+      data-tooltip="Loading Stations"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
+  </div>
+</div>
