@@ -252,25 +252,29 @@ body > .container > div {
 }
 
 .playing__info--playing {
-  padding: 20px;
   min-height: 180px;
 }
 
 .playing__meta {
-  background: rgba(0, 0, 0, 0.5);
-  padding: 12px;
-  margin-bottom: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1em;
+  min-height: 180px;
 }
 .playing__meta h3, .playing__meta h4 {
-  font-weight: 700;
   color: #fff;
   margin: 0;
 }
-.playing__meta h3 {
+.playing__meta .playing__title {
+  margin-top: 1em;
+  font-weight: 700;
   font-size: 22px;
 }
-.playing__meta h4 {
+.playing__meta .playing__artist {
   font-weight: 100;
+}
+
+.playing__controls {
+  margin-top: 1em;
 }
 
 .control__button {
@@ -344,8 +348,9 @@ body > .container > div {
 }
 .progress .time {
   display: block;
-  width: 93%;
   position: absolute;
+  right: 0;
+  margin-right: .5em;
 }
 
 .queue__tabs {
@@ -400,9 +405,6 @@ body > .container > div {
   color: #333;
   line-height: 400px;
   padding-top: 36px;
-}
-.messages--empty .fa {
-  display: inline-block;
 }
 
 .drilldown__list {

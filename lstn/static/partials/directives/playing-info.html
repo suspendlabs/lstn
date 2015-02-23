@@ -9,13 +9,13 @@
 
   <div data-ng-show="playing" class="playing__info playing__info--playing" data-album-cover-background>
     <div class="playing__meta">
-      <h3 class="playing__title" data-ng-bind="playing.track.title | truncate:28"></h3>
+      <h3 class="playing__title" data-ng-bind="playing.track.title | truncate:25"></h3>
       <h4 class="playing__artist" data-ng-bind="playing.track.artist | truncate:35"></h4>
+      <lstn-room-controls></lstn-room-controls>
     </div>
-    <lstn-room-controls></lstn-room-controls>
   </div>
-  <!-- TOOD: why is there a gap here? (fixed by negative top margin). -->
-  <div style="margin-top:-10px" class="progress" data-ng-show="playing.track.duration && playing.track.canStream">
+
+  <div class="progress" data-ng-show="playing.track.duration && playing.track.canStream">
     <div id="progress" class="progress-bar progress-bar-info progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="{{ playing.track.duration }}"></div>
     <span id="time" class="time"></span>
   </div>

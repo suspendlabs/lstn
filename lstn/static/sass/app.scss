@@ -289,25 +289,32 @@ body {
   }
 }
 .playing__info--playing {
-  padding: 20px;
   min-height:180px;
 }
 
 .playing__meta {
-  background: rgba(0, 0, 0, 0.5);
-  padding:12px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1em;
+  min-height: 180px;
+
   h3, h4 {
-    font-weight: 700;
     color: #fff;
     margin:0;
   }
-  h3 {
+
+  .playing__title {
+    margin-top: 1em;
+    font-weight: 700;
     font-size:22px;
   }
-  h4, {
+
+  .playing__artist {
     font-weight: 100;
   }
-  margin-bottom:12px;
+}
+
+.playing__controls {
+  margin-top: 1em;
 }
 
 .control__button {
@@ -393,8 +400,9 @@ body {
 
   .time {
     display: block;
-    width: 93%;
     position: absolute;
+    right: 0;
+    margin-right: .5em;
   }
 }
 
