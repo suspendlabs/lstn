@@ -576,6 +576,10 @@ angular.module('lstn.controllers', [])
         user: 0
       };
 
+      if (rdioTrack.icon400) {
+        lstnTrack.image = rdioTrack.icon400;
+      }
+
       return lstnTrack;
     };
 
