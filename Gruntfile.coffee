@@ -134,7 +134,7 @@ module.exports = (grunt) ->
     wiredep:
       lstn:
         src: ['lstn/templates/layout.html']
-        ignorePath: '..'
+        ignorePath: '../static'
 
     useminPrepare:
       html: 'lstn/templates/layout.html'
