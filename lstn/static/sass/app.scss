@@ -4,6 +4,7 @@
 @import "compass/css3/animation";
 @import "compass/css3/transform";
 @import "compass/css3/opacity";
+@import "compass/css3/flexbox";
 @import "variables";
 
 html, body {
@@ -487,10 +488,45 @@ body {
   border-bottom: 4px solid $accent-color;
 }
 
+.track, .chat__message {
+  @include display-flex;
+
+  .item__image, .item__actions, .item__info {
+    width: auto;
+    @include flex-basis(auto);
+    margin: 0;
+  }
+
+  .item__image {
+    width: auto;
+    @include flex-basis(60px);
+    @include flex-shrink(0);
+  }
+
+  .item__actions {
+    width: auto;
+    @include flex-shrink(0);
+    margin-right: 1em;
+  }
+
+  .item__info {
+    width: auto;
+    @include flex-grow(3);
+    margin: 0;
+  }
+}
+
+.chat__message .item__title {
+  @include display-flex;
+}
+
+.chat__message__message-type {
+  @include flex-grow(1);
+}
+
 .item__image {
-  width: 13%;
+  width: 17%;
   min-height: 60px;
-  float: left;
 
   img {
     width: 60px;
@@ -505,7 +541,6 @@ body {
 }
 
 .item__info {
-  float: left;
   width: 75%;
   line-height: 1.23;
 
@@ -537,7 +572,6 @@ body {
 }
 
 .item__actions {
-  float: right;
   margin-right: 15px;
   line-height: 50px;
 
@@ -708,10 +742,7 @@ footer {
 }
 
 .chat__timestamp {
-  display: inline-block;
-  position: absolute;
-  top: 3px;
-  right: 2px;
+  margin-right: 4px;
 }
 
 .search__box {

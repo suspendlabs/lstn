@@ -1,17 +1,18 @@
-<div id="message-{{ $id }}-{{ index }}-{{ message.user }}" class="chat__message clearfix">
+<div id="message-{{ $id }}-{{ index }}-{{ message.user }}" class="chat__message">
   <div class="chat__image item__image">
     <img data-ng-src="{{ message.user.picture }}" src="http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg" />
   </div>
   <div class="chat__user-info item__info">
     <div class="item__title">
-      <span class="chat__message__user" data-ng-bind="message.user.name"></span>
-      <span data-ng-switch="message.type">
+      <span class="chat__message__user" data-ng-bind="message.user.name"></span>&nbsp;
+      <span data-ng-switch="message.type" class="chat__message__message-type">
         <span class="chat__message--playing" data-ng-switch-when="playing">started playing</span>
         <span class="chat__message--upvoted" data-ng-switch-when="upvote">upvoted</span>
         <span class="chat__message--downvoted" data-ng-switch-when="downvote">downvoted</span>
         <span class="chat__message--skipped" data-ng-switch-when="skipped">skipped</span>
         <span class="chat__message--said" data-ng-switch-when="message">said</span>
       </span>
+      <div class="chat__timestamp text-muted" data-time-from-now="message.created"></div>
     </div>
     <div class="chat__message__message" data-ng-if="message.type === 'message'">
       <div class="wordwrap" data-ng-bind-html="message.text|twemoji"></div>
@@ -24,6 +25,5 @@
         <a data-ng-href="http://rdio.com{{ message.track.artistUrl }}" data-ng-bind="message.track.artist" target="_blank"></a>
       </div>
     </div>
-    <div class="chat__timestamp text-muted" data-time-from-now="message.created"></div>
   </div>
 </div>
