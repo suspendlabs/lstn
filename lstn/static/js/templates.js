@@ -94,20 +94,21 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/chat-message.html',
-    "<div id=\"message-{{ $id }}-{{ index }}-{{ message.user }}\" class=\"chat__message clearfix\">\n" +
+    "<div id=\"message-{{ $id }}-{{ index }}-{{ message.user }}\" class=\"chat__message\">\n" +
     "  <div class=\"chat__image item__image\">\n" +
     "    <img data-ng-src=\"{{ message.user.picture }}\" src=\"http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg\" />\n" +
     "  </div>\n" +
     "  <div class=\"chat__user-info item__info\">\n" +
     "    <div class=\"item__title\">\n" +
-    "      <span class=\"chat__message__user\" data-ng-bind=\"message.user.name\"></span>\n" +
-    "      <span data-ng-switch=\"message.type\">\n" +
+    "      <span class=\"chat__message__user\" data-ng-bind=\"message.user.name\"></span>&nbsp;\n" +
+    "      <span data-ng-switch=\"message.type\" class=\"chat__message__message-type\">\n" +
     "        <span class=\"chat__message--playing\" data-ng-switch-when=\"playing\">started playing</span>\n" +
     "        <span class=\"chat__message--upvoted\" data-ng-switch-when=\"upvote\">upvoted</span>\n" +
     "        <span class=\"chat__message--downvoted\" data-ng-switch-when=\"downvote\">downvoted</span>\n" +
     "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped\">skipped</span>\n" +
     "        <span class=\"chat__message--said\" data-ng-switch-when=\"message\">said</span>\n" +
     "      </span>\n" +
+    "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"chat__message__message\" data-ng-if=\"message.type === 'message'\">\n" +
     "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
@@ -120,7 +121,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <a data-ng-href=\"http://rdio.com{{ message.track.artistUrl }}\" data-ng-bind=\"message.track.artist\" target=\"_blank\"></a>\n" +
     "      </div>\n" +
     "    </div>\n" +
-    "    <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -725,7 +725,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/track.html',
-    "<div id=\"track-{{ $id }}-{{ index }}-{{ track.key }}\" class=\"drilldown__item track clearfix\">\n" +
+    "<div id=\"track-{{ $id }}-{{ index }}-{{ track.key }}\" class=\"drilldown__item track\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <img data-ng-src=\"{{ track.icon }}\" alt=\"{{ track.album }}\">\n" +
     "  </div>\n" +
