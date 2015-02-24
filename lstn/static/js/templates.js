@@ -823,7 +823,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <tab>\n" +
     "        <tab-heading>MORE MUSIC</tab-heading>\n" +
     "        <lstn-more-music></lstn-more-music>\n" +
-    "        </tab-heading>\n" +
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
