@@ -432,8 +432,10 @@ body > .container > div {
 }
 .track .item__image, .chat__message .item__image {
   width: auto;
-  -webkit-flex-shrink: 1;
-  flex-shrink: 1;
+  -webkit-flex-basis: 60px;
+  flex-basis: 60px;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
 }
 .track .item__actions, .chat__message .item__actions {
   width: auto;
