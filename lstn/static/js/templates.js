@@ -785,36 +785,23 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
+  $templateCache.put('/static/partials/help.html',
+    "<div>\n" +
+    "    <p>This product uses the Rdio API but is not endorsed, certified or otherwise approved in any way by Rdio®.</p>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('/static/partials/index.html',
     "<div>\n" +
     "  <div class=\"hero jumbotron\">\n" +
     "    <div class=\"container\">\n" +
-    "      <h1><span class=\"lstn\">Lstn</span> to <span class=\"rdio\">Rdio</span> with Friends</h1>\n" +
-    "      <p>Create a room and start listening to Rdio with your friends.</p>\n" +
+    "      <h1><span class=\"lstn\">Lstn</span> to <span class=\"rdio\">Music</span> with Friends</h1>\n" +
+    "      <p>Create a room and start listening to music with your friends.</p>\n" +
     "      <p>\n" +
     "        <a data-ng-show=\"!current_user.id\" class=\"btn btn-primary btn-lg\" href=\"/login\" role=\"button\" target=\"_self\">Get Started</a>\n" +
     "        <a data-ng-show=\"current_user.id\" class=\"btn btn-primary btn-lg\" href=\"/rooms\" role=\"button\">Get Started</a>\n" +
     "      </p>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div class=\"front__info__container container\">\n" +
-    "    <div class=\"row\">\n" +
-    "      <div class=\"front__info col-xs-4\">\n" +
-    "        <div><i class=\"glyphicon glyphicon-headphones\"></i></div>\n" +
-    "        <h4>Simple to get started</h4>\n" +
-    "        <p>Login with your Rdio account and create a room to start listening</p>\n" +
-    "      </div>\n" +
-    "      <div class=\"front__info col-xs-4\">\n" +
-    "        <div><i class=\"glyphicon glyphicon-list\"></i></div>\n" +
-    "        <h4>Sharing is caring</h4>\n" +
-    "        <p>Share your favorite music by using your playlists, collections, and stations from Rdio</p>\n" +
-    "      </div>\n" +
-    "      <div class=\"front__info col-xs-4\">\n" +
-    "        <div><i class=\"glyphicon glyphicon-transfer\"></i></div>\n" +
-    "        <h4>Stay in sync</h4>\n" +
-    "        <p>Music playback is synced between room members so you can listen and discover music together</p>\n" +
-    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -848,13 +835,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/rooms.html',
-    "<div class=\"page-header\">\n" +
+    "<div class=\"rooms\">\n" +
     "  <h1>\n" +
     "    Your Rooms\n" +
     "    <button class=\"btn btn-success pull-right\" data-ng-click=\"createRoom()\">Create Room</button>\n" +
     "  </h1>\n" +
-    " </div>\n" +
-    "<lstn-room-list></lstn-room-list>\n"
+    "  <lstn-room-list></lstn-room-list>\n" +
+    "</div>\n"
   );
 
 }]);
