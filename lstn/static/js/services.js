@@ -5,18 +5,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
 .factory('Alert', [
   function() {
-    var Alert = {
-      messages: {
-        success: [],
-        info: [],
-        warning: [],
-        error: []
-      }
-    };
-
-    Alert.dismiss = function(type) {
-      this.messages[type].splice(0, 1);
-    };
+    var Alert = {};
 
     Alert.success = function(message) {
       this.add(message, 'success');
@@ -37,12 +26,11 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     Alert.add = function(message, type) {
       type = type || 'info';
 
-      if (!(type in Alert.messages)) {
-        console.log(type, message);
-        return;
-      }
-
-      this.messages[type].push(message);
+      $.snackbar({
+        content: message,
+        style: 'snackbar--' + type,
+        timeout: 0
+      });
     };
 
     return Alert;
@@ -243,12 +231,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 .factory('CurrentRoom', ['$resource', function($resource) {
   var Room = {
     id: 0,
-    name: '',
-    slug: ''
+    name: null,
+    slug: null
   };
 
   Room.update = function(room) {
     $.extend(this, this, room);
+  };
+
+  Room.clear = function() {
+    this.id = 0;
+    this.name = null;
+    this.slug = null;
   };
 
   return Room;
@@ -436,6 +430,111 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   };
 
   return Station;
-}]);
+}])
+
+.constant('MoreMusic', {
+  categories: [
+    {
+      name: 'Playlists',
+      type: 'playlists',
+    },{
+      name: 'Stations',
+      type: 'stations'
+    },{
+      name: 'Collections',
+      type: 'collections'
+    }
+  ],
+  playlistTypes: [
+    {
+      name: 'Your Playlists',
+      key: 'owned'
+    },{
+      name: 'Collaborative Playlists',
+      key: 'collab'
+    },{
+      name: 'Subscribed Playlists',
+      key: 'subscribed'
+    },{
+      name: 'Favorited Playlists',
+      key: 'favorites'
+    }
+  ],
+  stationTypes: [
+    {
+      name: 'Your Stations',
+      key: 'you'
+    },{
+      name: 'Friends',
+      key: 'friends'
+    },{
+      name: 'Recent Stations',
+      key: 'recent'
+    },{
+      name: 'Genre',
+      key: 'genre'
+    }
+  ],
+  genres: [
+    {
+      name: 'Reggae',
+      key: 'Reggae'
+    },{
+      name: 'Rock',
+      key: 'Rock'
+    },{
+      name: 'Latin',
+      key: 'Latin'
+    },{
+      name: 'Christian Gospel',
+      key: 'Christian_Gospel'
+    },{
+      name: 'World',
+      key: 'World'
+    },{
+      name: 'Classical',
+      key: 'Classical'
+    },{
+      name: 'Dance',
+      key: 'Dance'
+    },{
+      name: 'Country',
+      key: 'Country'
+    },{
+      name: 'Songwriters/Folk',
+      key: 'Songwriters_Folk'
+    },{
+      name: 'Jazz',
+      key: 'Jazz'
+    },{
+      name: 'Pop',
+      key: 'Pop'
+    },{
+      name: 'Indie',
+      key: 'Indie'
+    },{
+      name: 'R&B',
+      key: 'R_and_B'
+    },{
+      name: 'Hip Hop',
+      key: 'Hip_Hop'
+    },{
+      name: 'Alternative',
+      key: 'Alternative'
+    },{
+      name: 'Holiday',
+      key: 'Holiday'
+    },{
+      name: 'Electronic',
+      key: 'Electronic'
+    },{
+      name: 'Blues',
+      key: 'Blues'
+    },{
+      name: 'More',
+      key: 'More'
+    }
+  ]
+});
 
 })();

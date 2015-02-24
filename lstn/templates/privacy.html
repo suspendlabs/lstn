@@ -1,0 +1,25 @@
+<% extends "layout.html" %>
+<% block title %>Lstn.fm - Privacy Policy<% endblock %>
+<% block body %>
+<div class="privacy">
+  <a href="//www.iubenda.com/privacy-policy/535565" class="iubenda-nostyle no-brand iub-body-embed iubenda-embed" title="Privacy Policy" style="display: none;">Privacy Policy</a>
+  <script type="text/javascript">
+  (function() {
+    var loader = function () {
+      var script = document.createElement('script');
+      var tag = document.getElementsByTagName('script')[0];
+      script.src = '//cdn.iubenda.com/iubenda.js';
+      tag.parentNode.insertBefore(script, tag);
+    };
+
+    if (window.addEventListener) {
+      window.addEventListener('load', loader, false);
+    } else if (window.attachEvent) {
+      window.attachEvent('onload', loader);
+    } else {
+      window.onload = loader;
+    }
+  })();
+  </script>
+</div>
+<% endblock %>

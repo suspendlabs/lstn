@@ -11,6 +11,33 @@ html, body {
   height: 100%;
 }
 
+.privacy {
+  background-color: $first-layer;
+  min-height: 400px;
+}
+
+.snackbar {
+  &.snackbar--error {
+    background-color: #f44336;
+    color: #ffffff;
+  }
+
+  &.snackbar--warning {
+    background-color: #ff5722;
+    color: #ffffff;
+  }
+
+  &.snackbar--info {
+    background-color: #03a9f4;
+    color: #ffffff;
+  }
+
+  &.snackbar--success {
+    background-color: #0f9d58;
+    color: #ffffff;
+  }
+}
+
 /* Source: http://snipplr.com/view/10979/css-cross-browser-word-wrap */
 .wordwrap { 
   white-space: pre-wrap;      /* CSS3 */   
@@ -128,7 +155,7 @@ body {
   display: block;
   margin-top: 0.26em;
 
-  &:link {
+  &:link, &:hover, &:visited, &:focus {
     color: #FFFFFF;
     text-decoration: none;
   }
@@ -208,20 +235,19 @@ body {
   }
 }
 
-.front__info__container {
-  margin-bottom: 30px;
- }
-
-.front__info {
-  text-align: center;
-  .glyphicon {
-    font-size: 3em;
+.rooms {
+  h1 {
+    color: $first-layer;
   }
 }
 
 .rooms__container {
   border: 1px solid #DDD;
   @include border-radius(4px);
+
+  table {
+    background-color: $first-layer;
+  }
 }
 
 .rooms {
