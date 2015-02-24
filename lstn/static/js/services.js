@@ -243,12 +243,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 .factory('CurrentRoom', ['$resource', function($resource) {
   var Room = {
     id: 0,
-    name: '',
-    slug: ''
+    name: null,
+    slug: null
   };
 
   Room.update = function(room) {
     $.extend(this, this, room);
+  };
+
+  Room.clear = function() {
+    this.id = 0;
+    this.name = null;
+    this.slug = null;
   };
 
   return Room;
