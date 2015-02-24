@@ -81,8 +81,8 @@
         <% if current_user.is_authenticated() %>
         <ul class="nav navbar-nav navbar-right">
           <li><p class="navbar__rooms navbar-text"><a class="navbar-link" href="/rooms">All Rooms</a></p></li>
-          <li data-ng-show="currentRoom" class="hidden-sm"><p class="navbar__divider navbar-text"><i class="fa fa-fw fa-angle-right"></i></p></li>
-          <li data-ng-show="currentRoom">
+          <li data-ng-show="currentRoom.id" class="hidden-sm"><p class="navbar__divider navbar-text"><i class="fa fa-fw fa-angle-right"></i></p></li>
+          <li data-ng-show="currentRoom.id">
             <p class="navbar__room navbar-text">
               <a class="navbar-link" data-ng-href="/room/{{ currentRoom.slug }}" data-ng-bind="currentRoom.name"></a>
             </p>
