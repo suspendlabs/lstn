@@ -38,6 +38,8 @@
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
   <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/snackbarjs/dist/snackbar.min.css" />
+  <link rel="stylesheet" href="bower_components/snackbarjs/themes-css/material.css" />
   <!-- endbower -->
   <!-- build:css /css/vendor.css -->
   <!-- endbuild -->
@@ -48,25 +50,6 @@
 <body data-ng-controller="AppController">
   <nav class="navbar navbar-inverse">
     <div class="container">
-      <div class="alerts">
-        <div class="alert alert-danger alert-dismissable" data-ng-show="alerts.messages.error.length > 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="alerts.dismiss('error')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.messages.error[0]"></span>
-        </div>
-        <div class="alert alert-warning alert-dismissable" data-ng-show="alerts.messages.warning.length > 0 && alerts.messages.error.length === 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="alerts.dismiss('warning')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.messages.warning[0]"></span>
-        </div>
-        <div class="alert alert-info alert-dismissable" data-ng-show="alerts.messages.info.length > 0 && alerts.messages.warning.length === 0 && alerts.messages.error.length === 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="alerts.dismiss('info')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.messages.info[0]"></span>
-        </div>
-        <div class="alert alert-success alert-dismissable" data-ng-show="alerts.messages.success.length > 0 && alerts.messages.info.length === 0 && alerts.messages.warning.length === 0 && alerts.messages.error.length === 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="alerts.dismiss('success')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.messages.success[0]"></span>
-        </div>
-      </div>
-
       <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
           <span class="sr-only">Toggle navigation</span>
@@ -131,6 +114,7 @@
   <script src="bower_components/ment.io/dist/mentio.js"></script>
   <script src="bower_components/angular-twemoji/dist/angular-twemoji.min.js"></script>
   <script src="bower_components/angular-emoji-map/angular-emoji-map.js"></script>
+  <script src="bower_components/snackbarjs/dist/snackbar.min.js"></script>
   <!-- endbower -->
   <!-- endbuild -->
 
@@ -148,16 +132,16 @@
   <!-- endbuild -->
 
   <div id="user" style="display: none;">%% user_json | safe %%</div>
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-      ga('create', 'UA-47764528-5', 'auto');
-      ga('require', 'linkid', 'linkid.js');
-      ga('set', '&uid', '%% current_user.id %%');
-      ga('send', 'pageview');
-    </script>
+    ga('create', 'UA-47764528-5', 'auto');
+    ga('require', 'linkid', 'linkid.js');
+    ga('set', '&uid', '%% current_user.id %%');
+    ga('send', 'pageview');
+  </script>
   </body>
 </html>
