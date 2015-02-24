@@ -436,6 +436,111 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   };
 
   return Station;
-}]);
+}])
+
+.constant('MoreMusic', {
+  categories: [
+    {
+      name: 'Playlists',
+      type: 'playlists',
+    },{
+      name: 'Stations',
+      type: 'stations'
+    },{
+      name: 'Collections',
+      type: 'collections'
+    }
+  ],
+  playlistTypes: [
+    {
+      name: 'Your Playlists',
+      key: 'owned'
+    },{
+      name: 'Collaborative Playlists',
+      key: 'collab'
+    },{
+      name: 'Subscribed Playlists',
+      key: 'subscribed'
+    },{
+      name: 'Favorited Playlists',
+      key: 'favorites'
+    }
+  ],
+  stationTypes: [
+    {
+      name: 'Your Stations',
+      key: 'you'
+    },{
+      name: 'Friends',
+      key: 'friends'
+    },{
+      name: 'Recent Stations',
+      key: 'recent'
+    },{
+      name: 'Genre',
+      key: 'genre'
+    }
+  ],
+  genres: [
+    {
+      name: 'Reggae',
+      key: 'Reggae'
+    },{
+      name: 'Rock',
+      key: 'Rock'
+    },{
+      name: 'Latin',
+      key: 'Latin'
+    },{
+      name: 'Christian Gospel',
+      key: 'Christian_Gospel'
+    },{
+      name: 'World',
+      key: 'World'
+    },{
+      name: 'Classical',
+      key: 'Classical'
+    },{
+      name: 'Dance',
+      key: 'Dance'
+    },{
+      name: 'Country',
+      key: 'Country'
+    },{
+      name: 'Songwriters/Folk',
+      key: 'Songwriters_Folk'
+    },{
+      name: 'Jazz',
+      key: 'Jazz'
+    },{
+      name: 'Pop',
+      key: 'Pop'
+    },{
+      name: 'Indie',
+      key: 'Indie'
+    },{
+      name: 'R&B',
+      key: 'R_and_B'
+    },{
+      name: 'Hip Hop',
+      key: 'Hip_Hop'
+    },{
+      name: 'Alternative',
+      key: 'Alternative'
+    },{
+      name: 'Holiday',
+      key: 'Holiday'
+    },{
+      name: 'Electronic',
+      key: 'Electronic'
+    },{
+      name: 'Blues',
+      key: 'Blues'
+    },{
+      name: 'More',
+      key: 'More'
+    }
+  ]
+});
 
 })();
