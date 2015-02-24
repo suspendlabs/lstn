@@ -5,18 +5,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
 .factory('Alert', [
   function() {
-    var Alert = {
-      messages: {
-        success: [],
-        info: [],
-        warning: [],
-        error: []
-      }
-    };
-
-    Alert.dismiss = function(type) {
-      this.messages[type].splice(0, 1);
-    };
+    var Alert = {};
 
     Alert.success = function(message) {
       this.add(message, 'success');
@@ -37,12 +26,11 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     Alert.add = function(message, type) {
       type = type || 'info';
 
-      if (!(type in Alert.messages)) {
-        console.log(type, message);
-        return;
-      }
-
-      this.messages[type].push(message);
+      $.snackbar({
+        content: message,
+        style: 'snackbar--' + type,
+        timeout: 0
+      });
     };
 
     return Alert;
