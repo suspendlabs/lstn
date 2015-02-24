@@ -9,12 +9,14 @@ angular.module('lstn.controllers', [])
       console.log('socket:error', ev, data);
     });
 
-    $scope.alerts = Alert;
     $scope.currentRoom = CurrentRoom;
+    $scope.alerts = Alert;
   }
 ])
 
-.controller('RoomsController', ['$scope', '$location', 'Room', function($scope, $location, Room, Alert) {
+.controller('RoomsController', ['$scope', '$location', 'Room', 'Alert', function($scope, $location, Room, Alert) {
+  $scope.currentRoom.clear();
+
   $scope.loading = true;
   $scope.showCreateRoom = false;
 
