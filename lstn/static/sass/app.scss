@@ -16,6 +16,28 @@ html, body {
   min-height: 400px;
 }
 
+.snackbar {
+  &.snackbar--error {
+    background-color: #f2dede;
+    color: #a94442;
+  }
+
+  &.snackbar--warning {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+  }
+
+  &.snackbar--info {
+    background-color: #d9edf7;
+    color: #31708f;
+  }
+
+  &.snackbar--success {
+    background-color: #dff0d8;
+    color: #3c763d;
+  }
+}
+
 /* Source: http://snipplr.com/view/10979/css-cross-browser-word-wrap */
 .wordwrap { 
   white-space: pre-wrap;      /* CSS3 */   
