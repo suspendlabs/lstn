@@ -2,6 +2,11 @@ html, body {
   height: 100%;
 }
 
+.privacy {
+  background-color: #eee;
+  min-height: 400px;
+}
+
 /* Source: http://snipplr.com/view/10979/css-cross-browser-word-wrap */
 .wordwrap {
   white-space: pre-wrap;
@@ -113,7 +118,7 @@ body > .container > div {
   display: block;
   margin-top: 0.26em;
 }
-.navbar-logo:link {
+.navbar-logo:link, .navbar-logo:hover, .navbar-logo:visited, .navbar-logo:focus {
   color: #FFFFFF;
   text-decoration: none;
 }
@@ -181,15 +186,8 @@ body > .container > div {
   font-size: 30px;
 }
 
-.front__info__container {
-  margin-bottom: 30px;
-}
-
-.front__info {
-  text-align: center;
-}
-.front__info .glyphicon {
-  font-size: 3em;
+.rooms h1 {
+  color: #eee;
 }
 
 .rooms__container {
@@ -197,6 +195,9 @@ body > .container > div {
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
+}
+.rooms__container table {
+  background-color: #eee;
 }
 
 .rooms {
