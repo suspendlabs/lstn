@@ -7,19 +7,24 @@ html, body {
   min-height: 400px;
 }
 
-.snackbar.snackbar--error {
+div.snackbar {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+div.snackbar.snackbar--error {
   background-color: #f44336;
   color: #ffffff;
 }
-.snackbar.snackbar--warning {
+div.snackbar.snackbar--warning {
   background-color: #ff5722;
   color: #ffffff;
 }
-.snackbar.snackbar--info {
+div.snackbar.snackbar--info {
   background-color: #03a9f4;
   color: #ffffff;
 }
-.snackbar.snackbar--success {
+div.snackbar.snackbar--success {
   background-color: #0f9d58;
   color: #ffffff;
 }

@@ -16,7 +16,9 @@ html, body {
   min-height: 400px;
 }
 
-.snackbar {
+div.snackbar {
+  @include border-radius(0);
+
   &.snackbar--error {
     background-color: #f44336;
     color: #ffffff;
