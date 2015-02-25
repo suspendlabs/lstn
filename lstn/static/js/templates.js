@@ -348,12 +348,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/playing-info.html',
     "<div class=\"playing__info-container\">\n" +
-    "  \n" +
+    "\n" +
     "  <div data-ng-hide=\"playing\" class=\"playing__info--stopped\">\n" +
-    "    <a data-ng-show=\"queue.length\" href=\"\" data-ng-click=\"toggleBroadcast()\">\n" +
+    "    <a data-ng-show=\"queue.tracks.length\" href=\"\" data-ng-click=\"toggleBroadcast()\">\n" +
     "      <i class=\"fa fa-play-circle\" />\n" +
     "    </a>\n" +
-    "    <p data-ng-show=\"!queue.length\">Waiting for a broadcaster&hellip;</p>\n" +
+    "    <p data-ng-show=\"!queue.tracks.length\">Waiting for a broadcaster&hellip;</p>\n" +
     "  </div>\n" +
     "\n" +
     "  <div data-ng-show=\"playing\" class=\"playing__info playing__info--playing\" data-album-cover-background>\n" +
@@ -592,7 +592,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/room-queue.html',
-    "<div>\n" +
+    "<div class=\"queue__container\">\n" +
     "  <ul id=\"queue\" class=\"queue queue--full track__list drilldown__list\" data-ng-show=\"queue.tracks && queue.tracks.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue.tracks\">\n" +
     "    <li data-ng-repeat=\"track in queue.tracks\">\n" +
     "      <lstn-track\n" +
@@ -809,12 +809,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/room.html',
-    "<div class=\"room row\">\n" +
-    "  <div class=\"col-md-3 room__left\">\n" +
+    "<div class=\"room\">\n" +
+    "  <div class=\"col-md-3 col-sm-4 room__left\">\n" +
     "    <lstn-playing-info></lstn-playing-info>\n" +
     "    <lstn-room-roster></lstn-room-roster>\n" +
     "  </div>\n" +
-    "  <div class=\"col-md-5 room__middle\">\n" +
+    "  <div class=\"col-md-5 col-sm-8 room__middle\">\n" +
     "    <tabset class=\"queue__tabs\">\n" +
     "      <tab id=\"my-queue-tab\">\n" +
     "        <tab-heading>MY QUEUE</tab-heading>\n" +
@@ -824,9 +824,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <tab-heading>MORE MUSIC</tab-heading>\n" +
     "        <lstn-more-music></lstn-more-music>\n" +
     "      </tab>\n" +
+    "      <tab class=\"hidden-md hidden-lg\">\n" +
+    "        <tab-heading>ROOM ACTIVITY</tab-heading>\n" +
+    "        <lstn-room-activity class=\"hidden-md hidden-lg\"></lstn-room-activity>\n" +
+    "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
-    "  <div class=\"col-md-4 room__right\">\n" +
+    "  <div class=\"col-md-4 hidden-sm hidden-xs room__right\">\n" +
     "    <lstn-room-activity></lstn-room-activity>\n" +
     "  </div>\n" +
     "</div>\n"
