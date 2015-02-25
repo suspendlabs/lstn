@@ -431,40 +431,38 @@ body > .container > div {
   margin-bottom: 0;
 }
 
-.drilldown__item {
+.drilldown__item, .chat__message {
   min-height: 60px;
   background-color: #eee;
   padding: 0;
   border-bottom: 4px solid #3d3d3d;
-}
-
-.track, .chat__message {
   display: -webkit-flex;
   display: flex;
 }
-.track .item__image, .track .item__actions, .track .item__info, .chat__message .item__image, .chat__message .item__actions, .chat__message .item__info {
-  width: auto;
-  -webkit-flex-basis: auto;
-  flex-basis: auto;
+.drilldown__item .item__image, .drilldown__item .item__actions, .drilldown__item .item__info, .chat__message .item__image, .chat__message .item__actions, .chat__message .item__info {
+  width: 60px;
+  -webkit-flex: none;
+  flex: none;
   margin: 0;
 }
-.track .item__image, .chat__message .item__image {
+.drilldown__item .item__image, .chat__message .item__image {
   width: auto;
   -webkit-flex-basis: 60px;
   flex-basis: 60px;
   -webkit-flex-shrink: 0;
   flex-shrink: 0;
 }
-.track .item__actions, .chat__message .item__actions {
+.drilldown__item .item__actions, .chat__message .item__actions {
   width: auto;
   -webkit-flex-shrink: 0;
   flex-shrink: 0;
   margin-right: 1em;
 }
-.track .item__info, .chat__message .item__info {
-  width: auto;
+.drilldown__item .item__info, .chat__message .item__info {
   -webkit-flex-grow: 3;
   flex-grow: 3;
+  -webkit-flex: 1;
+  flex: 1;
   margin: 0;
 }
 
