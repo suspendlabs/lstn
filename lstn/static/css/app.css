@@ -287,6 +287,10 @@ body > .container > div {
   margin-top: 1em;
 }
 
+.bootstrap-switch span.bootstrap-switch-handle-on.bootstrap-switch-primary {
+  background: #d24242;
+}
+
 .control__button {
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
@@ -309,15 +313,12 @@ body > .container > div {
   color: #fff;
   text-transform: uppercase;
 }
-.roster__container .roster__category-label .fa.fa-stop {
-  color: #d9534f;
-}
-.roster__container .roster__category-label .fa.fa-play-circle {
-  color: #5cb85c;
+.roster__container .roster__category-label .bootstrap-switch {
+  float: right;
 }
 .roster__container ul.roster {
   padding: 0;
-  margin: 0;
+  margin: 10px 0 0 0;
   list-style-type: none;
 }
 .roster__container ul.roster li {

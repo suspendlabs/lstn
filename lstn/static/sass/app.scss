@@ -333,6 +333,13 @@ body {
   margin-top: 1em;
 }
 
+
+.bootstrap-switch {
+  span.bootstrap-switch-handle-on.bootstrap-switch-primary {
+    background: $active-color;
+  }
+}
+
 .control__button {
   @include border-radius(0);
   opacity: 1;
@@ -353,19 +360,15 @@ body {
     color:#fff;
     text-transform:uppercase;
 
-    .fa.fa-stop {
-      color: #d9534f;
-    }
-    .fa.fa-play-circle {
-      color:#5cb85c;
+    .bootstrap-switch {
+      float: right;
     }
   }
 
   ul.roster {
     padding:0;
-    margin:0;
+    margin: 10px 0 0 0;
     list-style-type: none;
-
     
     li {  
       display:inline;
