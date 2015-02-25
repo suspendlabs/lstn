@@ -754,7 +754,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "      data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
     "    <a\n" +
-    "      class=\"fa fa-fw fa-plus-circle\"\n" +
+    "      class=\"fa fa-fw fa-plus-circle item__actions__add\"\n" +
     "      data-ng-hide=\"track.addingToQueue || track.in_queue || queue.bitset[track.key]\"\n" +
     "      data-ng-click=\"queue.addTrack(track)\"\n" +
     "      data-tooltip=\"Add To Queue\"\n" +
