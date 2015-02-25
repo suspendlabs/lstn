@@ -538,7 +538,7 @@ body > .container > div {
 .item__actions .item__actions__drag-handle:active {
   cursor: ns-resize;
 }
-.item__actions .item__actions__move-to-top {
+.item__actions .item__actions__move-to-top, .item__actions .item__actions__add {
   color: #5cb85c;
 }
 
