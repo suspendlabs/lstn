@@ -527,6 +527,19 @@ body > .container > div {
   color: #d24242;
   text-decoration: none;
   line-height: 60px;
+  font-size: 1.25em;
+}
+.item__actions .item__actions__drag-handle {
+  color: #777;
+  cursor: grab;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+.item__actions .item__actions__drag-handle:active {
+  cursor: ns-resize;
+}
+.item__actions .item__actions__move-to-top {
+  color: #5cb85c;
 }
 
 .messages {
