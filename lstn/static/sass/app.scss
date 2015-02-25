@@ -16,7 +16,9 @@ html, body {
   min-height: 400px;
 }
 
-.snackbar {
+div.snackbar {
+  @include border-radius(0);
+
   &.snackbar--error {
     background-color: #f44336;
     color: #ffffff;
@@ -90,9 +92,10 @@ body {
   background-color: $background-color;
 
   > .container {
-    padding: 0 15px 0;
+    height: 100%;
 
     > div {
+      height: 85%;
       margin-top: 15px;
     }
   }
@@ -110,22 +113,27 @@ body {
   @include border-radius(1em);
 }
 
+.container {
+  .navbar-header {
+    margin: 0;
+  }
+}
+
 .navbar-inverse {
   border: none;
   background-color: $accent-color;
   min-height: 70px;
   font-size: 1.4em;
 
-  .container {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
   .navbar-text {
     margin-top: 0.95em;
   }
 
   .navbar-nav {
+    &.navbar-right {
+      margin: 0;
+    }
+
     > li {
       > a {
         &.navbar__name {
@@ -162,50 +170,30 @@ body {
 }
 
 .navbar-right {
+  color: #FFFFFF;
+
+  a, a:link, a:hover, a:visited, a:active {
+    color: #FFFFFF;
+  }
+
   &.navbar--login {
     margin-right: 5px;
   }
 
-  .navbar__rooms {
-    margin-right: 5px;
-
-    a {
-      color: white;
-    }
-  }
-
   .navbar__divider {
-    margin-left: 0;
-    margin-right: 0;
-    color: #FFFFFF;
+    margin-left: 5px;
+    margin-right: 5px;
   }
 
   .navbar__room {
-    margin-left: 5px;
-
     a {
       font-weight: bold;
-      color: #FFFFFF;
     }
   }
 
   .navbar__photo {
     border: 2px solid #FFFFFF;
     margin-right: 5px;
-  }
-}
-
-.alerts {
-  z-index: 2000;
-  width: 50%;
-
-  position: fixed;
-  top: 5px;
-  left: 25%;
-
-  .alert {
-    padding: 9px 35px 9px 9px;
-    text-align: center;
   }
 }
 
@@ -281,19 +269,22 @@ body {
 }
 
 .room {
+  height: 100%;
   .room__left {
     padding-left: 0;
     padding-right: 0;
   }
 
   .room__middle {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 0;
+    padding-right: 0;
+    height: 100%;
   }
 
   .room__right {
     padding-left: 0;
     padding-right: 0;
+    height: 100%;
   }
 }
 
@@ -344,6 +335,13 @@ body {
   margin-top: 1em;
 }
 
+
+.bootstrap-switch {
+  span.bootstrap-switch-handle-on.bootstrap-switch-primary {
+    background: $active-color;
+  }
+}
+
 .control__button {
   @include border-radius(0);
   opacity: 1;
@@ -364,19 +362,15 @@ body {
     color:#fff;
     text-transform:uppercase;
 
-    .fa.fa-stop {
-      color: #d9534f;
-    }
-    .fa.fa-play-circle {
-      color:#5cb85c;
+    .bootstrap-switch {
+      float: right;
     }
   }
 
   ul.roster {
     padding:0;
-    margin:0;
+    margin: 10px 0 0 0;
     list-style-type: none;
-
     
     li {  
       display:inline;
@@ -434,12 +428,17 @@ body {
 }
 
 .queue__tabs {
+  height: 90%;
   min-height: 400px;
   background-color: $accent-color;
 
   .nav-tabs {
     > li {
-      width: 50%;
+      &:last-child {
+        width: 34%;
+      }
+
+      width: 33%;
       background-color: $accent-color;
 
       &.active {
@@ -468,6 +467,30 @@ body {
   }
 }
 
+.tab-content {
+  height: 95%;
+
+  .tab-pane {
+    height: 100%;
+  }
+}
+
+.queue__container {
+  height: 100%;
+}
+
+.queue {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.playlist__container {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .music__container {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -490,7 +513,6 @@ body {
 }
 
 .messages--empty {
-  min-height: 436px;
   font-size: 10em;
   color: $background-color;
   line-height: 400px;
@@ -508,7 +530,7 @@ body {
   background-color: $first-layer;
   padding: 0;
   border-bottom: 4px solid $accent-color;
-  
+
   @include display-flex;
 
   .item__image, .item__actions, .item__info {
@@ -620,7 +642,10 @@ body {
 }
 
 .messages {
-  min-height: 400px;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+
   width: 100%;
   margin-bottom: 0;
   list-style: none;
@@ -714,7 +739,7 @@ footer {
 }
 
 .room-activity {
-  min-height: 400px;
+  height: 95%;
   background-color: $accent-color;
 
   .form-control {
@@ -816,5 +841,30 @@ footer {
     font-weight: 700;
     text-transform: uppercase;
     text-decoration: none;
+  }
+}
+
+/* sm */
+@media (min-width: 768px) {
+  div.room {
+    > div.room__middle {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+  }
+
+  div.queue__tabs {
+    height: 100%;
+  }
+}
+
+/* md */
+@media (min-width: 992px) {
+  div.queue__tabs {
+    ul.nav-tabs {
+      > li {
+        width: 50%;
+      }
+    }
   }
 }

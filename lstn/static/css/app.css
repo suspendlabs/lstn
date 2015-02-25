@@ -7,19 +7,24 @@ html, body {
   min-height: 400px;
 }
 
-.snackbar.snackbar--error {
+div.snackbar {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+div.snackbar.snackbar--error {
   background-color: #f44336;
   color: #ffffff;
 }
-.snackbar.snackbar--warning {
+div.snackbar.snackbar--warning {
   background-color: #ff5722;
   color: #ffffff;
 }
-.snackbar.snackbar--info {
+div.snackbar.snackbar--info {
   background-color: #03a9f4;
   color: #ffffff;
 }
-.snackbar.snackbar--success {
+div.snackbar.snackbar--success {
   background-color: #0f9d58;
   color: #ffffff;
 }
@@ -83,9 +88,10 @@ body {
   background-color: #333;
 }
 body > .container {
-  padding: 0 15px 0;
+  height: 100%;
 }
 body > .container > div {
+  height: 85%;
   margin-top: 15px;
 }
 
@@ -103,18 +109,21 @@ body > .container > div {
   border-radius: 1em;
 }
 
+.container .navbar-header {
+  margin: 0;
+}
+
 .navbar-inverse {
   border: none;
   background-color: #3d3d3d;
   min-height: 70px;
   font-size: 1.4em;
 }
-.navbar-inverse .container {
-  padding-left: 0;
-  padding-right: 0;
-}
 .navbar-inverse .navbar-text {
   margin-top: 0.95em;
+}
+.navbar-inverse .navbar-nav.navbar-right {
+  margin: 0;
 }
 .navbar-inverse .navbar-nav > li > a.navbar__name {
   color: #FFFFFF;
@@ -140,42 +149,25 @@ body > .container > div {
   text-decoration: none;
 }
 
+.navbar-right {
+  color: #FFFFFF;
+}
+.navbar-right a, .navbar-right a:link, .navbar-right a:hover, .navbar-right a:visited, .navbar-right a:active {
+  color: #FFFFFF;
+}
 .navbar-right.navbar--login {
   margin-right: 5px;
 }
-.navbar-right .navbar__rooms {
-  margin-right: 5px;
-}
-.navbar-right .navbar__rooms a {
-  color: white;
-}
 .navbar-right .navbar__divider {
-  margin-left: 0;
-  margin-right: 0;
-  color: #FFFFFF;
-}
-.navbar-right .navbar__room {
   margin-left: 5px;
+  margin-right: 5px;
 }
 .navbar-right .navbar__room a {
   font-weight: bold;
-  color: #FFFFFF;
 }
 .navbar-right .navbar__photo {
   border: 2px solid #FFFFFF;
   margin-right: 5px;
-}
-
-.alerts {
-  z-index: 2000;
-  width: 50%;
-  position: fixed;
-  top: 5px;
-  left: 25%;
-}
-.alerts .alert {
-  padding: 9px 35px 9px 9px;
-  text-align: center;
 }
 
 .lstn {
@@ -238,17 +230,22 @@ body > .container > div {
   cursor: pointer;
 }
 
+.room {
+  height: 100%;
+}
 .room .room__left {
   padding-left: 0;
   padding-right: 0;
 }
 .room .room__middle {
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 0;
+  padding-right: 0;
+  height: 100%;
 }
 .room .room__right {
   padding-left: 0;
   padding-right: 0;
+  height: 100%;
 }
 
 .playing__info-container {
@@ -295,6 +292,10 @@ body > .container > div {
   margin-top: 1em;
 }
 
+.bootstrap-switch span.bootstrap-switch-handle-on.bootstrap-switch-primary {
+  background: #d24242;
+}
+
 .control__button {
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
@@ -317,15 +318,12 @@ body > .container > div {
   color: #fff;
   text-transform: uppercase;
 }
-.roster__container .roster__category-label .fa.fa-stop {
-  color: #d9534f;
-}
-.roster__container .roster__category-label .fa.fa-play-circle {
-  color: #5cb85c;
+.roster__container .roster__category-label .bootstrap-switch {
+  float: right;
 }
 .roster__container ul.roster {
   padding: 0;
-  margin: 0;
+  margin: 10px 0 0 0;
   list-style-type: none;
 }
 .roster__container ul.roster li {
@@ -372,12 +370,16 @@ body > .container > div {
 }
 
 .queue__tabs {
+  height: 90%;
   min-height: 400px;
   background-color: #3d3d3d;
 }
 .queue__tabs .nav-tabs > li {
-  width: 50%;
+  width: 33%;
   background-color: #3d3d3d;
+}
+.queue__tabs .nav-tabs > li:last-child {
+  width: 34%;
 }
 .queue__tabs .nav-tabs > li.active {
   background-color: #d24242;
@@ -400,6 +402,29 @@ body > .container > div {
   font-weight: 700;
 }
 
+.tab-content {
+  height: 95%;
+}
+.tab-content .tab-pane {
+  height: 100%;
+}
+
+.queue__container {
+  height: 100%;
+}
+
+.queue {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.playlist__container {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .music__container {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -418,7 +443,6 @@ body > .container > div {
 }
 
 .messages--empty {
-  min-height: 436px;
   font-size: 10em;
   color: #333;
   line-height: 400px;
@@ -541,7 +565,9 @@ body > .container > div {
 }
 
 .messages {
-  min-height: 400px;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
   width: 100%;
   margin-bottom: 0;
   list-style: none;
@@ -659,7 +685,7 @@ footer .container .text-muted {
   }
 }
 .room-activity {
-  min-height: 400px;
+  height: 95%;
   background-color: #3d3d3d;
 }
 .room-activity .form-control {
@@ -761,4 +787,22 @@ footer .container .text-muted {
   font-weight: 700;
   text-transform: uppercase;
   text-decoration: none;
+}
+
+/* sm */
+@media (min-width: 768px) {
+  div.room > div.room__middle {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  div.queue__tabs {
+    height: 100%;
+  }
+}
+/* md */
+@media (min-width: 992px) {
+  div.queue__tabs ul.nav-tabs > li {
+    width: 50%;
+  }
 }

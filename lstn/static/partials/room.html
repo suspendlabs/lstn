@@ -1,9 +1,9 @@
-<div class="room row">
-  <div class="col-md-3 room__left">
+<div class="room">
+  <div class="col-md-3 col-sm-4 room__left">
     <lstn-playing-info></lstn-playing-info>
     <lstn-room-roster></lstn-room-roster>
   </div>
-  <div class="col-md-5 room__middle">
+  <div class="col-md-5 col-sm-8 room__middle">
     <tabset class="queue__tabs">
       <tab id="my-queue-tab">
         <tab-heading>MY QUEUE</tab-heading>
@@ -12,11 +12,14 @@
       <tab>
         <tab-heading>MORE MUSIC</tab-heading>
         <lstn-more-music></lstn-more-music>
-        </tab-heading>
+      </tab>
+      <tab class="hidden-md hidden-lg">
+        <tab-heading>ROOM ACTIVITY</tab-heading>
+        <lstn-room-activity class="hidden-md hidden-lg"></lstn-room-activity>
       </tab>
     </tabset>
   </div>
-  <div class="col-md-4 room__right">
+  <div class="col-md-4 hidden-sm hidden-xs room__right">
     <lstn-room-activity></lstn-room-activity>
   </div>
 </div>

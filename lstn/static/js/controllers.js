@@ -430,14 +430,6 @@ angular.module('lstn.controllers', [])
 
     window.toggleBroadcast = $scope.toggleBroadcast = function() {
       $scope.isController = !$scope.isController;
-
-      if ($scope.isController) {
-        console.log('become a broadcaster');
-        socket.requestControl($scope.room.id, $scope.current_user.id);
-      } else {
-        console.log('become a listener');
-        socket.releaseControl($scope.room.id, $scope.current_user.id);
-      }
     };
 
     window.toggleMute = $scope.toggleMute = function() {
@@ -587,6 +579,20 @@ angular.module('lstn.controllers', [])
     };
 
     // Watches
+    $scope.$watch('isController', function(newVal, oldVal) {
+      if (newVal === oldVal) {
+        return;
+      }
+
+      if (newVal) {
+        console.log('become a broadcaster');
+        socket.requestControl($scope.room.id, $scope.current_user.id);
+      } else {
+        console.log('become a listener');
+        socket.releaseControl($scope.room.id, $scope.current_user.id);
+      }
+    });
+
     $scope.$watch('rdioReady', function(newVal, oldVal) {
       console.log('rdioReady', newVal, oldVal);
       if (newVal === oldVal) {
@@ -632,6 +638,7 @@ angular.module('lstn.controllers', [])
         return;
       }
 
+
       $scope.playing = {
         status: 'playing',
         track: $scope.rdioToLstn(newVal),
@@ -647,6 +654,12 @@ angular.module('lstn.controllers', [])
 
         // Clear the rdioPlay variable
         $scope.rdioPlay = null;
+      }
+
+      if (!newVal.canStream) {
+        Alert.error('Streaming for this track is unavailable in your area');
+        $scope.playing.status = 'stopped';
+        return;
       }
     }, true);
 

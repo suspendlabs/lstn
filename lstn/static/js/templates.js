@@ -348,12 +348,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/playing-info.html',
     "<div class=\"playing__info-container\">\n" +
-    "  \n" +
+    "\n" +
     "  <div data-ng-hide=\"playing\" class=\"playing__info--stopped\">\n" +
-    "    <a data-ng-show=\"queue.length\" href=\"\" data-ng-click=\"toggleBroadcast()\">\n" +
+    "    <a data-ng-show=\"queue.tracks.length\" href=\"\" data-ng-click=\"toggleBroadcast()\">\n" +
     "      <i class=\"fa fa-play-circle\" />\n" +
     "    </a>\n" +
-    "    <p data-ng-show=\"!queue.length\">Waiting for a broadcaster&hellip;</p>\n" +
+    "    <p data-ng-show=\"!queue.tracks.length\">Waiting for a broadcaster&hellip;</p>\n" +
     "  </div>\n" +
     "\n" +
     "  <div data-ng-show=\"playing\" class=\"playing__info playing__info--playing\" data-album-cover-background>\n" +
@@ -592,7 +592,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/room-queue.html',
-    "<div>\n" +
+    "<div class=\"queue__container\">\n" +
     "  <ul id=\"queue\" class=\"queue queue--full track__list drilldown__list\" data-ng-show=\"queue.tracks && queue.tracks.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue.tracks\">\n" +
     "    <li data-ng-repeat=\"track in queue.tracks\">\n" +
     "      <lstn-track\n" +
@@ -612,10 +612,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div class=\"roster__container room__container\">\n" +
     "\n" +
     "  <div class=\"roster__category\">\n" +
-    "    <div class=\"roster__category-label\">Broadcasters \n" +
-    "      <a href=\"\" data-ng-click=\"toggleBroadcast();\">\n" +
-    "        <i class=\"fa\" data-ng-class=\"{'fa-play-circle': !isController, 'fa-stop': isController }\"></i>\n" +
-    "      </a>\n" +
+    "    <div class=\"roster__category-label\">Broadcasting\n" +
+    "      <input\n" +
+    "        data-bs-switch\n" +
+    "        data-ng-model=\"isController\"\n" +
+    "        type=\"checkbox\"\n" +
+    "        data-switch-size=\"mini\">\n" +
     "    </div>\n" +
     "    <ul class=\"roster roster--controllers\">\n" +
     "      <li class=\"empty\" data-ng-show=\"!roster || roster.controllersCount === 0\">\n" +
@@ -635,7 +637,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "\n" +
     "  <div class=\"roster__category\">\n" +
-    "    <div class=\"roster__category-label\">Listeners</div>\n" +
+    "    <div class=\"roster__category-label\">Listening</div>\n" +
     "    <ul class=\"roster roster--listeners\" data-ng-show=\"roster && roster.usersCount > 0\">\n" +
     "      <li class=\"empty\" data-ng-show=\"!roster || roster.users.length === 0\">\n" +
     "        No one is listening\n" +
@@ -813,12 +815,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/room.html',
-    "<div class=\"room row\">\n" +
-    "  <div class=\"col-md-3 room__left\">\n" +
+    "<div class=\"room\">\n" +
+    "  <div class=\"col-md-3 col-sm-4 room__left\">\n" +
     "    <lstn-playing-info></lstn-playing-info>\n" +
     "    <lstn-room-roster></lstn-room-roster>\n" +
     "  </div>\n" +
-    "  <div class=\"col-md-5 room__middle\">\n" +
+    "  <div class=\"col-md-5 col-sm-8 room__middle\">\n" +
     "    <tabset class=\"queue__tabs\">\n" +
     "      <tab id=\"my-queue-tab\">\n" +
     "        <tab-heading>MY QUEUE</tab-heading>\n" +
@@ -827,11 +829,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <tab>\n" +
     "        <tab-heading>MORE MUSIC</tab-heading>\n" +
     "        <lstn-more-music></lstn-more-music>\n" +
-    "        </tab-heading>\n" +
+    "      </tab>\n" +
+    "      <tab class=\"hidden-md hidden-lg\">\n" +
+    "        <tab-heading>ROOM ACTIVITY</tab-heading>\n" +
+    "        <lstn-room-activity class=\"hidden-md hidden-lg\"></lstn-room-activity>\n" +
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
-    "  <div class=\"col-md-4 room__right\">\n" +
+    "  <div class=\"col-md-4 hidden-sm hidden-xs room__right\">\n" +
     "    <lstn-room-activity></lstn-room-activity>\n" +
     "  </div>\n" +
     "</div>\n"

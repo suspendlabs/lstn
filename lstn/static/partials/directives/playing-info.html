@@ -1,10 +1,10 @@
 <div class="playing__info-container">
-  
+
   <div data-ng-hide="playing" class="playing__info--stopped">
-    <a data-ng-show="queue.length" href="" data-ng-click="toggleBroadcast()">
+    <a data-ng-show="queue.tracks.length" href="" data-ng-click="toggleBroadcast()">
       <i class="fa fa-play-circle" />
     </a>
-    <p data-ng-show="!queue.length">Waiting for a broadcaster&hellip;</p>
+    <p data-ng-show="!queue.tracks.length">Waiting for a broadcaster&hellip;</p>
   </div>
 
   <div data-ng-show="playing" class="playing__info playing__info--playing" data-album-cover-background>
