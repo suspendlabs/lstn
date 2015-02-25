@@ -17,7 +17,7 @@
   </div>
   <div class="item__actions">
     <a
-      class="fa fa-fw fa-chevron-up"
+      class="fa fa-fw fa-arrow-circle-up item__actions__move-to-top"
       data-ng-show="track.in_queue && context === 'queue'"
       data-ng-click="queue.moveToTop(index)"
       data-tooltip="Move to Top of Queue"
@@ -27,14 +27,14 @@
       class="fa fa-fw fa-circle-o-notch fa-spin"
       data-ng-show="track.addingToQueue || track.removingFromQueue"></i>
     <a
-      class="fa fa-fw fa-plus"
+      class="fa fa-fw fa-plus-circle item__actions__add"
       data-ng-hide="track.addingToQueue || track.in_queue || queue.bitset[track.key]"
       data-ng-click="queue.addTrack(track)"
       data-tooltip="Add To Queue"
       data-tooltip-placement="bottom"
       data-tooltip-popup-delay="1000"></a>
     <a
-      class="fa fa-fw fa-minus"
+      class="fa fa-fw fa-minus-circle"
       data-ng-show="(track.in_queue || queue.bitset[track.key]) && context === 'queue' && !track.removingFromQueue"
       data-ng-click="queue.removeTrack(track, index)"
       data-tooltip="Remove From Queue"
@@ -46,5 +46,9 @@
       data-tooltip="This track is already in your queue"
       data-tooltip-placement="bottom"
       data-tooltip-popup-delay="1000"></i>
+    <i
+      class="fa fa-fw fa-bars item__actions__drag-handle"
+      data-ng-show="track.in_queue && context ==='queue'"
+      ></i>
   </div>
 </div>
