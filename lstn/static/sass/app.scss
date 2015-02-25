@@ -530,8 +530,8 @@ body {
   }
 
   .item__info {
-    width: auto;
     @include flex-grow(3);
+    @include flex(1);
     margin: 0;
   }
 }
