@@ -744,7 +744,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
     "    <a\n" +
-    "      class=\"fa fa-fw fa-chevron-up\"\n" +
+    "      class=\"fa fa-fw fa-arrow-circle-up item__actions__move-to-top\"\n" +
     "      data-ng-show=\"track.in_queue && context === 'queue'\"\n" +
     "      data-ng-click=\"queue.moveToTop(index)\"\n" +
     "      data-tooltip=\"Move to Top of Queue\"\n" +
@@ -754,14 +754,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "      data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
     "    <a\n" +
-    "      class=\"fa fa-fw fa-plus\"\n" +
+    "      class=\"fa fa-fw fa-plus-circle\"\n" +
     "      data-ng-hide=\"track.addingToQueue || track.in_queue || queue.bitset[track.key]\"\n" +
     "      data-ng-click=\"queue.addTrack(track)\"\n" +
     "      data-tooltip=\"Add To Queue\"\n" +
     "      data-tooltip-placement=\"bottom\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "    <a\n" +
-    "      class=\"fa fa-fw fa-minus\"\n" +
+    "      class=\"fa fa-fw fa-minus-circle\"\n" +
     "      data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context === 'queue' && !track.removingFromQueue\"\n" +
     "      data-ng-click=\"queue.removeTrack(track, index)\"\n" +
     "      data-tooltip=\"Remove From Queue\"\n" +
@@ -773,6 +773,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-tooltip=\"This track is already in your queue\"\n" +
     "      data-tooltip-placement=\"bottom\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-bars item__actions__drag-handle\"\n" +
+    "      data-ng-show=\"track.in_queue && context ==='queue'\"\n" +
+    "      ></i>\n" +
     "  </div>\n" +
     "</div>\n"
   );
