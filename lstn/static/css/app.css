@@ -458,9 +458,9 @@ body > .container > div {
   display: flex;
 }
 .drilldown__item .item__image, .drilldown__item .item__actions, .drilldown__item .item__info, .chat__message .item__image, .chat__message .item__actions, .chat__message .item__info {
-  width: auto;
-  -webkit-flex-basis: auto;
-  flex-basis: auto;
+  width: 60px;
+  -webkit-flex: none;
+  flex: none;
   margin: 0;
 }
 .drilldown__item .item__image, .chat__message .item__image {
@@ -477,9 +477,10 @@ body > .container > div {
   margin-right: 1em;
 }
 .drilldown__item .item__info, .chat__message .item__info {
-  width: auto;
   -webkit-flex-grow: 3;
   flex-grow: 3;
+  -webkit-flex: 1;
+  flex: 1;
   margin: 0;
 }
 
@@ -542,6 +543,19 @@ body > .container > div {
   color: #d24242;
   text-decoration: none;
   line-height: 60px;
+  font-size: 1.25em;
+}
+.item__actions .item__actions__drag-handle {
+  color: #777;
+  cursor: grab;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+}
+.item__actions .item__actions__drag-handle:active {
+  cursor: ns-resize;
+}
+.item__actions .item__actions__move-to-top, .item__actions .item__actions__add {
+  color: #5cb85c;
 }
 
 .messages {
