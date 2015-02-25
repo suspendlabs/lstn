@@ -602,6 +602,22 @@ body {
     color: $active-color;
     text-decoration: none;
     line-height: 60px;
+    font-size: 1.25em;
+  }
+
+  .item__actions__drag-handle {
+    color: $activity-default;
+    cursor: grab;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+
+    &:active {
+      cursor: ns-resize;
+    }
+  }
+
+  .item__actions__move-to-top {
+    color: $action-additive;
   }
 }
 
