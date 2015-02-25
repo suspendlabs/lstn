@@ -612,10 +612,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div class=\"roster__container room__container\">\n" +
     "\n" +
     "  <div class=\"roster__category\">\n" +
-    "    <div class=\"roster__category-label\">Broadcasters \n" +
-    "      <a href=\"\" data-ng-click=\"toggleBroadcast();\">\n" +
-    "        <i class=\"fa\" data-ng-class=\"{'fa-play-circle': !isController, 'fa-stop': isController }\"></i>\n" +
-    "      </a>\n" +
+    "    <div class=\"roster__category-label\">Broadcasting\n" +
+    "      <input\n" +
+    "        data-bs-switch\n" +
+    "        data-ng-model=\"isController\"\n" +
+    "        type=\"checkbox\"\n" +
+    "        data-switch-size=\"mini\">\n" +
     "    </div>\n" +
     "    <ul class=\"roster roster--controllers\">\n" +
     "      <li class=\"empty\" data-ng-show=\"!roster || roster.controllersCount === 0\">\n" +
@@ -635,7 +637,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "\n" +
     "  <div class=\"roster__category\">\n" +
-    "    <div class=\"roster__category-label\">Listeners</div>\n" +
+    "    <div class=\"roster__category-label\">Listening</div>\n" +
     "    <ul class=\"roster roster--listeners\" data-ng-show=\"roster && roster.usersCount > 0\">\n" +
     "      <li class=\"empty\" data-ng-show=\"!roster || roster.users.length === 0\">\n" +
     "        No one is listening\n" +
