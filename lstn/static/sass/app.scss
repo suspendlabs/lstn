@@ -512,8 +512,8 @@ body {
   @include display-flex;
 
   .item__image, .item__actions, .item__info {
-    width: auto;
-    @include flex-basis(auto);
+    width: 60px;
+    @include flex(none);
     margin: 0;
   }
 
