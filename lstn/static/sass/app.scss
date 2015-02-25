@@ -503,14 +503,12 @@ body {
   margin-bottom: 0;
 }
 
-.drilldown__item {
+.drilldown__item, .chat__message {
   min-height: 60px;
   background-color: $first-layer;
   padding: 0;
   border-bottom: 4px solid $accent-color;
-}
-
-.track, .chat__message {
+  
   @include display-flex;
 
   .item__image, .item__actions, .item__info {
