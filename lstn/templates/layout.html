@@ -48,51 +48,63 @@
   <!-- endbuild -->
 </head>
 <body data-ng-controller="AppController">
-  <nav class="navbar navbar-inverse">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-logo" href="/">LSTN</a>
-      </div>
+  <div id="content" class="container">
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-logo" href="/">LSTN</a>
+        </div>
 
-      <div class="collapse navbar-collapse" id="navbar-collapse-1">
-        <% if current_user.is_authenticated() %>
-        <ul class="nav navbar-nav navbar-right">
-          <li><p class="navbar__rooms navbar-text"><a class="navbar-link" href="/rooms">All Rooms</a></p></li>
-          <li data-ng-show="currentRoom.id" class="hidden-sm"><p class="navbar__divider navbar-text"><i class="fa fa-fw fa-angle-right"></i></p></li>
-          <li data-ng-show="currentRoom.id">
-            <p class="navbar__room navbar-text">
-              <a class="navbar-link" data-ng-href="/room/{{ currentRoom.slug }}" data-ng-bind="currentRoom.name"></a>
-            </p>
-          </li>
-          <li class="dropdown">
-            <a class="navbar__name dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-              <img data-ng-src="{{ current_user.picture }}" class="navbar__photo avatar xs ng-cloak" alt="{{ current_user.name }}">
-              %% current_user.name %%
-              <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="http://www.rdio.com%% current_user.profile %%" target="_blank">Profile</a></li>
-              <li class="divider"></li>
-              <li><a href="/logout" target="_self">Logout</a></li>
-            </ul>
-          </li>
-        </ul>
-        <% else %>
-        <ul class="nav navbar-nav navbar-right navbar--login">
-          <li><div><a class="btn btn-success navbar-btn" href="/login" target="_self">Login</a></div></li>
-        </ul>
-        <% endif %>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+          <% if current_user.is_authenticated() %>
+          <ul class="nav navbar-nav navbar-right">
+            <li><p class="navbar__rooms navbar-text"><a class="navbar-link" href="/rooms">All Rooms</a></p></li>
+            <li data-ng-show="currentRoom.id" class="hidden-sm hidden-xs"><p class="navbar__divider navbar-text"><i class="fa fa-fw fa-angle-right"></i></p></li>
+            <li data-ng-show="currentRoom.id">
+              <p class="navbar__room navbar-text">
+                <a class="navbar-link" data-ng-href="/room/{{ currentRoom.slug }}" data-ng-bind="currentRoom.name"></a>
+              </p>
+            </li>
+            <li class="hidden-sm hidden-md hidden-lg">
+              <p class="navbar-text">
+                <a href="http://www.rdio.com%% current_user.profile %%" target="_blank">Profile</a>
+              </p>
+            </li>
+            <li class="hidden-sm hidden-md hidden-lg">
+              <p class="navbar-text">
+                <a href="/logout" target="_self">Logout</a>
+              </p>
+            </li>
+            <li class="dropdown hidden-xs">
+              <a class="navbar__name dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                <img data-ng-src="{{ current_user.picture }}" class="navbar__photo avatar xs ng-cloak" alt="{{ current_user.name }}">
+                %% current_user.name %%
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="http://www.rdio.com%% current_user.profile %%" target="_blank">Profile</a></li>
+                <li class="divider"></li>
+                <li><a href="/logout" target="_self">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+          <% else %>
+          <ul class="nav navbar-nav navbar-right navbar--login">
+            <li><div><a class="btn btn-success navbar-btn" href="/login" target="_self">Login</a></div></li>
+          </ul>
+          <% endif %>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
 
-  <div id="content" class="container"><% block body %><% endblock %></div>
+    <% block body %><% endblock %>
+  </div>
 
   <!-- build:js /js/vendor.js -->
   <!-- bower:js -->
