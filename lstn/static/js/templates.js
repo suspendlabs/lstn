@@ -381,10 +381,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div class=\"playing__info-container\">\n" +
     "\n" +
     "  <div data-ng-hide=\"playing\" class=\"playing__info--stopped\">\n" +
-    "    <a data-ng-show=\"queue.tracks.length\" href=\"\" data-ng-click=\"toggleBroadcast()\">\n" +
-    "      <i class=\"fa fa-play-circle\" />\n" +
+    "    <a data-ng-show=\"queue.tracks.length\" data-ng-click=\"toggleBroadcast()\">\n" +
+    "      <i class=\"playing__info--ready fa fa-play-circle\" />\n" +
     "    </a>\n" +
-    "    <p data-ng-show=\"!queue.tracks.length\">Waiting for a broadcaster&hellip;</p>\n" +
+    "    <p class=\"playing__info--waiting\" data-ng-show=\"!queue.tracks.length\">Waiting for a broadcaster&hellip;</p>\n" +
     "  </div>\n" +
     "\n" +
     "  <div data-ng-show=\"playing\" class=\"playing__info playing__info--playing\" data-album-cover-background>\n" +

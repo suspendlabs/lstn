@@ -277,13 +277,12 @@ body {
 }
 
 .playing__info-container {
-  margin-bottom:36px;
+  margin-bottom: 36px;
 }
-.playing__info--stopped {
 
+.playing__info--stopped {
   background: #3d3d3d;
   min-height: 180px;
-  line-height: 180px;
   text-align: center;
   color: #fff;
   font-size: 1.7rem;
@@ -292,8 +291,18 @@ body {
     font-size: 8rem;
     line-height: 180px;
     color: $action-additive;
+    cursor: pointer;
   }
 }
+
+.playing__info--ready {
+  line-height: 180px;
+}
+
+.playing__info--waiting {
+  line-height: 180px;
+}
+
 .playing__info--playing {
   min-height:180px;
 }
