@@ -408,20 +408,15 @@ angular.module('lstn.controllers', [])
         $scope.isCurrentController = false;
         $scope.playing = null;
 
-        if (apiswf) {
-          apiswf.rdio_stop();
-        }
-
+        apiswf.rdio_stop();
         return;
       }
 
       // Play the track through Rdio
-      if (apiswf) {
-        apiswf.rdio_setVolume(0.7);
-        apiswf.rdio_play(data.key, {
-          initialPosition: data.position || 0
-        });
-      }
+      apiswf.rdio_setVolume(0.7);
+      apiswf.rdio_play(data.key, {
+        initialPosition: data.position || 0
+      });
 
       // Update the current controller
       $scope.currentController = data.controller || null;
@@ -467,25 +462,19 @@ angular.module('lstn.controllers', [])
 
     window.toggleMute = $scope.toggleMute = function() {
       $scope.mute = !$scope.mute;
-      if (apiswf) {
-        apiswf.rdio_setMute($scope.mute);
-      }
+      apiswf.rdio_setMute($scope.mute);
     };
 
     window.toggleVisualize = $scope.toggleVisualize = function() {
       $scope.visualize = !$scope.visualize;
 
       if ($scope.visualize) {
-        if (apiswf) {
-          apiswf.rdio_startFrequencyAnalyzer({
-            frequencies: '10-band',
-            period: 100
-          });
-        }
+        apiswf.rdio_startFrequencyAnalyzer({
+          frequencies: '10-band',
+          period: 100
+        });
       } else {
-        if (apiswf) {
-          apiswf.rdio_stopFrequencyAnalyzer();
-        }
+        apiswf.rdio_stopFrequencyAnalyzer();
       }
     };
 
