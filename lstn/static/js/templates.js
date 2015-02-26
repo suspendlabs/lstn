@@ -131,7 +131,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <a data-ng-click=\"clickHandler()\">\n" +
     "    <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"text\" data-tooltip=\"{{ tooltipText }}\" data-tooltip-placement=\"right\"></span>\n" +
     "  </a>\n" +
-    "  <a class=\"carousel__refresh pull-right\" data-ng-click=\"refreshHandler()\">\n" +
+    "  <a class=\"carousel__refresh pull-right\" data-ng-click=\"refreshHandler()\" data-ng-show=\"refreshHandler\">\n" +
     "    <i\n" +
     "      class=\"fa fa-fw fa-refresh\"\n" +
     "      data-ng-show=\"!loading\"\n" +
@@ -178,11 +178,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </slide>\n" +
     "\n" +
     "    <slide id=\"playlist_types\">\n" +
-    "      <div class=\"carousel__back text-left\">\n" +
-    "        <a data-ng-click=\"closeCategory()\">\n" +
-    "          <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentCategory.name\"></span>\n" +
-    "        </a>\n" +
-    "      </div>\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentCategory.name\"\n" +
+    "        data-tooltip-text=\"'Back to Categories'\"\n" +
+    "        data-click-handler=\"closeCategory\"></lstn-drilldown-back>\n" +
     "      <ul class=\"playlist-types playlist-types--full playlist-type__list drilldown__list text-left\">\n" +
     "        <li data-ng-repeat=\"item in playlistTypes\">\n" +
     "          <lstn-playlist-type\n" +
@@ -195,7 +194,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <slide id=\"playlists\">\n" +
     "      <lstn-drilldown-back\n" +
     "        data-text=\"currentPlaylistType.name\"\n" +
-    "        data-tooltip-text=\"'Back to Categories'\"\n" +
+    "        data-tooltip-text=\"'Back to Playlist Types'\"\n" +
     "        data-click-handler=\"closePlaylistType\"\n" +
     "        data-refresh-handler=\"refreshPlaylistType\"\n" +
     "        data-refresh-text=\"'Refresh Playlists'\"\n" +
@@ -232,11 +231,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </slide>\n" +
     "\n" +
     "    <slide id=\"station_types\">\n" +
-    "      <div class=\"carousel__back text-left\">\n" +
-    "        <a data-ng-click=\"closeCategory()\">\n" +
-    "          <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentCategory.name\"></span>\n" +
-    "        </a>\n" +
-    "      </div>\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentCategory.name\"\n" +
+    "        data-tooltip-text=\"'Back to Categories'\"\n" +
+    "        data-click-handler=\"closeCategory\"></lstn-drilldown-back>\n" +
     "      <ul class=\"station-types station-types--full station-type__list drilldown__list text-left\">\n" +
     "        <li data-ng-repeat=\"item in stationTypes\">\n" +
     "          <lstn-station-type\n" +
@@ -249,7 +247,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <slide id=\"stations\">\n" +
     "      <lstn-drilldown-back\n" +
     "        data-text=\"currentStationType.name\"\n" +
-    "        data-tooltip-text=\"'Back to Categories'\"\n" +
+    "        data-tooltip-text=\"'Back to Station Types'\"\n" +
     "        data-click-handler=\"closeStationType\"\n" +
     "        data-refresh-handler=\"refreshStationType\"\n" +
     "        data-refresh-text=\"'Refresh Stations'\"\n" +
