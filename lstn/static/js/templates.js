@@ -71,7 +71,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
-    "      class=\"item__title\"\n" +
+    "      class=\"item__title item__title--single\"\n" +
     "      data-ng-bind=\"category.name\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
@@ -410,7 +410,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
-    "      class=\"item__title\"\n" +
+    "      class=\"item__title item__title--single\"\n" +
     "      data-ng-bind=\"playlistType.name\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
@@ -439,7 +439,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
-    "      class=\"item__title\"\n" +
+    "      class=\"item__title item__title--couple\"\n" +
     "      data-ng-bind=\"playlist.name\"></div>\n" +
     "    <div class=\"item__count\" data-ng-pluralize count=\"playlist.length\" when=\"{'one': '{} track', 'other': '{} tracks'}\"></div>\n" +
     "  </div>\n" +
@@ -706,7 +706,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
-    "      class=\"item__title\"\n" +
+    "      class=\"item__title item__title--single\"\n" +
     "      data-ng-bind=\"stationType.name\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
@@ -735,7 +735,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
-    "      class=\"item__title\"\n" +
+    "      class=\"item__title item__title--single\"\n" +
     "      data-ng-bind=\"station.name\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +

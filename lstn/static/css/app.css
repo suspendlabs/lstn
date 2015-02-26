@@ -535,6 +535,12 @@ body > .container > div {
   text-overflow: ellipsis;
   overflow: hidden;
 }
+.item__info .item__title.item__title--single {
+  padding-top: 17px;
+}
+.item__info .item__title.item__title--couple {
+  padding-top: 8px;
+}
 .item__info .item__artist {
   width: 100%;
   font-size: 14px;

@@ -598,6 +598,14 @@ body {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+
+    &.item__title--single {
+      padding-top: 17px;
+    }
+
+    &.item__title--couple {
+      padding-top: 8px;
+    }
   }
 
   .item__artist {
