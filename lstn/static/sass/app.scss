@@ -516,6 +516,8 @@ body {
 }
 
 .drilldown__list {
+  height: 100%;
+
   list-style: none;
   padding: 0;
   margin-bottom: 0;
@@ -821,12 +823,28 @@ footer {
 }
 
 .more-music {
+  height: 100%;
+
   .carousel-control {
     display: none;
   }
 
   .carousel-indicators {
     display: none;
+  }
+
+  .carousel {
+    height: 100%;
+  }
+
+  .carousel-inner {
+    height: 93%;
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    .item {
+      height: 100%;
+    }
   }
 }
 
