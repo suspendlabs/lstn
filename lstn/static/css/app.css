@@ -453,6 +453,7 @@ body > .container > div {
 }
 
 .drilldown__list {
+  height: 100%;
   list-style: none;
   padding: 0;
   margin-bottom: 0;
@@ -775,11 +776,25 @@ footer .container .text-muted {
   border-color: #FFFFFF;
 }
 
+.more-music {
+  height: 100%;
+}
 .more-music .carousel-control {
   display: none;
 }
 .more-music .carousel-indicators {
   display: none;
+}
+.more-music .carousel {
+  height: 100%;
+}
+.more-music .carousel-inner {
+  height: 93%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.more-music .carousel-inner .item {
+  height: 100%;
 }
 
 .carousel__back {
