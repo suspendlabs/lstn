@@ -76,3 +76,6 @@ lstn/config.py
 socketio/production.json
 config/production.json
 lstn/static/js/config.js
+
+#VIM
+.*.swp
