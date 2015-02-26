@@ -392,7 +392,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             }
 
             CurrentUser.updateQueue({
-              queue: $scope.queue
+              queue: $scope.queue.tracks
             }, function(response) {
               if (!response || !response.success) {
                 console.log('CurrentUser.updateQueue', response);
@@ -422,6 +422,25 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
+.directive('lstnDrilldownBack', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        text: '=',
+        tooltipText: '=',
+        clickHandler: '=',
+        refreshHandler: '=',
+        refreshText: '=',
+        loading: '=',
+        loadingText: '='
+      },
+      templateUrl: '/static/partials/directives/drilldown-back.html'
+    };
+  }
+])
+
 .directive('lstnMusicCategories', ['$timeout', 'Alert', 'CurrentUser', 'Playlist', 'Station',
   function($timeout, Alert, CurrentUser, Playlist, Station) {
     return {
@@ -440,7 +459,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
         // Categories
         $scope.categories = [{
           name: 'Playlists',
-          type: 'playlists',
+          type: 'playlists'
         },{
           name: 'Stations',
           type: 'stations'
@@ -544,6 +563,18 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.currentPlaylistType = null;
         };
 
+        $scope.refreshPlaylistType = function() {
+          if (!$scope.currentPlaylistType) {
+            return;
+          }
+
+          if ($scope.currentPlaylistType.loadingPlaylists) {
+            return;
+          }
+
+          $scope.loadPlaylists($scope.currentPlaylistType);
+        };
+
         // Playlist Tracks
         $scope.currentPlaylist = null;
         $scope.tracks = [];
@@ -562,6 +593,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
 
             $scope.tracks = response.tracks;
             $scope.currentPlaylist = playlist;
+            $scope.currentPlaylist.length = $scope.tracks.length;
 
             $timeout(function() {
               playlist.loadingTracks = false;
@@ -588,6 +620,18 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.currentPlaylist = null;
         };
 
+        $scope.refreshPlaylist = function() {
+          if (!$scope.currentPlaylist) {
+            return;
+          }
+
+          if ($scope.currentPlaylist.loadingTracks) {
+            return;
+          }
+
+          $scope.loadPlaylistTracks($scope.currentPlaylist);
+        };
+
         // Station Types
         $scope.stationTypes = [{
           name: 'Your Stations',
@@ -598,18 +642,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
         },{
           name: 'Recent Stations',
           key: 'recent'
-        },{
-          name: 'Genre',
-          key: 'genre'
-        },{
-          name: 'Top Stations',
-          key: 'top'
-        },{
-          name: 'New Releases',
-          key: 'new'
-        },{
-          name: 'Spotlight',
-          key: 'spotlight'
         }];
 
         $scope.loadStationTypes = function(category) {
@@ -668,6 +700,18 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.currentStationType = null;
         };
 
+        $scope.refreshStationType = function() {
+          if (!$scope.currentStationType) {
+            return;
+          }
+
+          if ($scope.currentStationType.loadingStations) {
+            return;
+          }
+
+          $scope.loadStations($scope.currentStationType);
+        };
+
         // Station Tracks
         $scope.currentStation = null;
         $scope.tracks = [];
@@ -686,6 +730,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
 
             $scope.tracks = response.tracks;
             $scope.currentStation = station;
+            $scope.currentStation.length = $scope.tracks.length;
 
             $timeout(function() {
               station.loadingTracks = false;
@@ -710,6 +755,18 @@ angular.module('lstn.directives', ['sc.twemoji'])
           controller.select(prevSlide, 'prev');
 
           $scope.currentStation = null;
+        };
+
+        $scope.refreshStation = function() {
+          if (!$scope.currentStation) {
+            return;
+          }
+
+          if ($scope.currentStation.loadingTracks) {
+            return;
+          }
+
+          $scope.loadStationTracks($scope.currentStation);
         };
       }
     };
