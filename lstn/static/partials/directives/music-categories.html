@@ -11,11 +11,10 @@
     </slide>
 
     <slide id="playlist_types">
-      <div class="carousel__back text-left">
-        <a data-ng-click="closeCategory()">
-          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentCategory.name"></span>
-        </a>
-      </div>
+      <lstn-drilldown-back
+        data-text="currentCategory.name"
+        data-tooltip-text="'Back to Categories'"
+        data-click-handler="closeCategory"></lstn-drilldown-back>
       <ul class="playlist-types playlist-types--full playlist-type__list drilldown__list text-left">
         <li data-ng-repeat="item in playlistTypes">
           <lstn-playlist-type
@@ -28,7 +27,7 @@
     <slide id="playlists">
       <lstn-drilldown-back
         data-text="currentPlaylistType.name"
-        data-tooltip-text="'Back to Categories'"
+        data-tooltip-text="'Back to Playlist Types'"
         data-click-handler="closePlaylistType"
         data-refresh-handler="refreshPlaylistType"
         data-refresh-text="'Refresh Playlists'"
@@ -65,11 +64,10 @@
     </slide>
 
     <slide id="station_types">
-      <div class="carousel__back text-left">
-        <a data-ng-click="closeCategory()">
-          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentCategory.name"></span>
-        </a>
-      </div>
+      <lstn-drilldown-back
+        data-text="currentCategory.name"
+        data-tooltip-text="'Back to Categories'"
+        data-click-handler="closeCategory"></lstn-drilldown-back>
       <ul class="station-types station-types--full station-type__list drilldown__list text-left">
         <li data-ng-repeat="item in stationTypes">
           <lstn-station-type
@@ -82,7 +80,7 @@
     <slide id="stations">
       <lstn-drilldown-back
         data-text="currentStationType.name"
-        data-tooltip-text="'Back to Categories'"
+        data-tooltip-text="'Back to Station Types'"
         data-click-handler="closeStationType"
         data-refresh-handler="refreshStationType"
         data-refresh-text="'Refresh Stations'"
