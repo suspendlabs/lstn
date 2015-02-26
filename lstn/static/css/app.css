@@ -89,7 +89,6 @@ body {
 }
 body > .container {
   height: 100%;
-  margin-bottom: 10px;
 }
 body > .container > div {
   height: 80%;
