@@ -1,0 +1,17 @@
+<div class="carousel__back text-left">
+  <a data-ng-click="clickHandler()">
+    <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="text" data-tooltip="{{ tooltipText }}" data-tooltip-placement="right"></span>
+  </a>
+  <a class="carousel__refresh pull-right" data-ng-click="refreshHandler()" data-ng-show="refreshHandler">
+    <i
+      class="fa fa-fw fa-refresh"
+      data-ng-show="!loading"
+      data-tooltip="{{ refreshText }}"
+      data-tooltip-placement="left"></i>
+    <i
+      class="fa fa-fw fa-circle-o-notch fa-spin"
+      data-ng-show="loading"
+      data-tooltip="{{ loadingText }}"
+      data-tooltip-placement="left"></i>
+  </a>
+</div>

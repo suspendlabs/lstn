@@ -11,11 +11,10 @@
     </slide>
 
     <slide id="playlist_types">
-      <div class="carousel__back text-left">
-        <a data-ng-click="closeCategory()">
-          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentCategory.name"></span>
-        </a>
-      </div>
+      <lstn-drilldown-back
+        data-text="currentCategory.name"
+        data-tooltip-text="'Back to Categories'"
+        data-click-handler="closeCategory"></lstn-drilldown-back>
       <ul class="playlist-types playlist-types--full playlist-type__list drilldown__list text-left">
         <li data-ng-repeat="item in playlistTypes">
           <lstn-playlist-type
@@ -26,11 +25,14 @@
     </slide>
 
     <slide id="playlists">
-      <div class="carousel__back text-left">
-        <a data-ng-click="closePlaylistType()">
-          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentPlaylistType.name"></span>
-        </a>
-      </div>
+      <lstn-drilldown-back
+        data-text="currentPlaylistType.name"
+        data-tooltip-text="'Back to Playlist Types'"
+        data-click-handler="closePlaylistType"
+        data-refresh-handler="refreshPlaylistType"
+        data-refresh-text="'Refresh Playlists'"
+        data-loading="currentPlaylistType.loadingPlaylists"
+        data-loading-text="'Refreshing Playlists'"></lstn-drilldown-back>
       <ul class="playlists drilldown__list text-left">
         <li data-ng-repeat="item in playlists">
           <lstn-playlist
@@ -43,11 +45,14 @@
     </slide>
 
     <slide id="playlist_tracks">
-      <div class="carousel__back text-left">
-        <a data-ng-click="closePlaylist()">
-          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentPlaylist.name"></span>
-        </a>
-      </div>
+      <lstn-drilldown-back
+        data-text="currentPlaylist.name"
+        data-tooltip-text="'Back to Playlists'"
+        data-click-handler="closePlaylist"
+        data-refresh-handler="refreshPlaylist"
+        data-refresh-text="'Refresh Playlist'"
+        data-loading="currentPlaylist.loadingTracks"
+        data-loading-text="'Refreshing Playlist'"></lstn-drilldown-back>
       <ul class="tracks drilldown__list text-left">
         <li data-ng-repeat="item in tracks">
           <lstn-track
@@ -59,11 +64,10 @@
     </slide>
 
     <slide id="station_types">
-      <div class="carousel__back text-left">
-        <a data-ng-click="closeCategory()">
-          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentCategory.name"></span>
-        </a>
-      </div>
+      <lstn-drilldown-back
+        data-text="currentCategory.name"
+        data-tooltip-text="'Back to Categories'"
+        data-click-handler="closeCategory"></lstn-drilldown-back>
       <ul class="station-types station-types--full station-type__list drilldown__list text-left">
         <li data-ng-repeat="item in stationTypes">
           <lstn-station-type
@@ -74,11 +78,14 @@
     </slide>
 
     <slide id="stations">
-      <div class="carousel__back text-left">
-        <a data-ng-click="closeStationType()">
-          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentStationType.name"></span>
-        </a>
-      </div>
+      <lstn-drilldown-back
+        data-text="currentStationType.name"
+        data-tooltip-text="'Back to Station Types'"
+        data-click-handler="closeStationType"
+        data-refresh-handler="refreshStationType"
+        data-refresh-text="'Refresh Stations'"
+        data-loading="currentStationType.loadingStations"
+        data-loading-text="'Refreshing Stations'"></lstn-drilldown-back>
       <ul class="stations drilldown__list text-left">
         <li data-ng-repeat="item in stations">
           <lstn-playlist
@@ -91,11 +98,14 @@
     </slide>
 
     <slide id="station_tracks">
-      <div class="carousel__back text-left">
-        <a data-ng-click="closeStation()">
-          <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentStation.name"></span>
-        </a>
-      </div>
+      <lstn-drilldown-back
+        data-text="currentStation.name"
+        data-tooltip-text="'Back to Stations'"
+        data-click-handler="closeStation"
+        data-refresh-handler="refreshStation"
+        data-refresh-text="'Refresh Station'"
+        data-loading="currentStation.loadingTracks"
+        data-loading-text="'Refreshing Station'"></lstn-drilldown-back>
       <ul class="tracks drilldown__list text-left">
         <li data-ng-repeat="item in tracks">
           <lstn-track
