@@ -74,27 +74,17 @@
                 <a class="navbar-link" data-ng-href="/room/{{ currentRoom.slug }}" data-ng-bind="currentRoom.name"></a>
               </p>
             </li>
-            <li class="hidden-sm hidden-md hidden-lg">
+            <li class="divider">&nbsp;</li>
+            <li>
               <p class="navbar-text">
-                <a href="http://www.rdio.com%% current_user.profile %%" target="_blank">Profile</a>
+                <a href="http://www.rdio.com%% current_user.profile %%" target="_blank">%% current_user.name %%</a>
               </p>
             </li>
-            <li class="hidden-sm hidden-md hidden-lg">
+            <li class="divider">&nbsp;</li>
+            <li>
               <p class="navbar-text">
                 <a href="/logout" target="_self">Logout</a>
               </p>
-            </li>
-            <li class="dropdown hidden-xs">
-              <a class="navbar__name dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                <img data-ng-src="{{ current_user.picture }}" class="navbar__photo avatar xs ng-cloak" alt="{{ current_user.name }}">
-                %% current_user.name %%
-                <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="http://www.rdio.com%% current_user.profile %%" target="_blank">Profile</a></li>
-                <li class="divider"></li>
-                <li><a href="/logout" target="_self">Logout</a></li>
-              </ul>
             </li>
           </ul>
           <% else %>
