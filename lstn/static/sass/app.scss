@@ -516,9 +516,13 @@ body {
 }
 
 .drilldown__list {
+  height: 100%;
+
   list-style: none;
   padding: 0;
   margin-bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .drilldown__item, .chat__message {
@@ -810,6 +814,18 @@ footer {
   margin-right: 4px;
 }
 
+.search__wrapper {
+  height: 100%;
+}
+
+.search__container {
+  height: 100%;
+}
+
+.search__contents {
+  height: 100%;
+}
+
 .search__box {
   border-bottom: 4px solid $accent-color;
 
@@ -821,12 +837,32 @@ footer {
 }
 
 .more-music {
+  height: 100%;
+
   .carousel-control {
     display: none;
   }
 
   .carousel-indicators {
     display: none;
+  }
+
+  .carousel {
+    height: 100%;
+  }
+
+  .carousel-inner {
+    height: 100%;
+    overflow: inherit;
+
+    .item {
+      height: 80%;
+
+      .tracks {
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+    }
   }
 }
 

@@ -453,9 +453,12 @@ body > .container > div {
 }
 
 .drilldown__list {
+  height: 100%;
   list-style: none;
   padding: 0;
   margin-bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .drilldown__item, .chat__message {
@@ -762,6 +765,18 @@ footer .container .text-muted {
   margin-right: 4px;
 }
 
+.search__wrapper {
+  height: 100%;
+}
+
+.search__container {
+  height: 100%;
+}
+
+.search__contents {
+  height: 100%;
+}
+
 .search__box {
   border-bottom: 4px solid #3d3d3d;
 }
@@ -775,11 +790,28 @@ footer .container .text-muted {
   border-color: #FFFFFF;
 }
 
+.more-music {
+  height: 100%;
+}
 .more-music .carousel-control {
   display: none;
 }
 .more-music .carousel-indicators {
   display: none;
+}
+.more-music .carousel {
+  height: 100%;
+}
+.more-music .carousel-inner {
+  height: 100%;
+  overflow: inherit;
+}
+.more-music .carousel-inner .item {
+  height: 80%;
+}
+.more-music .carousel-inner .item .tracks {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .carousel__back {
