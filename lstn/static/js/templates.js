@@ -65,7 +65,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/category.html',
-    "<div id=\"category{{ $id }}\" class=\"drilldown__item category clearfix\">\n" +
+    "<div id=\"category{{ $id }}\" class=\"drilldown__item category\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <i class=\"fa fa-fw fa-music fa-3x\"></i>\n" +
     "  </div>\n" +
@@ -126,6 +126,27 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
+  $templateCache.put('/static/partials/directives/drilldown-back.html',
+    "<div class=\"carousel__back text-left\">\n" +
+    "  <a data-ng-click=\"clickHandler()\">\n" +
+    "    <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"text\" data-tooltip=\"{{ tooltipText }}\" data-tooltip-placement=\"right\"></span>\n" +
+    "  </a>\n" +
+    "  <a class=\"carousel__refresh pull-right\" data-ng-click=\"refreshHandler()\">\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-refresh\"\n" +
+    "      data-ng-show=\"!loading\"\n" +
+    "      data-tooltip=\"{{ refreshText }}\"\n" +
+    "      data-tooltip-placement=\"left\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"loading\"\n" +
+    "      data-tooltip=\"{{ loadingText }}\"\n" +
+    "      data-tooltip-placement=\"left\"></i>\n" +
+    "  </a>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('/static/partials/directives/emoticon-list.html',
     "<ul class=\"list-group emoticon-list\">\n" +
     "  <li data-mentio-menu-item=\"emoticon\" data-ng-repeat=\"emoticon in items\" class=\"list-group-item\">\n" +
@@ -172,11 +193,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </slide>\n" +
     "\n" +
     "    <slide id=\"playlists\">\n" +
-    "      <div class=\"carousel__back text-left\">\n" +
-    "        <a data-ng-click=\"closePlaylistType()\">\n" +
-    "          <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentPlaylistType.name\"></span>\n" +
-    "        </a>\n" +
-    "      </div>\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentPlaylistType.name\"\n" +
+    "        data-tooltip-text=\"'Back to Categories'\"\n" +
+    "        data-click-handler=\"closePlaylistType\"\n" +
+    "        data-refresh-handler=\"refreshPlaylistType\"\n" +
+    "        data-refresh-text=\"'Refresh Playlists'\"\n" +
+    "        data-loading=\"currentPlaylistType.loadingPlaylists\"\n" +
+    "        data-loading-text=\"'Refreshing Playlists'\"></lstn-drilldown-back>\n" +
     "      <ul class=\"playlists drilldown__list text-left\">\n" +
     "        <li data-ng-repeat=\"item in playlists\">\n" +
     "          <lstn-playlist\n" +
@@ -189,11 +213,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </slide>\n" +
     "\n" +
     "    <slide id=\"playlist_tracks\">\n" +
-    "      <div class=\"carousel__back text-left\">\n" +
-    "        <a data-ng-click=\"closePlaylist()\">\n" +
-    "          <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentPlaylist.name\"></span>\n" +
-    "        </a>\n" +
-    "      </div>\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentPlaylist.name\"\n" +
+    "        data-tooltip-text=\"'Back to Playlists'\"\n" +
+    "        data-click-handler=\"closePlaylist\"\n" +
+    "        data-refresh-handler=\"refreshPlaylist\"\n" +
+    "        data-refresh-text=\"'Refresh Playlist'\"\n" +
+    "        data-loading=\"currentPlaylist.loadingTracks\"\n" +
+    "        data-loading-text=\"'Refreshing Playlist'\"></lstn-drilldown-back>\n" +
     "      <ul class=\"tracks drilldown__list text-left\">\n" +
     "        <li data-ng-repeat=\"item in tracks\">\n" +
     "          <lstn-track\n" +
@@ -220,11 +247,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </slide>\n" +
     "\n" +
     "    <slide id=\"stations\">\n" +
-    "      <div class=\"carousel__back text-left\">\n" +
-    "        <a data-ng-click=\"closeStationType()\">\n" +
-    "          <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentStationType.name\"></span>\n" +
-    "        </a>\n" +
-    "      </div>\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentStationType.name\"\n" +
+    "        data-tooltip-text=\"'Back to Categories'\"\n" +
+    "        data-click-handler=\"closeStationType\"\n" +
+    "        data-refresh-handler=\"refreshStationType\"\n" +
+    "        data-refresh-text=\"'Refresh Stations'\"\n" +
+    "        data-loading=\"currentStationType.loadingStations\"\n" +
+    "        data-loading-text=\"'Refreshing Stations'\"></lstn-drilldown-back>\n" +
     "      <ul class=\"stations drilldown__list text-left\">\n" +
     "        <li data-ng-repeat=\"item in stations\">\n" +
     "          <lstn-playlist\n" +
@@ -237,11 +267,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </slide>\n" +
     "\n" +
     "    <slide id=\"station_tracks\">\n" +
-    "      <div class=\"carousel__back text-left\">\n" +
-    "        <a data-ng-click=\"closeStation()\">\n" +
-    "          <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentStation.name\"></span>\n" +
-    "        </a>\n" +
-    "      </div>\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentStation.name\"\n" +
+    "        data-tooltip-text=\"'Back to Stations'\"\n" +
+    "        data-click-handler=\"closeStation\"\n" +
+    "        data-refresh-handler=\"refreshStation\"\n" +
+    "        data-refresh-text=\"'Refresh Station'\"\n" +
+    "        data-loading=\"currentStation.loadingTracks\"\n" +
+    "        data-loading-text=\"'Refreshing Station'\"></lstn-drilldown-back>\n" +
     "      <ul class=\"tracks drilldown__list text-left\">\n" +
     "        <li data-ng-repeat=\"item in tracks\">\n" +
     "          <lstn-track\n" +
@@ -373,7 +406,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/playlist-type.html',
-    "<div id=\"playlist-type{{ $id }}\" class=\"drilldown__item playlist-type clearfix\">\n" +
+    "<div id=\"playlist-type{{ $id }}\" class=\"drilldown__item playlist-type\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <i class=\"fa fa-fw fa-music fa-3x\"></i>\n" +
     "  </div>\n" +
