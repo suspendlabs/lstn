@@ -158,6 +158,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/more-music.html',
     "<div class=\"more-music\">\n" +
+    "  <div class=\"search__box\">\n" +
+    "    <input type=\"search\" class=\"form-control\" data-ng-model=\"searchQuery\" placeholder=\"Search music...\">\n" +
+    "  </div>\n" +
     "  <lstn-music-search></lstn-music-search>\n" +
     "  <lstn-music-categories data-ng-show=\"!searchResults || searchResults.length === 0\"></lstn-music-categories>\n" +
     "</div>\n"
@@ -288,80 +291,75 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/music-search.html',
-    "<div>\n" +
-    "  <div class=\"search__box\">\n" +
-    "    <input type=\"search\" class=\"form-control\" data-ng-model=\"searchQuery\" placeholder=\"Search music...\">\n" +
-    "  </div>\n" +
-    "  <div class=\"search__container\" data-ng-show=\"searchResults && searchResults.length > 0\">\n" +
-    "    <div class=\"search__contents\">\n" +
-    "      <carousel id=\"search-carousel\" interval=\"false\">\n" +
-    "        <slide id=\"search_results\">\n" +
-    "          <div class=\"carousel__back text-left\">\n" +
-    "            <a data-ng-click=\"clearSearchResults()\">\n" +
-    "              <i class=\"fa fa-fw fa-times-circle-o\"></i> Clear Search Results\n" +
-    "            </a>\n" +
-    "          </div>\n" +
-    "          <ul class=\"search search--full track__list drilldown__list text-left\">\n" +
-    "            <li data-ng-repeat=\"item in searchResults\">\n" +
-    "              <div data-ng-switch=\"item.type\">\n" +
-    "                <lstn-album\n" +
-    "                  data-ng-switch-when=\"a\"\n" +
-    "                  data-context=\"'search'\"\n" +
-    "                  data-album=\"item\"\n" +
-    "                  data-index=\"$index\"\n" +
-    "                  data-load-album-tracks=\"loadAlbumTracks\"></lstn-album>\n" +
-    "\n" +
-    "                <lstn-artist\n" +
-    "                  data-ng-switch-when=\"r\"\n" +
-    "                  data-context=\"'search'\"\n" +
-    "                  data-artist=\"item\"\n" +
-    "                  data-index=\"$index\"\n" +
-    "                  data-load-albums=\"loadAlbums\"></lstn-artist>\n" +
-    "\n" +
-    "                <lstn-track\n" +
-    "                  data-ng-switch-when=\"t\"\n" +
-    "                  data-context=\"'search'\"\n" +
-    "                  data-track=\"item\"\n" +
-    "                  data-index=\"$index\"></lstn-track>\n" +
-    "              </div>\n" +
-    "            </li>\n" +
-    "          </ul>\n" +
-    "        </slide>\n" +
-    "\n" +
-    "        <slide id=\"search_albums\">\n" +
-    "          <div class=\"carousel__back text-left\">\n" +
-    "            <a data-ng-click=\"closeArtist()\">\n" +
-    "              <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentArtist.name\"></span>\n" +
-    "            </a>\n" +
-    "          </div>\n" +
-    "          <ul class=\"albums album--full album__list drilldown__list text-left\">\n" +
-    "            <li data-ng-repeat=\"item in albums\">\n" +
+    "<div class=\"search__container\" data-ng-show=\"searchResults && searchResults.length > 0\">\n" +
+    "  <div class=\"search__contents\">\n" +
+    "    <carousel id=\"search-carousel\" interval=\"false\">\n" +
+    "      <slide id=\"search_results\">\n" +
+    "        <div class=\"carousel__back text-left\">\n" +
+    "          <a data-ng-click=\"clearSearchResults()\">\n" +
+    "            <i class=\"fa fa-fw fa-times-circle-o\"></i> Clear Search Results\n" +
+    "          </a>\n" +
+    "        </div>\n" +
+    "        <ul class=\"search search--full track__list drilldown__list text-left\">\n" +
+    "          <li data-ng-repeat=\"item in searchResults\">\n" +
+    "            <div data-ng-switch=\"item.type\">\n" +
     "              <lstn-album\n" +
-    "                data-context=\"'artist'\"\n" +
+    "                data-ng-switch-when=\"a\"\n" +
+    "                data-context=\"'search'\"\n" +
     "                data-album=\"item\"\n" +
     "                data-index=\"$index\"\n" +
     "                data-load-album-tracks=\"loadAlbumTracks\"></lstn-album>\n" +
-    "            </li>\n" +
-    "          </ul>\n" +
-    "        </slide>\n" +
     "\n" +
-    "        <slide id=\"search_tracks\">\n" +
-    "          <div class=\"carousel__back text-left\">\n" +
-    "            <a data-ng-click=\"closeAlbum()\">\n" +
-    "              <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentAlbum.name\"></span>\n" +
-    "            </a>\n" +
-    "          </div>\n" +
-    "          <ul class=\"tracks track--full track__list drilldown__list text-left\">\n" +
-    "            <li data-ng-repeat=\"item in tracks\">\n" +
+    "              <lstn-artist\n" +
+    "                data-ng-switch-when=\"r\"\n" +
+    "                data-context=\"'search'\"\n" +
+    "                data-artist=\"item\"\n" +
+    "                data-index=\"$index\"\n" +
+    "                data-load-albums=\"loadAlbums\"></lstn-artist>\n" +
+    "\n" +
     "              <lstn-track\n" +
-    "                data-context=\"'album'\"\n" +
+    "                data-ng-switch-when=\"t\"\n" +
+    "                data-context=\"'search'\"\n" +
     "                data-track=\"item\"\n" +
     "                data-index=\"$index\"></lstn-track>\n" +
-    "            </li>\n" +
-    "          </ul>\n" +
-    "        </slide>\n" +
-    "      </carousel>\n" +
-    "    </div>\n" +
+    "            </div>\n" +
+    "          </li>\n" +
+    "        </ul>\n" +
+    "      </slide>\n" +
+    "\n" +
+    "      <slide id=\"search_albums\">\n" +
+    "        <div class=\"carousel__back text-left\">\n" +
+    "          <a data-ng-click=\"closeArtist()\">\n" +
+    "            <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentArtist.name\"></span>\n" +
+    "          </a>\n" +
+    "        </div>\n" +
+    "        <ul class=\"albums album--full album__list drilldown__list text-left\">\n" +
+    "          <li data-ng-repeat=\"item in albums\">\n" +
+    "            <lstn-album\n" +
+    "              data-context=\"'artist'\"\n" +
+    "              data-album=\"item\"\n" +
+    "              data-index=\"$index\"\n" +
+    "              data-load-album-tracks=\"loadAlbumTracks\"></lstn-album>\n" +
+    "          </li>\n" +
+    "        </ul>\n" +
+    "      </slide>\n" +
+    "\n" +
+    "      <slide id=\"search_tracks\">\n" +
+    "        <div class=\"carousel__back text-left\">\n" +
+    "          <a data-ng-click=\"closeAlbum()\">\n" +
+    "            <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentAlbum.name\"></span>\n" +
+    "          </a>\n" +
+    "        </div>\n" +
+    "        <ul class=\"tracks track--full track__list drilldown__list text-left\">\n" +
+    "          <li data-ng-repeat=\"item in tracks\">\n" +
+    "            <lstn-track\n" +
+    "              data-context=\"'album'\"\n" +
+    "              data-track=\"item\"\n" +
+    "              data-index=\"$index\"></lstn-track>\n" +
+    "          </li>\n" +
+    "        </ul>\n" +
+    "      </slide>\n" +
+    "    </carousel>\n" +
     "  </div>\n" +
     "</div>\n"
   );

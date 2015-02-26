@@ -1,76 +1,71 @@
-<div>
-  <div class="search__box">
-    <input type="search" class="form-control" data-ng-model="searchQuery" placeholder="Search music...">
-  </div>
-  <div class="search__container" data-ng-show="searchResults && searchResults.length > 0">
-    <div class="search__contents">
-      <carousel id="search-carousel" interval="false">
-        <slide id="search_results">
-          <div class="carousel__back text-left">
-            <a data-ng-click="clearSearchResults()">
-              <i class="fa fa-fw fa-times-circle-o"></i> Clear Search Results
-            </a>
-          </div>
-          <ul class="search search--full track__list drilldown__list text-left">
-            <li data-ng-repeat="item in searchResults">
-              <div data-ng-switch="item.type">
-                <lstn-album
-                  data-ng-switch-when="a"
-                  data-context="'search'"
-                  data-album="item"
-                  data-index="$index"
-                  data-load-album-tracks="loadAlbumTracks"></lstn-album>
-
-                <lstn-artist
-                  data-ng-switch-when="r"
-                  data-context="'search'"
-                  data-artist="item"
-                  data-index="$index"
-                  data-load-albums="loadAlbums"></lstn-artist>
-
-                <lstn-track
-                  data-ng-switch-when="t"
-                  data-context="'search'"
-                  data-track="item"
-                  data-index="$index"></lstn-track>
-              </div>
-            </li>
-          </ul>
-        </slide>
-
-        <slide id="search_albums">
-          <div class="carousel__back text-left">
-            <a data-ng-click="closeArtist()">
-              <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentArtist.name"></span>
-            </a>
-          </div>
-          <ul class="albums album--full album__list drilldown__list text-left">
-            <li data-ng-repeat="item in albums">
+<div class="search__container" data-ng-show="searchResults && searchResults.length > 0">
+  <div class="search__contents">
+    <carousel id="search-carousel" interval="false">
+      <slide id="search_results">
+        <div class="carousel__back text-left">
+          <a data-ng-click="clearSearchResults()">
+            <i class="fa fa-fw fa-times-circle-o"></i> Clear Search Results
+          </a>
+        </div>
+        <ul class="search search--full track__list drilldown__list text-left">
+          <li data-ng-repeat="item in searchResults">
+            <div data-ng-switch="item.type">
               <lstn-album
-                data-context="'artist'"
+                data-ng-switch-when="a"
+                data-context="'search'"
                 data-album="item"
                 data-index="$index"
                 data-load-album-tracks="loadAlbumTracks"></lstn-album>
-            </li>
-          </ul>
-        </slide>
 
-        <slide id="search_tracks">
-          <div class="carousel__back text-left">
-            <a data-ng-click="closeAlbum()">
-              <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentAlbum.name"></span>
-            </a>
-          </div>
-          <ul class="tracks track--full track__list drilldown__list text-left">
-            <li data-ng-repeat="item in tracks">
+              <lstn-artist
+                data-ng-switch-when="r"
+                data-context="'search'"
+                data-artist="item"
+                data-index="$index"
+                data-load-albums="loadAlbums"></lstn-artist>
+
               <lstn-track
-                data-context="'album'"
+                data-ng-switch-when="t"
+                data-context="'search'"
                 data-track="item"
                 data-index="$index"></lstn-track>
-            </li>
-          </ul>
-        </slide>
-      </carousel>
-    </div>
+            </div>
+          </li>
+        </ul>
+      </slide>
+
+      <slide id="search_albums">
+        <div class="carousel__back text-left">
+          <a data-ng-click="closeArtist()">
+            <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentArtist.name"></span>
+          </a>
+        </div>
+        <ul class="albums album--full album__list drilldown__list text-left">
+          <li data-ng-repeat="item in albums">
+            <lstn-album
+              data-context="'artist'"
+              data-album="item"
+              data-index="$index"
+              data-load-album-tracks="loadAlbumTracks"></lstn-album>
+          </li>
+        </ul>
+      </slide>
+
+      <slide id="search_tracks">
+        <div class="carousel__back text-left">
+          <a data-ng-click="closeAlbum()">
+            <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="currentAlbum.name"></span>
+          </a>
+        </div>
+        <ul class="tracks track--full track__list drilldown__list text-left">
+          <li data-ng-repeat="item in tracks">
+            <lstn-track
+              data-context="'album'"
+              data-track="item"
+              data-index="$index"></lstn-track>
+          </li>
+        </ul>
+      </slide>
+    </carousel>
   </div>
 </div>

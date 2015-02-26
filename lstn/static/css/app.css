@@ -457,6 +457,8 @@ body > .container > div {
   list-style: none;
   padding: 0;
   margin-bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .drilldown__item, .chat__message {
@@ -763,6 +765,18 @@ footer .container .text-muted {
   margin-right: 4px;
 }
 
+.search__wrapper {
+  height: 100%;
+}
+
+.search__container {
+  height: 100%;
+}
+
+.search__contents {
+  height: 100%;
+}
+
 .search__box {
   border-bottom: 4px solid #3d3d3d;
 }
@@ -789,12 +803,15 @@ footer .container .text-muted {
   height: 100%;
 }
 .more-music .carousel-inner {
-  height: 93%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  height: 100%;
+  overflow: inherit;
 }
 .more-music .carousel-inner .item {
-  height: 100%;
+  height: 80%;
+}
+.more-music .carousel-inner .item .tracks {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .carousel__back {
