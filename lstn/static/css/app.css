@@ -89,9 +89,10 @@ body {
 }
 body > .container {
   height: 100%;
+  margin-bottom: 10px;
 }
 body > .container > div {
-  height: 85%;
+  height: 80%;
   margin-top: 15px;
 }
 
@@ -125,15 +126,10 @@ body > .container > div {
 .navbar-inverse .navbar-nav.navbar-right {
   margin: 0;
 }
-.navbar-inverse .navbar-nav > li > a.navbar__name {
-  color: #FFFFFF;
-  padding-left: 10px;
-}
-.navbar-inverse .navbar-nav > .open > a {
-  background-color: #333;
-}
-.navbar-inverse .navbar-nav > .open > a:focus, .navbar-inverse .navbar-nav > .open > a:hover {
-  background-color: #333;
+.navbar-inverse .navbar-nav.navbar-right .divider {
+  line-height: 70px;
+  width: 1px;
+  border-left: 1px solid #333;
 }
 
 .navbar-logo {
@@ -370,7 +366,7 @@ body > .container > div {
 }
 
 .queue__tabs {
-  height: 90%;
+  height: 100%;
   min-height: 400px;
   background-color: #3d3d3d;
 }
@@ -403,7 +399,7 @@ body > .container > div {
 }
 
 .tab-content {
-  height: 95%;
+  height: 100%;
 }
 .tab-content .tab-pane {
   height: 100%;
@@ -685,7 +681,7 @@ footer .container .text-muted {
   }
 }
 .room-activity {
-  height: 95%;
+  height: 100%;
   background-color: #3d3d3d;
 }
 .room-activity .form-control {
@@ -788,16 +784,19 @@ footer .container .text-muted {
   text-transform: uppercase;
   text-decoration: none;
 }
+.carousel__back .carousel__refresh {
+  padding-right: 15px;
+  color: white;
+}
+.carousel__back .carousel__refresh .fa {
+  font-size: 1.25em;
+}
 
 /* sm */
 @media (min-width: 768px) {
   div.room > div.room__middle {
     padding-left: 15px;
     padding-right: 15px;
-  }
-
-  div.queue__tabs {
-    height: 100%;
   }
 }
 /* md */

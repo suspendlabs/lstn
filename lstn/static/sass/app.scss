@@ -93,9 +93,10 @@ body {
 
   > .container {
     height: 100%;
+    margin-bottom: 10px;
 
     > div {
-      height: 85%;
+      height: 80%;
       margin-top: 15px;
     }
   }
@@ -132,24 +133,11 @@ body {
   .navbar-nav {
     &.navbar-right {
       margin: 0;
-    }
 
-    > li {
-      > a {
-        &.navbar__name {
-          color: #FFFFFF;
-          padding-left: 10px;
-        }
-      }
-    }
-
-    > .open {
-      > a {
-        background-color: $background-color;
-
-        &:focus, &:hover {
-          background-color: $background-color;
-        }
+      .divider {
+        line-height: 70px;
+        width: 1px;
+        border-left: 1px solid $background-color;
       }
     }
   }
@@ -428,7 +416,7 @@ body {
 }
 
 .queue__tabs {
-  height: 90%;
+  height: 100%;
   min-height: 400px;
   background-color: $accent-color;
 
@@ -468,7 +456,7 @@ body {
 }
 
 .tab-content {
-  height: 95%;
+  height: 100%;
 
   .tab-pane {
     height: 100%;
@@ -739,7 +727,7 @@ footer {
 }
 
 .room-activity {
-  height: 95%;
+  height: 100%;
   background-color: $accent-color;
 
   .form-control {
@@ -842,6 +830,15 @@ footer {
     text-transform: uppercase;
     text-decoration: none;
   }
+
+  .carousel__refresh {
+    padding-right: 15px;
+    color: white;
+
+    .fa {
+      font-size: 1.25em;
+    }
+  }
 }
 
 /* sm */
@@ -851,10 +848,6 @@ footer {
       padding-left: 15px;
       padding-right: 15px;
     }
-  }
-
-  div.queue__tabs {
-    height: 100%;
   }
 }
 
