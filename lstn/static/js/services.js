@@ -33,6 +33,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       });
     };
 
+    Alert.clear = function() {
+      $('.snackbar').each(function() {
+        $(this).snackbar('hide');
+      });
+    };
+
     return Alert;
   }
 ])

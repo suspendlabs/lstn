@@ -11,16 +11,31 @@ angular.module('lstn.controllers', [])
 
     $scope.currentRoom = CurrentRoom;
     $scope.alerts = Alert;
+
+    $scope.cancelPromise = function(promise) {
+      if (promise &&
+        promise._httpTimeout &&
+        promise._httpTimeout.resolve) {
+
+        promise._httpTimeout.resolve();
+      }
+    };
   }
 ])
 
 .controller('RoomsController', ['$scope', '$location', 'Room', 'Alert', function($scope, $location, Room, Alert) {
-  $scope.currentRoom.clear();
+  var promises = {};
 
   $scope.loading = true;
   $scope.showCreateRoom = false;
 
-  Room.list({}, function(response) {
+  $scope.$on('$destroy', function(e) {
+    $.each(promises, function(name, promise) {
+      $scope.cancelPromise(promise);
+    });
+  });
+
+  promises.listRoom = Room.list({}, function(response) {
     $scope.loading = false;
     if (!response || !response.success || !response.rooms) {
       console.log('Room.list', response);
@@ -46,7 +61,7 @@ angular.module('lstn.controllers', [])
   };
 
   $scope.saveCreateRoom = function() {
-    Room.save({}, $scope.newRoom, function(response) {
+    promises.createRoom = Room.save({}, $scope.newRoom, function(response) {
       if (!response || !response.success || !response.slug) {
         console.log('Room.save', response);
 
@@ -65,6 +80,10 @@ angular.module('lstn.controllers', [])
   $scope.cancelCreateRoom = function() {
     $scope.showCreateRoom = false;
     $scope.newRoom.name = null;
+    
+    if (promises.createRoom) {
+      $scope.cancelPromise(promises.createRoom);
+    }
   };
 
   $scope.editRoom = function(index) {
@@ -72,9 +91,7 @@ angular.module('lstn.controllers', [])
   };
 
   $scope.saveEditRoom = function(index) {
-    console.log(index, $scope.rooms[index]);
-
-    Room.update({
+    promises.updateRoom = Room.update({
       id: $scope.rooms[index].id
     }, $scope.rooms[index], function(response) {
       if (!response || !response.success || !response.room) {
@@ -94,6 +111,10 @@ angular.module('lstn.controllers', [])
 
   $scope.cancelEditRoom = function(index) {
     $scope.rooms[index].editing = false;
+
+    if (promises.updateRoom) {
+      $scope.cancelPromise(promises.updateRoom);
+    }
   };
 
   $scope.deleteRoom = function(index) {
@@ -101,7 +122,7 @@ angular.module('lstn.controllers', [])
       return;
     }
 
-    Room.delete({
+    promises.deleteRoom = Room.delete({
       id: $scope.rooms[index].id
     }, function(response) {
       if (!response || !response.success) {
@@ -120,8 +141,11 @@ angular.module('lstn.controllers', [])
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Playlist', 'Queue', 'Alert',
-  function($scope, $routeParams, $timeout, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Playlist, Queue, Alert) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Alert',
+  function($scope, $routeParams, $timeout, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Alert) {
+    var promises = {};
+    var timeouts = {};
+
     $scope.playingTrack = null;
     $scope.isController = false;
     $scope.isCurrentController = false;
@@ -149,20 +173,23 @@ angular.module('lstn.controllers', [])
     $scope.queue = Queue;
     $scope.room = CurrentRoom;
 
-    $scope.$watch('queue.tracks', function() {
-      var set = {};
-      for (var i = 0; i < $scope.queue.tracks.length; i++) {
-        set[$scope.queue.tracks[i].key] = true;
-      }
+    $scope.$on('$destroy', function(e) {
+      $.each(promises, function(name, promise) {
+        $scope.cancelPromise(promise);
+      });
 
-      $scope.queue.bitset = set;
+      $.each(timeouts, function(name, promise) {
+        $timeout.cancel(promise);
+      });
+
+      $scope.currentRoom.clear();
+      $scope.alerts.clear();
     });
 
     // Notifications
     $scope.notificationPermission = 'default';
     if (window.Notification) {
       Notification.requestPermission(function(status) {
-        console.log(status);
         $scope.notificationPermission = status;
 
         if (Notification.permission !== status) {
@@ -223,7 +250,11 @@ angular.module('lstn.controllers', [])
       $scope.chat.messages = data;
       $scope.chat.loading = false;
 
-      $timeout(function() {
+      timeouts.chatHistory = $timeout(function() {
+        if ($('#messages').length === 0) {
+          return;
+        }
+
         $('#messages').animate({
           scrollTop: $('#messages')[0].scrollHeight
         }, 200);
@@ -257,7 +288,7 @@ angular.module('lstn.controllers', [])
       console.log('room:controller:playing', track);
       socket.emit('room:controller:playing', track);
 
-      CurrentUser.updateQueue({
+      promises.updateQueue = CurrentUser.updateQueue({
         queue: $scope.queue.tracks
       }, function(response) {
         if (!response || !response.success) {
@@ -297,7 +328,7 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      CurrentUser.get({}, function(response) {
+      promises.getCurrentUser = CurrentUser.get({}, function(response) {
         if (!response || !response.success || !response.user) {
           console.log('CurrentUser.get', response);
 
@@ -326,7 +357,7 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      CurrentUser.get({}, function(response) {
+      promises.getCurrentUser = CurrentUser.get({}, function(response) {
         if (!response || !response.success || !response.user) {
           console.log('CurrentUser.get', response);
 
@@ -347,20 +378,17 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:chat:message', function(message) {
-      console.log(message);
-
       $scope.chat.messages.push(message);
 
       if (message &&
         message.mentionNames &&
         message.mentionedNames.indexOf($scope.current_user.mention.toLowerCase()) !== -1) {
 
-        console.log('mentioned');
         $scope.sendNotification(message.user, message.text, message.picture, 5000);
         $scope.$broadcast('mentioned', true);
       }
 
-      $timeout(function() {
+      timeouts.chatMessage = $timeout(function() {
         $('#messages').animate({
           scrollTop: $('#messages')[0].scrollHeight
         }, 200);
@@ -379,8 +407,8 @@ angular.module('lstn.controllers', [])
       if (!data || !data.key) {
         $scope.isCurrentController = false;
         $scope.playing = null;
-        apiswf.rdio_stop();
 
+        apiswf.rdio_stop();
         return;
       }
 
@@ -399,12 +427,12 @@ angular.module('lstn.controllers', [])
       }
 
       // Cancel the update timeout
-      if ($scope.updateTimeout) {
-        $timeout.cancel($scope.updateTimeout);
+      if (timeouts.updatePosition) {
+        $timeout.cancel(timeouts.updatePosition);
       }
 
       // Create a new update timeout
-      $scope.updateTimeout = $timeout($scope.updatePosition, 1 * 2000, false);
+      timeouts.updatePosition = $timeout($scope.updatePosition, 1 * 2000, false);
     };
 
     $scope.trackFinished = function() {
@@ -425,7 +453,7 @@ angular.module('lstn.controllers', [])
 
       socket.updatePosition(window.playingPosition);
 
-      $scope.updateTimeout = $timeout($scope.updatePosition, 1 * 1000, false);
+      timeouts.updatePosition = $timeout($scope.updatePosition, 1 * 1000, false);
     };
 
     window.toggleBroadcast = $scope.toggleBroadcast = function() {
@@ -467,7 +495,7 @@ angular.module('lstn.controllers', [])
 
       $scope.voting = true;
 
-      User.upvote({
+      promises.upvoteUser = User.upvote({
         id: $scope.currentController,
         room: $scope.room.id,
         track: $scope.playing.track.key,
@@ -516,7 +544,7 @@ angular.module('lstn.controllers', [])
 
       $scope.voting = true;
 
-      User.downvote({
+      promises.downvoteUser = User.downvote({
         id: $scope.currentController,
         room: $scope.room.id,
         track: $scope.playing.track.key,
@@ -579,6 +607,15 @@ angular.module('lstn.controllers', [])
     };
 
     // Watches
+    $scope.$watch('queue.tracks', function() {
+      var set = {};
+      for (var i = 0; i < $scope.queue.tracks.length; i++) {
+        set[$scope.queue.tracks[i].key] = true;
+      }
+
+      $scope.queue.bitset = set;
+    });
+
     $scope.$watch('isController', function(newVal, oldVal) {
       if (newVal === oldVal) {
         return;
@@ -763,21 +800,19 @@ angular.module('lstn.controllers', [])
       };
 
       var flashCheck = function(e) {
-        $timeout(function() {
-            if ($scope.flashEnabled === false) {
-              Alert.error('Flash doesn\'t appear to be enabled. Make sure it\'s installed and you\'ve enabled it.');
-            }
-          }, 5000
-        );
+        timeouts.flashCheck = $timeout(function() {
+          if ($scope.flashEnabled === false) {
+            Alert.error('Flash doesn\'t appear to be enabled. Make sure it\'s installed and you\'ve enabled it.');
+          }
+        }, 5000);
       };
 
       swfobject.embedSWF('//www.rdio.com/api/swf/',
         'apiswf', 1, 1, '9.0.0', 'expressInstall.swf',
         flashVars, params, {}, flashCheck);
-
     };
 
-    Room.get({
+    promises.getRoom = Room.get({
       id: $routeParams.id
     }, function(response) {
       if (!response || !response.success || !response.room) {
