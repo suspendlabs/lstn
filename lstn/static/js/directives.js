@@ -145,6 +145,9 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       templateUrl: '/static/partials/directives/music-search.html',
       link: function($scope, $element, $attrs) {
+        var lastRequest = null;
+        var lastTimeout = null;
+
         // Build a map of slide names to indices
         $scope.searchSlides = {};
 
@@ -167,7 +170,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.loadAlbums = function(artist) {
           artist.loadingAlbums = true;
 
-          Artist.getAlbums(artist.key).then(function(response) {
+          lastRequest = Artist.getAlbums(artist.key);
+          lastRequest.then(function(response) {
             if (!response || !response.albums) {
               artist.loadingAlbums = false;
               Alert.error('Something happened while trying to load albums for the artist.');
@@ -177,7 +181,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             $scope.albums = response.albums;
             $scope.currentArtist = artist;
 
-            $timeout(function() {
+            lastTimeout = $timeout(function() {
               artist.loadingAlbums = false;
 
               var controller = angular.element('#search-carousel')
@@ -208,7 +212,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.loadAlbumTracks = function(album) {
           album.loadingTracks = true;
 
-          Album.getTracks(album.key).then(function(response) {
+          lastRequest = Album.getTracks(album.key);
+          lastRequest.then(function(response) {
             if (!response || !response.tracks) {
               album.loadingTracks = false;
               Alert.error('Something happened while trying to load tracks for the album.');
@@ -218,7 +223,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             $scope.tracks = response.tracks;
             $scope.currentAlbum = album;
 
-            $timeout(function() {
+            lastTimeout = $timeout(function() {
               album.loadingTracks = false;
 
               var controller = angular.element('#search-carousel')
@@ -262,7 +267,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             return;
           }
 
-          CurrentUser.search({
+          lastRequest = CurrentUser.search({
             query: newVal
           }, function(response) {
             if (!response || !response.success || !response.results) {
@@ -274,6 +279,16 @@ angular.module('lstn.directives', ['sc.twemoji'])
           }, function(response) {
             // TODO: Error
           });
+        });
+
+        $scope.$on('$destroy', function() {
+          if (lastRequest) {
+            $scope.cancelPromise(lastRequest);
+          }
+
+          if (lastTimeout) {
+            $timeout.cancel(lastTimeout);
+          }
         });
       }
     };
@@ -377,6 +392,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       templateUrl: '/static/partials/directives/room-queue.html',
       link: function($scope, $element, $attrs) {
+        var lastRequest = null;
+
         $scope.oldQueue = null;
 
         $scope.sortableOptions = {
@@ -391,7 +408,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
               return;
             }
 
-            CurrentUser.updateQueue({
+            lastRequest = CurrentUser.updateQueue({
               queue: $scope.queue.tracks
             }, function(response) {
               if (!response || !response.success) {
@@ -407,6 +424,12 @@ angular.module('lstn.directives', ['sc.twemoji'])
             });
           }
         };
+
+        $scope.$on('$destroy', function() {
+          if (lastRequest) {
+            $scope.cancelPromise(lastRequest);
+          }
+        });
       }
     };
   }
@@ -448,6 +471,9 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       templateUrl: '/static/partials/directives/music-categories.html',
       link: function($scope, $element, $attrs) {
+        var lastRequest = null;
+        var lastTimeout = null;
+
         // Build a map of slide names to indices
         $scope.musicSlides = {};
 
@@ -526,7 +552,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
           console.log('loadPlaylists', playlistType);
           playlistType.loadingPlaylists = true;
 
-          CurrentUser.getPlaylists(playlistType.key).then(function(response) {
+          lastRequest = CurrentUser.getPlaylists(playlistType.key);
+          lastRequest.then(function(response) {
             if (!response || !response.playlists || !response.playlists[playlistType.key]) {
               console.log('LoadPlaylists', response);
 
@@ -538,7 +565,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             $scope.playlists = response.playlists[playlistType.key];
             $scope.currentPlaylistType = playlistType;
 
-            $timeout(function() {
+            lastTimeout = $timeout(function() {
               playlistType.loadingPlaylists = false;
 
               var controller = angular.element('#category-carousel')
@@ -582,7 +609,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.loadPlaylistTracks = function(playlist) {
           playlist.loadingTracks = true;
 
-          Playlist.getTracks(playlist.key).then(function(response) {
+          lastRequest = Playlist.getTracks(playlist.key);
+          lastRequest.then(function(response) {
             if (!response || !response.tracks) {
               console.log('LoadTracks', response);
 
@@ -595,7 +623,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             $scope.currentPlaylist = playlist;
             $scope.currentPlaylist.length = $scope.tracks.length;
 
-            $timeout(function() {
+            lastTimeout = $timeout(function() {
               playlist.loadingTracks = false;
 
               var controller = angular.element('#category-carousel')
@@ -663,7 +691,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
           console.log('loadStations', stationType);
           stationType.loadingStations = true;
 
-          CurrentUser.getStations(stationType.key).then(function(response) {
+          lastRequest = CurrentUser.getStations(stationType.key);
+          lastRequest.then(function(response) {
             if (!response || !response.stations) {
               console.log('LoadStations', response);
 
@@ -675,7 +704,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             $scope.stations = response.stations;
             $scope.currentStationType = stationType;
 
-            $timeout(function() {
+            lastTimeout = $timeout(function() {
               stationType.loadingStations = false;
 
               var controller = angular.element('#category-carousel')
@@ -719,7 +748,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.loadStationTracks = function(station) {
           station.loadingTracks = true;
 
-          Station.getTracks(station.key).then(function(response) {
+          lastRequest = Station.getTracks(station.key);
+          lastRequest.then(function(response) {
             if (!response || !response.tracks) {
               console.log('LoadTracks', response);
 
@@ -732,7 +762,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
             $scope.currentStation = station;
             $scope.currentStation.length = $scope.tracks.length;
 
-            $timeout(function() {
+            lastTimeout = $timeout(function() {
               station.loadingTracks = false;
 
               var controller = angular.element('#category-carousel')
@@ -768,6 +798,16 @@ angular.module('lstn.directives', ['sc.twemoji'])
 
           $scope.loadStationTracks($scope.currentStation);
         };
+
+        $scope.$on('$destroy', function() {
+          if (lastRequest) {
+            $scope.cancelPromise(lastRequest);
+          }
+
+          if (lastTimeout) {
+            $timeout.cancel(lastTimeout);
+          }
+        });
       }
     };
   }
