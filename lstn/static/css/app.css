@@ -120,7 +120,7 @@ body > .container > div {
   font-size: 1.4em;
 }
 .navbar-inverse .navbar-text {
-  margin-top: 0.95em;
+  margin-top: 1.05em;
 }
 .navbar-inverse .navbar-nav.navbar-right {
   margin: 0;
@@ -154,8 +154,8 @@ body > .container > div {
   margin-right: 5px;
 }
 .navbar-right .navbar__divider {
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: -10px;
+  margin-right: -10px;
 }
 .navbar-right .navbar__room a {
   font-weight: bold;
