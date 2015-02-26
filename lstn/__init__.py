@@ -84,4 +84,14 @@ def register_blueprint(app):
   from lstn.views.api.playlist import playlist
   app.register_blueprint(playlist)
 
+  from lstn.views.api.artist import artist
+  app.register_blueprint(artist)
+
+  from lstn.views.api.album import album
+  app.register_blueprint(album)
+
+  from lstn.views.api.station import station
+  app.register_blueprint(station)
+
+
 register_blueprint(app)

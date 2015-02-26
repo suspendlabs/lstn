@@ -1,0 +1,29 @@
+<div id="album-{{ $id }}-{{ index }}-{{ album.key }}" class="drilldown__item album clearfix">
+  <div class="item__image">
+    <img data-ng-src="{{ album.icon }}" alt="{{ album.album }}">
+  </div>
+  <div class="item__info">
+    <div
+      class="item__title"
+      data-ng-bind="album.name"></div>
+    <div
+      class="item__artist"
+      data-ng-bind="album.artist"></div>
+    <div class="item__count" data-ng-pluralize count="album.length" when="{'one': '{} track', 'other': '{} tracks'}"></div>
+  </div>
+  <div class="item__actions">
+    <a
+      class="fa fa-fw fa-chevron-right"
+      data-ng-show="!album.loadingTracks"
+      data-ng-click="loadAlbumTracks(album)"
+      data-tooltip="Load Tracks"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
+    <a
+      class="fa fa-fw fa-circle-o-notch fa-spin"
+      data-ng-show="album.loadingTracks"
+      data-tooltip="Loading Tracks"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
+  </div>
+</div>

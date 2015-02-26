@@ -26,17 +26,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
   };
 })
 
-.directive('holder', [
-  function() {
-    return {
-      link: function(scope, element, attrs) {
-        attrs.$set('data-src', attrs.holder);
-        Holder.run({images:element[0]});
-      }
-    };
-  }
-])
-
 .directive('lstnRoomRoster', [
   function() {
     return {
@@ -57,128 +46,13 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnRoomMusic', [
-  function() {
+.directive('lstnRoomActivity', ['socket', 'emojiMap',
+  function(socket, emojiMap) {
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/static/partials/directives/room-music.html'
-    };
-  }
-])
-
-.directive('lstnMusicSearch', ['CurrentUser',
-  function(CurrentUser) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/music-search.html',
+      templateUrl: '/static/partials/directives/room-activity.html',
       link: function($scope, $element, $attrs) {
-        $scope.searchResults = [];
-        $scope.searchQuery = null;
-
-        $scope.clearSearchResults = function() {
-          $scope.searchResults = [];
-          $scope.searchQuery = null;
-        };
-
-        $scope.$watch('searchQuery', function(newVal, oldVal) {
-          if (newVal === oldVal) {
-            return;
-          }
-
-          if (!newVal) {
-            $scope.searchResults = [];
-            return;
-          }
-
-          if (newVal.length < 3) {
-            return;
-          }
-
-          CurrentUser.search({
-            query: newVal
-          }, function(response) {
-            if (!response || !response.success || !response.results) {
-              // TODO: Error
-              return;
-            }
-
-            $scope.searchResults = response.results;
-          }, function(response) {
-            // TODO: Error
-          });
-        });
-      }
-    };
-  }
-])
-
-.directive('lstnMusicCategories', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/music-categories.html'
-    };
-  }
-])
-
-.directive('lstnPlayingImage', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/playing-image.html'
-    };
-  }
-])
-
-
-.directive('lstnPlayingInfo', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/playing-info.html'
-    };
-  }
-])
-
-.directive('lstnVisualizer', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/visualizer.html',
-      link: function($scope, $element, $attrs) {
-        $scope.bands = 10;
-        $scope.getNumber = function(num) {
-          return new Array(num);
-        };
-      }
-    };
-  }
-])
-
-.directive('lstnRoomControls', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/room-controls.html'
-    };
-  }
-])
-
-.directive('lstnRoomQueue', ['$timeout', 'CurrentUser', 'socket', 'emojiMap',
-  function($timeout, CurrentUser, socket, emojiMap) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/room-queue.html',
-      link: function($scope, $element, $attrs) {
-        $scope.oldQueue = null;
         $scope.mentionNames = [];
         $scope.emoticons = [];
         $scope.mentioned = false;
@@ -187,35 +61,9 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.mentioned = true;
         });
 
-        $scope.sortableOptions = {
-          'ui-floating': false,
-          axis: 'y',
-          start: function(e, ui) {
-            $scope.oldQueue = angular.copy($scope.queue);
-          },
-          stop: function(e, ui) {
-            if (angular.equals($scope.oldQueue, $scope.queue)) {
-              $scope.oldQueue = null;
-              return;
-            }
-
-            CurrentUser.updateQueue({
-              queue: $scope.queue
-            }, function(response) {
-              if (!response || !response.success) {
-                // TODO: Error
-                return;
-              }
-            }, function(response) {
-              // TODO: Error
-            });
-          }
-        };
-
         $scope.message = {
           sender: $scope.current_user.id,
-          user: $scope.current_user.name,
-          picture: $scope.current_user.picture,
+          user: $scope.current_user,
           text: null,
           type: 'message',
         };
@@ -227,20 +75,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
 
           socket.sendMessage($scope.message);
           $scope.message.text = null;
-        };
-
-        $scope.selectQueueTab = function(tab) {
-          $scope.trackUnseenChatMessages = tab !== 'chat';
-          if (!$scope.trackUnseenChatMessages) {
-            $scope.unseenChatMessages = 0;
-            $scope.mentioned = false;
-
-            $timeout(function() {
-              $('#messages').animate({
-                scrollTop: $('#messages')[0].scrollHeight
-              }, 200);
-            }, 100);
-          }
         };
 
         $scope.searchRoster = function(term) {
@@ -259,6 +93,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
               }
             }, mentionNames);
           }
+
           $scope.mentionNames = mentionNames;
         };
 
@@ -293,58 +128,777 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnCategory', ['$parse', 'CurrentUser',
-  function($parse, CurrentUser) {
+.directive('lstnRoomMusic', [
+  function() {
     return {
       restrict: 'E',
-      transclude: true,
       replace: true,
-      scope: true,
-      templateUrl: '/static/partials/directives/category.html',
+      templateUrl: '/static/partials/directives/room-music.html'
+    };
+  }
+])
+
+.directive('lstnMusicSearch', ['$timeout', 'Alert', 'CurrentUser', 'Artist', 'Album',
+  function($timeout, Alert, CurrentUser, Artist, Album) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/music-search.html',
       link: function($scope, $element, $attrs) {
-        $scope.name = $parse($attrs.name)($scope);
-        $scope.type = $parse($attrs.type)($scope);
-        $scope.open = $parse($attrs.open)($scope);
+        // Build a map of slide names to indices
+        $scope.searchSlides = {};
 
-        // TODO: We should consider passing this in
-        $scope.group = $element.parent().attr('id');
+        angular.element('#search-carousel .carousel-inner div.item').each(function(index) {
+          var id = this.getAttribute('id');
+          $scope.searchSlides[id] = index;
+        });
 
-        $scope.categoryId = Date.now();
-        $scope.refreshingList = false;
+        $scope.searchResults = [];
+        $scope.searchQuery = null;
 
-        $scope.categoryStatus = {
-          open: $scope.open || false
+        $scope.clearSearchResults = function() {
+          $scope.searchResults = [];
+          $scope.searchQuery = null;
         };
 
-        $scope.toggleCategoryOpen = function() {
-          $scope.categoryStatus.open = !$scope.categoryStatus.open;
-        };
+        $scope.currentArtist = null;
 
-        $scope.refreshList = function() {
-          console.log('refreshList', $scope.type);
+        $scope.albums = [];
+        $scope.loadAlbums = function(artist) {
+          artist.loadingAlbums = true;
 
-          $scope.refreshingList = true;
-          $scope.categoryStatus.open = false;
+          Artist.getAlbums(artist.key).then(function(response) {
+            if (!response || !response.albums) {
+              artist.loadingAlbums = false;
+              Alert.error('Something happened while trying to load albums for the artist.');
+              return;
+            }
 
-          CurrentUser.playlists({
-            id: $scope.type
+            $scope.albums = response.albums;
+            $scope.currentArtist = artist;
+
+            $timeout(function() {
+              artist.loadingAlbums = false;
+
+              var controller = angular.element('#search-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[$scope.searchSlides.search_albums];
+              controller.select(nextSlide, 'next');
+            }, 100);
           }, function(response) {
-            $scope.refreshingList = false;
+            artist.loadingAlbums = false;
+            Alert.error('Something happened while trying to load albums for the artist.');
+          });
+        };
 
-            if (!response || !response.success || !response.playlists) {
+        $scope.closeArtist = function() {
+          var controller = angular.element('#search-carousel')
+            .controller('carousel');
+
+          var prevSlide = controller.slides[$scope.searchSlides.search_results];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentArtist = null;
+        };
+
+        $scope.currentAlbum = null;
+
+        $scope.tracks = [];
+        $scope.loadAlbumTracks = function(album) {
+          album.loadingTracks = true;
+
+          Album.getTracks(album.key).then(function(response) {
+            if (!response || !response.tracks) {
+              album.loadingTracks = false;
+              Alert.error('Something happened while trying to load tracks for the album.');
+              return;
+            }
+
+            $scope.tracks = response.tracks;
+            $scope.currentAlbum = album;
+
+            $timeout(function() {
+              album.loadingTracks = false;
+
+              var controller = angular.element('#search-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[$scope.searchSlides.search_tracks];
+              controller.select(nextSlide, 'next');
+            }, 100);
+          }, function(response) {
+            album.loadingTracks = false;
+            Alert.error('Something happened while trying to load tracks for the album.');
+          });
+        };
+
+        $scope.closeAlbum = function() {
+          var controller = angular.element('#search-carousel')
+            .controller('carousel');
+
+          var targetSlide = $scope.searchSlides.search_albums;
+          if (!$scope.currentArtist) {
+            targetSlide = $scope.searchSlides.search_results;
+          }
+
+          var prevSlide = controller.slides[targetSlide];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentAlbum = null;
+        };
+
+        $scope.$watch('searchQuery', function(newVal, oldVal) {
+          if (newVal === oldVal) {
+            return;
+          }
+
+          if (!newVal) {
+            $scope.searchResults = [];
+            return;
+          }
+
+          if (newVal.length < 3) {
+            return;
+          }
+
+          CurrentUser.search({
+            query: newVal
+          }, function(response) {
+            if (!response || !response.success || !response.results) {
               // TODO: Error
               return;
             }
 
-            $scope.playlists[type] = response.playlists[type];
-
-            $scope.categoryStatus.open = true;
+            $scope.searchResults = response.results;
           }, function(response) {
-            $scope.refreshingList = false;
             // TODO: Error
           });
+        });
+      }
+    };
+  }
+])
+
+.directive('lstnPlayingImage', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/playing-image.html'
+    };
+  }
+])
+
+
+.directive('lstnPlayingInfo', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/playing-info.html',
+      link: function($scope, $element, $attrs) {
+        $scope.playingStyle = '';
+      }
+    };
+  }
+])
+
+.directive('lstnVisualizer', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/visualizer.html',
+      link: function($scope, $element, $attrs) {
+        $scope.bands = 10;
+        $scope.getNumber = function(num) {
+          return new Array(num);
         };
       }
+    };
+  }
+])
+
+.directive('lstnRoomControls', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-controls.html'
+    };
+  }
+])
+
+.directive('lstnRoomControlSkip', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-skip.html'
+    };
+  }
+])
+
+.directive('lstnRoomControlVolume', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-volume.html'
+    };
+  }
+])
+
+.directive('lstnRoomControlUpvote', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-upvote.html'
+    };
+  }
+])
+
+.directive('lstnRoomControlDownvote', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-downvote.html'
+    };
+  }
+])
+
+.directive('lstnRoomQueue', ['$timeout', 'Alert', 'CurrentUser',
+  function($timeout, Alert, CurrentUser) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-queue.html',
+      link: function($scope, $element, $attrs) {
+        $scope.oldQueue = null;
+
+        $scope.sortableOptions = {
+          'ui-floating': false,
+          axis: 'y',
+          start: function(e, ui) {
+            $scope.oldQueue = angular.copy($scope.queue);
+          },
+          stop: function(e, ui) {
+            if (angular.equals($scope.oldQueue, $scope.queue)) {
+              $scope.oldQueue = null;
+              return;
+            }
+
+            CurrentUser.updateQueue({
+              queue: $scope.queue.tracks
+            }, function(response) {
+              if (!response || !response.success) {
+                console.log('CurrentUser.updateQueue', response);
+
+                Alert.error('Something went wrong while updating your queue');
+                return;
+              }
+            }, function(response) {
+              console.log('CurrentUser.updateQueue', response);
+
+              Alert.error('Something went wrong while updating your queue');
+            });
+          }
+        };
+      }
+    };
+  }
+])
+
+.directive('lstnMoreMusic', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/more-music.html'
+    };
+  }
+])
+
+.directive('lstnDrilldownBack', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        text: '=',
+        tooltipText: '=',
+        clickHandler: '=',
+        refreshHandler: '=',
+        refreshText: '=',
+        loading: '=',
+        loadingText: '='
+      },
+      templateUrl: '/static/partials/directives/drilldown-back.html'
+    };
+  }
+])
+
+.directive('lstnMusicCategories', ['$timeout', 'Alert', 'CurrentUser', 'Playlist', 'Station',
+  function($timeout, Alert, CurrentUser, Playlist, Station) {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/music-categories.html',
+      link: function($scope, $element, $attrs) {
+        // Build a map of slide names to indices
+        $scope.musicSlides = {};
+
+        angular.element('#category-carousel .carousel-inner div.item').each(function(index) {
+          var id = this.getAttribute('id');
+          $scope.musicSlides[id] = index;
+        });
+
+        // Categories
+        $scope.categories = [{
+          name: 'Playlists',
+          type: 'playlists'
+        },{
+          name: 'Stations',
+          type: 'stations'
+        },{
+          name: 'Collections',
+          type: 'collections'
+        }];
+
+        $scope.currentCategory = null;
+
+        $scope.loadChildren = function(category) {
+          category.loading = true;
+
+          if (category.type == 'playlists') {
+            $scope.loadPlaylistTypes(category);
+          } else if (category.type == 'stations') {
+            $scope.loadStationTypes(category);
+          } else if (category.type == 'collections') {
+            $scope.loadCollectionTypes(category);
+          }
+        };
+
+        // Playlist Types
+        $scope.playlistTypes = [{
+          name: 'Your Playlists',
+          key: 'owned'
+        },{
+          name: 'Collaborative Playlists',
+          key: 'collab'
+        },{
+          name: 'Subscribed Playlists',
+          key: 'subscribed'
+        },{
+          name: 'Favorited Playlists',
+          key: 'favorites'
+        }];
+
+        $scope.loadPlaylistTypes = function(category) {
+          category.loading = false;
+          $scope.currentCategory = category;
+
+          var controller = angular.element('#category-carousel')
+            .controller('carousel');
+
+          var nextSlide = controller.slides[$scope.musicSlides.playlist_types];
+          controller.select(nextSlide, 'next');
+        };
+
+        $scope.closeCategory = function() {
+          var controller = angular.element('#category-carousel')
+            .controller('carousel');
+
+          var prevSlide = controller.slides[$scope.musicSlides.categories];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentCategory = null;
+        };
+
+        // Playlists
+        $scope.currentPlaylistType = null;
+        $scope.playlists = [];
+
+        $scope.loadPlaylists = function(playlistType) {
+          console.log('loadPlaylists', playlistType);
+          playlistType.loadingPlaylists = true;
+
+          CurrentUser.getPlaylists(playlistType.key).then(function(response) {
+            if (!response || !response.playlists || !response.playlists[playlistType.key]) {
+              console.log('LoadPlaylists', response);
+
+              playlistType.loadingPlaylists = false;
+              Alert.error('Something went wrong while trying to load the playlists.');
+              return;
+            }
+
+            $scope.playlists = response.playlists[playlistType.key];
+            $scope.currentPlaylistType = playlistType;
+
+            $timeout(function() {
+              playlistType.loadingPlaylists = false;
+
+              var controller = angular.element('#category-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[$scope.musicSlides.playlists];
+              controller.select(nextSlide, 'next');
+            }, 100);
+          }, function(response) {
+            playlistType.loadingPlaylists = false;
+            Alert.error('Something went wrong while trying to load the playlists.');
+          });
+        };
+
+        $scope.closePlaylistType = function() {
+          var controller = angular.element('#category-carousel')
+            .controller('carousel');
+
+          var prevSlide = controller.slides[$scope.musicSlides.playlist_types];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentPlaylistType = null;
+        };
+
+        $scope.refreshPlaylistType = function() {
+          if (!$scope.currentPlaylistType) {
+            return;
+          }
+
+          if ($scope.currentPlaylistType.loadingPlaylists) {
+            return;
+          }
+
+          $scope.loadPlaylists($scope.currentPlaylistType);
+        };
+
+        // Playlist Tracks
+        $scope.currentPlaylist = null;
+        $scope.tracks = [];
+
+        $scope.loadPlaylistTracks = function(playlist) {
+          playlist.loadingTracks = true;
+
+          Playlist.getTracks(playlist.key).then(function(response) {
+            if (!response || !response.tracks) {
+              console.log('LoadTracks', response);
+
+              playlist.loadingTracks = false;
+              Alert.error('Something went wrong while trying to load the playlist tracks.');
+              return;
+            }
+
+            $scope.tracks = response.tracks;
+            $scope.currentPlaylist = playlist;
+            $scope.currentPlaylist.length = $scope.tracks.length;
+
+            $timeout(function() {
+              playlist.loadingTracks = false;
+
+              var controller = angular.element('#category-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[$scope.musicSlides.playlist_tracks];
+              controller.select(nextSlide, 'next');
+            }, 100);
+          }, function(response) {
+            playlist.loadingTracks = false;
+            Alert.error('Something went wrong while trying to load the playlist tracks.');
+          });
+        };
+
+        $scope.closePlaylist = function() {
+          var controller = angular.element('#category-carousel')
+            .controller('carousel');
+
+          var prevSlide = controller.slides[$scope.musicSlides.playlists];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentPlaylist = null;
+        };
+
+        $scope.refreshPlaylist = function() {
+          if (!$scope.currentPlaylist) {
+            return;
+          }
+
+          if ($scope.currentPlaylist.loadingTracks) {
+            return;
+          }
+
+          $scope.loadPlaylistTracks($scope.currentPlaylist);
+        };
+
+        // Station Types
+        $scope.stationTypes = [{
+          name: 'Your Stations',
+          key: 'you'
+        },{
+          name: 'Friends',
+          key: 'friends'
+        },{
+          name: 'Recent Stations',
+          key: 'recent'
+        }];
+
+        $scope.loadStationTypes = function(category) {
+          category.loading = false;
+          $scope.currentCategory = category;
+
+          var controller = angular.element('#category-carousel')
+            .controller('carousel');
+
+          var nextSlide = controller.slides[$scope.musicSlides.station_types];
+          controller.select(nextSlide, 'next');
+        };
+
+        // Stations
+        $scope.currentStationType = null;
+        $scope.stations = [];
+
+        $scope.loadStations = function(stationType) {
+          console.log('loadStations', stationType);
+          stationType.loadingStations = true;
+
+          CurrentUser.getStations(stationType.key).then(function(response) {
+            if (!response || !response.stations) {
+              console.log('LoadStations', response);
+
+              stationType.loadingStations = false;
+              Alert.error('Something went wrong while trying to load the stations.');
+              return;
+            }
+
+            $scope.stations = response.stations;
+            $scope.currentStationType = stationType;
+
+            $timeout(function() {
+              stationType.loadingStations = false;
+
+              var controller = angular.element('#category-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[$scope.musicSlides.stations];
+              controller.select(nextSlide, 'next');
+            }, 100);
+          }, function(response) {
+            stationType.loadingStations = false;
+            Alert.error('Something went wrong while trying to load the stations.');
+          });
+        };
+
+        $scope.closeStationType = function() {
+          var controller = angular.element('#category-carousel')
+            .controller('carousel');
+
+          var prevSlide = controller.slides[$scope.musicSlides.station_types];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentStationType = null;
+        };
+
+        $scope.refreshStationType = function() {
+          if (!$scope.currentStationType) {
+            return;
+          }
+
+          if ($scope.currentStationType.loadingStations) {
+            return;
+          }
+
+          $scope.loadStations($scope.currentStationType);
+        };
+
+        // Station Tracks
+        $scope.currentStation = null;
+        $scope.tracks = [];
+
+        $scope.loadStationTracks = function(station) {
+          station.loadingTracks = true;
+
+          Station.getTracks(station.key).then(function(response) {
+            if (!response || !response.tracks) {
+              console.log('LoadTracks', response);
+
+              station.loadingTracks = false;
+              Alert.error('Something went wrong while trying to load the station tracks.');
+              return;
+            }
+
+            $scope.tracks = response.tracks;
+            $scope.currentStation = station;
+            $scope.currentStation.length = $scope.tracks.length;
+
+            $timeout(function() {
+              station.loadingTracks = false;
+
+              var controller = angular.element('#category-carousel')
+                .controller('carousel');
+
+              var nextSlide = controller.slides[$scope.musicSlides.station_tracks];
+              controller.select(nextSlide, 'next');
+            }, 100);
+          }, function(response) {
+            station.loadingTracks = false;
+            Alert.error('Something went wrong while trying to load the station tracks.');
+          });
+        };
+
+        $scope.closeStation = function() {
+          var controller = angular.element('#category-carousel')
+            .controller('carousel');
+
+          var prevSlide = controller.slides[$scope.musicSlides.stations];
+          controller.select(prevSlide, 'prev');
+
+          $scope.currentStation = null;
+        };
+
+        $scope.refreshStation = function() {
+          if (!$scope.currentStation) {
+            return;
+          }
+
+          if ($scope.currentStation.loadingTracks) {
+            return;
+          }
+
+          $scope.loadStationTracks($scope.currentStation);
+        };
+      }
+    };
+  }
+])
+
+.directive('lstnCategory', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        category: '=',
+        loadChildren: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/category.html'
+    };
+  }
+])
+
+.directive('lstnPlaylistType', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        playlistType: '=',
+        loadPlaylists: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/playlist-type.html'
+    };
+  }
+])
+
+.directive('lstnPlaylist', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        playlist: '=',
+        loadPlaylistTracks: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/playlist.html'
+    };
+  }
+])
+
+.directive('lstnArtist', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        artist: '=',
+        loadAlbums: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/artist.html'
+    };
+  }
+])
+
+.directive('lstnAlbum', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        album: '=',
+        loadAlbumTracks: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/album.html'
+    };
+  }
+])
+
+.directive('lstnTrack', ['Queue',
+  function(Queue) {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        track: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/track.html',
+      link: function($scope, $element, $attrs) {
+        $scope.queue = Queue;
+      }
+    };
+  }
+])
+
+.directive('lstnStationType', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        stationType: '=',
+        loadStations: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/station-type.html'
+    };
+  }
+])
+
+.directive('lstnStation', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        station: '=',
+        loadStationTracks: '=',
+        index: '=',
+        context: '='
+      },
+      templateUrl: '/static/partials/directives/station.html'
     };
   }
 ])
@@ -364,6 +918,10 @@ angular.module('lstn.directives', ['sc.twemoji'])
     return {
       restrict: 'E',
       replace: true,
+      scope: {
+        message: '=',
+        index: '='
+      },
       templateUrl: '/static/partials/directives/chat-message.html',
       link: function($scope, $element, $attrs) {
         var messageClasses = {
@@ -372,7 +930,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           upvote: 'list-group-item-success',
           downvote: 'list-group-item-danger'
         };
-        
+
         $scope.getMessageClass = function() {
           if (!$scope.message) {
             return null;
@@ -393,95 +951,32 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
+.directive('albumCoverBackground', [function() {
+  return {
+    link: function($scope, $element) {
+      $scope.$watch('playing.track.image', function(imageUrl) {
+        if (imageUrl) {
+          $element.css('background-image', 'url(' + imageUrl + ')');
+          $element.css('background-size', 'cover');
+        } else {
 
-.directive('lstnTrack', ['$parse',
-  function($parse) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/track.html',
-      link: function($scope, $element, $attrs) {
-        $scope.cutoff  = $parse($attrs.cutoff || 25)($scope);
-        $scope.context = $attrs.context || 'playlist';
-        
-      }
-    };
-  }
-])
+        }
+      });
+    }
+  };
+}])
 
-.directive('lstnTrackList', ['$parse',
-  function($parse) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/track-list.html',
-      link: function($scope, $element, $attrs) {
-        $scope.cutoff = $parse($attrs.cutoff || 25)($scope);
-      }
-    };
-  }
-])
-
-.directive('lstnPlaylist', ['$timeout', 'Playlist',
-  function($timeout, Playlist) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/playlist.html',
-      link: function($scope, $element, $attrs) {
-        $scope.category = $element.parent().attr('id');
-
-        $scope.status = {
-          open: false
-        };
-
-        $scope.toggleOpen = function() {
-          // Prevent a double click of the toggle
-          if ($scope.showLoading) {
-            return;
-          }
-
-          if (typeof $scope.tracks === 'undefined') {
-            $scope.showLoading = true;
-
-            Playlist.tracks({
-              id: $scope.playlist.key
-            }, function(response) {
-              $scope.showLoading = false;
-
-              if (!response || !response.success || !response.tracks) {
-                // TODO: Error
-                return;
-              }
-
-              $scope.tracks = response.tracks;
-
-              $timeout(function() {
-                $scope.status.open = !$scope.status.open;
-              }, 100);
-            }, function(response) {
-              $scope.showLoading = false;
-              // TODO: Error
-            });
-          } else {
-            $scope.status.open = !$scope.status.open;
-          }
-        };
-      }
-    };
-  }
-])
 .directive('timeFromNow', ['$timeout', '$filter', function($timeout, $filter) {
   return {
     scope: {
       timeFromNow: '='
-    }, 
+    },
     link: function($scope, element) {
 
       var timeoutId;
       var intervalLength = 1000 * 60;
       var filter = $filter('timeFromNow');
-        
+
       function updateTime() {
         element.text(filter($scope.timeFromNow));
       }
@@ -500,7 +995,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       updateTime();
       updateLater();
     }
-  };  
+  };
 }
 ]);
 })();

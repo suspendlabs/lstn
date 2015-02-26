@@ -1,24 +1,24 @@
-<div id="category{{ $id }}" class="drilldown__item category">
+<div id="station{{ $id }}" class="drilldown__item station clearfix">
   <div class="item__image">
-    <i class="fa fa-fw fa-music fa-3x"></i>
+    <img data-ng-src="{{ station.icon }}" alt="{{ station.name }}">
   </div>
   <div class="item__info">
     <div
       class="item__title item__title--single"
-      data-ng-bind="category.name"></div>
+      data-ng-bind="station.name"></div>
   </div>
   <div class="item__actions">
     <a
       class="fa fa-fw fa-chevron-right"
-      data-ng-show="!category.loading"
-      data-ng-click="loadChildren(category)"
-      data-tooltip="Load"
+      data-ng-show="!station.loadingTracks"
+      data-ng-click="loadStationTracks(station)"
+      data-tooltip="Load Tracks"
       data-tooltip-placement="bottom"
       data-tooltip-popup-delay="1000"></a>
     <a
       class="fa fa-fw fa-circle-o-notch fa-spin"
-      data-ng-show="category.loading"
-      data-tooltip="Loading"
+      data-ng-show="station.loadingTracks"
+      data-tooltip="Loading Tracks"
       data-tooltip-placement="bottom"
       data-tooltip-popup-delay="1000"></a>
   </div>

@@ -102,7 +102,7 @@ Lstn.prototype.getUser = function(user) {
   return null;
 };
 
-Lstn.prototype.getSongName = function() {
+Lstn.prototype.getTrack = function() {
   if (!(this.roomId in playing)) {
     return null;
   }
@@ -111,29 +111,12 @@ Lstn.prototype.getSongName = function() {
     return null;
   }
 
-  if (!('name' in playing[this.roomId])) {
+  if (!('key' in playing[this.roomId])) {
     return null;
   }
 
-  return playing[this.roomId].name;
+  return playing[this.roomId];
 };
-
-Lstn.prototype.getSongArtist = function() {
-  if (!(this.roomId in playing)) {
-    return null;
-  }
-
-  if (!playing[this.roomId]) {
-    return null;
-  }
-
-  if (!('artist' in playing[this.roomId])) {
-    return null;
-  }
-
-  return playing[this.roomId].artist;
-};
-
 
 Lstn.prototype.clearTimeouts = function() {
   if (!(this.roomId in timeouts)) {
@@ -383,8 +366,8 @@ Lstn.prototype.sendChatHistory = function() {
 };
 
 Lstn.prototype.sendChatMessage = function(message) {
-
   message.created = moment().format();
+
   io.sockets.in(this.roomId).emit('room:chat:message', message);
 
   if (!(this.roomId in chatHistory)) {
@@ -511,14 +494,13 @@ Lstn.prototype.sendPlaying = function(broadcast) {
 
     var controller = this.getCurrentController();
     var user = this.getUser(controller);
-    var name = this.getSongName();
-    var artist = this.getSongArtist();
+    var track = this.getTrack();
 
-    if (controller && user && name && artist) {
+    if (controller && user && track) {
       this.sendChatMessage({
         sender: this.getCurrentController(),
-        text: 'has started playing ' + name + ' by ' + artist,
-        user: user.name,
+        track: track,
+        user: user,
         type: 'playing',
       });
     }
@@ -709,7 +691,7 @@ Lstn.prototype.onControllerPlayingPosition = function(data) {
 };
 
 Lstn.prototype.onControllerPlayingFinished = function(data) {
-  console.log(this.userId + ' says song in ' + this.roomId + ' has finished');
+  console.log(this.userId + ' says track in ' + this.roomId + ' has finished');
 
   // If the user is the current controller, process controllers
   if (this.isCurrentController()) {
@@ -719,18 +701,17 @@ Lstn.prototype.onControllerPlayingFinished = function(data) {
 };
 
 Lstn.prototype.onControllerPlayingSkipped = function(data) {
-  console.log(this.userId + ' says song in ' + this.roomId + ' was skipped');
+  console.log(this.userId + ' says track in ' + this.roomId + ' was skipped');
 
   var controller = this.getCurrentController();
   var user = this.getUser(controller);
-  var name = this.getSongName();
-  var artist = this.getSongArtist();
+  var track = this.getTrack();
 
-  if (controller && user && name && artist) {
+  if (controller && user && track) {
     this.sendChatMessage({
       sender: this.getCurrentController(),
-      text: 'has skipped ' + name + ' by ' + artist,
-      user: user.name,
+      track: track,
+      user: user,
       type: 'skipped',
     });
   }
@@ -741,7 +722,6 @@ Lstn.prototype.onControllerPlayingSkipped = function(data) {
     this.initController(this.getNextController());
   }
 };
-
 
 Lstn.prototype.onControllerUpvote = function() {
   var votes = this.incrPlayingVotes();
@@ -755,8 +735,7 @@ Lstn.prototype.onControllerUpvote = function() {
   if (user) {
     this.sendChatMessage({
       sender: this.userId,
-      text: 'upvoted this song',
-      user: user.name,
+      user: user,
       type: 'upvote'
     });
   }
@@ -774,8 +753,7 @@ Lstn.prototype.onControllerDownvote = function() {
   if (user) {
     this.sendChatMessage({
       sender: this.userId,
-      text: 'downvoted this song',
-      user: user.name,
+      user: user,
       type: 'downvote'
     });
   }

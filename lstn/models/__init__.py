@@ -5,6 +5,7 @@ import time
 import re
 
 from lstn import db, r
+from lstn.exceptions import APIException
 
 from flask import current_app
 from flask.ext.login import UserMixin, current_user

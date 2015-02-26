@@ -1,39 +1,149 @@
 angular.module('lstn.templates', []).run(['$templateCache', function($templateCache) {
   'use strict';
 
-  $templateCache.put('/static/partials/directives/category.html',
-    "<div id=\"category{{ $id }}\" class=\"category panel panel-primary\">\n" +
-    "  <div class=\"panel-heading\" role=\"tab\" id=\"heading{{ $id }}\">\n" +
-    "    <h4 class=\"panel-title\">\n" +
-    "      <a data-ng-click=\"toggleCategoryOpen()\" aria-expanded=\"{{ categoryStatus.open }}\" aria-controls=\"content{{ $id }}\" data-parent=\"#{{ group }}\">\n" +
-    "        <span data-ng-bind=\"name | truncate:28\" title=\"{{ name }}\"></span>\n" +
-    "        <span class=\"pull-right glyphicon glyphicon-chevron-right\" data-ng-class=\"{'glyphicon-chevron-down': categoryStatus.open, 'glyphicon-chevron-right': !categoryStatus.open}\"></span>\n" +
-    "      </a>\n" +
-    "    </h4>\n" +
+  $templateCache.put('/static/partials/directives/album.html',
+    "<div id=\"album-{{ $id }}-{{ index }}-{{ album.key }}\" class=\"drilldown__item album clearfix\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <img data-ng-src=\"{{ album.icon }}\" alt=\"{{ album.album }}\">\n" +
     "  </div>\n" +
-    "  <div id=\"content{{ $id }}\" class=\"panel-collapse\" collapse=\"!categoryStatus.open\" role=\"tabpanel\" aria-labeledby=\"heading{{ $id }}\">\n" +
-    "    <div class=\"category__contents panel-body\">\n" +
-    "      <div id=\"categoryContents{{ $id }}\" ng-transclude></div>\n" +
-    "    </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title\"\n" +
+    "      data-ng-bind=\"album.name\"></div>\n" +
+    "    <div\n" +
+    "      class=\"item__artist\"\n" +
+    "      data-ng-bind=\"album.artist\"></div>\n" +
+    "    <div class=\"item__count\" data-ng-pluralize count=\"album.length\" when=\"{'one': '{} track', 'other': '{} tracks'}\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-show=\"!album.loadingTracks\"\n" +
+    "      data-ng-click=\"loadAlbumTracks(album)\"\n" +
+    "      data-tooltip=\"Load Tracks\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"album.loadingTracks\"\n" +
+    "      data-tooltip=\"Loading Tracks\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "  </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/artist.html',
+    "<div id=\"artist-{{ $id }}-{{ index }}-{{ artist.key }}\" class=\"drilldown__item artist clearfix\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <img data-ng-src=\"{{ artist.icon }}\" alt=\"{{ artist.artist }}\">\n" +
+    "  </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title\"\n" +
+    "      data-ng-bind=\"artist.name\"></div>\n" +
+    "    <div class=\"item__count\" data-ng-pluralize count=\"artist.albumCount\" when=\"{'one': '{} album', 'other': '{} albums'}\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-show=\"!artist.loadingAlbums\"\n" +
+    "      data-ng-click=\"loadAlbums(artist)\"\n" +
+    "      data-tooltip=\"Load Albums\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"artist.loadingAlbums\"\n" +
+    "      data-tooltip=\"Loading Albums\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "  </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/category.html',
+    "<div id=\"category{{ $id }}\" class=\"drilldown__item category\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <i class=\"fa fa-fw fa-music fa-3x\"></i>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title item__title--single\"\n" +
+    "      data-ng-bind=\"category.name\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-show=\"!category.loading\"\n" +
+    "      data-ng-click=\"loadChildren(category)\"\n" +
+    "      data-tooltip=\"Load\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"category.loading\"\n" +
+    "      data-tooltip=\"Loading\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
   );
 
 
   $templateCache.put('/static/partials/directives/chat-message.html',
-    "<li>\n" +
-    "  <div class=\"row\">\n" +
-    "    <div class=\"col-xs-3\">\n" +
-    "      <div class=\"chat__user\" data-ng-bind=\"message.user\"></div>\n" +
-    "    </div>\n" +
-    "    <div data-ng-class=\"{'col-xs-6': message.created, 'col-xs-9': !message.created}\">\n" +
-    "      <div class=\"chat__message wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
-    "    </div>\n" +
-    "    <div class=\"col-xs-3\" data-ng-if=\"message.created\">\n" +
+    "<div id=\"message-{{ $id }}-{{ index }}-{{ message.user }}\" class=\"chat__message\">\n" +
+    "  <div class=\"chat__image item__image\">\n" +
+    "    <img data-ng-src=\"{{ message.user.picture }}\" src=\"http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg\" />\n" +
+    "  </div>\n" +
+    "  <div class=\"chat__user-info item__info\">\n" +
+    "    <div class=\"item__title\">\n" +
+    "      <span class=\"chat__message__user\" data-ng-bind=\"message.user.name\"></span>&nbsp;\n" +
+    "      <span data-ng-switch=\"message.type\" class=\"chat__message__message-type\">\n" +
+    "        <span class=\"chat__message--playing\" data-ng-switch-when=\"playing\">started playing</span>\n" +
+    "        <span class=\"chat__message--upvoted\" data-ng-switch-when=\"upvote\">upvoted</span>\n" +
+    "        <span class=\"chat__message--downvoted\" data-ng-switch-when=\"downvote\">downvoted</span>\n" +
+    "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped\">skipped</span>\n" +
+    "        <span class=\"chat__message--said\" data-ng-switch-when=\"message\">said</span>\n" +
+    "      </span>\n" +
     "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "    </div>\n" +
+    "    <div class=\"chat__message__message\" data-ng-if=\"message.type === 'message'\">\n" +
+    "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
+    "    </div>\n" +
+    "    <div class=\"chat__track-info text-muted\" data-ng-if=\"message.type !== 'message'\">\n" +
+    "      <div class=\"chat__track\">\n" +
+    "        <a data-ng-href=\"http://rdio.com{{ message.track.url }}\" data-ng-bind=\"message.track.name\" target=\"_blank\"></a>\n" +
+    "      </div>\n" +
+    "      <div class=\"chat__artist\">\n" +
+    "        <a data-ng-href=\"http://rdio.com{{ message.track.artistUrl }}\" data-ng-bind=\"message.track.artist\" target=\"_blank\"></a>\n" +
+    "      </div>\n" +
+    "    </div>\n" +
     "  </div>\n" +
-    "</li>\n"
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/drilldown-back.html',
+    "<div class=\"carousel__back text-left\">\n" +
+    "  <a data-ng-click=\"clickHandler()\">\n" +
+    "    <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"text\" data-tooltip=\"{{ tooltipText }}\" data-tooltip-placement=\"right\"></span>\n" +
+    "  </a>\n" +
+    "  <a class=\"carousel__refresh pull-right\" data-ng-click=\"refreshHandler()\" data-ng-show=\"refreshHandler\">\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-refresh\"\n" +
+    "      data-ng-show=\"!loading\"\n" +
+    "      data-tooltip=\"{{ refreshText }}\"\n" +
+    "      data-tooltip-placement=\"left\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"loading\"\n" +
+    "      data-tooltip=\"{{ loadingText }}\"\n" +
+    "      data-tooltip-placement=\"left\"></i>\n" +
+    "  </a>\n" +
+    "</div>\n"
   );
 
 
@@ -46,60 +156,221 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
+  $templateCache.put('/static/partials/directives/more-music.html',
+    "<div class=\"more-music\">\n" +
+    "  <lstn-music-search></lstn-music-search>\n" +
+    "  <lstn-music-categories data-ng-show=\"!searchResults || searchResults.length === 0\"></lstn-music-categories>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('/static/partials/directives/music-categories.html',
-    "<div id=\"categories\" class=\"categories\">\n" +
-    "  <div class=\"search__container category panel panel-primary\" data-ng-show=\"searchResults && searchResults.length > 0\">\n" +
-    "    <div class=\"panel-heading\" role=\"tab\" id=\"search-heading\">\n" +
-    "      <h4 class=\"panel-title\">\n" +
-    "        <a data-ng-click=\"clearSearchResults()\">\n" +
-    "          Search Results\n" +
-    "          <span class=\"pull-right glyphicon glyphicon-remove-circle\"></span>\n" +
-    "        </a>\n" +
-    "      </h4>\n" +
-    "    </div>\n" +
-    "    <div id=\"search-content\" class=\"tabpanel\" aria-labeledby=\"search-heading\">\n" +
-    "      <div class=\"search__contents panel-body\">\n" +
-    "        <ul class=\"track__list\">\n" +
-    "          <lstn-track data-ng-class-even=\"'track--even'\" data-ng-class-odd=\"'track--odd'\" data-ng-repeat=\"song in searchResults\" data-cutoff=\"28\"></lstn-track>\n" +
-    "        </ul>\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
+    "<div class=\"playlist__container\">\n" +
+    "  <carousel id=\"category-carousel\" interval=\"false\">\n" +
+    "    <slide id=\"categories\">\n" +
+    "      <ul class=\"categories categories--full category__list drilldown__list text-left\">\n" +
+    "        <li data-ng-repeat=\"item in categories\">\n" +
+    "          <lstn-category\n" +
+    "            data-category=\"item\"\n" +
+    "            data-load-children=\"loadChildren\"></lstn-category>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </slide>\n" +
     "\n" +
-    "  <lstn-category data-ng-show=\"playlists.owned && playlists.owned.length > 0\" data-name=\"'Your Playlists'\" data-type=\"'owned'\" data-open=\"true\">\n" +
-    "    <lstn-playlist data-ng-repeat=\"playlist in playlists.owned\"></lstn-playlist>\n" +
-    "  </lstn-category>\n" +
-    "  <lstn-category data-ng-show=\"playlists.collab && playlists.collab.length > 0\" data-name=\"'Collaborative Playlists'\" data-type=\"'collab'\">\n" +
-    "    <lstn-playlist data-ng-repeat=\"playlist in playlists.collab\"></lstn-playlist>\n" +
-    "  </lstn-category>\n" +
-    "  <lstn-category data-ng-show=\"playlists.subscribed && playlists.subscribed.length > 0\" data-name=\"'Subscribed Playlists'\" data-type=\"'subscribed'\">\n" +
-    "    <lstn-playlist data-ng-repeat=\"playlist in playlists.subscribed\"></lstn-playlist>\n" +
-    "  </lstn-category>\n" +
-    "  <lstn-category data-ng-show=\"playlists.favorites && playlists.favorites.length > 0\" data-name=\"'Favorited Playlists'\" data-type=\"'favorites'\">\n" +
-    "    <lstn-playlist data-ng-repeat=\"playlist in playlists.favorites\"></lstn-playlist>\n" +
-    "  </lstn-category>\n" +
-    "  <lstn-category data-name=\"'Collections'\" data-type=\"'collections'\">\n" +
-    "    Albums / Tracks\n" +
-    "    Artists / Tracks\n" +
-    "  </lstn-category>\n" +
-    "  <lstn-category data-name=\"'Stations'\" data-type=\"'stations'\">\n" +
-    "    Stations\n" +
-    "  </lstn-category>\n" +
+    "    <slide id=\"playlist_types\">\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentCategory.name\"\n" +
+    "        data-tooltip-text=\"'Back to Categories'\"\n" +
+    "        data-click-handler=\"closeCategory\"></lstn-drilldown-back>\n" +
+    "      <ul class=\"playlist-types playlist-types--full playlist-type__list drilldown__list text-left\">\n" +
+    "        <li data-ng-repeat=\"item in playlistTypes\">\n" +
+    "          <lstn-playlist-type\n" +
+    "            data-playlist-type=\"item\"\n" +
+    "            data-load-playlists=\"loadPlaylists\"></lstn-playlist-type>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </slide>\n" +
+    "\n" +
+    "    <slide id=\"playlists\">\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentPlaylistType.name\"\n" +
+    "        data-tooltip-text=\"'Back to Playlist Types'\"\n" +
+    "        data-click-handler=\"closePlaylistType\"\n" +
+    "        data-refresh-handler=\"refreshPlaylistType\"\n" +
+    "        data-refresh-text=\"'Refresh Playlists'\"\n" +
+    "        data-loading=\"currentPlaylistType.loadingPlaylists\"\n" +
+    "        data-loading-text=\"'Refreshing Playlists'\"></lstn-drilldown-back>\n" +
+    "      <ul class=\"playlists drilldown__list text-left\">\n" +
+    "        <li data-ng-repeat=\"item in playlists\">\n" +
+    "          <lstn-playlist\n" +
+    "            data-context=\"'category'\"\n" +
+    "            data-playlist=\"item\"\n" +
+    "            data-index=\"$index\"\n" +
+    "            data-load-playlist-tracks=\"loadPlaylistTracks\"></lstn-playlist>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </slide>\n" +
+    "\n" +
+    "    <slide id=\"playlist_tracks\">\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentPlaylist.name\"\n" +
+    "        data-tooltip-text=\"'Back to Playlists'\"\n" +
+    "        data-click-handler=\"closePlaylist\"\n" +
+    "        data-refresh-handler=\"refreshPlaylist\"\n" +
+    "        data-refresh-text=\"'Refresh Playlist'\"\n" +
+    "        data-loading=\"currentPlaylist.loadingTracks\"\n" +
+    "        data-loading-text=\"'Refreshing Playlist'\"></lstn-drilldown-back>\n" +
+    "      <ul class=\"tracks drilldown__list text-left\">\n" +
+    "        <li data-ng-repeat=\"item in tracks\">\n" +
+    "          <lstn-track\n" +
+    "            data-context=\"'playlist'\"\n" +
+    "            data-track=\"item\"\n" +
+    "            data-index=\"$index\"></lstn-track>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </slide>\n" +
+    "\n" +
+    "    <slide id=\"station_types\">\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentCategory.name\"\n" +
+    "        data-tooltip-text=\"'Back to Categories'\"\n" +
+    "        data-click-handler=\"closeCategory\"></lstn-drilldown-back>\n" +
+    "      <ul class=\"station-types station-types--full station-type__list drilldown__list text-left\">\n" +
+    "        <li data-ng-repeat=\"item in stationTypes\">\n" +
+    "          <lstn-station-type\n" +
+    "            data-station-type=\"item\"\n" +
+    "            data-load-stations=\"loadStations\"></lstn-station-type>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </slide>\n" +
+    "\n" +
+    "    <slide id=\"stations\">\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentStationType.name\"\n" +
+    "        data-tooltip-text=\"'Back to Station Types'\"\n" +
+    "        data-click-handler=\"closeStationType\"\n" +
+    "        data-refresh-handler=\"refreshStationType\"\n" +
+    "        data-refresh-text=\"'Refresh Stations'\"\n" +
+    "        data-loading=\"currentStationType.loadingStations\"\n" +
+    "        data-loading-text=\"'Refreshing Stations'\"></lstn-drilldown-back>\n" +
+    "      <ul class=\"stations drilldown__list text-left\">\n" +
+    "        <li data-ng-repeat=\"item in stations\">\n" +
+    "          <lstn-playlist\n" +
+    "            data-context=\"'category'\"\n" +
+    "            data-playlist=\"item\"\n" +
+    "            data-index=\"$index\"\n" +
+    "            data-load-playlist-tracks=\"loadStationTracks\"></lstn-playlist>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </slide>\n" +
+    "\n" +
+    "    <slide id=\"station_tracks\">\n" +
+    "      <lstn-drilldown-back\n" +
+    "        data-text=\"currentStation.name\"\n" +
+    "        data-tooltip-text=\"'Back to Stations'\"\n" +
+    "        data-click-handler=\"closeStation\"\n" +
+    "        data-refresh-handler=\"refreshStation\"\n" +
+    "        data-refresh-text=\"'Refresh Station'\"\n" +
+    "        data-loading=\"currentStation.loadingTracks\"\n" +
+    "        data-loading-text=\"'Refreshing Station'\"></lstn-drilldown-back>\n" +
+    "      <ul class=\"tracks drilldown__list text-left\">\n" +
+    "        <li data-ng-repeat=\"item in tracks\">\n" +
+    "          <lstn-track\n" +
+    "            data-context=\"'station'\"\n" +
+    "            data-track=\"item\"\n" +
+    "            data-index=\"$index\"></lstn-track>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </slide>\n" +
+    "  </carousel>\n" +
     "</div>\n"
   );
 
 
   $templateCache.put('/static/partials/directives/music-search.html',
     "<div>\n" +
-    "  <input type=\"text\" class=\"form-control\" data-ng-model=\"searchQuery\" placeholder=\"Search music...\">\n" +
+    "  <div class=\"search__box\">\n" +
+    "    <input type=\"search\" class=\"form-control\" data-ng-model=\"searchQuery\" placeholder=\"Search music...\">\n" +
+    "  </div>\n" +
+    "  <div class=\"search__container\" data-ng-show=\"searchResults && searchResults.length > 0\">\n" +
+    "    <div class=\"search__contents\">\n" +
+    "      <carousel id=\"search-carousel\" interval=\"false\">\n" +
+    "        <slide id=\"search_results\">\n" +
+    "          <div class=\"carousel__back text-left\">\n" +
+    "            <a data-ng-click=\"clearSearchResults()\">\n" +
+    "              <i class=\"fa fa-fw fa-times-circle-o\"></i> Clear Search Results\n" +
+    "            </a>\n" +
+    "          </div>\n" +
+    "          <ul class=\"search search--full track__list drilldown__list text-left\">\n" +
+    "            <li data-ng-repeat=\"item in searchResults\">\n" +
+    "              <div data-ng-switch=\"item.type\">\n" +
+    "                <lstn-album\n" +
+    "                  data-ng-switch-when=\"a\"\n" +
+    "                  data-context=\"'search'\"\n" +
+    "                  data-album=\"item\"\n" +
+    "                  data-index=\"$index\"\n" +
+    "                  data-load-album-tracks=\"loadAlbumTracks\"></lstn-album>\n" +
+    "\n" +
+    "                <lstn-artist\n" +
+    "                  data-ng-switch-when=\"r\"\n" +
+    "                  data-context=\"'search'\"\n" +
+    "                  data-artist=\"item\"\n" +
+    "                  data-index=\"$index\"\n" +
+    "                  data-load-albums=\"loadAlbums\"></lstn-artist>\n" +
+    "\n" +
+    "                <lstn-track\n" +
+    "                  data-ng-switch-when=\"t\"\n" +
+    "                  data-context=\"'search'\"\n" +
+    "                  data-track=\"item\"\n" +
+    "                  data-index=\"$index\"></lstn-track>\n" +
+    "              </div>\n" +
+    "            </li>\n" +
+    "          </ul>\n" +
+    "        </slide>\n" +
+    "\n" +
+    "        <slide id=\"search_albums\">\n" +
+    "          <div class=\"carousel__back text-left\">\n" +
+    "            <a data-ng-click=\"closeArtist()\">\n" +
+    "              <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentArtist.name\"></span>\n" +
+    "            </a>\n" +
+    "          </div>\n" +
+    "          <ul class=\"albums album--full album__list drilldown__list text-left\">\n" +
+    "            <li data-ng-repeat=\"item in albums\">\n" +
+    "              <lstn-album\n" +
+    "                data-context=\"'artist'\"\n" +
+    "                data-album=\"item\"\n" +
+    "                data-index=\"$index\"\n" +
+    "                data-load-album-tracks=\"loadAlbumTracks\"></lstn-album>\n" +
+    "            </li>\n" +
+    "          </ul>\n" +
+    "        </slide>\n" +
+    "\n" +
+    "        <slide id=\"search_tracks\">\n" +
+    "          <div class=\"carousel__back text-left\">\n" +
+    "            <a data-ng-click=\"closeAlbum()\">\n" +
+    "              <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"currentAlbum.name\"></span>\n" +
+    "            </a>\n" +
+    "          </div>\n" +
+    "          <ul class=\"tracks track--full track__list drilldown__list text-left\">\n" +
+    "            <li data-ng-repeat=\"item in tracks\">\n" +
+    "              <lstn-track\n" +
+    "                data-context=\"'album'\"\n" +
+    "                data-track=\"item\"\n" +
+    "                data-index=\"$index\"></lstn-track>\n" +
+    "            </li>\n" +
+    "          </ul>\n" +
+    "        </slide>\n" +
+    "      </carousel>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 
 
   $templateCache.put('/static/partials/directives/playing-image.html',
     "<div class=\"playing__art\" class=\"text-center\">\n" +
-    "  <img data-ng-show=\"playing.song.image\" data-ng-src=\"{{ playing.song.image }}\" alt=\"{{ playing.song.title }} - {{ playing.song.artist }}\">\n" +
-    "  <div data-ng-show=\"!playing.song.image\" class=\"text-center\">\n" +
+    "  <img data-ng-show=\"playing.track.image\" data-ng-src=\"{{ playing.track.image }}\" alt=\"{{ playing.track.title }} - {{ playing.track.artist }}\">\n" +
+    "  <div data-ng-show=\"!playing.track.image\" class=\"text-center\">\n" +
     "    <i class=\"glyphicon glyphicon-music playing__placeholder text-muted\"></i>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -108,80 +379,186 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/playing-info.html',
     "<div class=\"playing__info-container\">\n" +
-    "  <div data-ng-show=\"!visualize && !playing.song\" class=\"playing__info playing__info--stopped text-center\">\n" +
-    "    <h3 class=\"text-muted\">Add music to your queue and click Broadcast to start playing</h3>\n" +
+    "\n" +
+    "  <div data-ng-hide=\"playing\" class=\"playing__info--stopped\">\n" +
+    "    <a data-ng-show=\"queue.tracks.length\" data-ng-click=\"toggleBroadcast()\">\n" +
+    "      <i class=\"playing__info--ready fa fa-play-circle\" />\n" +
+    "    </a>\n" +
+    "    <p class=\"playing__info--waiting\" data-ng-show=\"!queue.tracks.length\">Waiting for a broadcaster&hellip;</p>\n" +
     "  </div>\n" +
-    "  <div data-ng-show=\"!visualize && playing.song\" class=\"playing__info playing__info--playing text-center\">\n" +
-    "    <h3 class=\"playing__title\" data-ng-bind=\"playing.song.title | truncate:28\"></h3>\n" +
-    "    <h4 class=\"playing__artist\" data-ng-bind=\"playing.song.artist | truncate:35\"></h4>\n" +
-    "    <p class=\"playing__album\" data-ng-bind=\"playing.song.album | truncate: 40\"></p>\n" +
-    "    <p class=\"playing__warning text-warning\" data-ng-show=\"!playing.song.canStream\"><strong>This song can't be played in your region.</strong></p>\n" +
-    "    <div class=\"progress\" data-ng-show=\"playing.song.duration && playing.song.canStream\">\n" +
-    "      <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.song.duration }}\"></div>\n" +
-    "      <span id=\"time\" class=\"time\"></span>\n" +
+    "\n" +
+    "  <div data-ng-show=\"playing\" class=\"playing__info playing__info--playing\" data-album-cover-background>\n" +
+    "    <div class=\"playing__meta\">\n" +
+    "      <h3 class=\"playing__title\" data-ng-bind=\"playing.track.title | truncate:25\"></h3>\n" +
+    "      <h4 class=\"playing__artist\" data-ng-bind=\"playing.track.artist | truncate:35\"></h4>\n" +
+    "      <lstn-room-controls></lstn-room-controls>\n" +
     "    </div>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <div class=\"progress\" data-ng-show=\"playing.track.duration && playing.track.canStream\">\n" +
+    "    <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.track.duration }}\"></div>\n" +
+    "    <span id=\"time\" class=\"time\"></span>\n" +
+    "  </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/playlist-type.html',
+    "<div id=\"playlist-type{{ $id }}\" class=\"drilldown__item playlist-type\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <i class=\"fa fa-fw fa-music fa-3x\"></i>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title item__title--single\"\n" +
+    "      data-ng-bind=\"playlistType.name\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-show=\"!playlistType.loadingPlaylists\"\n" +
+    "      data-ng-click=\"loadPlaylists(playlistType)\"\n" +
+    "      data-tooltip=\"Load Playlists\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"playlistType.loadingPlaylists\"\n" +
+    "      data-tooltip=\"Loading Playlists\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
   );
 
 
   $templateCache.put('/static/partials/directives/playlist.html',
-    "<div id=\"playlist{{ $id }}\" class=\"playlist panel panel-success\">\n" +
-    "  <div class=\"panel-heading\" role=\"tab\" id=\"heading{{ $id }}\">\n" +
-    "    <h4 class=\"panel-title\">\n" +
-    "      <a data-ng-click=\"toggleOpen()\" aria-expanded=\"{{ status.open }}\" aria-controls=\"content{{ $id }}\" data-parent=\"#{{ category }}\">\n" +
-    "        <span data-ng-bind=\"playlist.name | truncate:28\" title=\"{{ playlist.name }}\"></span>\n" +
-    "        <span class=\"pull-right glyphicon glyphicon-chevron-right\" data-ng-class=\"{'glyphicon-chevron-down': status.open && !showLoading, 'glyphicon-chevron-right': !status.open && !showLoading, 'glyphicon-refresh spinning': showLoading}\"></span>\n" +
-    "      </a>\n" +
-    "    </h4>\n" +
+    "<div id=\"playlist{{ $id }}\" class=\"drilldown__item playlist clearfix\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <img data-ng-src=\"{{ playlist.icon }}\" alt=\"{{ playlist.name }}\">\n" +
     "  </div>\n" +
-    "  <div id=\"content{{ $id }}\" class=\"panel-collapse\" collapse=\"!status.open\" role=\"tabpanel\" aria-labeledby=\"heading{{ $id }}\">\n" +
-    "    <div class=\"playlist__tracks panel-body\">\n" +
-    "      <lstn-track-list data-cutoff=\"28\"></lstn-track-list>\n" +
-    "    </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title item__title--couple\"\n" +
+    "      data-ng-bind=\"playlist.name\"></div>\n" +
+    "    <div class=\"item__count\" data-ng-pluralize count=\"playlist.length\" when=\"{'one': '{} track', 'other': '{} tracks'}\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-show=\"!playlist.loadingTracks\"\n" +
+    "      data-ng-click=\"loadPlaylistTracks(playlist)\"\n" +
+    "      data-tooltip=\"Load Tracks\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"playlist.loadingTracks\"\n" +
+    "      data-tooltip=\"Loading Tracks\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
   );
 
 
-  $templateCache.put('/static/partials/directives/room-controls.html',
-    "<div class=\"playing__actions col-md-12 text-center\">\n" +
-    "  <div class=\"playing__actions__container panel panel-default\">\n" +
-    "    <button data-ng-show=\"!mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Unmute\" data-ng-click=\"toggleMute()\" title=\"Unmute\">\n" +
-    "      <span class=\"glyphicon glyphicon-volume-off\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"mute\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Mute\" data-ng-click=\"toggleMute()\" title=\"Mute\">\n" +
-    "      <span class=\"glyphicon glyphicon-volume-up\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"!playing.downvoted && !isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key || playing.song.voted\" class=\"btn btn-danger btn-lg\" aria-label=\"Downvote\" data-ng-click=\"downvote()\" title=\"Downvote\">\n" +
-    "      <span class=\"glyphicon glyphicon-thumbs-down\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"playing.downvoted\" type=\"button\" disabled=\"disabled\" class=\"btn btn-danger btn-lg\" aria-label=\"Downvoted\" title=\"Downvoted\">\n" +
-    "      <span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.song.key\" class=\"btn btn-danger btn-lg\" aria-label=\"Skip Song\" data-ng-click=\"skipSong()\" title=\"Skip Song\">\n" +
-    "      <span class=\"glyphicon glyphicon-step-forward\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"isController\" type=\"button\" class=\"btn btn-primary btn-lg\" aria-label=\"Stop Broadcasting\" data-ng-click=\"toggleBroadcast()\" title=\"Stop Broadcasting\">\n" +
-    "      <span class=\"glyphicon glyphicon-headphones\" aria-hidden=\"true\"></span>\n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"!isController\" data-ng-disabled=\"!queue || queue.length === 0\" type=\"button\" class=\"btn btn-primary btn-lg\" aria-label=\"Start Broadcasting\" data-ng-click=\"toggleBroadcast()\" title=\"Start Broadcasting\">\n" +
-    "      <span class=\"glyphicon glyphicon-cd\" aria-hidden=\"true\"></span>\n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"!playing.upvoted\" type=\"button\" data-ng-disabled=\"!playing.song.key || isCurrentController || playing.song.voted\" class=\"btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
-    "      <span class=\"glyphicon glyphicon-thumbs-up\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"playing.upvoted\" type=\"button\" disabled=\"disabled\" class=\"btn btn-success btn-lg\" aria-label=\"Upvoted\" title=\"Upvoted\">\n" +
-    "      <span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
+  $templateCache.put('/static/partials/directives/room-activity.html',
+    "<div class=\"room-activity\">\n" +
+    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading\">\n" +
+    "    <li data-ng-repeat=\"item in chat.messages\">\n" +
+    "      <lstn-chat-message\n" +
+    "        data-message=\"item\"\n" +
+    "        data-index=\"$index\"></lstn-chat-message>\n" +
+    "    </li>\n" +
+    "  </ul>\n" +
+    "  <div class=\"messages--empty text-center\" data-ng-show=\"chat.loading\">\n" +
+    "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
+    "  </div>\n" +
+    "  <input\n" +
+    "    id=\"chat-input\"\n" +
+    "    data-mentio\n" +
+    "    data-mentio-id=\"'chat-input'\"\n" +
+    "    ng-trim=\"false\"\n" +
+    "    class=\"form-control\"\n" +
+    "    type=\"text\"\n" +
+    "    data-ng-show=\"!chat.loading\"\n" +
+    "    data-ng-model=\"message.text\"\n" +
+    "    data-lstn-enter=\"sendMessage()\"\n" +
+    "    placeholder=\"Send message...\"></input>\n" +
     "\n" +
-    "    <button data-ng-show=\"visualize\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Show Visualizer\" data-ng-click=\"toggleVisualize()\" title=\"Show Visualizer\">\n" +
-    "      <span class=\"glyphicon glyphicon-eye-close\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "    <button data-ng-show=\"!visualize\" data-ng-disabled=\"!playing.song.key\" type=\"button\" class=\"btn btn-default btn-lg\" aria-label=\"Hide Visualizer\" data-ng-click=\"toggleVisualize()\" title=\"Hide Visualizer\">\n" +
-    "      <span class=\"glyphicon glyphicon-eye-open\" aria-hidden=\"true\"></span> \n" +
-    "    </button>\n" +
-    "   </div>\n" +
+    "  <mentio-menu\n" +
+    "    id=\"mention-menu\"\n" +
+    "    mentio-for=\"'chat-input'\"\n" +
+    "    mentio-trigger-char=\"'@'\"\n" +
+    "    mentio-items=\"mentionNames\"\n" +
+    "    mentio-template-url=\"/static/partials/directives/roster-mention.html\"\n" +
+    "    mentio-search=\"searchRoster(term)\"\n" +
+    "    mentio-select=\"getUser(item)\"></mentio-menu>\n" +
+    "\n" +
+    "  <mentio-menu\n" +
+    "    id=\"emoticon-menu\"\n" +
+    "    class=\"emoticon-menu\"\n" +
+    "    mentio-for=\"'chat-input'\"\n" +
+    "    mentio-trigger-char=\"':'\"\n" +
+    "    mentio-items=\"emoticons\"\n" +
+    "    mentio-template-url=\"/static/partials/directives/emoticon-list.html\"\n" +
+    "    mentio-search=\"searchEmoticons(term)\"\n" +
+    "    mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/room-control-downvote.html',
+    "<span>\n" +
+    "  <button data-ng-show=\"!playing.downvoted && !isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.track.key || playing.track.voted\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Downvote\" data-ng-click=\"downvote()\" title=\"Downvote\">\n" +
+    "    <i class=\"fa fa-thumbs-down\" aria-hidden=\"true\"></i>\n" +
+    "  </button>\n" +
+    "  <button data-ng-show=\"playing.downvoted\" type=\"button\" disabled=\"disabled\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Downvoted\" title=\"Downvoted\">\n" +
+    "    <i class=\"fa fa-check\" aria-hidden=\"true\"></i>\n" +
+    "  </button>\n" +
+    "</span>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/room-control-skip.html',
+    "<span>\n" +
+    "  <button data-ng-show=\"isCurrentController\" type=\"button\" data-ng-disabled=\"!playing.track.key\" class=\"control__button btn btn-danger btn-lg\" aria-label=\"Skip Song\" data-ng-click=\"skipTrack()\" title=\"Skip Song\">\n" +
+    "    <span class=\"fa fa-step-forward\" aria-hidden=\"true\"></span>\n" +
+    "  </button>\n" +
+    "</span>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/room-control-upvote.html',
+    "<span>\n" +
+    "  <button type=\"button\" data-ng-hide=\"playing.upvoted || isCurrentController\" data-ng-disabled=\"!playing.track.key || isCurrentController || playing.track.voted\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvote\" data-ng-click=\"upvote()\" title=\"Upvote\">\n" +
+    "    <i class=\"fa fa-thumbs-up\" aria-hidden=\"true\"></i>\n" +
+    "  </button>\n" +
+    "  <button data-ng-show=\"playing.upvoted\" type=\"button\" disabled=\"disabled\" class=\"control__button btn btn-success btn-lg\" aria-label=\"Upvoted\" title=\"Upvoted\">\n" +
+    "    <i class=\"fa fa-check\" aria-hidden=\"true\"></i>\n" +
+    "  </button>\n" +
+    "</span>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/room-control-volume.html',
+    "<span>\n" +
+    "  <button data-ng-show=\"!mute\" data-ng-disabled=\"!playing.track.key\" type=\"button\" class=\"control__button btn btn-default btn-lg\" aria-label=\"Mute\" data-ng-click=\"toggleMute()\" title=\"Mute\">\n" +
+    "    <i class=\"fa fa-volume-off\" aria-hidden=\"true\"></i>\n" +
+    "  </button>\n" +
+    "  <button data-ng-show=\"mute\" data-ng-disabled=\"!playing.track.key\" type=\"button\" class=\"control__button btn btn-default btn-lg\" aria-label=\"Unmute\" data-ng-click=\"toggleMute()\" title=\"Unmute\">\n" +
+    "    <i class=\"fa fa-lg fa-volume-up\" aria-hidden=\"true\"></i>\n" +
+    "  </button>\n" +
+    "</span>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/room-controls.html',
+    "<div class=\"playing__controls\">\n" +
+    "  <lstn-room-control-volume></lstn-room-control-volume>\n" +
+    "  <lstn-room-control-downvote></lstn-room-control-downvote>\n" +
+    "  <lstn-room-control-skip></lstn-room-control-skip>\n" +
+    "  <lstn-room-control-upvote></lstn-room-control-upvote>\n" +
     "</div>\n"
   );
 
@@ -245,90 +622,18 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
-  $templateCache.put('/static/partials/directives/room-playing.html',
-    "<div class=\"playing__container room__container\">\n" +
-    "  <div class=\"row no-gutters\">\n" +
-    "    <div class=\"col-md-5 col-sm-4\">\n" +
-    "      <lstn-playing-image></lstn-playing-image>\n" +
-    "    </div>\n" +
-    "    <div class=\"col-md-7 col-sm-8\">\n" +
-    "      <lstn-playing-info></lstn-playing-info>\n" +
-    "      <lstn-visualizer data-ng-show=\"visualize && playing.song\"></lstn-visualizer>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "  <div class=\"row\">\n" +
-    "    <lstn-room-controls></lstn-room-controls>\n" +
-    "  </div>\n" +
-    "  <div class=\"row\">\n" +
-    "    <lstn-room-queue></lstn-room-queue>\n" +
-    "  </div>\n" +
-    "</div>\n"
-  );
-
-
   $templateCache.put('/static/partials/directives/room-queue.html',
-    "<div class=\"playing__queue col-md-12\">\n" +
-    "  <div class=\"playing__queue__container panel panel-success\">\n" +
-    "    <tabset class=\"queue__tabs\">\n" +
-    "      <tab id=\"your-queue-tab\" heading=\"Your Queue\" data-select=\"selectQueueTab('personal')\">\n" +
-    "        <ul id=\"queue\" class=\"queue queue--full track__list\" data-ng-show=\"queue && queue.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue\">\n" +
-    "          <lstn-track\n" +
-    "            data-ng-class-even=\"'track--even'\"\n" +
-    "            data-ng-class-odd=\"'track--odd'\"\n" +
-    "            data-ng-repeat=\"song in queue\"\n" +
-    "            data-context=\"queue\"\n" +
-    "            data-cutoff=\"50\"></lstn-track>\n" +
-    "        </ul>\n" +
-    "        <div class=\"queue--empty alert alert-info text-center\" data-ng-show=\"!queue || queue.length === 0\">\n" +
-    "          <h3>Select songs from your playlists on the left to add songs to your queue</h3>\n" +
-    "        </div>\n" +
-    "      </tab>\n" +
-    "      <tab id=\"room-queue-tab\" heading=\"Room Queue\" data-select=\"selectQueueTab('room')\">\n" +
-    "        <ul id=\"room-queue\" class=\"queue queue--full track__list\" data-ng-show=\"roomQueue && roomQueue.length > 0\">\n" +
-    "          <lstn-track\n" +
-    "            data-ng-class-even=\"'track--even'\"\n" +
-    "            data-ng-class-odd=\"'track--odd'\"\n" +
-    "            data-ng-repeat=\"song in roomQueue\"\n" +
-    "            data-context=\"queue\"\n" +
-    "            data-cutoff=\"50\"></lstn-track>\n" +
-    "        </ul>\n" +
-    "        <div class=\"queue--empty alert alert-info text-center\" data-ng-show=\"!roomQueue || roomQueue.length === 0\">\n" +
-    "          <h3>See the upcoming songs from each broadcaster</h3>\n" +
-    "        </div>\n" +
-    "      </tab>\n" +
-    "      <tab id=\"chat-tab\" data-select=\"selectQueueTab('chat')\">\n" +
-    "        <tab-heading>\n" +
-    "          Chat\n" +
-    "          <span data-ng-class=\"{'mentioned': mentioned}\" class=\"label label-default label-as-badge\" data-ng-show=\"trackUnseenChatMessages && unseenChatMessages > 0\" data-ng-bind=\"unseenChatMessages\"></span>\n" +
-    "        </tab-heading>\n" +
-    "        <ul id=\"messages\" class=\"messages list-group\">\n" +
-    "          <lstn-chat-message\n" +
-    "            class=\"list-group-item\"\n" +
-    "            data-ng-repeat=\"message in chat.messages\"\n" +
-    "            data-ng-class=\"getMessageClass()\"></lstn-chat-message>\n" +
-    "        </ul>\n" +
-    "        <input data-mentio data-mentio-id=\"'chat-input'\" ng-trim=\"false\" class=\"form-control\" type=\"text\" data-ng-model=\"message.text\" data-lstn-enter=\"sendMessage()\" placeholder=\"Send message...\"></input>\n" +
-    "        <mentio-menu\n" +
-    "          id=\"mention-menu\"\n" +
-    "          mentio-for=\"'chat-input'\"\n" +
-    "          mentio-trigger-char=\"'@'\"\n" +
-    "          mentio-items=\"mentionNames\"\n" +
-    "          mentio-template-url=\"/static/partials/directives/roster-mention.html\"\n" +
-    "          mentio-search=\"searchRoster(term)\"\n" +
-    "          mentio-select=\"getUser(item)\"></mentio-menu>\n" +
-    "\n" +
-    "        <mentio-menu\n" +
-    "          id=\"emoticon-menu\"\n" +
-    "          class=\"emoticon-menu\"\n" +
-    "          mentio-for=\"'chat-input'\"\n" +
-    "          mentio-trigger-char=\"':'\"\n" +
-    "          mentio-items=\"emoticons\"\n" +
-    "          mentio-template-url=\"/static/partials/directives/emoticon-list.html\"\n" +
-    "          mentio-search=\"searchEmoticons(term)\"\n" +
-    "          mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
-    "\n" +
-    "      </tab>\n" +
-    "    </tabset>\n" +
+    "<div class=\"queue__container\">\n" +
+    "  <ul id=\"queue\" class=\"queue queue--full track__list drilldown__list\" data-ng-show=\"queue.tracks && queue.tracks.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue.tracks\">\n" +
+    "    <li data-ng-repeat=\"track in queue.tracks\">\n" +
+    "      <lstn-track\n" +
+    "        data-track=\"track\"\n" +
+    "        data-context=\"'queue'\"\n" +
+    "        data-index=\"$index\"></lstn-track>\n" +
+    "    </li>\n" +
+    "  </ul>\n" +
+    "  <div class=\"queue--empty text-center\" data-ng-show=\"!queue.tracks || queue.tracks.length === 0\">\n" +
+    "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -336,36 +641,47 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-roster.html',
     "<div class=\"roster__container room__container\">\n" +
-    "  <div class=\"panel panel-primary\">\n" +
-    "    <div class=\"panel-heading\">Broadcasters</div>\n" +
-    "    <ul class=\"roster roster--controllers list-group\">\n" +
-    "      <li class=\"list-group-item\" data-ng-show=\"!roster || roster.controllersCount === 0\">\n" +
-    "        <div class=\"text-center\"><strong>No Broadcasters</strong></div>\n" +
+    "\n" +
+    "  <div class=\"roster__category\">\n" +
+    "    <div class=\"roster__category-label\">Broadcasting\n" +
+    "      <input\n" +
+    "        data-bs-switch\n" +
+    "        data-ng-model=\"isController\"\n" +
+    "        type=\"checkbox\"\n" +
+    "        data-switch-size=\"mini\">\n" +
+    "    </div>\n" +
+    "    <ul class=\"roster roster--controllers\">\n" +
+    "      <li class=\"empty\" data-ng-show=\"!roster || roster.controllersCount === 0\">\n" +
+    "        No Broadcasters\n" +
     "      </li>\n" +
-    "      <li data-ng-show=\"roster && roster.controllersCount > 0\" data-ng-repeat=\"user_id in roster.controllerOrder\" class=\"list-group-item\" data-ng-class=\"{'list-group-item-success': current_user.id === user_id}\">\n" +
-    "        <span class=\"badge\" data-ng-bind=\"roster.controllers[user_id].points\" data-ng-show=\"user_id !== currentController\"></span>\n" +
-    "        <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" target=\"_blank\">\n" +
-    "          <img data-ng-src=\"{{ roster.controllers[user_id].picture }}\" class=\"avatar xs\" \n" +
+    "      <li class=\"roster__item--controller\"\n" +
+    "        data-ng-show=\"roster && roster.controllersCount > 0\" data-ng-repeat=\"user_id in roster.controllerOrder\">\n" +
+    "        <a data-ng-href=\"http://www.rdio.com{{ roster.controllers[user_id].profile }}\" target=\"_blank\"\n" +
+    "          tooltip=\"{{ roster.controllers[user_id].name }} ({{ roster.controllers[user_id].points }})\" data-tooltip-placement=\"bottom\">\n" +
+    "          <img data-ng-src=\"{{ roster.controllers[user_id].picture }}\" class=\"avatar xs\"\n" +
     "            data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
-    "            alt=\"{{ roster.controllers[user_id].name }}\"/> {{ roster.controllers[user_id].name }}\n" +
+    "            alt=\"{{ roster.controllers[user_id].name }}\" />\n" +
+    "            <i data-ng-if=\"user_id === currentController\" class=\"fa fa-volume-up\" />\n" +
     "        </a>\n" +
-    "        <span class=\"glyphicon glyphicon-music pull-right\" aria-hidden=\"true\" data-ng-show=\"user_id === currentController\"></span>\n" +
     "      </li>\n" +
     "    </ul>\n" +
     "  </div>\n" +
-    "  <div class=\"panel panel-default\">\n" +
-    "    <div class=\"panel-heading\">Listeners</div>\n" +
-    "    <ul class=\"roster list-group\">\n" +
-    "      <li class=\"list-group-item\" data-ng-show=\"!roster || roster.usersCount === 0\">\n" +
-    "        <div class=\"text-center\"><strong>No Listeners</strong></div>\n" +
+    "\n" +
+    "  <div class=\"roster__category\">\n" +
+    "    <div class=\"roster__category-label\">Listening</div>\n" +
+    "    <ul class=\"roster roster--listeners\" data-ng-show=\"roster && roster.usersCount > 0\">\n" +
+    "      <li class=\"empty\" data-ng-show=\"!roster || roster.users.length === 0\">\n" +
+    "        No one is listening\n" +
     "      </li>\n" +
-    "      <li data-ng-show=\"roster && roster.usersCount > 0\" data-ng-repeat=\"(user_id, user) in roster.users | orderBy:name\" class=\"list-group-item\" data-ng-class=\"{'list-group-item-success': current_user.id === user.id}\">\n" +
-    "        <span class=\"badge\" data-ng-bind=\"user.points\"></span>\n" +
-    "        <a data-ng-href=\"http://www.rdio.com{{ user.profile }}\"target=\"_blank\">\n" +
-    "          <img data-ng-src=\"{{ user.picture }}\" \n" +
-    "            data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
-    "            class=\"avatar xs\" alt=\"{{ user.name }}\"/> {{ user.name }}\n" +
-    "        </a>\n" +
+    "      <li data-ng-repeat=\"(user_id, user) in roster.users | orderBy:name\">\n" +
+    "      <a class=\"roster__user\"\n" +
+    "        data-ng-href=\"http://www.rdio.com{{ user.profile }}\"\n" +
+    "        target=\"_blank\"\n" +
+    "        tooltip=\"{{ user.name }} ({{ user.points }})\" data-tooltip-placement=\"bottom\">\n" +
+    "        <img data-ng-src=\"{{ user.picture }}\"\n" +
+    "        data-ng-class=\"{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}\"\n" +
+    "        class=\"avatar xs\" alt=\"{{ user.name }}\" />\n" +
+    "      </a>\n" +
     "      </li>\n" +
     "    </ul>\n" +
     "  </div>\n" +
@@ -383,40 +699,119 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
-  $templateCache.put('/static/partials/directives/track-list.html',
-    "<ul class=\"track__list\">\n" +
-    "  <lstn-track data-ng-class-even=\"'track--even'\" data-ng-class-odd=\"'track--odd'\" data-ng-repeat=\"song in tracks\" data-cutoff=\"cutoff\"></lstn-track>\n" +
-    "</ul>\n"
+  $templateCache.put('/static/partials/directives/station-type.html',
+    "<div id=\"station-type{{ $id }}\" class=\"drilldown__item station-type clearfix\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <i class=\"fa fa-fw fa-music fa-3x\"></i>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title item__title--single\"\n" +
+    "      data-ng-bind=\"stationType.name\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-show=\"!stationType.loadingStations\"\n" +
+    "      data-ng-click=\"loadStations(stationType)\"\n" +
+    "      data-tooltip=\"Load Stations\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"stationType.loadingStations\"\n" +
+    "      data-tooltip=\"Loading Stations\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "  </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/directives/station.html',
+    "<div id=\"station{{ $id }}\" class=\"drilldown__item station clearfix\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <img data-ng-src=\"{{ station.icon }}\" alt=\"{{ station.name }}\">\n" +
+    "  </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title item__title--single\"\n" +
+    "      data-ng-bind=\"station.name\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-show=\"!station.loadingTracks\"\n" +
+    "      data-ng-click=\"loadStationTracks(station)\"\n" +
+    "      data-tooltip=\"Load Tracks\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"station.loadingTracks\"\n" +
+    "      data-tooltip=\"Loading Tracks\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "  </div>\n" +
+    "</div>\n"
   );
 
 
   $templateCache.put('/static/partials/directives/track.html',
-    "<li id=\"track-{{ $id }}-{{ $index }}-{{ song.key }}\" class=\"track\">\n" +
-    "<div class=\"track__image\">\n" +
-    "  <img data-ng-src=\"{{ song.icon }}\" alt=\"{{ song.album }}\" title=\"{{ song.album }}\">\n" +
-    "  <div class=\"overlay\"></div>\n" +
-    "  <i class=\"fa fa-circle-o-notch fa-spin\" data-ng-show=\"song.addingToQueue || song.removingFromQueue\"></i>\n" +
-    "  <span data-ng-hide=\"song.addingToQueue || song.in_queue || queueBitset[song.key]\" \n" +
-    "    class=\"glyphicon glyphicon-plus-sign\" data-ng-click=\"addSongToQueue(song)\" title=\"Add to Queue\"></span>\n" +
-    "  <span data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context==='queue' && !song.removingFromQueue\" \n" +
-    "    class=\"glyphicon glyphicon-minus-sign\" data-ng-click=\"removeSongFromQueue(song, $index)\" title=\"Remove from Queue\"></span>\n" +
-    "  <span data-ng-show=\"(song.in_queue || queueBitset[song.key]) && context==='playlist'\" \n" +
-    "    class=\"glyphicon glyphicon-ok\" title=\"This song is already in your queue\"></span>\n" +
-    "</div>\n" +
-    "<div class=\"track__info\">\n" +
-    "  <div class=\"track__title\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\" \n" +
-    "    title=\"{{ song.name }}\" data-ng-bind=\"song.name | truncate:cutoff\"></div>\n" +
-    "  <div class=\"track__artist\" data-ng-class=\"{'text-muted': context === 'playlist' && queueBitset[song.key]}\"\n" +
-    "    data-ng-bind=\"song.artist | truncate:cutoff\" title=\"{{ song.artist }}\"></div>\n" +
-    "</div>\n" +
-    "<div class=\"track__actions--queued\">\n" +
-    "  <a data-ng-click=\"moveToTopOfQueue($index)\">\n" +
-    "    <i data-ng-show=\"song.in_queue && context==='queue'\" class=\"track__top glyphicon glyphicon-chevron-up\" \n" +
-    "      data-ng-click=\"moveToTopOfQueue($index)\" title=\"Move to Top of Queue\"></i>\n" +
-    "  </a>\n" +
-    "</div>\n" +
-    "<div class=\"clear\"></div>\n" +
-    "</li>\n"
+    "<div id=\"track-{{ $id }}-{{ index }}-{{ track.key }}\" class=\"drilldown__item track\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <img data-ng-src=\"{{ track.icon }}\" alt=\"{{ track.album }}\">\n" +
+    "  </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title\"\n" +
+    "      data-ng-class=\"{'text-muted': context !== 'queue' && queue.bitset[track.key]}\"\n" +
+    "      data-ng-bind=\"track.name\"></div>\n" +
+    "    <div\n" +
+    "      class=\"item__artist\"\n" +
+    "      data-ng-class=\"{'text-muted': context !== 'queue' && queue.bitset[track.key]}\"\n" +
+    "      data-ng-bind=\"track.artist\"></div>\n" +
+    "    <div\n" +
+    "      class=\"item__duration text-muted\"\n" +
+    "      data-ng-bind=\"track.duration | duration\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-arrow-circle-up item__actions__move-to-top\"\n" +
+    "      data-ng-show=\"track.in_queue && context === 'queue'\"\n" +
+    "      data-ng-click=\"queue.moveToTop(index)\"\n" +
+    "      data-tooltip=\"Move to Top of Queue\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-plus-circle item__actions__add\"\n" +
+    "      data-ng-hide=\"track.addingToQueue || track.in_queue || queue.bitset[track.key]\"\n" +
+    "      data-ng-click=\"queue.addTrack(track)\"\n" +
+    "      data-tooltip=\"Add To Queue\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-minus-circle\"\n" +
+    "      data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context === 'queue' && !track.removingFromQueue\"\n" +
+    "      data-ng-click=\"queue.removeTrack(track, index)\"\n" +
+    "      data-tooltip=\"Remove From Queue\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-check\"\n" +
+    "      data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context !== 'queue'\"\n" +
+    "      data-tooltip=\"This track is already in your queue\"\n" +
+    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-bars item__actions__drag-handle\"\n" +
+    "      data-ng-show=\"track.in_queue && context ==='queue'\"\n" +
+    "      ></i>\n" +
+    "  </div>\n" +
+    "</div>\n"
   );
 
 
@@ -427,36 +822,23 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
+  $templateCache.put('/static/partials/help.html',
+    "<div>\n" +
+    "    <p>This product uses the Rdio API but is not endorsed, certified or otherwise approved in any way by Rdio®.</p>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('/static/partials/index.html',
     "<div>\n" +
     "  <div class=\"hero jumbotron\">\n" +
     "    <div class=\"container\">\n" +
-    "      <h1><span class=\"lstn\">Lstn</span> to <span class=\"rdio\">Rdio</span> with Friends</h1>\n" +
-    "      <p>Create a room and start listening to Rdio with your friends.</p>\n" +
+    "      <h1><span class=\"lstn\">Lstn</span> to <span class=\"rdio\">Music</span> with Friends</h1>\n" +
+    "      <p>Create a room and start listening to music with your friends.</p>\n" +
     "      <p>\n" +
     "        <a data-ng-show=\"!current_user.id\" class=\"btn btn-primary btn-lg\" href=\"/login\" role=\"button\" target=\"_self\">Get Started</a>\n" +
     "        <a data-ng-show=\"current_user.id\" class=\"btn btn-primary btn-lg\" href=\"/rooms\" role=\"button\">Get Started</a>\n" +
     "      </p>\n" +
-    "    </div>\n" +
-    "  </div>\n" +
-    "\n" +
-    "  <div class=\"front__info__container container\">\n" +
-    "    <div class=\"row\">\n" +
-    "      <div class=\"front__info col-xs-4\">\n" +
-    "        <div><i class=\"glyphicon glyphicon-headphones\"></i></div>\n" +
-    "        <h4>Simple to get started</h4>\n" +
-    "        <p>Login with your Rdio account and create a room to start listening</p>\n" +
-    "      </div>\n" +
-    "      <div class=\"front__info col-xs-4\">\n" +
-    "        <div><i class=\"glyphicon glyphicon-list\"></i></div>\n" +
-    "        <h4>Sharing is caring</h4>\n" +
-    "        <p>Share your favorite music by using your playlists, collections, and stations from Rdio</p>\n" +
-    "      </div>\n" +
-    "      <div class=\"front__info col-xs-4\">\n" +
-    "        <div><i class=\"glyphicon glyphicon-transfer\"></i></div>\n" +
-    "        <h4>Stay in sync</h4>\n" +
-    "        <p>Music playback is synced between room members so you can listen and discover music together</p>\n" +
-    "      </div>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -464,38 +846,42 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/room.html',
-    "<div>\n" +
-    "  <div class=\"page-header\">\n" +
-    "    <h1>\n" +
-    "      {{ room.name }}\n" +
-    "    </h1>\n" +
+    "<div class=\"room\">\n" +
+    "  <div class=\"col-md-3 col-sm-4 room__left\">\n" +
+    "    <lstn-playing-info></lstn-playing-info>\n" +
+    "    <lstn-room-roster></lstn-room-roster>\n" +
     "  </div>\n" +
-    "\n" +
-    "  <div class=\"room row\">\n" +
-    "    <div class=\"room__middle col-md-6 col-md-push-3\">\n" +
-    "      <lstn-room-playing></lstn-room-playing>\n" +
-    "    </div>\n" +
-    "    <div class=\"room__left col-md-3 col-md-pull-6\">\n" +
-    "      <div class=\"column__header\">Room Users</div>\n" +
-    "      <lstn-room-roster></lstn-room-roster>\n" +
-    "    </div>\n" +
-    "    <div class=\"room__right col-md-3\">\n" +
-    "      <div class=\"column__header\">Music</div>\n" +
-    "      <lstn-room-music></lstn-room-music>\n" +
-    "    </div>\n" +
+    "  <div class=\"col-md-5 col-sm-8 room__middle\">\n" +
+    "    <tabset class=\"queue__tabs\">\n" +
+    "      <tab id=\"my-queue-tab\">\n" +
+    "        <tab-heading>MY QUEUE</tab-heading>\n" +
+    "        <lstn-room-queue></lstn-room-queue>\n" +
+    "      </tab>\n" +
+    "      <tab>\n" +
+    "        <tab-heading>MORE MUSIC</tab-heading>\n" +
+    "        <lstn-more-music></lstn-more-music>\n" +
+    "      </tab>\n" +
+    "      <tab class=\"hidden-md hidden-lg\">\n" +
+    "        <tab-heading>ROOM ACTIVITY</tab-heading>\n" +
+    "        <lstn-room-activity class=\"hidden-md hidden-lg\"></lstn-room-activity>\n" +
+    "      </tab>\n" +
+    "    </tabset>\n" +
+    "  </div>\n" +
+    "  <div class=\"col-md-4 hidden-sm hidden-xs room__right\">\n" +
+    "    <lstn-room-activity></lstn-room-activity>\n" +
     "  </div>\n" +
     "</div>\n"
   );
 
 
   $templateCache.put('/static/partials/rooms.html',
-    "<div class=\"page-header\">\n" +
+    "<div class=\"rooms\">\n" +
     "  <h1>\n" +
     "    Your Rooms\n" +
     "    <button class=\"btn btn-success pull-right\" data-ng-click=\"createRoom()\">Create Room</button>\n" +
     "  </h1>\n" +
-    " </div>\n" +
-    "<lstn-room-list></lstn-room-list>\n"
+    "  <lstn-room-list></lstn-room-list>\n" +
+    "</div>\n"
   );
 
 }]);

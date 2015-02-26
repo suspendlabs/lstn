@@ -1,21 +1,25 @@
-<div>
-  <div class="page-header">
-    <h1>
-      {{ room.name }}
-    </h1>
+<div class="room">
+  <div class="col-md-3 col-sm-4 room__left">
+    <lstn-playing-info></lstn-playing-info>
+    <lstn-room-roster></lstn-room-roster>
   </div>
-
-  <div class="room row">
-    <div class="room__middle col-md-6 col-md-push-3">
-      <lstn-room-playing></lstn-room-playing>
-    </div>
-    <div class="room__left col-md-3 col-md-pull-6">
-      <div class="column__header">Room Users</div>
-      <lstn-room-roster></lstn-room-roster>
-    </div>
-    <div class="room__right col-md-3">
-      <div class="column__header">Music</div>
-      <lstn-room-music></lstn-room-music>
-    </div>
+  <div class="col-md-5 col-sm-8 room__middle">
+    <tabset class="queue__tabs">
+      <tab id="my-queue-tab">
+        <tab-heading>MY QUEUE</tab-heading>
+        <lstn-room-queue></lstn-room-queue>
+      </tab>
+      <tab>
+        <tab-heading>MORE MUSIC</tab-heading>
+        <lstn-more-music></lstn-more-music>
+      </tab>
+      <tab class="hidden-md hidden-lg">
+        <tab-heading>ROOM ACTIVITY</tab-heading>
+        <lstn-room-activity class="hidden-md hidden-lg"></lstn-room-activity>
+      </tab>
+    </tabset>
+  </div>
+  <div class="col-md-4 hidden-sm hidden-xs room__right">
+    <lstn-room-activity></lstn-room-activity>
   </div>
 </div>
