@@ -31,7 +31,6 @@ angular.module('lstn.controllers', [])
 
   $scope.$on('$destroy', function(e) {
     $.each($scope.promises, function(name, promise) {
-      console.log('destroying promise', name);
       $scope.cancelPromise(promise);
     });
   });
@@ -92,8 +91,6 @@ angular.module('lstn.controllers', [])
   };
 
   $scope.saveEditRoom = function(index) {
-    console.log(index, $scope.rooms[index]);
-
     $scope.promises.updateRoom = Room.update({
       id: $scope.rooms[index].id
     }, $scope.rooms[index], function(response) {
@@ -193,7 +190,6 @@ angular.module('lstn.controllers', [])
     $scope.notificationPermission = 'default';
     if (window.Notification) {
       Notification.requestPermission(function(status) {
-        console.log(status);
         $scope.notificationPermission = status;
 
         if (Notification.permission !== status) {
@@ -382,15 +378,12 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:chat:message', function(message) {
-      console.log(message);
-
       $scope.chat.messages.push(message);
 
       if (message &&
         message.mentionNames &&
         message.mentionedNames.indexOf($scope.current_user.mention.toLowerCase()) !== -1) {
 
-        console.log('mentioned');
         $scope.sendNotification(message.user, message.text, message.picture, 5000);
         $scope.$broadcast('mentioned', true);
       }
@@ -823,7 +816,6 @@ angular.module('lstn.controllers', [])
             Alert.error('Flash doesn\'t appear to be enabled. Make sure it\'s installed and you\'ve enabled it.');
           }
         }, 5000);
-        console.log($scope.timeouts);
       };
 
       swfobject.embedSWF('//www.rdio.com/api/swf/',
