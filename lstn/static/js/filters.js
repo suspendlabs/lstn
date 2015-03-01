@@ -57,6 +57,24 @@ angular.module('lstn.filters', [])
 
 .filter('timeFromNow', [function() {
   return function(date) {
+    moment.locale('en', {
+      relativeTime: {
+        future: 'in %s',
+        past: '%s ago',
+        s: '1s',
+        m: '1m',
+        mm: '%dm',
+        h: '1h',
+        hh: '%dh',
+        d: '1d',
+        dd: '%dd',
+        M: '1mo',
+        MM: '%dmo',
+        y: '1y',
+        yy: '%dy'
+      }
+    });
+
     return moment(date).fromNow(true);
   };
 }])
