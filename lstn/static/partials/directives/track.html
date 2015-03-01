@@ -21,7 +21,7 @@
       data-ng-show="track.in_queue && context === 'queue'"
       data-ng-click="queue.moveToTop(index)"
       data-tooltip="Move to Top of Queue"
-      data-tooltip-placement="bottom"
+      data-tooltip-placement="left"
       data-tooltip-popup-delay="1000"></a>
     <i
       class="fa fa-fw fa-circle-o-notch fa-spin"
@@ -44,7 +44,7 @@
       class="fa fa-fw fa-check"
       data-ng-show="(track.in_queue || queue.bitset[track.key]) && context !== 'queue'"
       data-tooltip="This track is already in your queue"
-      data-tooltip-placement="bottom"
+      data-tooltip-placement="left"
       data-tooltip-popup-delay="1000"></i>
     <i
       class="fa fa-fw fa-bars item__actions__drag-handle"
