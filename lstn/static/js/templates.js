@@ -21,13 +21,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-show=\"!album.loadingTracks\"\n" +
     "      data-ng-click=\"loadAlbumTracks(album)\"\n" +
     "      data-tooltip=\"Load Tracks\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "    <a\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "      data-ng-show=\"album.loadingTracks\"\n" +
     "      data-tooltip=\"Loading Tracks\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -51,13 +51,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-show=\"!artist.loadingAlbums\"\n" +
     "      data-ng-click=\"loadAlbums(artist)\"\n" +
     "      data-tooltip=\"Load Albums\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "    <a\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "      data-ng-show=\"artist.loadingAlbums\"\n" +
     "      data-tooltip=\"Loading Albums\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -80,13 +80,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-show=\"!category.loading\"\n" +
     "      data-ng-click=\"loadChildren(category)\"\n" +
     "      data-tooltip=\"Load\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "    <a\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "      data-ng-show=\"category.loading\"\n" +
     "      data-tooltip=\"Loading\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -417,13 +417,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-show=\"!playlistType.loadingPlaylists\"\n" +
     "      data-ng-click=\"loadPlaylists(playlistType)\"\n" +
     "      data-tooltip=\"Load Playlists\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "    <a\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "      data-ng-show=\"playlistType.loadingPlaylists\"\n" +
     "      data-tooltip=\"Loading Playlists\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -447,13 +447,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-show=\"!playlist.loadingTracks\"\n" +
     "      data-ng-click=\"loadPlaylistTracks(playlist)\"\n" +
     "      data-tooltip=\"Load Tracks\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "    <a\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "      data-ng-show=\"playlist.loadingTracks\"\n" +
     "      data-tooltip=\"Loading Tracks\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -713,13 +713,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-show=\"!stationType.loadingStations\"\n" +
     "      data-ng-click=\"loadStations(stationType)\"\n" +
     "      data-tooltip=\"Load Stations\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "    <a\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "      data-ng-show=\"stationType.loadingStations\"\n" +
     "      data-tooltip=\"Loading Stations\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -742,13 +742,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-show=\"!station.loadingTracks\"\n" +
     "      data-ng-click=\"loadStationTracks(station)\"\n" +
     "      data-tooltip=\"Load Tracks\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "    <a\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "      data-ng-show=\"station.loadingTracks\"\n" +
     "      data-tooltip=\"Loading Tracks\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -779,7 +779,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-show=\"track.in_queue && context === 'queue'\"\n" +
     "      data-ng-click=\"queue.moveToTop(index)\"\n" +
     "      data-tooltip=\"Move to Top of Queue\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "    <i\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
@@ -802,7 +802,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      class=\"fa fa-fw fa-check\"\n" +
     "      data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context !== 'queue'\"\n" +
     "      data-tooltip=\"This track is already in your queue\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></i>\n" +
     "    <i\n" +
     "      class=\"fa fa-fw fa-bars item__actions__drag-handle\"\n" +
