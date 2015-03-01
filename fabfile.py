@@ -33,7 +33,7 @@ def build(target='production'):
 
         local('cp %s/lstn/config.py %s/lstn/' % (LOCAL_REPO, archive))
         local('cp %s/socketio/%s.json %s/socketio/config.json' % (LOCAL_REPO, target, archive))
-        local('cp %s/config/%s.json %s/config/production.json' % (LOCAL_REPO, target, archive))
+        local('cp %s/config/%s.json %s/config/%s.json' % (LOCAL_REPO, target, archive, target))
 
         # Attempt to copy node modules
         node_modules_dir = LOCAL_REPO + '/node_modules'
