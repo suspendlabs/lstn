@@ -560,8 +560,8 @@ body > .container > div {
   cursor: pointer;
   color: #d24242;
   text-decoration: none;
-  line-height: 60px;
   font-size: 1.25em;
+  margin-top: 22px;
 }
 .item__actions .item__actions__drag-handle {
   color: #777;
@@ -804,7 +804,8 @@ footer .container .text-muted {
 }
 .more-music .carousel-inner {
   height: 100%;
-  overflow: inherit;
+  overflow-x: hidden;
+  overflow-y: inherit;
 }
 .more-music .carousel-inner .item {
   height: 80%;

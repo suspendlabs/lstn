@@ -629,8 +629,8 @@ body {
     cursor:pointer;
     color: $active-color;
     text-decoration: none;
-    line-height: 60px;
     font-size: 1.25em;
+    margin-top: 22px;
   }
 
   .item__actions__drag-handle {
@@ -853,7 +853,8 @@ footer {
 
   .carousel-inner {
     height: 100%;
-    overflow: inherit;
+    overflow-x: hidden;
+    overflow-y: inherit;
 
     .item {
       height: 80%;
