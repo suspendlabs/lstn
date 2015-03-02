@@ -21,7 +21,8 @@
     "angular-emoji-map": "~1.0.1",
     "snackbarjs": "~1.0.0",
     "bootstrap-switch": "~3.3.2",
-    "angular-bootstrap-switch": "~0.3.0"
+    "angular-bootstrap-switch": "~0.3.0",
+    "angular-linkify": "~1.1.0"
   },
   "version": "0.1.0",
   "homepage": "http://lstn.in",
