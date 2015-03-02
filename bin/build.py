@@ -21,16 +21,18 @@ try:
   groups = autoscale.get_all_groups(names=['Lstn'])
 
   if groups:
-    print 'Found autoscale group'
-    group = groups[0]
+    for group in groups:
+      instances = [instance.instance_id for instance in group.instances]
+      if instance_id in instances:
+        print 'Found autoscale group'
 
-    if group.tags:
-      print 'Reading autoscale group tags...'
-      tag = group.tags[0]
+        if group.tags:
+          print 'Reading autoscale group tags...'
 
-      if tag.key == 'lstn:environment':
-        print 'Found environment tag'
-        env = tag.value
+          for tag in group.tags:
+            if tag.key == 'lstn:environment':
+              print 'Found environment tag'
+              env = tag.value
 except:
   pass
 
