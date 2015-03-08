@@ -43,14 +43,69 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   }
 ])
 
-.factory('Queue', ['$timeout', 'CurrentUser', 'Alert',
-  function($timeout, CurrentUser, Alert) {
+.factory('Favorite', ['CurrentUser', 'Alert',
+  function(CurrentUser, Alert) {
+    var Favorite = {
+      bitset: []
+    };
+
+    Favorite.addTrack = function(track) {
+      track.addingToFavorites = true;
+
+      CurrentUser.addToFavorites({
+        id: track.key
+      }, function(response) {
+        track.addingToFavorites = false;
+        if (!response || !response.success) {
+          console.log('CurrentUser.addToFavorites', response);
+
+          Alert.error('Something went wrong while trying to add the track to your favorites.');
+          return;
+        }
+
+        Favorite.bitset[track.key] = true;
+      }, function(response) {
+        console.log('CurrentUser.addToFavorites', response);
+
+        track.addingToFavorites = false;
+        Alert.error('Something went wrong while trying to add the track to your favorites.');
+      });
+    };
+
+    Favorite.removeTrack = function(track) {
+      track.removingFromFavorites = true;
+      CurrentUser.removeFromFavorites({
+        id: track.key
+      }, function(response) {
+        track.removingFromFavorites = false;
+        if (!response || !response.success) {
+          console.log('CurrentUser.removeFromFavorites', response);
+
+          Alert.error('Something went wrong while trying to remove the track from your favorites.');
+          return;
+        }
+
+        delete Favorite.bitset[track.key];
+      }, function(response) {
+        console.log('CurrentUser.removeFromFavorites', response);
+
+        track.removingFromFavorites = false;
+        Alert.error('Something went wrong while trying to remove the track from your favorites.');
+      });
+    };
+
+    return Favorite;
+  }
+])
+
+.factory('Queue', ['CurrentUser', 'Alert',
+  function(CurrentUser, Alert) {
     var Queue = {
       bitset: '',
       tracks: []
     };
 
-    Queue.addTrack = function(track) {
+    Queue.addTrack = function(track, position) {
       track.addingToQueue = true;
 
       CurrentUser.addToQueue({
@@ -66,11 +121,9 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
         Queue.tracks = response.queue;
 
-        $timeout(function() {
-          $('#queue').animate({
-            scrollTop: $('#queue')[0].scrollHeight
-          }, 500);
-        }, 10);
+        if (position === 'top') {
+          Queue.moveToTop(Queue.tracks.length - 1);
+        }
       }, function(response) {
         console.log('CurrentUser.addToQueue', response);
 
@@ -126,6 +179,33 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         console.log('moveToTopOfQueue', response);
 
         Alert.error('Something went wrong while trying to move the track to the top of your queue.');
+      });
+    };
+
+    Queue.moveToBottom = function(index) {
+      var tracks = Queue.tracks.splice(index, 1);
+      if (!tracks || tracks.length === 0) {
+        console.log('moveToBottomOfQueue', 'no tracks to move');
+
+        Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
+        return;
+      }
+
+      Queue.tracks.push(tracks[0]);
+
+      CurrentUser.updateQueue({
+        queue: Queue.tracks
+      }, function(response) {
+        if (!response || !response.success) {
+          console.log('moveToBottomOfQueue', response);
+
+          Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
+          return;
+        }
+      }, function(response) {
+        console.log('moveToBottomOfQueue', response);
+
+        Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
       });
     };
 
@@ -313,6 +393,24 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         action: 'stations'
       }
     },
+    favorites: {
+      method: 'GET',
+      params: {
+        action: 'favorites'
+      }
+    },
+    addToFavorites: {
+      method: 'POST',
+      params: {
+        action: 'favorites'
+      }
+    },
+    removeFromFavorites: {
+      method: 'DELETE',
+      params: {
+        action: 'favorites'
+      }
+    },
     addToQueue: {
       method: 'POST',
       params: {
@@ -347,6 +445,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
   CurrentUser.getStations = function(type) {
     return CurrentUser.stations({
+      id: type
+    }).$promise;
+  };
+
+  CurrentUser.getFavorites = function(type) {
+    return CurrentUser.favorites({
       id: type
     }).$promise;
   };
