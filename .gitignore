@@ -78,3 +78,6 @@ socketio/beta.json
 config/production.json
 config/beta.json
 lstn/static/js/config.js
+
+#VIM
+.*.swp
