@@ -501,6 +501,12 @@ body > .container > div {
   display: flex;
 }
 
+.chat__track, .chat__artist {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .chat__message__message-type {
   -webkit-flex-grow: 1;
   flex-grow: 1;
