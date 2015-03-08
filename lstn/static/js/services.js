@@ -289,9 +289,14 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     this.emit('room:controller:playing:finished');
   };
 
-  socket.sendSkipped = function() {
-    console.log('sending room:controller:playing:skipped');
-    this.emit('room:controller:playing:skipped');
+  socket.sendSkipped = function(reason) {
+    var type = 'room:controller:playing:skipped';
+    if (reason) {
+      type += ':' + reason;
+    }
+
+    console.log('sending ' + type);
+    this.emit(type);
   };
 
   socket.sendUpvote = function() {
