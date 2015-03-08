@@ -374,7 +374,7 @@ angular.module('lstn.controllers', [])
       });
 
       if (downvote.votes <= -2) {
-        $scope.skipTrack();
+        $scope.skipTrack('downvoted');
       }
     });
 
@@ -580,14 +580,14 @@ angular.module('lstn.controllers', [])
       });
     };
 
-    window.skipTrack = $scope.skipTrack = function() {
+    window.skipTrack = $scope.skipTrack = function(reason) {
       if (!$scope.isCurrentController) {
         return;
       }
 
       console.log('skipTrack');
       $scope.isCurrentController = false;
-      socket.sendSkipped();
+      socket.sendSkipped(reason);
     };
 
     $scope.rdioToLstn = function(rdioTrack) {
