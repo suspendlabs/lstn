@@ -731,10 +731,12 @@ Lstn.prototype.onControllerUpvote = function() {
   });
 
   var user = this.getUser();
+  var track = this.getTrack();
 
-  if (user) {
+  if (user && track) {
     this.sendChatMessage({
       sender: this.userId,
+      track: track,
       user: user,
       type: 'upvote'
     });
@@ -749,10 +751,12 @@ Lstn.prototype.onControllerDownvote = function() {
   });
 
   var user = this.getUser();
+  var track = this.getTrack();
 
-  if (user) {
+  if (user && track) {
     this.sendChatMessage({
       sender: this.userId,
+      track: track,
       user: user,
       type: 'downvote'
     });

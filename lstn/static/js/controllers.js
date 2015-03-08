@@ -413,7 +413,6 @@ angular.module('lstn.controllers', [])
       }
 
       // Play the track through Rdio
-      apiswf.rdio_setVolume(0.7);
       apiswf.rdio_play(data.key, {
         initialPosition: data.position || 0
       });
@@ -463,6 +462,11 @@ angular.module('lstn.controllers', [])
     window.toggleMute = $scope.toggleMute = function() {
       $scope.mute = !$scope.mute;
       apiswf.rdio_setMute($scope.mute);
+
+      // Adjust the volume if unmuting. This may not be necessary.
+      if (!$scope.mute) {
+        apiswf.rdio_setVolume(0.7);
+      }
     };
 
     window.toggleVisualize = $scope.toggleVisualize = function() {
@@ -640,6 +644,9 @@ angular.module('lstn.controllers', [])
       if (!newVal) {
         return;
       }
+
+      // Set initial volume
+      apiswf.rdio_setVolume(0.7);
 
       // If we don't have a track to play, return
       if (!$scope.rdioPlay) {

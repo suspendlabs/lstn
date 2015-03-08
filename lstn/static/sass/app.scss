@@ -40,6 +40,12 @@ div.snackbar {
   }
 }
 
+.text-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /* Source: http://snipplr.com/view/10979/css-cross-browser-word-wrap */
 .wordwrap { 
   white-space: pre-wrap;      /* CSS3 */   
@@ -566,6 +572,14 @@ body {
   @include flex-grow(1);
 }
 
+.chat__track {
+  font-weight: 700;
+}
+
+.chat__artist {
+  font-weight: 400;
+}
+
 .item__image {
   width: 17%;
   min-height: 60px;
@@ -587,6 +601,10 @@ body {
   line-height: 1.23;
 
   padding: 3px 0 0 5px;
+
+  a {
+    color: $first-layer-text-color;
+  }
   
   .item__top {
     float: right;
