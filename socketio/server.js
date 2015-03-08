@@ -684,6 +684,10 @@ Lstn.prototype.onControllerPlaying = function(data) {
 
   // Create a timeout to advance the queue if necessary
   this.addPlayingTimeout();
+
+  // Update the redis keys
+  cache.hincrby('played', data.key, 1);
+  cache.hincrby('played:' + this.roomId, data.key, 1);
 };
 
 Lstn.prototype.onControllerPlayingPosition = function(data) {
