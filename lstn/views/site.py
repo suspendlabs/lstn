@@ -111,7 +111,7 @@ def privacy():
 @site.route('/', defaults={'path': 'index'})
 @site.route('/<path:path>')
 def index(path):
-  if path not in ['index', 'login', 'auth']:
+  if path not in ['index', 'login', 'auth', 'privacy', 'terms']:
     if not current_user.is_authenticated():
       return current_app.login_manager.unauthorized()
 

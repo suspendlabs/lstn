@@ -93,5 +93,4 @@ def register_blueprint(app):
   from lstn.views.api.station import station
   app.register_blueprint(station)
 
-
 register_blueprint(app)

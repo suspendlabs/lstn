@@ -141,8 +141,8 @@ angular.module('lstn.controllers', [])
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Alert',
-  function($scope, $routeParams, $timeout, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Alert) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert',
+  function($scope, $routeParams, $timeout, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert) {
     var promises = {};
     var timeouts = {};
 
@@ -172,6 +172,7 @@ angular.module('lstn.controllers', [])
 
     $scope.queue = Queue;
     $scope.room = CurrentRoom;
+    $scope.favorites = Favorite;
 
     $scope.$on('$destroy', function(e) {
       $.each(promises, function(name, promise) {
@@ -834,6 +835,13 @@ angular.module('lstn.controllers', [])
 
       if (response.queue) {
         $scope.queue.tracks = response.queue;
+      }
+
+      if (response.favorites) {
+        angular.forEach(response.favorites, function(favorite) {
+          $scope.favorites.bitset[favorite] = true;
+        });
+        console.log($scope.favorites);
       }
 
       socket.registerRoom($scope.room.id, $scope.current_user);

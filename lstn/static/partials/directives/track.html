@@ -16,39 +16,66 @@
       data-ng-bind="track.duration | duration"></div>
   </div>
   <div class="item__actions">
-    <a
-      class="fa fa-fw fa-arrow-circle-up item__actions__move-to-top"
-      data-ng-show="track.in_queue && context === 'queue'"
-      data-ng-click="queue.moveToTop(index)"
-      data-tooltip="Move to Top of Queue"
-      data-tooltip-placement="left"
-      data-tooltip-popup-delay="1000"></a>
-    <i
-      class="fa fa-fw fa-circle-o-notch fa-spin"
-      data-ng-show="track.addingToQueue || track.removingFromQueue"></i>
-    <a
-      class="fa fa-fw fa-plus-circle item__actions__add"
-      data-ng-hide="track.addingToQueue || track.in_queue || queue.bitset[track.key]"
-      data-ng-click="queue.addTrack(track)"
-      data-tooltip="Add To Queue"
-      data-tooltip-placement="bottom"
-      data-tooltip-popup-delay="1000"></a>
-    <a
-      class="fa fa-fw fa-minus-circle"
-      data-ng-show="(track.in_queue || queue.bitset[track.key]) && context === 'queue' && !track.removingFromQueue"
-      data-ng-click="queue.removeTrack(track, index)"
-      data-tooltip="Remove From Queue"
-      data-tooltip-placement="bottom"
-      data-tooltip-popup-delay="1000"></a>
-    <i
-      class="fa fa-fw fa-check"
-      data-ng-show="(track.in_queue || queue.bitset[track.key]) && context !== 'queue'"
-      data-tooltip="This track is already in your queue"
-      data-tooltip-placement="left"
-      data-tooltip-popup-delay="1000"></i>
-    <i
-      class="fa fa-fw fa-bars item__actions__drag-handle"
-      data-ng-show="track.in_queue && context ==='queue'"
-      ></i>
+    <span class="dropdown" data-dropdown>
+      <i
+        class="fa fa-fw fa-circle-o-notch fa-spin"
+        data-ng-show="track.addingToQueue || track.removingFromQueue"></i>
+      <i
+        class="fa fa-fw fa-check"
+        data-ng-show="(track.in_queue || queue.bitset[track.key]) && context !== 'queue'"
+        data-tooltip="This track is already in your queue"
+        data-tooltip-placement="left"
+        data-tooltip-popup-delay="1000"></i>
+      <a
+        class="fa fa-fw fa-ellipsis-v dropdown-toggle"
+        data-ng-hide="track.addingToQueue || track.removingFromQueue || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')"
+        data-dropdown-toggle></a>
+      <ul
+        class="dropdown-menu dropdown-menu-right"
+        data-ng-hide="track.addingToQueue || track.removingFromQueue">
+        <li data-ng-show="track.in_queue && context === 'queue'">
+          <a data-ng-click="queue.moveToTop(index)">
+            <i class="fa fa-fw fa-arrow-circle-up item__actions__move-to-top"></i>
+            Move to Top of Queue
+          </a>
+        </li>
+        <li data-ng-show="track.in_queue && context === 'queue'">
+          <a data-ng-click="queue.moveToBottom(index)">
+            <i class="fa fa-fw fa-arrow-circle-down item__actions__move-to-bottom"></i>
+            Move to Bottom of Queue
+          </a>
+        </li>
+        <li data-ng-show="(track.in_queue || queue.bitset[track.key]) && context === 'queue'">
+          <a data-ng-click="queue.removeTrack(track, index)">
+            <i class="fa fa-fw fa-minus-circle"></i>
+            Remove From Queue
+          </a>
+        </li>
+        <li data-ng-hide="track.in_queue || queue.bitset[track.key]">
+          <a data-ng-click="queue.addTrack(track, 'top')">
+            <i class="fa fa-fw fa-plus-circle item__actions__add"></i>
+            Add to Top of Queue
+          </a>
+        </li>
+        <li data-ng-hide="track.in_queue || queue.bitset[track.key]">
+          <a data-ng-click="queue.addTrack(track)">
+            <i class="fa fa-fw fa-plus-circle item__actions__add"></i>
+            Add to Bottom of Queue
+          </a>
+        </li>
+        <li data-ng-hide="favorites.bitset[track.key]">
+          <a data-ng-click="favorites.addTrack(track)">
+            <i class="fa fa-fw fa-heart item__actions__favorite"></i>
+            Favorite Track
+          </a>
+        </li>
+        <li data-ng-show="favorites.bitset[track.key]">
+          <a data-ng-click="favorites.removeTrack(track)">
+            <i class="fa fa-fw fa-heart-o item__actions__unfavorite"></i>
+            Unfavorite Track
+          </a>
+        </li>
+      </ul>
+    </span>
   </div>
 </div>

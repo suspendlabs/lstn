@@ -893,8 +893,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnTrack', ['Queue',
-  function(Queue) {
+.directive('lstnTrack', ['Queue', 'Favorite',
+  function(Queue, Favorite) {
     return {
       restrict: 'E',
       replace: true,
@@ -906,6 +906,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       templateUrl: '/static/partials/directives/track.html',
       link: function($scope, $element, $attrs) {
         $scope.queue = Queue;
+        $scope.favorites = Favorite;
       }
     };
   }

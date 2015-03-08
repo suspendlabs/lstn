@@ -583,27 +583,27 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <td data-ng-show=\"!room.editing\"><a data-ng-href=\"/room/{{ room.slug }}\" data-ng-bind=\"room.name\"></a></td>\n" +
     "        <td data-ng-show=\"room.editing\" class=\"form-inline\">\n" +
     "          <label for=\"room-name\" class=\"sr-only\">Room Name</label>\n" +
-    "          <input type=\"text\" id=\"room-name\" data-ng-model=\"room.name\" class=\"form-control\" placeholder=\"Room Name\" />\n" +
+    "          <input type=\"text\" id=\"room-name\" data-ng-model=\"room.name\" class=\"form-control input-sm\" placeholder=\"Room Name\" />\n" +
     "        </td>\n" +
     "        <td data-ng-bind=\"room.owner.name\"></div>\n" +
     "        <td data-ng-show=\"!room.editing\">\n" +
-    "          <button class=\"btn btn-default\" data-ng-click=\"editRoom($index)\">Edit</button>\n" +
-    "          <button class=\"btn btn-default\" data-ng-click=\"deleteRoom($index)\">Delete</button>\n" +
+    "          <button class=\"btn btn-default btn-xs\" data-ng-click=\"editRoom($index)\">Edit</button>\n" +
+    "          <button class=\"btn btn-default btn-xs\" data-ng-click=\"deleteRoom($index)\">Delete</button>\n" +
     "        </td>\n" +
     "        <td data-ng-show=\"room.editing\">\n" +
-    "          <button class=\"btn btn-primary\" data-ng-click=\"saveEditRoom($index)\">Save</button>\n" +
-    "          <button class=\"btn btn-default\" data-ng-click=\"cancelEditRoom($index)\">Cancel</button>\n" +
+    "          <button class=\"btn btn-primary btn-xs\" data-ng-click=\"saveEditRoom($index)\">Save</button>\n" +
+    "          <button class=\"btn btn-default btn-xs\" data-ng-click=\"cancelEditRoom($index)\">Cancel</button>\n" +
     "        </td>\n" +
     "      </tr>\n" +
     "      <tr data-ng-show=\"showCreateRoom\">\n" +
     "        <td class=\"form-inline\">\n" +
     "          <label for=\"room-name\" class=\"sr-only\">Room Name</label>\n" +
-    "          <input type=\"text\" id=\"room-name\" data-ng-model=\"newRoom.name\" class=\"form-control\" placeholder=\"Room Name\" />\n" +
+    "          <input type=\"text\" id=\"room-name\" data-ng-model=\"newRoom.name\" class=\"form-control input-sm\" placeholder=\"Room Name\" />\n" +
     "        </td>\n" +
     "        <td></td>\n" +
     "        <td>\n" +
-    "          <button class=\"btn btn-primary\" data-ng-click=\"saveCreateRoom()\">Create</button>\n" +
-    "          <button class=\"btn btn-default\" data-ng-click=\"cancelCreateRoom()\">Cancel</button>\n" +
+    "          <button class=\"btn btn-primary btn-xs\" data-ng-click=\"saveCreateRoom()\">Create</button>\n" +
+    "          <button class=\"btn btn-default btn-xs\" data-ng-click=\"cancelCreateRoom()\">Cancel</button>\n" +
     "        </td>\n" +
     "      </tr>\n" +
     "    </tbody>\n" +
@@ -774,40 +774,67 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-bind=\"track.duration | duration\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-arrow-circle-up item__actions__move-to-top\"\n" +
-    "      data-ng-show=\"track.in_queue && context === 'queue'\"\n" +
-    "      data-ng-click=\"queue.moveToTop(index)\"\n" +
-    "      data-tooltip=\"Move to Top of Queue\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "    <i\n" +
-    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-plus-circle item__actions__add\"\n" +
-    "      data-ng-hide=\"track.addingToQueue || track.in_queue || queue.bitset[track.key]\"\n" +
-    "      data-ng-click=\"queue.addTrack(track)\"\n" +
-    "      data-tooltip=\"Add To Queue\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-minus-circle\"\n" +
-    "      data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context === 'queue' && !track.removingFromQueue\"\n" +
-    "      data-ng-click=\"queue.removeTrack(track, index)\"\n" +
-    "      data-tooltip=\"Remove From Queue\"\n" +
-    "      data-tooltip-placement=\"bottom\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "    <i\n" +
-    "      class=\"fa fa-fw fa-check\"\n" +
-    "      data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context !== 'queue'\"\n" +
-    "      data-tooltip=\"This track is already in your queue\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></i>\n" +
-    "    <i\n" +
-    "      class=\"fa fa-fw fa-bars item__actions__drag-handle\"\n" +
-    "      data-ng-show=\"track.in_queue && context ==='queue'\"\n" +
-    "      ></i>\n" +
+    "    <span class=\"dropdown\" data-dropdown>\n" +
+    "      <i\n" +
+    "        class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "        data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
+    "      <i\n" +
+    "        class=\"fa fa-fw fa-check\"\n" +
+    "        data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context !== 'queue'\"\n" +
+    "        data-tooltip=\"This track is already in your queue\"\n" +
+    "        data-tooltip-placement=\"left\"\n" +
+    "        data-tooltip-popup-delay=\"1000\"></i>\n" +
+    "      <a\n" +
+    "        class=\"fa fa-fw fa-ellipsis-v dropdown-toggle\"\n" +
+    "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')\"\n" +
+    "        data-dropdown-toggle></a>\n" +
+    "      <ul\n" +
+    "        class=\"dropdown-menu dropdown-menu-right\"\n" +
+    "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue\">\n" +
+    "        <li data-ng-show=\"track.in_queue && context === 'queue'\">\n" +
+    "          <a data-ng-click=\"queue.moveToTop(index)\">\n" +
+    "            <i class=\"fa fa-fw fa-arrow-circle-up item__actions__move-to-top\"></i>\n" +
+    "            Move to Top of Queue\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "        <li data-ng-show=\"track.in_queue && context === 'queue'\">\n" +
+    "          <a data-ng-click=\"queue.moveToBottom(index)\">\n" +
+    "            <i class=\"fa fa-fw fa-arrow-circle-down item__actions__move-to-bottom\"></i>\n" +
+    "            Move to Bottom of Queue\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "        <li data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context === 'queue'\">\n" +
+    "          <a data-ng-click=\"queue.removeTrack(track, index)\">\n" +
+    "            <i class=\"fa fa-fw fa-minus-circle\"></i>\n" +
+    "            Remove From Queue\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "        <li data-ng-hide=\"track.in_queue || queue.bitset[track.key]\">\n" +
+    "          <a data-ng-click=\"queue.addTrack(track, 'top')\">\n" +
+    "            <i class=\"fa fa-fw fa-plus-circle item__actions__add\"></i>\n" +
+    "            Add to Top of Queue\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "        <li data-ng-hide=\"track.in_queue || queue.bitset[track.key]\">\n" +
+    "          <a data-ng-click=\"queue.addTrack(track)\">\n" +
+    "            <i class=\"fa fa-fw fa-plus-circle item__actions__add\"></i>\n" +
+    "            Add to Bottom of Queue\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "        <li data-ng-hide=\"favorites.bitset[track.key]\">\n" +
+    "          <a data-ng-click=\"favorites.addTrack(track)\">\n" +
+    "            <i class=\"fa fa-fw fa-heart item__actions__favorite\"></i>\n" +
+    "            Favorite Track\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "        <li data-ng-show=\"favorites.bitset[track.key]\">\n" +
+    "          <a data-ng-click=\"favorites.removeTrack(track)\">\n" +
+    "            <i class=\"fa fa-fw fa-heart-o item__actions__unfavorite\"></i>\n" +
+    "            Unfavorite Track\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </span>\n" +
     "  </div>\n" +
     "</div>\n"
   );

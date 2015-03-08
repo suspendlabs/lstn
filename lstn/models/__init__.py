@@ -137,6 +137,28 @@ class User(db.Model, ModelMixin, UserMixin):
 
     return queue
 
+  def get_favorites(self):
+    rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+      current_app.config['RDIO_CONSUMER_SECRET'],
+      self.oauth_token,
+      self.oauth_token_secret)
+
+    data = {
+      'method': 'getKeysInFavorites',
+      'user': self.external_id,
+    }
+
+    try:
+      response = rdio_manager.call_api_authenticated(data)
+    except Exception as e:
+      current_app.logger.debug(e)
+      raise APIException('Unable to retrieve your favorites: %s' % str(e))
+
+    if not response:
+      return []
+
+    return response['keys']
+
   def get_owned_rooms(self):
     rooms = {}
     for room in self.owned:
