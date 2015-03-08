@@ -111,7 +111,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"chat__message__message\" data-ng-if=\"message.type === 'message'\">\n" +
-    "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
+    "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|linkify|twemoji\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"chat__track-info text-muted\" data-ng-if=\"message.type !== 'message'\">\n" +
     "      <div class=\"chat__track text-truncate\">\n" +
