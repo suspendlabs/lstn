@@ -385,6 +385,16 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
+.directive('lstnRoomControlShuffle', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-shuffle.html'
+    };
+  }
+])
+
 .directive('lstnRoomQueue', ['$timeout', 'Alert', 'CurrentUser',
   function($timeout, Alert, CurrentUser) {
     return {
