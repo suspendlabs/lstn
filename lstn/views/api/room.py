@@ -98,12 +98,14 @@ def room_id_action(room_id):
       raise APIException('Unable to retrieve playback token', 500)
 
   queue = current_user.get_queue()
+  favorites = current_user.get_favorites()
 
   response = {
     'success': 1,
     'room': room,
     'playback': playback,
     'queue': queue,
+    'favorites': favorites,
   }
 
   return jsonify(response)
