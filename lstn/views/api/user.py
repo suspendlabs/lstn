@@ -39,17 +39,17 @@ def vote(user_id, direction):
   if not room:
     raise APIException('Unable to find room', 404)
 
-  song_id = request.json.get('song', None)
-  if not song_id:
-    raise APIException('You must specify a song id')
+  track_id = request.json.get('track', None)
+  if not track_id:
+    raise APIException('You must specify a track id')
 
   remaining = request.json.get('remaining', None)
   if not remaining:
-    raise APIException('You must specify a song remaining time')
+    raise APIException('You must specify a track remaining time')
 
   remaining = int(remaining)
 
-  voting_key = 'vote_%s_%s_%s_%s' % (current_user.id, user_id, room_id, song_id)
+  voting_key = 'vote_%s_%s_%s_%s' % (current_user.id, user_id, room_id, track_id)
   voted = r.get(voting_key)
   if voted and voted == direction:
     raise APIException('You have already voted')
@@ -128,6 +128,56 @@ def get_playlist_type(list_type):
 
   return jsonify(success=True, playlists=playlists)
 
+@user.route('/stations/<station_type>', methods=['GET'])
+@login_required
+def get_station_type(station_type):
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  methods = {
+    'you': {
+      'method': 'getStations',
+      'user': current_user.external_id,
+    },
+    'friends': {
+      'method': 'getFriendAndTastemakerStations',
+    },
+    'recent': {
+      'method': 'getRecentStationsHistoryForUser',
+      'user': current_user.external_id,
+    },
+    'genre': {
+      'method': 'getGenreStations',
+    },
+    'top': {
+      'method': 'getCuratedContent',
+      'curationType': 'top_stations',
+    },
+    'new': {
+      'method': 'getCuratedContent',
+      'curationType': 'new_releases_weekly_station',
+    },
+    'spotlight': {
+      'method': 'getCuratedContent',
+      'curationType': 'spotlight',
+    }
+  }
+
+  if station_type not in methods:
+    raise APIException('Invalid station type')
+
+  stations = {}
+
+  try:
+    stations = rdio_manager.call_api_authenticated(methods[station_type])
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to retrieve station: %s' % str(e))
+
+  return jsonify(success=True, stations=stations)
+
 @user.route('/queue', methods=['GET', 'PUT'])
 @login_required
 def user_queue():
@@ -181,13 +231,13 @@ def add_queue(track_id):
       rdio_manager.add_to_playlist(queue_playlist, [track_id])
     except Exception as e:
       current_app.logger.debug(e)
-      raise APIException('Unable to add the song to your queue: %s' % str(e))
+      raise APIException('Unable to add the track to your queue: %s' % str(e))
   else:
     try:
       playlist = rdio_manager.create_playlist('Lstn to Rdio', 'User Queue for Lstn', [track_id])
     except Exception as e:
       current_app.logger.debug(e)
-      raise APIException('Unable to add the song to your queue: %s' % str(e))
+      raise APIException('Unable to add the track to your queue: %s' % str(e))
 
     # Throw an error if we couldn't create it
     if not playlist:
@@ -218,7 +268,7 @@ def delete_queue(track_id):
     rdio_manager.remove_from_playlist(current_user.queue, [track_id], index)
   except Exception as e:
     current_app.logger.debug(e)
-    raise APIException('Unable to remove that song from your queue: %s' % str(e))
+    raise APIException('Unable to remove that track from your queue: %s' % str(e))
 
   queue = current_user.get_queue()
   return jsonify(success=True, queue=queue)
@@ -240,7 +290,8 @@ def search():
   data = {
     'method': 'search',
     'query': query,
-    'types': 'track',
+    'types': 'track,artist,album',
+    'extras': 'albumCount',
   }
 
   try:

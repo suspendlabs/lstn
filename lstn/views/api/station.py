@@ -9,26 +9,32 @@ from flask.ext.login import login_required, current_user
 from lstn import db
 from lstn.exceptions import APIException
 
-playlist = Blueprint('playlist', __name__, url_prefix='/api/playlist')
+station = Blueprint('station', __name__, url_prefix='/api/station')
 
-@playlist.route('/<playlist_id>/tracks', methods=['GET'])
+@station.route('/<station_id>/tracks', methods=['GET'])
 @login_required
-def get_tracks(playlist_id):
+def get_tracks(station_id):
   rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
     current_app.config['RDIO_CONSUMER_SECRET'],
     current_user.oauth_token,
     current_user.oauth_token_secret)
 
-  tracks = []
+  data = {
+    'method': 'generateStation',
+    'station_key': station_id,
+  }
 
   try:
-    playlists = rdio_manager.get([playlist_id], ['tracks'])
+    station = rdio_manager.call_api_authenticated(data)
   except Exception as e:
     current_app.logger.debug(e)
-    raise APIException('Unable to retrieve playlist tracks: %s' % str(e))
+    raise APIException('Unable to retrieve station tracks: %s' % str(e))
 
-  if len(playlists) > 0 and hasattr(playlists[0], 'tracks'):
-      tracks = [track._data for track in playlists[0].tracks]
+  current_app.logger.debug(station)
+
+  tracks = []
+  if 'tracks' in station:
+      tracks = station['tracks']
 
   response = {
     'success': 1,

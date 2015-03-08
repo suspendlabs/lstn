@@ -3,6 +3,136 @@
 
 angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
+.factory('Alert', [
+  function() {
+    var Alert = {};
+
+    Alert.success = function(message) {
+      this.add(message, 'success');
+    };
+
+    Alert.info = function(message) {
+      this.add(message, 'info');
+    };
+
+    Alert.warning = function(message) {
+      this.add(message, 'warning');
+    };
+
+    Alert.error = function(message) {
+      this.add(message, 'error');
+    };
+
+    Alert.add = function(message, type) {
+      type = type || 'info';
+
+      $.snackbar({
+        content: message,
+        style: 'snackbar--' + type,
+        timeout: 0
+      });
+    };
+
+    Alert.clear = function() {
+      $('.snackbar').each(function() {
+        $(this).snackbar('hide');
+      });
+    };
+
+    return Alert;
+  }
+])
+
+.factory('Queue', ['$timeout', 'CurrentUser', 'Alert',
+  function($timeout, CurrentUser, Alert) {
+    var Queue = {
+      bitset: '',
+      tracks: []
+    };
+
+    Queue.addTrack = function(track) {
+      track.addingToQueue = true;
+
+      CurrentUser.addToQueue({
+        id: track.key
+      }, function(response) {
+        track.addingToQueue = false;
+        if (!response || !response.success || !response.queue) {
+          console.log('CurrentUser.addToQueue', response);
+
+          Alert.error('Something went wrong while trying to add the track to your queue.');
+          return;
+        }
+
+        Queue.tracks = response.queue;
+
+        $timeout(function() {
+          $('#queue').animate({
+            scrollTop: $('#queue')[0].scrollHeight
+          }, 500);
+        }, 10);
+      }, function(response) {
+        console.log('CurrentUser.addToQueue', response);
+
+        track.addingToQueue = false;
+        Alert.error('Something went wrong while trying to add the track to your queue.');
+      });
+    };
+
+    Queue.removeTrack = function(track, index) {
+      track.removingFromQueue = true;
+      CurrentUser.removeFromQueue({
+        id: track.key,
+        index: index
+      }, function(response) {
+        track.removingFromQueue = false;
+        if (!response || !response.success || !response.queue) {
+          console.log('CurrentUser.removeFromQueue', response);
+
+          Alert.error('Something went wrong while trying to remove the track from your queue.');
+          return;
+        }
+
+        Queue.tracks = response.queue;
+      }, function(response) {
+        console.log('CurrentUser.removeFromQueue', response);
+
+        track.removingFromQueue = false;
+        Alert.error('Something went wrong while trying to remove the track from your queue.');
+      });
+    };
+
+    Queue.moveToTop = function(index) {
+      var tracks = Queue.tracks.splice(index, 1);
+      if (!tracks || tracks.length === 0) {
+        console.log('moveToTopOfQueue', 'no tracks to move');
+
+        Alert.error('Something went wrong while trying to move the track to the top of your queue.');
+        return;
+      }
+
+      Queue.tracks.unshift(tracks[0]);
+
+      CurrentUser.updateQueue({
+        queue: Queue.tracks
+      }, function(response) {
+        if (!response || !response.success) {
+          console.log('moveToTopOfQueue', response);
+
+          Alert.error('Something went wrong while trying to move the track to the top of your queue.');
+          return;
+        }
+      }, function(response) {
+        console.log('moveToTopOfQueue', response);
+
+        Alert.error('Something went wrong while trying to move the track to the top of your queue.');
+      });
+    };
+
+    return Queue;
+  }
+])
+
 .factory('Rdio', [
   function() {
     var rdio = {
@@ -42,12 +172,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     console.log('sending room:controller:release');
     this.emit('room:controller:release');
   };
-  
+
   socket.requestControl = function(id, user) {
     console.log('sending room:controller:request');
     this.emit('room:controller:request');
   };
-  
+
   socket.roomConnect = function(id, user) {
     console.log('sending room:connect');
     this.emit('room:connect', {
@@ -104,6 +234,26 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   return socket;
 }])
 
+.factory('CurrentRoom', ['$resource', function($resource) {
+  var Room = {
+    id: 0,
+    name: null,
+    slug: null
+  };
+
+  Room.update = function(room) {
+    $.extend(this, this, room);
+  };
+
+  Room.clear = function() {
+    this.id = 0;
+    this.name = null;
+    this.slug = null;
+  };
+
+  return Room;
+}])
+
 .factory('Room', ['$resource', function($resource) {
   var Room = $resource('/api/room/:id/:action/:target', {
     id: '@id',
@@ -148,13 +298,19 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 }])
 
 .factory('CurrentUser', ['$resource', function($resource) {
-  return $resource('/api/user/:action/:id', {
+  var CurrentUser = $resource('/api/user/:action/:id', {
     id: '@id'
   },{
     playlists: {
       method: 'GET',
       params: {
         action: 'playlists'
+      }
+    },
+    stations: {
+      method: 'GET',
+      params: {
+        action: 'stations'
       }
     },
     addToQueue: {
@@ -182,10 +338,24 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }
     }
   });
+
+  CurrentUser.getPlaylists = function(type) {
+    return CurrentUser.playlists({
+      id: type
+    }).$promise;
+  };
+
+  CurrentUser.getStations = function(type) {
+    return CurrentUser.stations({
+      id: type
+    }).$promise;
+  };
+
+  return CurrentUser;
 }])
 
 .factory('Playlist', ['$resource', function($resource) {
-  return $resource('/api/playlist/:id/:action', {
+  var Playlist = $resource('/api/playlist/:id/:action', {
     id: '@id'
   },{
     tracks: {
@@ -195,6 +365,182 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }
     }
   });
-}]);
+
+  Playlist.getTracks = function(playlist) {
+    return this.tracks({
+      id: playlist
+    }).$promise;
+  };
+
+  return Playlist;
+}])
+
+.factory('Artist', ['$resource', function($resource) {
+  var Artist = $resource('/api/artist/:id/:action', {
+    id: '@id'
+  },{
+    albums: {
+      method: 'GET',
+      params: {
+        action: 'albums'
+      }
+    }
+  });
+
+  Artist.getAlbums = function(artistId) {
+    return Artist.albums({
+      id: artistId
+    }).$promise;
+  };
+
+  return Artist;
+}])
+
+.factory('Album', ['$resource', function($resource) {
+  var Album = $resource('/api/album/:id/:action', {
+    id: '@id'
+  },{
+    tracks: {
+      method: 'GET',
+      params: {
+        action: 'tracks'
+      }
+    }
+  });
+
+  Album.getTracks = function(artistId) {
+    return this.tracks({
+      id: artistId
+    }).$promise;
+  };
+
+  return Album;
+}])
+
+.factory('Station', ['$resource', function($resource) {
+  var Station = $resource('/api/station/:id/:action', {
+    id: '@id'
+  },{
+    tracks: {
+      method: 'GET',
+      params: {
+        action: 'tracks'
+      }
+    }
+  });
+
+  Station.getTracks = function(station) {
+    return this.tracks({
+      id: station
+    }).$promise;
+  };
+
+  return Station;
+}])
+
+.constant('MoreMusic', {
+  categories: [
+    {
+      name: 'Playlists',
+      type: 'playlists',
+    },{
+      name: 'Stations',
+      type: 'stations'
+    },{
+      name: 'Collections',
+      type: 'collections'
+    }
+  ],
+  playlistTypes: [
+    {
+      name: 'Your Playlists',
+      key: 'owned'
+    },{
+      name: 'Collaborative Playlists',
+      key: 'collab'
+    },{
+      name: 'Subscribed Playlists',
+      key: 'subscribed'
+    },{
+      name: 'Favorited Playlists',
+      key: 'favorites'
+    }
+  ],
+  stationTypes: [
+    {
+      name: 'Your Stations',
+      key: 'you'
+    },{
+      name: 'Friends',
+      key: 'friends'
+    },{
+      name: 'Recent Stations',
+      key: 'recent'
+    },{
+      name: 'Genre',
+      key: 'genre'
+    }
+  ],
+  genres: [
+    {
+      name: 'Reggae',
+      key: 'Reggae'
+    },{
+      name: 'Rock',
+      key: 'Rock'
+    },{
+      name: 'Latin',
+      key: 'Latin'
+    },{
+      name: 'Christian Gospel',
+      key: 'Christian_Gospel'
+    },{
+      name: 'World',
+      key: 'World'
+    },{
+      name: 'Classical',
+      key: 'Classical'
+    },{
+      name: 'Dance',
+      key: 'Dance'
+    },{
+      name: 'Country',
+      key: 'Country'
+    },{
+      name: 'Songwriters/Folk',
+      key: 'Songwriters_Folk'
+    },{
+      name: 'Jazz',
+      key: 'Jazz'
+    },{
+      name: 'Pop',
+      key: 'Pop'
+    },{
+      name: 'Indie',
+      key: 'Indie'
+    },{
+      name: 'R&B',
+      key: 'R_and_B'
+    },{
+      name: 'Hip Hop',
+      key: 'Hip_Hop'
+    },{
+      name: 'Alternative',
+      key: 'Alternative'
+    },{
+      name: 'Holiday',
+      key: 'Holiday'
+    },{
+      name: 'Electronic',
+      key: 'Electronic'
+    },{
+      name: 'Blues',
+      key: 'Blues'
+    },{
+      name: 'More',
+      key: 'More'
+    }
+  ]
+});
 
 })();

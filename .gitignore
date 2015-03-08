@@ -74,7 +74,9 @@ bower_components
 # Local
 lstn/config.py
 socketio/production.json
+socketio/beta.json
 config/production.json
+config/beta.json
 lstn/static/js/config.js
 
 #VIM

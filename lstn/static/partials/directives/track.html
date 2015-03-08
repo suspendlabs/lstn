@@ -1,26 +1,54 @@
-<li id="track-{{ $id }}-{{ $index }}-{{ song.key }}" class="track">
-<div class="track__image">
-  <img data-ng-src="{{ song.icon }}" alt="{{ song.album }}" title="{{ song.album }}">
-  <div class="overlay"></div>
-  <i class="fa fa-circle-o-notch fa-spin" data-ng-show="song.addingToQueue || song.removingFromQueue"></i>
-  <span data-ng-hide="song.addingToQueue || song.in_queue || queueBitset[song.key]" 
-    class="glyphicon glyphicon-plus-sign" data-ng-click="addSongToQueue(song)" title="Add to Queue"></span>
-  <span data-ng-show="(song.in_queue || queueBitset[song.key]) && context==='queue' && !song.removingFromQueue" 
-    class="glyphicon glyphicon-minus-sign" data-ng-click="removeSongFromQueue(song, $index)" title="Remove from Queue"></span>
-  <span data-ng-show="(song.in_queue || queueBitset[song.key]) && context==='playlist'" 
-    class="glyphicon glyphicon-ok" title="This song is already in your queue"></span>
+<div id="track-{{ $id }}-{{ index }}-{{ track.key }}" class="drilldown__item track">
+  <div class="item__image">
+    <img data-ng-src="{{ track.icon }}" alt="{{ track.album }}">
+  </div>
+  <div class="item__info">
+    <div
+      class="item__title"
+      data-ng-class="{'text-muted': context !== 'queue' && queue.bitset[track.key]}"
+      data-ng-bind="track.name"></div>
+    <div
+      class="item__artist"
+      data-ng-class="{'text-muted': context !== 'queue' && queue.bitset[track.key]}"
+      data-ng-bind="track.artist"></div>
+    <div
+      class="item__duration text-muted"
+      data-ng-bind="track.duration | duration"></div>
+  </div>
+  <div class="item__actions">
+    <a
+      class="fa fa-fw fa-arrow-circle-up item__actions__move-to-top"
+      data-ng-show="track.in_queue && context === 'queue'"
+      data-ng-click="queue.moveToTop(index)"
+      data-tooltip="Move to Top of Queue"
+      data-tooltip-placement="left"
+      data-tooltip-popup-delay="1000"></a>
+    <i
+      class="fa fa-fw fa-circle-o-notch fa-spin"
+      data-ng-show="track.addingToQueue || track.removingFromQueue"></i>
+    <a
+      class="fa fa-fw fa-plus-circle item__actions__add"
+      data-ng-hide="track.addingToQueue || track.in_queue || queue.bitset[track.key]"
+      data-ng-click="queue.addTrack(track)"
+      data-tooltip="Add To Queue"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
+    <a
+      class="fa fa-fw fa-minus-circle"
+      data-ng-show="(track.in_queue || queue.bitset[track.key]) && context === 'queue' && !track.removingFromQueue"
+      data-ng-click="queue.removeTrack(track, index)"
+      data-tooltip="Remove From Queue"
+      data-tooltip-placement="bottom"
+      data-tooltip-popup-delay="1000"></a>
+    <i
+      class="fa fa-fw fa-check"
+      data-ng-show="(track.in_queue || queue.bitset[track.key]) && context !== 'queue'"
+      data-tooltip="This track is already in your queue"
+      data-tooltip-placement="left"
+      data-tooltip-popup-delay="1000"></i>
+    <i
+      class="fa fa-fw fa-bars item__actions__drag-handle"
+      data-ng-show="track.in_queue && context ==='queue'"
+      ></i>
+  </div>
 </div>
-<div class="track__info">
-  <div class="track__title" data-ng-class="{'text-muted': context === 'playlist' && queueBitset[song.key]}" 
-    title="{{ song.name }}" data-ng-bind="song.name | truncate:cutoff"></div>
-  <div class="track__artist" data-ng-class="{'text-muted': context === 'playlist' && queueBitset[song.key]}"
-    data-ng-bind="song.artist | truncate:cutoff" title="{{ song.artist }}"></div>
-</div>
-<div class="track__actions--queued">
-  <a data-ng-click="moveToTopOfQueue($index)">
-    <i data-ng-show="song.in_queue && context==='queue'" class="track__top glyphicon glyphicon-chevron-up" 
-      data-ng-click="moveToTopOfQueue($index)" title="Move to Top of Queue"></i>
-  </a>
-</div>
-<div class="clear"></div>
-</li>

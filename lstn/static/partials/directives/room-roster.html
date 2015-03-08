@@ -1,34 +1,45 @@
 <div class="roster__container room__container">
-  <div class="panel panel-primary">
-    <div class="panel-heading">Broadcasters</div>
-    <ul class="roster roster--controllers list-group">
-      <li class="list-group-item" data-ng-show="!roster || roster.controllersCount === 0">
-        <div class="text-center"><strong>No Broadcasters</strong></div>
+
+  <div class="roster__category">
+    <div class="roster__category-label">Broadcasting
+      <input
+        data-bs-switch
+        data-ng-model="isController"
+        type="checkbox"
+        data-switch-size="mini">
+    </div>
+    <ul class="roster roster--controllers">
+      <li class="empty" data-ng-show="!roster || roster.controllersCount === 0">
+        No Broadcasters
       </li>
-      <li data-ng-show="roster && roster.controllersCount > 0" data-ng-repeat="user_id in roster.controllerOrder" class="list-group-item" data-ng-class="{'list-group-item-success': current_user.id === user_id}">
-        <span class="badge" data-ng-bind="roster.controllers[user_id].points" data-ng-show="user_id !== currentController"></span>
-        <a data-ng-href="http://www.rdio.com{{ roster.controllers[user_id].profile }}" target="_blank">
-          <img data-ng-src="{{ roster.controllers[user_id].picture }}" class="avatar xs" 
+      <li class="roster__item--controller"
+        data-ng-show="roster && roster.controllersCount > 0" data-ng-repeat="user_id in roster.controllerOrder">
+        <a data-ng-href="http://www.rdio.com{{ roster.controllers[user_id].profile }}" target="_blank"
+          tooltip="{{ roster.controllers[user_id].name }} ({{ roster.controllers[user_id].points }})" data-tooltip-placement="bottom">
+          <img data-ng-src="{{ roster.controllers[user_id].picture }}" class="avatar xs"
             data-ng-class="{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}"
-            alt="{{ roster.controllers[user_id].name }}"/> {{ roster.controllers[user_id].name }}
+            alt="{{ roster.controllers[user_id].name }}" />
+            <i data-ng-if="user_id === currentController" class="fa fa-volume-up" />
         </a>
-        <span class="glyphicon glyphicon-music pull-right" aria-hidden="true" data-ng-show="user_id === currentController"></span>
       </li>
     </ul>
   </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">Listeners</div>
-    <ul class="roster list-group">
-      <li class="list-group-item" data-ng-show="!roster || roster.usersCount === 0">
-        <div class="text-center"><strong>No Listeners</strong></div>
+
+  <div class="roster__category">
+    <div class="roster__category-label">Listening</div>
+    <ul class="roster roster--listeners" data-ng-show="roster && roster.usersCount > 0">
+      <li class="empty" data-ng-show="!roster || roster.users.length === 0">
+        No one is listening
       </li>
-      <li data-ng-show="roster && roster.usersCount > 0" data-ng-repeat="(user_id, user) in roster.users | orderBy:name" class="list-group-item" data-ng-class="{'list-group-item-success': current_user.id === user.id}">
-        <span class="badge" data-ng-bind="user.points"></span>
-        <a data-ng-href="http://www.rdio.com{{ user.profile }}"target="_blank">
-          <img data-ng-src="{{ user.picture }}" 
-            data-ng-class="{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}"
-            class="avatar xs" alt="{{ user.name }}"/> {{ user.name }}
-        </a>
+      <li data-ng-repeat="(user_id, user) in roster.users | orderBy:name">
+      <a class="roster__user"
+        data-ng-href="http://www.rdio.com{{ user.profile }}"
+        target="_blank"
+        tooltip="{{ user.name }} ({{ user.points }})" data-tooltip-placement="bottom">
+        <img data-ng-src="{{ user.picture }}"
+        data-ng-class="{upvoted: playing.upvotes[user_id], downvoted: playing.downvotes[user_id]}"
+        class="avatar xs" alt="{{ user.name }}" />
+      </a>
       </li>
     </ul>
   </div>

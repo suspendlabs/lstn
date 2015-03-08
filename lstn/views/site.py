@@ -104,6 +104,10 @@ def logout():
   logout_user()
   return redirect(url_for('site.index'))
 
+@site.route('/privacy')
+def privacy():
+  return render_template('privacy.html')
+
 @site.route('/', defaults={'path': 'index'})
 @site.route('/<path:path>')
 def index(path):

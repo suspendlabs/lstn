@@ -18,7 +18,7 @@ def __version():
         version = local('git rev-parse --short HEAD', capture = True)
     return version
 
-def build():
+def build(target='production'):
     with lcd(LOCAL_REPO):
         version = __version()
         compressed = '%s.zip' % version
@@ -32,8 +32,8 @@ def build():
         local('git checkout-index -f -a --prefix=%s/' % archive)
 
         local('cp %s/lstn/config.py %s/lstn/' % (LOCAL_REPO, archive))
-        local('cp %s/socketio/production.json %s/socketio/config.json' % (LOCAL_REPO, archive))
-        local('cp %s/config/production.json %s/config/production.json' % (LOCAL_REPO, archive))
+        local('cp %s/socketio/%s.json %s/socketio/config.json' % (LOCAL_REPO, target, archive))
+        local('cp %s/config/%s.json %s/config/%s.json' % (LOCAL_REPO, target, archive, target))
 
         # Attempt to copy node modules
         node_modules_dir = LOCAL_REPO + '/node_modules'
@@ -57,18 +57,20 @@ def build():
         if not has_bower_deps:
             local('bower install')
 
-        local('grunt deploy')
+        local('grunt deploy --target=%s' % target)
 
         compressed = '%s.zip' % version
         local('zip -x "*.git*" -x "*node_modules*" -r ../%s *' % compressed)
 
-
-
     with lcd(BUILD_DIR):
         local('rm -rf %s' % version)
 
-def deploy():
+def deploy(target='production'):
     version = __version()
+
+    s3_bucket = 'lstn'
+    if target == 'beta':
+      s3_bucket += '-beta'
 
     # Check that we have a build file.
     compressed = '%s.zip' % (version)
@@ -76,9 +78,12 @@ def deploy():
         abort(red('Build file not found. Did you forget to build?'))
 
     S3_BUCKET   = 'devops.lstn.fm'
-    S3_KEY      = 'builds/lstn/' + compressed
+    S3_KEY      = 'builds/%s/%s' % (s3_bucket, compressed)
     CD_APP_NAME = 'Lstn'
+
     CD_DEPLOYMENT_GROUP = 'Production'
+    if target == 'beta':
+      CD_DEPLOYMENT_GROUP = 'Beta'
 
     # Upload to S3
     with lcd(BUILD_DIR):

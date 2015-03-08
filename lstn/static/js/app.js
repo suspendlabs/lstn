@@ -8,6 +8,7 @@ angular.module('lstn', [
   'ui.sortable',
   'btford.socket-io',
   'mentio',
+  'frapontillo.bootstrap-switch',
   'lstn.config',
   'lstn.services',
   'lstn.controllers',

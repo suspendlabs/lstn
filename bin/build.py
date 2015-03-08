@@ -7,7 +7,8 @@ import datetime
 
 configs = {
   'default': 'lstn.config.DefaultConfig',
-  'production': 'lstn.config.ProductionConfig'
+  'beta': 'lstn.config.BetaConfig',
+  'production': 'lstn.config.ProductionConfig',
 }
 
 env = 'default'

@@ -61,10 +61,16 @@ module.exports = (grunt) ->
         options:
           dest: '<%= lstn.static %>/js/config.js'
         constants: 'config/development.json'
+
       dist:
         options:
           dest: '<%= lstn.static %>/js/config.js'
         constants: 'config/production.json'
+
+      beta:
+        options:
+          dest: '<%= lstn.static %>/js/config.js'
+        constants: 'config/beta.json'
 
     ngtemplates:
       options:
@@ -134,7 +140,7 @@ module.exports = (grunt) ->
     wiredep:
       lstn:
         src: ['lstn/templates/layout.html']
-        ignorePath: '..'
+        ignorePath: '../static/'
 
     useminPrepare:
       html: 'lstn/templates/layout.html'
@@ -201,7 +207,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', [
     'clean:dist'
     'copy'
-    'ngtemplates:dist'
+    'ngtemplates'
     'useminPrepare'
     'concat:generated'
     'cssmin:generated'
@@ -211,4 +217,5 @@ module.exports = (grunt) ->
     'htmlmin'
   ]
 
-  grunt.registerTask 'deploy', ['ngconstant:dist', 'build']
+  var target = grunt.option('target') || 'dist'
+  grunt.registerTask 'deploy', ['ngconstant:' + target, 'build']

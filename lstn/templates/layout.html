@@ -28,72 +28,76 @@
   <meta name="msapplication-TileImage" content="/mstile-144x144.png">
   <meta name="theme-color" content="#ffffff">
 
-  <link href='//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+  <script src="//use.typekit.net/btu3rlc.js"></script>
+  <script>
+    try {
+      Typekit.load();
+    } catch(e) {}
+  </script>
+
   <!-- bower:css -->
-  <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css" />
-  <link rel="stylesheet" href="/bower_components/fontawesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css" />
   <!-- endbower -->
+
   <!-- build:css /css/vendor.css -->
+  <link rel="stylesheet" href="bower_components/snackbarjs/dist/snackbar.min.css" />
+  <link rel="stylesheet" href="bower_components/snackbarjs/themes-css/material.css" />
   <!-- endbuild -->
+
   <!-- build:css /css/lstn.css -->
   <link rel="stylesheet" href="css/app.css" />
   <!-- endbuild -->
 </head>
 <body data-ng-controller="AppController">
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-      <div class="alerts">
-        <div class="alert alert-danger alert-dismissable" data-ng-show="alerts.danger.length > 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="dismissAlert('danger')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.danger[0]"></span>
+  <div id="content" class="container">
+    <nav class="navbar navbar-inverse">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-logo" href="/">LSTN</a>
         </div>
-        <div class="alert alert-warning alert-dismissable" data-ng-show="alerts.warning.length > 0 && alerts.danger.length === 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="dismissAlert('warning')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.warning[0]"></span>
-        </div>
-        <div class="alert alert-info alert-dismissable" data-ng-show="alerts.info.length > 0 && alerts.warning.length === 0 && alerts.danger.length === 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="dismissAlert('info')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.info[0]"></span>
-        </div>
-        <div class="alert alert-success alert-dismissable" data-ng-show="alerts.success.length > 0 && alerts.info.length === 0 && alerts.warning.length === 0 && alerts.danger.length === 0" data-ng-cloak>
-          <button type="button" class="close" data-ng-click="dismissAlert('success')" data-dismiss="alert">&times;</button>
-          <span data-ng-bind="alerts.success[0]"></span>
-        </div>
-      </div>
 
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/"><img src="/images/lstn.png" alt="Lstn"></a>
-      </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+          <% if current_user.is_authenticated() %>
+          <ul class="nav navbar-nav navbar-right">
+            <li><p class="navbar__rooms navbar-text"><a class="navbar-link" href="/rooms">All Rooms</a></p></li>
+            <li data-ng-show="currentRoom.id" class="hidden-xs ng-cloak"><p class="navbar__divider navbar-text"><i class="fa fa-fw fa-angle-right"></i></p></li>
+            <li data-ng-show="currentRoom.id" class="ng-cloak">
+              <p class="navbar__room navbar-text">
+                <a class="navbar-link" data-ng-href="/room/{{ currentRoom.slug }}" data-ng-bind="currentRoom.name"></a>
+              </p>
+            </li>
+            <li class="divider hidden-xs">&nbsp;</li>
+            <li>
+              <p class="navbar-text">
+                <a href="http://www.rdio.com%% current_user.profile %%" target="_blank">%% current_user.name %%</a>
+              </p>
+            </li>
+            <li class="divider hidden-xs">&nbsp;</li>
+            <li>
+              <p class="navbar-text">
+                <a href="/logout" target="_self">Logout</a>
+              </p>
+            </li>
+          </ul>
+          <% else %>
+          <ul class="nav navbar-nav navbar-right navbar--login">
+            <li><div><a class="btn btn-success navbar-btn" href="/login" target="_self">Login</a></div></li>
+          </ul>
+          <% endif %>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
 
-      <div class="collapse navbar-collapse" id="navbar-collapse-1">
-        <% if current_user.is_authenticated() %>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="/rooms">Rooms</a></li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">%% current_user.name %% <span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="http://www.rdio.com%% current_user.profile %%" target="_blank">Profile</a></li>
-              <li class="divider"></li>
-              <li><a href="/logout" target="_self">Logout</a></li>
-            </ul>
-          </li>
-        </ul>
-        <% else %>
-        <ul class="nav navbar-nav navbar-right navbar--login">
-          <li><div><a class="btn btn-success navbar-btn" href="/login" target="_self">Login</a></div></li>
-        </ul>
-        <% endif %>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
-
-  <div id="content" class="container"><% block body %><% endblock %></div>
+    <% block body %><% endblock %>
+  </div>
 
   <!-- build:js /js/vendor.js -->
   <!-- bower:js -->
@@ -107,15 +111,17 @@
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="bower_components/swfobject/swfobject/swfobject.js"></script>
-  <script src="bower_components/holderjs/holder.js"></script>
   <script src="bower_components/angular-socket-io/socket.js"></script>
   <script src="bower_components/jquery-ui/jquery-ui.js"></script>
   <script src="bower_components/angular-ui-sortable/sortable.js"></script>
   <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/ment.io/dist/mentio.js"></script>
   <script src="bower_components/angular-twemoji/dist/angular-twemoji.min.js"></script>
   <script src="bower_components/angular-emoji-map/angular-emoji-map.js"></script>
-  <script src="bower_components/ment.io/dist/mentio.min.js"></script>
+  <script src="bower_components/bootstrap-switch/dist/js/bootstrap-switch.js"></script>
+  <script src="bower_components/angular-bootstrap-switch/dist/angular-bootstrap-switch.js"></script>
   <!-- endbower -->
+  <script src="bower_components/snackbarjs/dist/snackbar.min.js"></script>
   <!-- endbuild -->
 
   <script src="/socket.io/socket.io.js"></script>
@@ -132,5 +138,16 @@
   <!-- endbuild -->
 
   <div id="user" style="display: none;">%% user_json | safe %%</div>
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-47764528-5', 'auto');
+    ga('require', 'linkid', 'linkid.js');
+    ga('set', '&uid', '%% current_user.id %%');
+    ga('send', 'pageview');
+  </script>
   </body>
 </html>
