@@ -583,27 +583,27 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <td data-ng-show=\"!room.editing\"><a data-ng-href=\"/room/{{ room.slug }}\" data-ng-bind=\"room.name\"></a></td>\n" +
     "        <td data-ng-show=\"room.editing\" class=\"form-inline\">\n" +
     "          <label for=\"room-name\" class=\"sr-only\">Room Name</label>\n" +
-    "          <input type=\"text\" id=\"room-name\" data-ng-model=\"room.name\" class=\"form-control\" placeholder=\"Room Name\" />\n" +
+    "          <input type=\"text\" id=\"room-name\" data-ng-model=\"room.name\" class=\"form-control input-sm\" placeholder=\"Room Name\" />\n" +
     "        </td>\n" +
     "        <td data-ng-bind=\"room.owner.name\"></div>\n" +
     "        <td data-ng-show=\"!room.editing\">\n" +
-    "          <button class=\"btn btn-default\" data-ng-click=\"editRoom($index)\">Edit</button>\n" +
-    "          <button class=\"btn btn-default\" data-ng-click=\"deleteRoom($index)\">Delete</button>\n" +
+    "          <button class=\"btn btn-default btn-xs\" data-ng-click=\"editRoom($index)\">Edit</button>\n" +
+    "          <button class=\"btn btn-default btn-xs\" data-ng-click=\"deleteRoom($index)\">Delete</button>\n" +
     "        </td>\n" +
     "        <td data-ng-show=\"room.editing\">\n" +
-    "          <button class=\"btn btn-primary\" data-ng-click=\"saveEditRoom($index)\">Save</button>\n" +
-    "          <button class=\"btn btn-default\" data-ng-click=\"cancelEditRoom($index)\">Cancel</button>\n" +
+    "          <button class=\"btn btn-primary btn-xs\" data-ng-click=\"saveEditRoom($index)\">Save</button>\n" +
+    "          <button class=\"btn btn-default btn-xs\" data-ng-click=\"cancelEditRoom($index)\">Cancel</button>\n" +
     "        </td>\n" +
     "      </tr>\n" +
     "      <tr data-ng-show=\"showCreateRoom\">\n" +
     "        <td class=\"form-inline\">\n" +
     "          <label for=\"room-name\" class=\"sr-only\">Room Name</label>\n" +
-    "          <input type=\"text\" id=\"room-name\" data-ng-model=\"newRoom.name\" class=\"form-control\" placeholder=\"Room Name\" />\n" +
+    "          <input type=\"text\" id=\"room-name\" data-ng-model=\"newRoom.name\" class=\"form-control input-sm\" placeholder=\"Room Name\" />\n" +
     "        </td>\n" +
     "        <td></td>\n" +
     "        <td>\n" +
-    "          <button class=\"btn btn-primary\" data-ng-click=\"saveCreateRoom()\">Create</button>\n" +
-    "          <button class=\"btn btn-default\" data-ng-click=\"cancelCreateRoom()\">Cancel</button>\n" +
+    "          <button class=\"btn btn-primary btn-xs\" data-ng-click=\"saveCreateRoom()\">Create</button>\n" +
+    "          <button class=\"btn btn-default btn-xs\" data-ng-click=\"cancelCreateRoom()\">Cancel</button>\n" +
     "        </td>\n" +
     "      </tr>\n" +
     "    </tbody>\n" +
