@@ -1,5 +1,14 @@
 <span>
-  <button data-ng-show="isCurrentController" type="button" data-ng-disabled="!playing.track.key" class="control__button btn btn-danger btn-lg" aria-label="Skip Song" data-ng-click="skipTrack()" title="Skip Song">
+  <button
+    type="button"
+    data-ng-show="isCurrentController"
+    data-ng-disabled="!playing.track.key"
+    class="control__button btn btn-danger btn-lg"
+    aria-label="Skip Song"
+    data-ng-click="skipTrack()"
+    data-tooltip="Skip Song"
+    data-tooltip-placement="bottom"
+    data-tooltip-popup-delay="1000">
     <span class="fa fa-step-forward" aria-hidden="true"></span>
   </button>
 </span>

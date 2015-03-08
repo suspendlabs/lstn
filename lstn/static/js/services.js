@@ -102,7 +102,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   function(CurrentUser, Alert) {
     var Queue = {
       bitset: '',
-      tracks: []
+      tracks: [],
+      shuffle: false
     };
 
     Queue.addTrack = function(track, position) {
@@ -209,6 +210,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       });
     };
 
+    Queue.toggleShuffle = function() {
+      Queue.shuffle = !Queue.shuffle;
+    };
+
     return Queue;
   }
 ])
@@ -289,9 +294,14 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     this.emit('room:controller:playing:finished');
   };
 
-  socket.sendSkipped = function() {
-    console.log('sending room:controller:playing:skipped');
-    this.emit('room:controller:playing:skipped');
+  socket.sendSkipped = function(reason) {
+    var type = 'room:controller:playing:skipped';
+    if (reason) {
+      type += ':' + reason;
+    }
+
+    console.log('sending ' + type);
+    this.emit(type);
   };
 
   socket.sendUpvote = function() {

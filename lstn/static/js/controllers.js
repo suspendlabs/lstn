@@ -283,8 +283,14 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      var track = $scope.queue.tracks.shift();
-      $scope.queue.tracks.push(track);
+      var track;
+      if ($scope.queue.shuffle) {
+        var index = Math.floor(Math.random() * $scope.queue.tracks.length);
+        track = $scope.queue.tracks[index];
+      } else {
+        track = $scope.queue.tracks.shift();
+        $scope.queue.tracks.push(track);
+      }
 
       console.log('room:controller:playing', track);
       socket.emit('room:controller:playing', track);
@@ -374,7 +380,7 @@ angular.module('lstn.controllers', [])
       });
 
       if (downvote.votes <= -2) {
-        $scope.skipTrack();
+        $scope.skipTrack('downvoted');
       }
     });
 
@@ -580,14 +586,14 @@ angular.module('lstn.controllers', [])
       });
     };
 
-    window.skipTrack = $scope.skipTrack = function() {
+    window.skipTrack = $scope.skipTrack = function(reason) {
       if (!$scope.isCurrentController) {
         return;
       }
 
       console.log('skipTrack');
       $scope.isCurrentController = false;
-      socket.sendSkipped();
+      socket.sendSkipped(reason);
     };
 
     $scope.rdioToLstn = function(rdioTrack) {
