@@ -700,19 +700,24 @@ Lstn.prototype.onControllerPlayingFinished = function(data) {
   }
 };
 
-Lstn.prototype.onControllerPlayingSkipped = function(data) {
+Lstn.prototype.onControllerPlayingSkipped = function(data, reason) {
   console.log(this.userId + ' says track in ' + this.roomId + ' was skipped');
 
   var controller = this.getCurrentController();
   var user = this.getUser(controller);
   var track = this.getTrack();
 
+  var type = 'skipped';
+  if (reason) {
+    type += ':' + reason;
+  }
+
   if (controller && user && track) {
     this.sendChatMessage({
       sender: this.getCurrentController(),
       track: track,
       user: user,
-      type: 'skipped',
+      type: type,
     });
   }
 
@@ -805,6 +810,7 @@ io.sockets.on('connection', function(socket) {
   socket.on('room:controller:playing:position', lstn.onControllerPlayingPosition.bind(lstn));
   socket.on('room:controller:playing:finished', lstn.onControllerPlayingFinished.bind(lstn));
   socket.on('room:controller:playing:skipped', lstn.onControllerPlayingSkipped.bind(lstn));
+  socket.on('room:controller:playing:skipped:downvoted', lstn.onControllerPlayingSkipped.bind(lstn, 'downvoted'));
 
   // Controller voting
   socket.on('room:controller:upvote', lstn.onControllerUpvote.bind(lstn));
