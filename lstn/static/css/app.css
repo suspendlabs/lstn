@@ -493,7 +493,7 @@ body > .container > div {
   width: auto;
   -webkit-flex-shrink: 0;
   flex-shrink: 0;
-  margin-right: 1em;
+  margin-right: 0.5em;
 }
 .drilldown__item .item__info, .chat__message .item__info {
   -webkit-flex-grow: 3;
@@ -576,9 +576,13 @@ body > .container > div {
 }
 .item__actions .dropdown-menu {
   font-size: 12px;
+  cursor: pointer;
 }
 .item__actions .dropdown-menu .fa {
   margin-top: 0;
+}
+.item__actions .dropdown-menu li a {
+  padding: 3px 5px;
 }
 .item__actions .fa {
   cursor: pointer;
@@ -596,7 +600,7 @@ body > .container > div {
 .item__actions .item__actions__drag-handle:active {
   cursor: ns-resize;
 }
-.item__actions .item__actions__move-to-top, .item__actions .item__actions__add {
+.item__actions .item__actions__move-to-top, .item__actions .item__actions__move-to-bottom, .item__actions .item__actions__add {
   color: #5cb85c;
 }
 
