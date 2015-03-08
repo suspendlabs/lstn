@@ -574,18 +574,10 @@ body {
 
 .chat__track {
   font-weight: 700;
-
-  a {
-    color: $first-layer-text-color;
-  }
 }
 
 .chat__artist {
   font-weight: 400;
-
-  a {
-    color: $first-layer-text-color;
-  }
 }
 
 .item__image {
@@ -609,6 +601,10 @@ body {
   line-height: 1.23;
 
   padding: 3px 0 0 5px;
+
+  a {
+    color: $first-layer-text-color;
+  }
   
   .item__top {
     float: right;

@@ -515,15 +515,9 @@ body > .container > div {
 .chat__track {
   font-weight: 700;
 }
-.chat__track a {
-  color: #333;
-}
 
 .chat__artist {
   font-weight: 400;
-}
-.chat__artist a {
-  color: #333;
 }
 
 .item__image {
@@ -544,6 +538,9 @@ body > .container > div {
   width: 75%;
   line-height: 1.23;
   padding: 3px 0 0 5px;
+}
+.item__info a {
+  color: #333;
 }
 .item__info .item__top {
   float: right;
