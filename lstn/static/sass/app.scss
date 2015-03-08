@@ -572,6 +572,22 @@ body {
   @include flex-grow(1);
 }
 
+.chat__track {
+  font-weight: 700;
+
+  a {
+    color: $first-layer-text-color;
+  }
+}
+
+.chat__artist {
+  font-weight: 400;
+
+  a {
+    color: $first-layer-text-color;
+  }
+}
+
 .item__image {
   width: 17%;
   min-height: 60px;

@@ -512,6 +512,20 @@ body > .container > div {
   flex-grow: 1;
 }
 
+.chat__track {
+  font-weight: 700;
+}
+.chat__track a {
+  color: #333;
+}
+
+.chat__artist {
+  font-weight: 400;
+}
+.chat__artist a {
+  color: #333;
+}
+
 .item__image {
   width: 17%;
   min-height: 60px;
