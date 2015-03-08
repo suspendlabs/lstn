@@ -106,6 +106,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <span class=\"chat__message--upvoted\" data-ng-switch-when=\"upvote\">upvoted</span>\n" +
     "        <span class=\"chat__message--downvoted\" data-ng-switch-when=\"downvote\">downvoted</span>\n" +
     "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped\">skipped</span>\n" +
+    "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped:downvoted\">skipped (downvoted)</span>\n" +
     "        <span class=\"chat__message--said\" data-ng-switch-when=\"message\">said</span>\n" +
     "      </span>\n" +
     "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
