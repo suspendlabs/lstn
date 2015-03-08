@@ -102,7 +102,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   function(CurrentUser, Alert) {
     var Queue = {
       bitset: '',
-      tracks: []
+      tracks: [],
+      shuffle: false
     };
 
     Queue.addTrack = function(track, position) {
@@ -207,6 +208,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
         Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
       });
+    };
+
+    Queue.toggleShuffle = function() {
+      Queue.shuffle = !Queue.shuffle;
     };
 
     return Queue;
