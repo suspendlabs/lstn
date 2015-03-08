@@ -29,6 +29,12 @@ div.snackbar.snackbar--success {
   color: #ffffff;
 }
 
+.text-truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /* Source: http://snipplr.com/view/10979/css-cross-browser-word-wrap */
 .wordwrap {
   white-space: pre-wrap;
@@ -499,12 +505,6 @@ body > .container > div {
 .chat__message .item__title {
   display: -webkit-flex;
   display: flex;
-}
-
-.chat__track, .chat__artist {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
 .chat__message__message-type {
