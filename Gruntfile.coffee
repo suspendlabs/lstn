@@ -217,5 +217,5 @@ module.exports = (grunt) ->
     'htmlmin'
   ]
 
-  var target = grunt.option('target') || 'dist'
+  target = grunt.option('target') || 'dist'
   grunt.registerTask 'deploy', ['ngconstant:' + target, 'build']
