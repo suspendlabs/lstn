@@ -5,6 +5,7 @@ html, body {
 .privacy {
   background-color: #eee;
   min-height: 400px;
+  height: auto;
 }
 
 div.snackbar {
