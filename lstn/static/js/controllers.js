@@ -283,8 +283,14 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      var track = $scope.queue.tracks.shift();
-      $scope.queue.tracks.push(track);
+      var track;
+      if ($scope.queue.shuffle) {
+        var index = Math.floor(Math.random() * $scope.queue.tracks.length);
+        track = $scope.queue.tracks[index];
+      } else {
+        track = $scope.queue.tracks.shift();
+        $scope.queue.tracks.push(track);
+      }
 
       console.log('room:controller:playing', track);
       socket.emit('room:controller:playing', track);
