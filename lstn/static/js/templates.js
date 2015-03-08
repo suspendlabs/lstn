@@ -114,10 +114,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|twemoji\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"chat__track-info text-muted\" data-ng-if=\"message.type !== 'message'\">\n" +
-    "      <div class=\"chat__track\">\n" +
+    "      <div class=\"chat__track text-truncate\">\n" +
     "        <a data-ng-href=\"http://rdio.com{{ message.track.url }}\" data-ng-bind=\"message.track.name\" target=\"_blank\"></a>\n" +
     "      </div>\n" +
-    "      <div class=\"chat__artist\">\n" +
+    "      <div class=\"chat__artist text-truncate\">\n" +
     "        <a data-ng-href=\"http://rdio.com{{ message.track.artistUrl }}\" data-ng-bind=\"message.track.artist\" target=\"_blank\"></a>\n" +
     "      </div>\n" +
     "    </div>\n" +
