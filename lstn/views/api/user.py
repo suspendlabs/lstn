@@ -301,3 +301,60 @@ def search():
     raise APIException('Unable to search music: %s' % str(e))
 
   return jsonify(success=True, results=results['results'])
+
+@user.route('/favorites', methods=['GET'])
+@login_required
+def user_favorites():
+  try:
+    favorites = current_user.get_favorites()
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to get your favorites: %s' % str(e))
+
+  return jsonify(success=True, favorites=favorites)
+
+@user.route('/favorites/<track_id>', methods=['POST', 'DELETE'])
+@login_required
+def user_favorite_track(track_id):
+  if request.method == 'POST':
+    return add_favorite(track_id)
+
+  return delete_favorite(track_id)
+
+def add_favorite(track_id):
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  data = {
+    'method': 'addToFavorites',
+    'keys': track_id,
+  }
+
+  try:
+    rdio_manager.call_api_authenticated(data)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to add the track to your favorites: %s' % str(e))
+
+  return jsonify(success=True)
+
+def delete_favorite(track_id):
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  data = {
+    'method': 'removeFromFavorites',
+    'keys': track_id,
+  }
+
+  try:
+    rdio_manager.call_api_authenticated(data)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to remove that track from your favorites: %s' % str(e))
+
+  return jsonify(success=True)
