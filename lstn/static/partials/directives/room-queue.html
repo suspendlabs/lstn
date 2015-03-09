@@ -1,4 +1,14 @@
 <div class="queue__container">
+  <div class="queue__controls" data-ng-show="queue.tracks && queue.tracks.length > 0">
+    <button class="btn btn-default" data-ng-click="queue.shuffle()">
+      <i class="fa fa-fw fa-random"></i>
+      Shuffle
+    </button><!--
+    --><button class="btn btn-default" data-ng-click="queue.clear()">
+      <i class="fa fa-fw fa-times"></i>
+      Clear
+    </button>
+  </div>
   <ul id="queue" class="queue queue--full track__list drilldown__list" data-ng-show="queue.tracks && queue.tracks.length > 0" data-ui-sortable="sortableOptions" ng-model="queue.tracks">
     <li data-ng-repeat="track in queue.tracks">
       <lstn-track
