@@ -542,41 +542,24 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <button\n" +
     "    type=\"button\"\n" +
     "    data-ng-hide=\"favorites.bitset[playing.track.key]\"\n" +
-    "    class=\"control__button btn btn-danger\"\n" +
+    "    class=\"control__button btn btn-default\"\n" +
     "    aria-label=\"Favorite\"\n" +
     "    data-ng-click=\"favorites.addTrack(playing.track)\"\n" +
     "    data-tooltip=\"Favorite\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-heart\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-heart-o text-danger\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
     "    type=\"button\"\n" +
     "    data-ng-show=\"favorites.bitset[playing.track.key]\"\n" +
-    "    class=\"control__button btn btn-danger\"\n" +
+    "    class=\"control__button btn btn-default\"\n" +
     "    aria-label=\"Unfavorite\"\n" +
     "    data-ng-click=\"favorites.removeTrack(playing.track)\"\n" +
     "    data-tooltip=\"Unfavorite\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-heart-o\" aria-hidden=\"true\"></i>\n" +
-    "  </button>\n" +
-    "</span>\n"
-  );
-
-
-  $templateCache.put('/static/partials/directives/room-control-shuffle.html',
-    "<span>\n" +
-    "  <button\n" +
-    "    type=\"button\"\n" +
-    "    class=\"control__button btn\"\n" +
-    "    data-ng-class=\"{'btn-default': !queue.shuffle, 'btn-primary': queue.shuffle}\"\n" +
-    "    aria-label=\"Shuffle\"\n" +
-    "    data-ng-click=\"queue.toggleShuffle()\"\n" +
-    "    data-tooltip=\"Shuffle Queue\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-random\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-heart text-danger\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
   );
@@ -665,7 +648,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <lstn-room-control-downvote></lstn-room-control-downvote>\n" +
     "  <lstn-room-control-skip></lstn-room-control-skip>\n" +
     "  <lstn-room-control-upvote></lstn-room-control-upvote>\n" +
-    "  <lstn-room-control-shuffle></lstn-room-control-shuffle>\n" +
     "  <lstn-room-control-favorite></lstn-room-control-favorite>\n" +
     "</div>\n"
   );
@@ -733,11 +715,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-queue.html',
     "<div class=\"queue__container\">\n" +
     "  <div class=\"queue__controls\" data-ng-show=\"queue.tracks && queue.tracks.length > 0\">\n" +
-    "    <button class=\"btn btn-default\" data-ng-click=\"queue.shuffle()\">\n" +
+    "    <button class=\"btn\" data-ng-click=\"queue.toggleShuffle()\" data-ng-class=\"{'toggled': queue.shuffle}\">\n" +
     "      <i class=\"fa fa-fw fa-random\"></i>\n" +
     "      Shuffle\n" +
     "    </button><!--\n" +
-    "    --><button class=\"btn btn-default\" data-ng-click=\"queue.clear()\">\n" +
+    "    --><button class=\"btn btn-default\" data-ng-click=\"queue.clearTracks()\">\n" +
     "      <i class=\"fa fa-fw fa-times\"></i>\n" +
     "      Clear\n" +
     "    </button>\n" +
