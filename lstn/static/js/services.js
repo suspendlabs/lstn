@@ -214,6 +214,29 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       Queue.shuffle = !Queue.shuffle;
     };
 
+    Queue.clearTracks = function() {
+      if (!confirm('Are you sure you want to clear your queue?')) {
+        return;
+      }
+
+      Queue.tracks = [];
+
+      CurrentUser.updateQueue({
+        queue: Queue.tracks
+      }, function(response) {
+        if (!response || !response.success) {
+          console.log('clearTracks', response);
+
+          Alert.error('Something went wrong while trying to clear your queue.');
+          return;
+        }
+      }, function(response) {
+        console.log('clearTracks', response);
+
+        Alert.error('Something went wrong while trying to clear your queue.');
+      });
+    };
+
     return Queue;
   }
 ])
