@@ -513,7 +513,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    type=\"button\"\n" +
     "    data-ng-show=\"!playing.downvoted && !isCurrentController\"\n" +
     "    data-ng-disabled=\"!playing.track.key || playing.track.voted\"\n" +
-    "    class=\"control__button btn btn-danger btn-lg\"\n" +
+    "    class=\"control__button btn btn-danger\"\n" +
     "    aria-label=\"Downvote\"\n" +
     "    data-ng-click=\"downvote()\"\n" +
     "    data-tooltip=\"Downvote\"\n" +
@@ -525,7 +525,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    type=\"button\"\n" +
     "    data-ng-show=\"playing.downvoted\"\n" +
     "    disabled=\"disabled\"\n" +
-    "    class=\"control__button btn btn-danger btn-lg\"\n" +
+    "    class=\"control__button btn btn-danger\"\n" +
     "    aria-label=\"Downvoted\"\n" +
     "    data-tooltip=\"Downvoted\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
@@ -536,11 +536,39 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
+  $templateCache.put('/static/partials/directives/room-control-favorite.html',
+    "<span>\n" +
+    "  <button\n" +
+    "    type=\"button\"\n" +
+    "    data-ng-hide=\"favorites.bitset[playing.track.key]\"\n" +
+    "    class=\"control__button btn btn-danger\"\n" +
+    "    aria-label=\"Favorite\"\n" +
+    "    data-ng-click=\"favorites.addTrack(playing.track)\"\n" +
+    "    data-tooltip=\"Favorite\"\n" +
+    "    data-tooltip-placement=\"bottom\"\n" +
+    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    <i class=\"fa fa-heart\" aria-hidden=\"true\"></i>\n" +
+    "  </button>\n" +
+    "  <button\n" +
+    "    type=\"button\"\n" +
+    "    data-ng-show=\"favorites.bitset[playing.track.key]\"\n" +
+    "    class=\"control__button btn btn-danger\"\n" +
+    "    aria-label=\"Unfavorite\"\n" +
+    "    data-ng-click=\"favorites.removeTrack(playing.track)\"\n" +
+    "    data-tooltip=\"Unfavorite\"\n" +
+    "    data-tooltip-placement=\"bottom\"\n" +
+    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    <i class=\"fa fa-heart-o\" aria-hidden=\"true\"></i>\n" +
+    "  </button>\n" +
+    "</span>\n"
+  );
+
+
   $templateCache.put('/static/partials/directives/room-control-shuffle.html',
     "<span>\n" +
     "  <button\n" +
     "    type=\"button\"\n" +
-    "    class=\"control__button btn btn-lg\"\n" +
+    "    class=\"control__button btn\"\n" +
     "    data-ng-class=\"{'btn-default': !queue.shuffle, 'btn-primary': queue.shuffle}\"\n" +
     "    aria-label=\"Shuffle\"\n" +
     "    data-ng-click=\"queue.toggleShuffle()\"\n" +
@@ -559,7 +587,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    type=\"button\"\n" +
     "    data-ng-show=\"isCurrentController\"\n" +
     "    data-ng-disabled=\"!playing.track.key\"\n" +
-    "    class=\"control__button btn btn-danger btn-lg\"\n" +
+    "    class=\"control__button btn btn-danger\"\n" +
     "    aria-label=\"Skip Song\"\n" +
     "    data-ng-click=\"skipTrack()\"\n" +
     "    data-tooltip=\"Skip Song\"\n" +
@@ -577,7 +605,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    type=\"button\"\n" +
     "    data-ng-hide=\"playing.upvoted || isCurrentController\"\n" +
     "    data-ng-disabled=\"!playing.track.key || isCurrentController || playing.track.voted\"\n" +
-    "    class=\"control__button btn btn-success btn-lg\"\n" +
+    "    class=\"control__button btn btn-success\"\n" +
     "    aria-label=\"Upvote\"\n" +
     "    data-ng-click=\"upvote()\"\n" +
     "    data-tooltip=\"Upvote\"\n" +
@@ -589,7 +617,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    type=\"button\"\n" +
     "    data-ng-show=\"playing.upvoted\"\n" +
     "    disabled=\"disabled\"\n" +
-    "    class=\"control__button btn btn-success btn-lg\"\n" +
+    "    class=\"control__button btn btn-success\"\n" +
     "    aria-label=\"Upvoted\"\n" +
     "    data-tooltip=\"Upvoted\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
@@ -606,19 +634,19 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-ng-show=\"!mute\"\n" +
     "    data-ng-disabled=\"!playing.track.key\"\n" +
     "    type=\"button\"\n" +
-    "    class=\"control__button btn btn-default btn-lg\"\n" +
+    "    class=\"control__button btn btn-default\"\n" +
     "    aria-label=\"Mute\"\n" +
     "    data-ng-click=\"toggleMute()\"\n" +
     "    data-tooltip=\"Mute\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-volume-off\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-lg fa-volume-off\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
     "    data-ng-show=\"mute\"\n" +
     "    data-ng-disabled=\"!playing.track.key\"\n" +
     "    type=\"button\"\n" +
-    "    class=\"control__button btn btn-default btn-lg\"\n" +
+    "    class=\"control__button btn btn-default\"\n" +
     "    aria-label=\"Unmute\"\n" +
     "    data-ng-click=\"toggleMute()\"\n" +
     "    data-tooltip=\"Unmute\"\n" +
@@ -637,6 +665,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <lstn-room-control-skip></lstn-room-control-skip>\n" +
     "  <lstn-room-control-upvote></lstn-room-control-upvote>\n" +
     "  <lstn-room-control-shuffle></lstn-room-control-shuffle>\n" +
+    "  <lstn-room-control-favorite></lstn-room-control-favorite>\n" +
     "</div>\n"
   );
 
