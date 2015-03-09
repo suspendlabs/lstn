@@ -102,7 +102,7 @@ body {
     height: 100%;
 
     > div {
-      height: 80%;
+      height: calc(100% - 130px);
       margin-top: 15px;
     }
   }
@@ -264,9 +264,11 @@ body {
 
 .room {
   height: 100%;
+
   .room__left {
     padding-left: 0;
     padding-right: 0;
+    height: 100%;
   }
 
   .room__middle {
@@ -436,6 +438,8 @@ body {
   background-color: $accent-color;
 
   .nav-tabs {
+    height: 36px;
+
     > li {
       &:last-child {
         width: 34%;
@@ -482,16 +486,33 @@ body {
   height: 100%;
 }
 
+.queue__controls {
+  height: 30px;
+  border-bottom: 4px solid $accent-color;
+
+  .btn {
+    @include border-radius(0);
+    border: 0;
+    margin: 0;
+    padding: 3px;
+    width: 50%;
+  }
+}
+
 .queue {
-  height: 100%;
+  height: calc(100% - 66px);
+
+  &.drilldown__list {
+    height: calc(100% - 66px);
+  }
+
   overflow-x: hidden;
   overflow-y: auto;
 }
 
 .playlist__container {
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  height: calc(100% - 38px);
+  overflow: hidden;
 }
 
 .music__container {
@@ -563,6 +584,10 @@ body {
     @include flex(1);
     margin: 0;
   }
+}
+
+.chat__input {
+  height: 36px;
 }
 
 .chat__message .item__title {
@@ -684,7 +709,7 @@ body {
 }
 
 .messages {
-  height: 100%;
+  height: calc(100% - 36px);
   overflow-x: hidden;
   overflow-y: auto;
 
@@ -853,7 +878,7 @@ footer {
 }
 
 .search__container {
-  height: 100%;
+  height: calc(100% - 38px);
 }
 
 .search__contents {
@@ -871,7 +896,7 @@ footer {
 }
 
 .more-music {
-  height: 100%;
+  height: calc(100% - 36px);
 
   .carousel-control {
     display: none;
@@ -887,11 +912,10 @@ footer {
 
   .carousel-inner {
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: inherit;
+    overflow: hidden;
 
     .item {
-      height: 80%;
+      height: calc(100% - 40px);
 
       .tracks {
         overflow-x: hidden;

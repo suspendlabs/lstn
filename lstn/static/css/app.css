@@ -98,7 +98,7 @@ body > .container {
   height: 100%;
 }
 body > .container > div {
-  height: 80%;
+  height: calc(100% - 130px);
   margin-top: 15px;
 }
 
@@ -238,6 +238,7 @@ body > .container > div {
 .room .room__left {
   padding-left: 0;
   padding-right: 0;
+  height: 100%;
 }
 .room .room__middle {
   padding-left: 0;
@@ -384,6 +385,9 @@ body > .container > div {
   min-height: 400px;
   background-color: #3d3d3d;
 }
+.queue__tabs .nav-tabs {
+  height: 36px;
+}
 .queue__tabs .nav-tabs > li {
   width: 33%;
   background-color: #3d3d3d;
@@ -423,16 +427,32 @@ body > .container > div {
   height: 100%;
 }
 
+.queue__controls {
+  height: 30px;
+  border-bottom: 4px solid #3d3d3d;
+}
+.queue__controls .btn {
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  border: 0;
+  margin: 0;
+  padding: 3px;
+  width: 50%;
+}
+
 .queue {
-  height: 100%;
+  height: calc(100% - 66px);
   overflow-x: hidden;
   overflow-y: auto;
 }
+.queue.drilldown__list {
+  height: calc(100% - 66px);
+}
 
 .playlist__container {
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  height: calc(100% - 38px);
+  overflow: hidden;
 }
 
 .music__container {
@@ -501,6 +521,10 @@ body > .container > div {
   -webkit-flex: 1;
   flex: 1;
   margin: 0;
+}
+
+.chat__input {
+  height: 36px;
 }
 
 .chat__message .item__title {
@@ -605,7 +629,7 @@ body > .container > div {
 }
 
 .messages {
-  height: 100%;
+  height: calc(100% - 36px);
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
@@ -798,7 +822,7 @@ footer .container .text-muted {
 }
 
 .search__container {
-  height: 100%;
+  height: calc(100% - 38px);
 }
 
 .search__contents {
@@ -819,7 +843,7 @@ footer .container .text-muted {
 }
 
 .more-music {
-  height: 100%;
+  height: calc(100% - 36px);
 }
 .more-music .carousel-control {
   display: none;
@@ -832,11 +856,10 @@ footer .container .text-muted {
 }
 .more-music .carousel-inner {
   height: 100%;
-  overflow-x: hidden;
-  overflow-y: inherit;
+  overflow: hidden;
 }
 .more-music .carousel-inner .item {
-  height: 80%;
+  height: calc(100% - 40px);
 }
 .more-music .carousel-inner .item .tracks {
   overflow-x: hidden;
