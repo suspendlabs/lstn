@@ -463,22 +463,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-activity.html',
     "<div class=\"room-activity\">\n" +
-    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading\">\n" +
-    "    <li data-ng-repeat=\"item in chat.messages\">\n" +
-    "      <lstn-chat-message\n" +
-    "        data-message=\"item\"\n" +
-    "        data-index=\"$index\"></lstn-chat-message>\n" +
-    "    </li>\n" +
-    "  </ul>\n" +
-    "  <div class=\"messages--empty text-center\" data-ng-show=\"chat.loading\">\n" +
-    "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
-    "  </div>\n" +
     "  <input\n" +
     "    id=\"chat-input\"\n" +
     "    data-mentio\n" +
     "    data-mentio-id=\"'chat-input'\"\n" +
     "    ng-trim=\"false\"\n" +
-    "    class=\"form-control\"\n" +
+    "    class=\"form-control chat__input\"\n" +
     "    type=\"text\"\n" +
     "    data-ng-show=\"!chat.loading\"\n" +
     "    data-ng-model=\"message.text\"\n" +
@@ -503,6 +493,17 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    mentio-template-url=\"/static/partials/directives/emoticon-list.html\"\n" +
     "    mentio-search=\"searchEmoticons(term)\"\n" +
     "    mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
+    "\n" +
+    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading\">\n" +
+    "    <li data-ng-repeat=\"item in chat.messages\">\n" +
+    "      <lstn-chat-message\n" +
+    "        data-message=\"item\"\n" +
+    "        data-index=\"$index\"></lstn-chat-message>\n" +
+    "    </li>\n" +
+    "  </ul>\n" +
+    "  <div class=\"messages--empty text-center\" data-ng-show=\"chat.loading\">\n" +
+    "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 
@@ -731,6 +732,16 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-queue.html',
     "<div class=\"queue__container\">\n" +
+    "  <div class=\"queue__controls\" data-ng-show=\"queue.tracks && queue.tracks.length > 0\">\n" +
+    "    <button class=\"btn btn-default\" data-ng-click=\"queue.shuffle()\">\n" +
+    "      <i class=\"fa fa-fw fa-random\"></i>\n" +
+    "      Shuffle\n" +
+    "    </button><!--\n" +
+    "    --><button class=\"btn btn-default\" data-ng-click=\"queue.clear()\">\n" +
+    "      <i class=\"fa fa-fw fa-times\"></i>\n" +
+    "      Clear\n" +
+    "    </button>\n" +
+    "  </div>\n" +
     "  <ul id=\"queue\" class=\"queue queue--full track__list drilldown__list\" data-ng-show=\"queue.tracks && queue.tracks.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue.tracks\">\n" +
     "    <li data-ng-repeat=\"track in queue.tracks\">\n" +
     "      <lstn-track\n" +
