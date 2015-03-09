@@ -3,19 +3,19 @@
     data-ng-show="!mute"
     data-ng-disabled="!playing.track.key"
     type="button"
-    class="control__button btn btn-default btn-lg"
+    class="control__button btn btn-default"
     aria-label="Mute"
     data-ng-click="toggleMute()"
     data-tooltip="Mute"
     data-tooltip-placement="bottom"
     data-tooltip-popup-delay="1000">
-    <i class="fa fa-volume-off" aria-hidden="true"></i>
+    <i class="fa fa-lg fa-volume-off" aria-hidden="true"></i>
   </button>
   <button
     data-ng-show="mute"
     data-ng-disabled="!playing.track.key"
     type="button"
-    class="control__button btn btn-default btn-lg"
+    class="control__button btn btn-default"
     aria-label="Unmute"
     data-ng-click="toggleMute()"
     data-tooltip="Unmute"

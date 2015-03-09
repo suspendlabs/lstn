@@ -1,0 +1,24 @@
+<span>
+  <button
+    type="button"
+    data-ng-hide="favorites.bitset[playing.track.key]"
+    class="control__button btn btn-danger"
+    aria-label="Favorite"
+    data-ng-click="favorites.addTrack(playing.track)"
+    data-tooltip="Favorite"
+    data-tooltip-placement="bottom"
+    data-tooltip-popup-delay="1000">
+    <i class="fa fa-heart" aria-hidden="true"></i>
+  </button>
+  <button
+    type="button"
+    data-ng-show="favorites.bitset[playing.track.key]"
+    class="control__button btn btn-danger"
+    aria-label="Unfavorite"
+    data-ng-click="favorites.removeTrack(playing.track)"
+    data-tooltip="Unfavorite"
+    data-tooltip-placement="bottom"
+    data-tooltip-popup-delay="1000">
+    <i class="fa fa-heart-o" aria-hidden="true"></i>
+  </button>
+</span>
