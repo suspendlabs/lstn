@@ -829,6 +829,8 @@ angular.module('lstn.controllers', [])
     promises.getRoom = Room.get({
       id: $routeParams.id
     }, function(response) {
+      $scope.queue.loading = false;
+
       if (!response || !response.success || !response.room) {
         console.log('Room.get', response);
 
