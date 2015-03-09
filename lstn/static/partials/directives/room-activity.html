@@ -1,20 +1,10 @@
 <div class="room-activity">
-  <ul id="messages" class="messages list-group" data-ng-show="!chat.loading">
-    <li data-ng-repeat="item in chat.messages">
-      <lstn-chat-message
-        data-message="item"
-        data-index="$index"></lstn-chat-message>
-    </li>
-  </ul>
-  <div class="messages--empty text-center" data-ng-show="chat.loading">
-    <i class="fa fa-circle-o-notch fa-spin"></i>
-  </div>
   <input
     id="chat-input"
     data-mentio
     data-mentio-id="'chat-input'"
     ng-trim="false"
-    class="form-control"
+    class="form-control chat__input"
     type="text"
     data-ng-show="!chat.loading"
     data-ng-model="message.text"
@@ -39,4 +29,15 @@
     mentio-template-url="/static/partials/directives/emoticon-list.html"
     mentio-search="searchEmoticons(term)"
     mentio-select="getEmoticon(item)"></mentio-menu>
+
+  <ul id="messages" class="messages list-group" data-ng-show="!chat.loading">
+    <li data-ng-repeat="item in chat.messages">
+      <lstn-chat-message
+        data-message="item"
+        data-index="$index"></lstn-chat-message>
+    </li>
+  </ul>
+  <div class="messages--empty text-center" data-ng-show="chat.loading">
+    <i class="fa fa-circle-o-notch fa-spin"></i>
+  </div>
 </div>
