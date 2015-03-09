@@ -494,14 +494,15 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    mentio-search=\"searchEmoticons(term)\"\n" +
     "    mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
     "\n" +
-    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading\">\n" +
+    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading && chat.messages && chat.messages.length > 0\">\n" +
     "    <li data-ng-repeat=\"item in chat.messages\">\n" +
     "      <lstn-chat-message\n" +
     "        data-message=\"item\"\n" +
     "        data-index=\"$index\"></lstn-chat-message>\n" +
     "    </li>\n" +
     "  </ul>\n" +
-    "  <div class=\"messages--empty text-center\" data-ng-show=\"chat.loading\">\n" +
+    "  <div class=\"messages--empty\" data-ng-show=\"!chat.loading && (!chat.messages || chat.messages.length === 0)\"></div>\n" +
+    "  <div class=\"messages--loading\" data-ng-show=\"chat.loading\">\n" +
     "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -714,7 +715,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-queue.html',
     "<div class=\"queue__container\">\n" +
-    "  <div class=\"queue__controls\" data-ng-show=\"queue.tracks && queue.tracks.length > 0\">\n" +
+    "  <div class=\"queue__controls\" data-ng-show=\"!queue.loading && queue.tracks && queue.tracks.length > 0\">\n" +
     "    <button class=\"btn\" data-ng-click=\"queue.toggleShuffle()\" data-ng-class=\"{'toggled': queue.shuffle}\">\n" +
     "      <i class=\"fa fa-fw fa-random\"></i>\n" +
     "      Shuffle\n" +
@@ -724,7 +725,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      Clear\n" +
     "    </button>\n" +
     "  </div>\n" +
-    "  <ul id=\"queue\" class=\"queue queue--full track__list drilldown__list\" data-ng-show=\"queue.tracks && queue.tracks.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue.tracks\">\n" +
+    "  <ul id=\"queue\" class=\"queue queue--full track__list drilldown__list\" data-ng-show=\"!queue.loading && queue.tracks && queue.tracks.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue.tracks\">\n" +
     "    <li data-ng-repeat=\"track in queue.tracks\">\n" +
     "      <lstn-track\n" +
     "        data-track=\"track\"\n" +
@@ -732,7 +733,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        data-index=\"$index\"></lstn-track>\n" +
     "    </li>\n" +
     "  </ul>\n" +
-    "  <div class=\"queue--empty text-center\" data-ng-show=\"!queue.tracks || queue.tracks.length === 0\">\n" +
+    "  <div class=\"queue--empty\" data-ng-show=\"!queue.loading && (!queue.tracks || queue.tracks.length === 0)\">\n" +
+    "    <p>You don't have any tracks in your queue.</p>\n" +
+    "  </div>\n" +
+    "  <div class=\"queue--loading\" data-ng-show=\"queue.loading\">\n" +
     "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
     "  </div>\n" +
     "</div>\n"
