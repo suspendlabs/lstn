@@ -488,16 +488,36 @@ body > .container > div {
 }
 
 .queue--empty {
-  font-size: 10em;
-  color: #333;
-  line-height: 400px;
+  height: calc(100% - 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.queue--empty p {
+  font-size: 1.4em;
+  color: #ffffff;
 }
 
-.messages--empty {
+.queue--loading {
+  height: calc(100% - 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-size: 10em;
   color: #333;
-  line-height: 400px;
+}
+
+.messages--loading {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding-top: 36px;
+  font-size: 10em;
+  color: #333;
 }
 
 .drilldown__list {
