@@ -941,6 +941,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        </li>\n" +
     "      </ul>\n" +
     "    </span>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-bars item__actions__drag-handle\"\n" +
+    "      data-ng-show=\"track.in_queue && context === 'queue'\"></i>\n" +
     "  </div>\n" +
     "</div>\n"
   );
