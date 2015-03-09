@@ -340,7 +340,6 @@ body {
   margin-top: 1em;
 }
 
-
 .bootstrap-switch {
   span.bootstrap-switch-handle-on.bootstrap-switch-primary {
     background: $active-color;
@@ -349,11 +348,15 @@ body {
 
 .control__button {
   @include border-radius(0);
-  opacity: 1;
-  width:50px;
-  height:50px;
-  font-size:18px;
+  @include opacity(1);
 
+  width: 50px;
+  height: 50px;
+  font-size: 18px;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .roster__category {
@@ -390,7 +393,6 @@ body {
       }
 
       &.roster__item--controller {
-        
         a {
           position: relative;
           .fa.fa-volume-up {
@@ -445,6 +447,10 @@ body {
         width: 34%;
       }
 
+      &:hover {
+        background-color: darken($accent-color, 5%);
+      }
+
       width: 33%;
       background-color: $accent-color;
 
@@ -487,8 +493,7 @@ body {
 }
 
 .queue__controls {
-  height: 30px;
-  border-bottom: 4px solid $accent-color;
+  height: 26px;
 
   .btn {
     @include border-radius(0);
@@ -496,14 +501,34 @@ body {
     margin: 0;
     padding: 3px;
     width: 50%;
+
+    background-color: $accent-color;
+    color: $accent-text-color;
+
+    &:hover {
+      background-color: darken($accent-color, 5%);
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &.toggled {
+      background-color: $active-color;
+      color: $active-text-color;
+
+      &:hover {
+        background-color: darken($active-color, 5%);
+      }
+    }
   }
 }
 
 .queue {
-  height: calc(100% - 66px);
+  height: calc(100% - 62px);
 
   &.drilldown__list {
-    height: calc(100% - 66px);
+    height: calc(100% - 62px);
   }
 
   overflow-x: hidden;
