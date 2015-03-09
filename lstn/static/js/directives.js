@@ -395,6 +395,16 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
+.directive('lstnRoomControlFavorite', [
+  function() {
+    return {
+      restrict: 'E',
+      replace: true,
+      templateUrl: '/static/partials/directives/room-control-favorite.html'
+    };
+  }
+])
+
 .directive('lstnRoomQueue', ['$timeout', 'Alert', 'CurrentUser',
   function($timeout, Alert, CurrentUser) {
     return {
