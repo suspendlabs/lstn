@@ -103,7 +103,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     var Queue = {
       bitset: '',
       tracks: [],
-      shuffle: false
+      shuffle: false,
+      loading: true
     };
 
     Queue.addTrack = function(track, position) {
@@ -221,7 +222,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
       Queue.tracks = [];
 
-      CurrentUser.updateQueue({
+      CurrentUser.clearQueue({
         queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
@@ -458,6 +459,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     },
     updateQueue: {
       method: 'PUT',
+      params: {
+        action: 'queue'
+      }
+    },
+    clearQueue: {
+      method: 'DELETE',
       params: {
         action: 'queue'
       }
