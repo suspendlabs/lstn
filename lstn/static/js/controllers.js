@@ -257,7 +257,7 @@ angular.module('lstn.controllers', [])
         }
 
         $('#messages').animate({
-          scrollTop: $('#messages')[0].scrollHeight
+          scrollTop: 0
         }, 200);
       }, 10);
     });
@@ -385,7 +385,7 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:chat:message', function(message) {
-      $scope.chat.messages.push(message);
+      $scope.chat.messages.unshift(message);
 
       if (message &&
         message.mentionNames &&
@@ -397,7 +397,7 @@ angular.module('lstn.controllers', [])
 
       timeouts.chatMessage = $timeout(function() {
         $('#messages').animate({
-          scrollTop: $('#messages')[0].scrollHeight
+          scrollTop: 0
         }, 200);
       }, 10);
     });
