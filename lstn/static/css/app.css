@@ -2,6 +2,34 @@ html, body {
   height: 100%;
 }
 
+.btn-accent {
+  background-color: #3d3d3d;
+  border-color: #3d3d3d;
+  color: #ffffff;
+}
+.btn-accent:hover {
+  background-color: #303030;
+  color: #ffffff;
+}
+.btn-accent:focus {
+  outline: none;
+  color: #ffffff;
+}
+
+.btn-active {
+  background-color: #d24242;
+  border-color: #d24242;
+  color: #ffffff;
+}
+.btn-active:hover {
+  background-color: #ca3030;
+  color: #ffffff;
+}
+.btn-active:focus {
+  outline: none;
+  color: #ffffff;
+}
+
 .privacy {
   background-color: #eee;
   min-height: 400px;
@@ -126,6 +154,9 @@ body > .container > div {
 
 .navbar-inverse {
   border: none;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
   background-color: #3d3d3d;
   min-height: 70px;
   font-size: 1.4em;
