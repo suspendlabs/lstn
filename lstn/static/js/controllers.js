@@ -296,13 +296,32 @@ angular.module('lstn.controllers', [])
         return;
       }
 
+      var queueBehavior = 'bottom';
+      if ($scope.current_user &&
+        $scope.current_user.settings &&
+        $scope.current_user.settings.queue &&
+        $scope.current_user.settings.queue.behavior) {
+
+        queueBehavior = $scope.current_user.settings.queue.behavior;
+      }
+
       var track;
       if ($scope.queue.shuffle) {
         var index = Math.floor(Math.random() * $scope.queue.tracks.length);
         track = $scope.queue.tracks[index];
+
+        if (queueBehavior === 'remove') {
+          $scope.queue.tracks.splice(index, 1);
+          $scope.queue.removeTrack(track, index);
+        }
       } else {
         track = $scope.queue.tracks.shift();
-        $scope.queue.tracks.push(track);
+
+        if (queueBehavior === 'bottom') {
+          $scope.queue.tracks.push(track);
+        } else {
+          $scope.queue.removeTrack(track, 0);
+        }
       }
 
       console.log('room:controller:playing', track);
