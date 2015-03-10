@@ -917,6 +917,31 @@ angular.module('lstn.directives', ['sc.twemoji'])
       link: function($scope, $element, $attrs) {
         $scope.queue = Queue;
         $scope.favorites = Favorite;
+        $scope.status = {
+          open: false
+        };
+
+        $scope.toggleDropdown = function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          var dropdown = $element.find('.dropdown');
+          if (!dropdown || dropdown.length === 0) {
+            return;
+          }
+
+          if (!$scope.status.open) {
+            if (($(window).scrollTop() + $(window).height()) - $element.offset().top < 200) {
+              dropdown.addClass('dropup');
+            } else {
+              dropdown.removeClass('dropup');
+            }
+          } else {
+            dropdown.removeClass('dropup');
+          }
+
+          $scope.status.open = !$scope.status.open;
+        };
       }
     };
   }
