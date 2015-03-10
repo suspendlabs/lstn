@@ -133,6 +133,8 @@ body {
 
 .navbar-inverse {
   border: none;
+  @include border-radius(0);
+
   background-color: $accent-color;
   min-height: 70px;
   font-size: 1.4em;

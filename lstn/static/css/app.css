@@ -126,6 +126,9 @@ body > .container > div {
 
 .navbar-inverse {
   border: none;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
   background-color: #3d3d3d;
   min-height: 70px;
   font-size: 1.4em;
