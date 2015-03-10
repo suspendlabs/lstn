@@ -77,7 +77,7 @@
             <li class="divider hidden-xs">&nbsp;</li>
             <li>
               <p class="navbar-text">
-                <a href="http://www.rdio.com%% current_user.profile %%" target="_blank">%% current_user.name %%</a>
+                <a data-ng-click="openProfile()">%% current_user.name %%</a>
               </p>
             </li>
             <li class="divider hidden-xs">&nbsp;</li>
@@ -89,7 +89,7 @@
           </ul>
           <% else %>
           <ul class="nav navbar-nav navbar-right navbar--login">
-            <li><div><a class="btn btn-success navbar-btn" href="/login" target="_self">Login</a></div></li>
+            <li><p><a class="btn btn-success navbar-btn" href="/login" target="_self">Login</a></p></li>
           </ul>
           <% endif %>
         </div><!-- /.navbar-collapse -->
