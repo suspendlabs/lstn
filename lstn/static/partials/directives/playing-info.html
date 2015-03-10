@@ -9,8 +9,8 @@
 
   <div data-ng-show="playing" class="playing__info playing__info--playing" data-album-cover-background>
     <div class="playing__meta">
-      <h3 class="playing__title" data-ng-bind="playing.track.title | truncate:25"></h3>
-      <h4 class="playing__artist" data-ng-bind="playing.track.artist | truncate:35"></h4>
+      <h3 class="playing__title text-truncate" data-ng-bind="playing.track.title"></h3>
+      <h4 class="playing__artist text-truncate" data-ng-bind="playing.track.artist"></h4>
       <lstn-room-controls></lstn-room-controls>
     </div>
   </div>

@@ -388,8 +388,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "\n" +
     "  <div data-ng-show=\"playing\" class=\"playing__info playing__info--playing\" data-album-cover-background>\n" +
     "    <div class=\"playing__meta\">\n" +
-    "      <h3 class=\"playing__title\" data-ng-bind=\"playing.track.title | truncate:25\"></h3>\n" +
-    "      <h4 class=\"playing__artist\" data-ng-bind=\"playing.track.artist | truncate:35\"></h4>\n" +
+    "      <h3 class=\"playing__title text-truncate\" data-ng-bind=\"playing.track.title\"></h3>\n" +
+    "      <h4 class=\"playing__artist text-truncate\" data-ng-bind=\"playing.track.artist\"></h4>\n" +
     "      <lstn-room-controls></lstn-room-controls>\n" +
     "    </div>\n" +
     "  </div>\n" +
