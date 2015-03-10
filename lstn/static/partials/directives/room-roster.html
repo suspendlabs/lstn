@@ -1,13 +1,21 @@
 <div class="roster__container room__container">
+  <div class="roster__broadcasting">
+    <div data-ng-show="isController" class="broadcasting broadcasting--on">
+      <a data-ng-click="toggleBroadcast()">
+        <i class="fa fa-microphone-slash"></i>
+        <div>STOP BROADCASTING</div>
+      </a>
+    </div>
+    <div data-ng-show="!isController" class="broadcasting broadcasting--off">
+      <a data-ng-click="toggleBroadcast()">
+        <i class="fa fa-microphone"></i>
+        <div>START BROADCASTING</div>
+      </a>
+    </div>
+  </div>
 
   <div class="roster__category">
-    <div class="roster__category-label">Broadcasting
-      <input
-        data-bs-switch
-        data-ng-model="isController"
-        type="checkbox"
-        data-switch-size="mini">
-    </div>
+    <div class="roster__category-label">Broadcasting</div>
     <ul class="roster roster--controllers">
       <li class="empty" data-ng-show="!roster || roster.controllersCount === 0">
         No Broadcasters
