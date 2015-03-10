@@ -307,7 +307,7 @@ body {
   .fa.fa-play-circle {
     font-size: 8rem;
     line-height: 180px;
-    color: $action-additive;
+    color: $broadcasting-off-light;
     cursor: pointer;
   }
 }
@@ -395,26 +395,26 @@ body {
   }
 
   .broadcasting--on {
-    background-color: #aa403d;
+    background-color: $broadcasting-on-light;
 
     .fa {
-      background-color: #883331;
+      background-color: $broadcasting-on-dark;
     }
 
     div {
-      @include text-shadow(1px 1px 1px #883331);
+      @include text-shadow(1px 1px 1px $broadcasting-on-dark);
     }
   }
 
   .broadcasting--off {
-    background-color: #2fa661;
+    background-color: $broadcasting-off-light;
 
     .fa {
-      background-color: #1e8c4d;
+      background-color: $broadcasting-off-dark;
     }
 
     div {
-      @include text-shadow(1px 1px 1px #1e8c4d);
+      @include text-shadow(1px 1px 1px $broadcasting-off-dark);
     }
   }
 }

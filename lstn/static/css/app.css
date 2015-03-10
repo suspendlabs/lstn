@@ -272,7 +272,7 @@ body > .container > div {
 .playing__info--stopped .fa.fa-play-circle {
   font-size: 8rem;
   line-height: 180px;
-  color: #5cb85c;
+  color: #2fa661;
   cursor: pointer;
 }
 
