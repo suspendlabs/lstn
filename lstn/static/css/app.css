@@ -8,6 +8,10 @@ html, body {
   height: auto;
 }
 
+div.modal-header {
+  padding: 0 15px;
+}
+
 div.snackbar {
   -moz-border-radius: 0;
   -webkit-border-radius: 0;
@@ -125,6 +129,9 @@ body > .container > div {
   background-color: #3d3d3d;
   min-height: 70px;
   font-size: 1.4em;
+}
+.navbar-inverse a {
+  cursor: pointer;
 }
 .navbar-inverse .navbar-text {
   margin-top: 1.05em;

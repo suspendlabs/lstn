@@ -17,6 +17,10 @@ html, body {
   height: auto;
 }
 
+div.modal-header {
+  padding: 0 15px;
+}
+
 div.snackbar {
   @include border-radius(0);
 
@@ -131,6 +135,10 @@ body {
   background-color: $accent-color;
   min-height: 70px;
   font-size: 1.4em;
+
+  a {
+    cursor: pointer;
+  }
 
   .navbar-text {
     margin-top: 1.05em;
