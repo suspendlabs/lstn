@@ -259,7 +259,7 @@ body > .container > div {
 }
 
 .playing__info-container {
-  margin-bottom: 36px;
+  margin-bottom: 15px;
 }
 
 .playing__info--stopped {
@@ -328,8 +328,48 @@ body > .container > div {
   outline: none;
 }
 
+.roster__broadcasting {
+  margin-bottom: 15px;
+}
+.roster__broadcasting a {
+  color: white;
+  cursor: pointer;
+}
+.roster__broadcasting .fa {
+  height: 50px;
+  width: 50px;
+  display: inline-block;
+  float: left;
+  line-height: 50px;
+  font-size: 1.4em;
+  text-align: center;
+}
+.roster__broadcasting .broadcasting div {
+  display: inline-block;
+  line-height: 50px;
+  margin-left: 15px;
+}
+.roster__broadcasting .broadcasting--on {
+  background-color: #aa403d;
+}
+.roster__broadcasting .broadcasting--on .fa {
+  background-color: #883331;
+}
+.roster__broadcasting .broadcasting--on div {
+  text-shadow: 1px 1px 1px #883331;
+}
+.roster__broadcasting .broadcasting--off {
+  background-color: #2fa661;
+}
+.roster__broadcasting .broadcasting--off .fa {
+  background-color: #1e8c4d;
+}
+.roster__broadcasting .broadcasting--off div {
+  text-shadow: 1px 1px 1px #1e8c4d;
+}
+
 .roster__category {
-  margin-bottom: 36px;
+  margin-bottom: 15px;
 }
 
 .roster__container {

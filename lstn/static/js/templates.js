@@ -745,15 +745,23 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-roster.html',
     "<div class=\"roster__container room__container\">\n" +
+    "  <div class=\"roster__broadcasting\">\n" +
+    "    <div data-ng-show=\"isController\" class=\"broadcasting broadcasting--on\">\n" +
+    "      <a data-ng-click=\"toggleBroadcast()\">\n" +
+    "        <i class=\"fa fa-microphone-slash\"></i>\n" +
+    "        <div>STOP BROADCASTING</div>\n" +
+    "      </a>\n" +
+    "    </div>\n" +
+    "    <div data-ng-show=\"!isController\" class=\"broadcasting broadcasting--off\">\n" +
+    "      <a data-ng-click=\"toggleBroadcast()\">\n" +
+    "        <i class=\"fa fa-microphone\"></i>\n" +
+    "        <div>START BROADCASTING</div>\n" +
+    "      </a>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
     "\n" +
     "  <div class=\"roster__category\">\n" +
-    "    <div class=\"roster__category-label\">Broadcasting\n" +
-    "      <input\n" +
-    "        data-bs-switch\n" +
-    "        data-ng-model=\"isController\"\n" +
-    "        type=\"checkbox\"\n" +
-    "        data-switch-size=\"mini\">\n" +
-    "    </div>\n" +
+    "    <div class=\"roster__category-label\">Broadcasting</div>\n" +
     "    <ul class=\"roster roster--controllers\">\n" +
     "      <li class=\"empty\" data-ng-show=\"!roster || roster.controllersCount === 0\">\n" +
     "        No Broadcasters\n" +
