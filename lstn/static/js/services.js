@@ -32,7 +32,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         timeout: 0
       };
 
-      if (id) [
+      if (id) {
         options.id = id;
       }
 
