@@ -678,6 +678,8 @@ angular.module('lstn.controllers', [])
     });
 
     $scope.$watch('playingTrack', function(newVal, oldVal) {
+      Alert.remove('canStream');
+
       console.log('playingTrack', newVal, oldVal);
       if (newVal === oldVal) {
         return;
@@ -702,7 +704,6 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-
       $scope.playing = {
         status: 'playing',
         track: $scope.rdioToLstn(newVal),
@@ -721,7 +722,7 @@ angular.module('lstn.controllers', [])
       }
 
       if (!newVal.canStream) {
-        Alert.error('Streaming for this track is unavailable in your area');
+        Alert.error('Streaming for this track is unavailable in your area', 'canStream');
         $scope.playing.status = 'stopped';
         return;
       }
