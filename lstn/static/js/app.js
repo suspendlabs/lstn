@@ -9,7 +9,6 @@ angular.module('lstn', [
   'btford.socket-io',
   'mentio',
   'linkify',
-  'frapontillo.bootstrap-switch',
   'lstn.config',
   'lstn.services',
   'lstn.controllers',
