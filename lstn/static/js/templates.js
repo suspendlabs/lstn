@@ -880,7 +880,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-bind=\"track.duration | duration\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
-    "    <span class=\"dropdown\" data-dropdown>\n" +
+    "    <span class=\"dropdown\" data-dropdown data-is-open=\"status.open\">\n" +
     "      <i\n" +
     "        class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "        data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
@@ -891,12 +891,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        data-tooltip-placement=\"left\"\n" +
     "        data-tooltip-popup-delay=\"1000\"></i>\n" +
     "      <a\n" +
-    "        class=\"fa fa-fw fa-ellipsis-v dropdown-toggle\"\n" +
+    "        class=\"fa fa-fw fa-ellipsis-v\"\n" +
     "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')\"\n" +
-    "        data-dropdown-toggle></a>\n" +
+    "        data-ng-click=\"toggleDropdown($event)\"></a>\n" +
     "      <ul\n" +
     "        class=\"dropdown-menu dropdown-menu-right\"\n" +
-    "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue\">\n" +
+    "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue\"\n" +
+    "        role=\"menu\">\n" +
     "        <li data-ng-show=\"track.in_queue && context === 'queue'\">\n" +
     "          <a data-ng-click=\"queue.moveToTop(index)\">\n" +
     "            <i class=\"fa fa-fw fa-arrow-circle-up item__actions__move-to-top\"></i>\n" +
@@ -927,6 +928,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "            Add to Bottom of Queue\n" +
     "          </a>\n" +
     "        </li>\n" +
+    "        <li class=\"divider\"></li>\n" +
     "        <li data-ng-hide=\"favorites.bitset[track.key]\">\n" +
     "          <a data-ng-click=\"favorites.addTrack(track)\">\n" +
     "            <i class=\"fa fa-fw fa-heart item__actions__favorite\"></i>\n" +
