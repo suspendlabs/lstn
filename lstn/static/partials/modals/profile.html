@@ -1,0 +1,16 @@
+<div>
+  <div class="modal-header"><h3 data-ng-bind="current_user.name"></h3></div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="queue-behavior">When a track is played from my queue:</label>
+      <select data-ng-model="settings.queue.behavior">
+        <option value="bottom">Move to bottom of queue</option>
+        <option value="remove">Remove the track</option>
+      </select>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    <button class="btn btn-primary" ng-click="ok()">Save</button>
+  </div>
+</div>
