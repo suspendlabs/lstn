@@ -489,19 +489,6 @@ angular.module('lstn.controllers', [])
       }
     };
 
-    window.toggleVisualize = $scope.toggleVisualize = function() {
-      $scope.visualize = !$scope.visualize;
-
-      if ($scope.visualize) {
-        apiswf.rdio_startFrequencyAnalyzer({
-          frequencies: '10-band',
-          period: 100
-        });
-      } else {
-        apiswf.rdio_stopFrequencyAnalyzer();
-      }
-    };
-
     window.upvote = $scope.upvote = function() {
       if (!$scope.playing ||
         $scope.playing.voted ||
