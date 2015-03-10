@@ -474,6 +474,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       params: {
         action: 'search'
       }
+    },
+    settings: {
+      method: 'POST',
+      params: {
+        action: 'settings'
+      }
     }
   });
 

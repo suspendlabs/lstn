@@ -3,8 +3,8 @@
 
 angular.module('lstn.controllers', [])
 
-.controller('AppController', ['$scope', 'Alert', 'CurrentRoom',
-  function($scope, Alert, CurrentRoom) {
+.controller('AppController', ['$scope', '$modal', 'Alert', 'CurrentRoom', 'CurrentUser',
+  function($scope, $modal, Alert, CurrentRoom, CurrentUser) {
     $scope.$on('socket:error', function(ev, data) {
       console.log('socket:error', ev, data);
     });
@@ -19,6 +19,19 @@ angular.module('lstn.controllers', [])
 
         promise._httpTimeout.resolve();
       }
+    };
+
+    // Profile
+    $scope.openProfile = function() {
+      var profileInstance = $modal.open({
+        templateUrl: '/partials/modals/profile.html',
+        controller: 'ProfileController',
+        size: 'sm'
+      });
+
+      profileInstance.result.then(function(settings) {
+        CurrentUser.settings(settings);
+      });
     };
   }
 ])
@@ -861,6 +874,22 @@ angular.module('lstn.controllers', [])
     });
   }
 ])
+
+.controller('ProfileController', ['$scope', '$modalInstance', function($scope, $modalInstance) {
+  $scope.settings = $scope.current_user.settings || {
+    queue: {
+      behavior: 'bottom'
+    }
+  };
+
+  $scope.ok = function() {
+    $modalInstance.close($scope.settings);
+  };
+
+  $scope.cancel = function() {
+    $modalInstance.dismiss('cancel');
+  };
+}])
 
 .controller('UserController', ['$scope', function($scope) {
 }]);

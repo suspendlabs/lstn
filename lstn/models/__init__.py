@@ -10,6 +10,7 @@ from lstn.exceptions import APIException
 from flask import current_app
 from flask.ext.login import UserMixin, current_user
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.types import TypeDecorator, TEXT
 from slugify import slugify
 
 class ModelMixin(object):
@@ -37,6 +38,19 @@ class ModelEncoder(DateTimeEncoder):
     else:
       return super(ModelEncoder, self).default(obj)
 
+class JSONEncodedDict(TypeDecorator):
+  impl = TEXT
+
+  def process_bind_param(self, value, dialect):
+    if value is not None:
+      value = json.dumps(value)
+    return value;
+
+  def process_result_value(self, value, dialect):
+    if value is not None:
+      value = json.loads(value)
+    return value
+
 Base = declarative_base()
 
 class User(db.Model, ModelMixin, UserMixin):
@@ -51,7 +65,7 @@ class User(db.Model, ModelMixin, UserMixin):
   queue = db.Column(db.String(255))
   picture = db.Column(db.String(32))
   points = db.Column(db.BigInteger)
-  settings = db.Column(db.Text)
+  settings = db.Column(JSONEncodedDict())
   created_at = db.Column(db.DateTime, nullable=False, default=db.func.now())
 
   owned = db.relationship('Room', backref='owner')
@@ -68,7 +82,6 @@ class User(db.Model, ModelMixin, UserMixin):
       data.pop('external_id', None)
       data.pop('oauth_token', None)
       data.pop('oauth_token_secret', None)
-      data.pop('settings', None)
 
     data['mention'] = ''.join(word.capitalize() for word in slugify(self.name).split('-'))
 

@@ -382,3 +382,12 @@ def delete_favorite(track_id):
     raise APIException('Unable to remove that track from your favorites: %s' % str(e))
 
   return jsonify(success=True)
+
+@user.route('/settings', methods=['POST'])
+@login_required
+def set_settings():
+  current_user.settings = request.json
+  db.session.add(current_user)
+  db.session.flush()
+
+  return jsonify(success=True)

@@ -388,8 +388,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "\n" +
     "  <div data-ng-show=\"playing\" class=\"playing__info playing__info--playing\" data-album-cover-background>\n" +
     "    <div class=\"playing__meta\">\n" +
-    "      <h3 class=\"playing__title\" data-ng-bind=\"playing.track.title | truncate:25\"></h3>\n" +
-    "      <h4 class=\"playing__artist\" data-ng-bind=\"playing.track.artist | truncate:35\"></h4>\n" +
+    "      <h3 class=\"playing__title text-truncate\" data-ng-bind=\"playing.track.title\"></h3>\n" +
+    "      <h4 class=\"playing__artist text-truncate\" data-ng-bind=\"playing.track.artist\"></h4>\n" +
     "      <lstn-room-controls></lstn-room-controls>\n" +
     "    </div>\n" +
     "  </div>\n" +
@@ -521,7 +521,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-tooltip=\"Downvote\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-thumbs-down\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-thumbs-down fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
     "    type=\"button\"\n" +
@@ -532,7 +532,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-tooltip=\"Downvoted\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-check\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-check fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
   );
@@ -549,7 +549,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-tooltip=\"Favorite\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-heart-o text-danger\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-heart-o fa-lg text-danger\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
     "    type=\"button\"\n" +
@@ -560,7 +560,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-tooltip=\"Unfavorite\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-heart text-danger\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-heart fa-lg text-danger\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
   );
@@ -578,7 +578,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-tooltip=\"Skip Song\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <span class=\"fa fa-step-forward\" aria-hidden=\"true\"></span>\n" +
+    "    <span class=\"fa fa-step-forward fa-lg\" aria-hidden=\"true\"></span>\n" +
     "  </button>\n" +
     "</span>\n"
   );
@@ -596,7 +596,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-tooltip=\"Upvote\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-thumbs-up\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-thumbs-up fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
     "    type=\"button\"\n" +
@@ -607,7 +607,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-tooltip=\"Upvoted\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-check\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-check fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
   );
@@ -976,6 +976,26 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <a data-ng-show=\"current_user.id\" class=\"btn btn-primary btn-lg\" href=\"/rooms\" role=\"button\">Get Started</a>\n" +
     "      </p>\n" +
     "    </div>\n" +
+    "  </div>\n" +
+    "</div>\n"
+  );
+
+
+  $templateCache.put('/static/partials/modals/profile.html',
+    "<div>\n" +
+    "  <div class=\"modal-header\"><h3 data-ng-bind=\"current_user.name\"></h3></div>\n" +
+    "  <div class=\"modal-body\">\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label for=\"queue-behavior\">When a track is played from my queue:</label>\n" +
+    "      <select data-ng-model=\"settings.queue.behavior\">\n" +
+    "        <option value=\"bottom\">Move to bottom of queue</option>\n" +
+    "        <option value=\"remove\">Remove the track</option>\n" +
+    "      </select>\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "  <div class=\"modal-footer\">\n" +
+    "    <button class=\"btn btn-warning\" ng-click=\"cancel()\">Cancel</button>\n" +
+    "    <button class=\"btn btn-primary\" ng-click=\"ok()\">Save</button>\n" +
     "  </div>\n" +
     "</div>\n"
   );
