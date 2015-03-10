@@ -17,7 +17,7 @@ angular.module('lstn', [
   'lstn.templates'
 ])
 
-.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+.config(['$routeProvider', '$locationProvider', '$logProvider', function($routeProvider, $locationProvider, $logProvider) {
   var routes = {
     '/': {
       templateUrl: '/static/partials/index.html',
@@ -45,6 +45,8 @@ angular.module('lstn', [
   });
 
   $locationProvider.html5Mode(true);
+
+  $logProvider.debugEnabled(true);
 }])
 
 .run(['$rootScope', function($rootScope) {
