@@ -4,9 +4,9 @@
 angular.module('lstn.controllers', [])
 
 .controller('AppController', ['$scope', '$modal', 'Alert', 'CurrentRoom', 'CurrentUser',
-  function($scope, $modal, Alert, CurrentRoom, CurrentUser) {
+  function($scope, $modal, $log, Alert, CurrentRoom, CurrentUser) {
     $scope.$on('socket:error', function(ev, data) {
-      console.log('socket:error', ev, data);
+      $log.debug('socket:error', ev, data);
     });
 
     $scope.currentRoom = CurrentRoom;
@@ -51,16 +51,12 @@ angular.module('lstn.controllers', [])
   promises.listRoom = Room.list({}, function(response) {
     $scope.loading = false;
     if (!response || !response.success || !response.rooms) {
-      console.log('Room.list', response);
-
       Alert.error('Something went wrong while trying to load the rooms list.');
       return;
     }
 
     $scope.rooms = response.rooms;
   }, function(response) {
-    console.log('Room.list', response);
-
     $scope.loading = false;
     Alert.error('Something went wrong while trying to load the rooms list.');
   });
@@ -76,16 +72,12 @@ angular.module('lstn.controllers', [])
   $scope.saveCreateRoom = function() {
     promises.createRoom = Room.save({}, $scope.newRoom, function(response) {
       if (!response || !response.success || !response.slug) {
-        console.log('Room.save', response);
-
         Alert.error('Something went wrong while trying to create the new room.');
         return false;
       }
 
       $location.path('/room/' + response.slug);
     }, function(response) {
-      console.log('Room.save', response);
-
       Alert.error('Something went wrong while trying to create the new room.');
     });
   };
@@ -108,16 +100,12 @@ angular.module('lstn.controllers', [])
       id: $scope.rooms[index].id
     }, $scope.rooms[index], function(response) {
       if (!response || !response.success || !response.room) {
-        console.log('Room.update', response);
-
         Alert.error('Something went wrong while trying to save the room.');
         return false;
       }
 
       $scope.rooms[index] = response.room;
     }, function(response) {
-      console.log('Room.update', response);
-
       Alert.error('Something went wrong while trying to save the room.');
     });
   };
@@ -139,23 +127,19 @@ angular.module('lstn.controllers', [])
       id: $scope.rooms[index].id
     }, function(response) {
       if (!response || !response.success) {
-        console.log('Room.delete', response);
-
         Alert.error('Something went wrong while trying to delete the room.');
         return;
       }
 
       $scope.rooms.splice(index, 1);
     }, function(response) {
-      console.log('Room.delete', response);
-
       Alert.error('Something went wrong while trying to delete the room.');
     });
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', 'socket', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert',
-  function($scope, $routeParams, $timeout, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert',
+  function($scope, $routeParams, $timeout, $log, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert) {
     var promises = {};
     var timeouts = {};
 
@@ -245,7 +229,6 @@ angular.module('lstn.controllers', [])
 
     // Setup sockets
     socket.on('connect', function() {
-      console.log('connect');
       socket.isConnected = true;
 
       if ($scope.room && $scope.room.id) {
@@ -254,13 +237,10 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:connect:error', function(data) {
-      console.log('room:connect:error', data);
-
       Alert.error('Something went wrong while trying to connect to the room.');
     });
 
     socket.on('room:chat:history', function(data) {
-      console.log('room:chat:history', data);
       $scope.chat.messages = data;
       $scope.chat.loading = false;
 
@@ -276,19 +256,14 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:roster:update', function(data) {
-      console.log('room:roster:update', data);
       $scope.roster = data;
       $scope.roster.controllersCount = $scope.roster.controllerOrder.length;
       $scope.roster.usersCount = Object.keys($scope.roster.users).length;
     });
 
     socket.on('room:controller:playing:request', function(data) {
-      console.log('room:controller:playing:request', data);
-
       $scope.isCurrentController = true;
       if (!$scope.queue.tracks || $scope.queue.tracks.length === 0) {
-        console.log('room:controller:empty');
-
         $scope.isController = false;
         socket.emit('room:controller:empty');
 
@@ -324,28 +299,21 @@ angular.module('lstn.controllers', [])
         }
       }
 
-      console.log('room:controller:playing', track);
       socket.emit('room:controller:playing', track);
 
       promises.updateQueue = CurrentUser.updateQueue({
         queue: $scope.queue.tracks
       }, function(response) {
         if (!response || !response.success) {
-          console.log('moveToBottomOfQueue', response);
-
           Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
           return;
         }
       }, function(response) {
-        console.log('moveToBottomOfQueue', response);
-
         Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
       });
     });
 
     socket.on('room:playing', function(data) {
-      console.log('room:playing', data);
-
       if (!$scope.rdioReady) {
         $scope.rdioPlay = data;
         return;
@@ -369,16 +337,12 @@ angular.module('lstn.controllers', [])
 
       promises.getCurrentUser = CurrentUser.get({}, function(response) {
         if (!response || !response.success || !response.user) {
-          console.log('CurrentUser.get', response);
-
           Alert.warning('Something went wrong while trying to get your latest score.');
           return;
         }
 
         socket.roomUpdate(response.user);
       }, function(response) {
-        console.log('CurrentUser.get', response);
-
         Alert.warning('Something went wrong while trying to get your latest score.');
       });
     });
@@ -398,16 +362,12 @@ angular.module('lstn.controllers', [])
 
       promises.getCurrentUser = CurrentUser.get({}, function(response) {
         if (!response || !response.success || !response.user) {
-          console.log('CurrentUser.get', response);
-
           Alert.warning('Something went wrong while trying to get your latest score.');
           return;
         }
 
         socket.roomUpdate(response.user);
       }, function(response) {
-        console.log('CurrentUser.get', response);
-
         Alert.warning('Something went wrong while trying to get your latest score.');
       });
 
@@ -441,8 +401,6 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      console.log('playTrack', data);
-
       if (!data || !data.key) {
         $scope.isCurrentController = false;
         $scope.playing = null;
@@ -474,8 +432,6 @@ angular.module('lstn.controllers', [])
     };
 
     $scope.trackFinished = function() {
-      console.log('trackFinished');
-
       $scope.isCurrentController = false;
       socket.sendFinished();
     };
@@ -534,8 +490,6 @@ angular.module('lstn.controllers', [])
         $scope.voting = false;
 
         if (!response || !response.success) {
-          console.log('User.upvote', response);
-
           Alert.error('Something went wrong while trying to upvote the track.');
           return;
         }
@@ -549,8 +503,6 @@ angular.module('lstn.controllers', [])
 
         socket.sendUpvote();
       }, function(response) {
-        console.log('User.upvote', response);
-
         $scope.voting = false;
         Alert.error('Something went wrong while trying to upvote the track.');
       });
@@ -583,8 +535,6 @@ angular.module('lstn.controllers', [])
         $scope.voting = false;
 
         if (!response || !response.success) {
-          console.log('User.downvote', response);
-
           Alert.error('Something went wrong while trying to downvote the track.');
           return false;
         }
@@ -598,8 +548,6 @@ angular.module('lstn.controllers', [])
 
         socket.sendDownvote();
       }, function(response) {
-        console.log('User.downvote', response);
-
         $scope.voting = false;
         Alert.error('Something went wrong while trying to downvote the track.');
       });
@@ -610,7 +558,6 @@ angular.module('lstn.controllers', [])
         return;
       }
 
-      console.log('skipTrack');
       $scope.isCurrentController = false;
       socket.sendSkipped(reason);
     };
@@ -652,16 +599,13 @@ angular.module('lstn.controllers', [])
       }
 
       if (newVal) {
-        console.log('become a broadcaster');
         socket.requestControl($scope.room.id, $scope.current_user.id);
       } else {
-        console.log('become a listener');
         socket.releaseControl($scope.room.id, $scope.current_user.id);
       }
     });
 
     $scope.$watch('rdioReady', function(newVal, oldVal) {
-      console.log('rdioReady', newVal, oldVal);
       if (newVal === oldVal) {
         return;
       }
@@ -686,7 +630,7 @@ angular.module('lstn.controllers', [])
     $scope.$watch('playingTrack', function(newVal, oldVal) {
       Alert.remove('canStream');
 
-      console.log('playingTrack', newVal, oldVal);
+      $log.debug('playingTrack', newVal, oldVal);
       if (newVal === oldVal) {
         return;
       }
@@ -705,7 +649,6 @@ angular.module('lstn.controllers', [])
 
       // Skip auto play tracks from Rdio
       if (newVal.type === 'ap') {
-        console.log('trying to play auto-play track', newVal);
         $scope.playing = null;
         return;
       }
@@ -752,23 +695,17 @@ angular.module('lstn.controllers', [])
           });
         },
         playStateChanged: function(playState) {
-          console.log('play state changed', playState);
-
           $scope.$evalAsync(function() {
             $scope.playState = playState;
           });
         },
         playingTrackChanged: function(playingTrack, sourcePosition) {
-          console.log('playing track changed', playingTrack);
-
           $scope.$evalAsync(function() {
             $scope.playingTrack = playingTrack;
             $scope.sourcePosition = sourcePosition;
           });
         },
         playingSourceChanged: function(playingSource) {
-          console.log('playing source changed', playingSource);
-
           $scope.$evalAsync(function() {
             $scope.playingSource = $scope.playingSource;
           });
@@ -800,9 +737,7 @@ angular.module('lstn.controllers', [])
           progressBar.attr('aria-valuenow', currentValue);
           progressBar.css('width', percentage + '%');
         },
-        queueChanged: function(newQueue) {
-          console.log('new queue', newQueue);
-        },
+        queueChanged: function(newQueue) {},
         shuffleChanged: function(shuffle) {},
         repeatChanged: function(repeatMode) {},
         playingSomewhereElse: function() {
@@ -852,8 +787,6 @@ angular.module('lstn.controllers', [])
       $scope.queue.loading = false;
 
       if (!response || !response.success || !response.room) {
-        console.log('Room.get', response);
-
         Alert.error('Something went wrong while trying to load the room data.');
         return;
       }
@@ -869,14 +802,11 @@ angular.module('lstn.controllers', [])
         angular.forEach(response.favorites, function(favorite) {
           $scope.favorites.bitset[favorite] = true;
         });
-        console.log($scope.favorites);
       }
 
       socket.registerRoom($scope.room.id, $scope.current_user);
       initPlayback();
     }, function(response) {
-      console.log('Room.get', response);
-
       Alert.error('Something went wrong while trying to load the room data.');
     });
   }
