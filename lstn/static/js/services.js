@@ -7,30 +7,40 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   function() {
     var Alert = {};
 
-    Alert.success = function(message) {
+    Alert.success = function(message, id) {
       this.add(message, 'success');
     };
 
-    Alert.info = function(message) {
+    Alert.info = function(message, id) {
       this.add(message, 'info');
     };
 
-    Alert.warning = function(message) {
+    Alert.warning = function(message, id) {
       this.add(message, 'warning');
     };
 
-    Alert.error = function(message) {
-      this.add(message, 'error');
+    Alert.error = function(message, id) {
+      this.add(message, 'error', id);
     };
 
-    Alert.add = function(message, type) {
+    Alert.add = function(message, type, id) {
       type = type || 'info';
 
-      $.snackbar({
+      var options = {
         content: message,
         style: 'snackbar--' + type,
         timeout: 0
-      });
+      };
+
+      if (id) [
+        options.id = id;
+      }
+
+      $.snackbar(options);
+    };
+
+    Alert.remove = function(id) {
+      $('#' + id).snackbar('hide');
     };
 
     Alert.clear = function() {
