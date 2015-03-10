@@ -6,7 +6,7 @@
         <div>STOP BROADCASTING</div>
       </a>
     </div>
-    <div data-ng-show="!isController" class="broadcasting broadcasting--off">
+    <div data-ng-show="!isController && queue && queue.tracks && queue.tracks.length > 0" class="broadcasting broadcasting--off">
       <a data-ng-click="toggleBroadcast()">
         <i class="fa fa-microphone"></i>
         <div>START BROADCASTING</div>
