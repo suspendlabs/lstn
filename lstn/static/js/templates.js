@@ -1002,8 +1002,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </div>\n" +
     "  </div>\n" +
     "  <div class=\"modal-footer\">\n" +
-    "    <button class=\"btn btn-warning\" ng-click=\"cancel()\">Cancel</button>\n" +
-    "    <button class=\"btn btn-primary\" ng-click=\"ok()\">Save</button>\n" +
+    "    <button class=\"btn btn-accent\" ng-click=\"cancel()\">Cancel</button>\n" +
+    "    <button class=\"btn btn-active\" ng-click=\"ok()\">Save</button>\n" +
     "  </div>\n" +
     "</div>\n"
   );

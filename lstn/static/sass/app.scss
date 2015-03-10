@@ -12,6 +12,38 @@ html, body {
   height: 100%;
 }
 
+.btn-accent {
+  background-color: $accent-color;
+  border-color: $accent-color;
+  color: $accent-text-color;
+
+  &:hover {
+    background-color: darken($accent-color, 5%);
+    color: $accent-text-color;
+  }
+
+  &:focus {
+    outline: none;
+    color: $accent-text-color;
+  }
+}
+
+.btn-active {
+  background-color: $active-color;
+  border-color: $active-color;
+  color: $active-text-color;
+
+  &:hover {
+    background-color: darken($active-color, 5%);
+    color: $active-text-color;
+  }
+
+  &:focus {
+    outline: none;
+    color: $active-text-color;
+  }
+}
+
 .privacy {
   background-color: $first-layer;
   min-height: 400px;
