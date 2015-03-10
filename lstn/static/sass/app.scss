@@ -102,7 +102,7 @@ body {
     height: 100%;
 
     > div {
-      height: 80%;
+      height: calc(100% - 130px);
       margin-top: 15px;
     }
   }
@@ -264,9 +264,11 @@ body {
 
 .room {
   height: 100%;
+
   .room__left {
     padding-left: 0;
     padding-right: 0;
+    height: 100%;
   }
 
   .room__middle {
@@ -315,7 +317,7 @@ body {
 
 .playing__meta {
   background: rgba(0, 0, 0, 0.4);
-  padding: 1em;
+  padding: 0.7em;
   min-height: 180px;
 
   h3, h4 {
@@ -338,7 +340,6 @@ body {
   margin-top: 1em;
 }
 
-
 .bootstrap-switch {
   span.bootstrap-switch-handle-on.bootstrap-switch-primary {
     background: $active-color;
@@ -347,11 +348,15 @@ body {
 
 .control__button {
   @include border-radius(0);
-  opacity: 1;
-  width:50px;
-  height:50px;
-  font-size:18px;
+  @include opacity(1);
 
+  width: 50px;
+  height: 50px;
+  font-size: 18px;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .roster__category {
@@ -388,7 +393,6 @@ body {
       }
 
       &.roster__item--controller {
-        
         a {
           position: relative;
           .fa.fa-volume-up {
@@ -436,9 +440,15 @@ body {
   background-color: $accent-color;
 
   .nav-tabs {
+    height: 36px;
+
     > li {
       &:last-child {
         width: 34%;
+      }
+
+      &:hover {
+        background-color: darken($accent-color, 5%);
       }
 
       width: 33%;
@@ -482,16 +492,52 @@ body {
   height: 100%;
 }
 
+.queue__controls {
+  height: 26px;
+
+  .btn {
+    @include border-radius(0);
+    border: 0;
+    margin: 0;
+    padding: 3px;
+    width: 50%;
+
+    background-color: $accent-color;
+    color: $accent-text-color;
+
+    &:hover {
+      background-color: darken($accent-color, 5%);
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &.toggled {
+      background-color: $active-color;
+      color: $active-text-color;
+
+      &:hover {
+        background-color: darken($active-color, 5%);
+      }
+    }
+  }
+}
+
 .queue {
-  height: 100%;
+  height: calc(100% - 62px);
+
+  &.drilldown__list {
+    height: calc(100% - 62px);
+  }
+
   overflow-x: hidden;
   overflow-y: auto;
 }
 
 .playlist__container {
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
+  height: calc(100% - 38px);
+  overflow: hidden;
 }
 
 .music__container {
@@ -510,16 +556,39 @@ body {
 }
 
 .queue--empty {
-  font-size: 10em;
-  color: $background-color;
-  line-height: 400px;
+  height: calc(100% - 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    font-size: 1.4em;
+    color: $accent-text-color;
+  }
 }
 
-.messages--empty {
+.queue--loading {
+  height: calc(100% - 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   font-size: 10em;
   color: $background-color;
-  line-height: 400px;
+}
+
+.messages--loading {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding-top: 36px;
+
+  font-size: 10em;
+  color: $background-color;
 }
 
 .drilldown__list {
@@ -563,6 +632,10 @@ body {
     @include flex(1);
     margin: 0;
   }
+}
+
+.chat__input {
+  height: 36px;
 }
 
 .chat__message .item__title {
@@ -684,7 +757,7 @@ body {
 }
 
 .messages {
-  height: 100%;
+  height: calc(100% - 36px);
   overflow-x: hidden;
   overflow-y: auto;
 
@@ -853,7 +926,7 @@ footer {
 }
 
 .search__container {
-  height: 100%;
+  height: calc(100% - 38px);
 }
 
 .search__contents {
@@ -871,7 +944,7 @@ footer {
 }
 
 .more-music {
-  height: 100%;
+  height: calc(100% - 36px);
 
   .carousel-control {
     display: none;
@@ -887,11 +960,10 @@ footer {
 
   .carousel-inner {
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: inherit;
+    overflow: hidden;
 
     .item {
-      height: 80%;
+      height: calc(100% - 40px);
 
       .tracks {
         overflow-x: hidden;

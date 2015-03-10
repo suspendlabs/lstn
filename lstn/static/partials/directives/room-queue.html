@@ -1,5 +1,15 @@
 <div class="queue__container">
-  <ul id="queue" class="queue queue--full track__list drilldown__list" data-ng-show="queue.tracks && queue.tracks.length > 0" data-ui-sortable="sortableOptions" ng-model="queue.tracks">
+  <div class="queue__controls" data-ng-show="!queue.loading && queue.tracks && queue.tracks.length > 0">
+    <button class="btn" data-ng-click="queue.toggleShuffle()" data-ng-class="{'toggled': queue.shuffle}">
+      <i class="fa fa-fw fa-random"></i>
+      Shuffle
+    </button><!--
+    --><button class="btn btn-default" data-ng-click="queue.clearTracks()">
+      <i class="fa fa-fw fa-times"></i>
+      Clear
+    </button>
+  </div>
+  <ul id="queue" class="queue queue--full track__list drilldown__list" data-ng-show="!queue.loading && queue.tracks && queue.tracks.length > 0" data-ui-sortable="sortableOptions" ng-model="queue.tracks">
     <li data-ng-repeat="track in queue.tracks">
       <lstn-track
         data-track="track"
@@ -7,7 +17,10 @@
         data-index="$index"></lstn-track>
     </li>
   </ul>
-  <div class="queue--empty text-center" data-ng-show="!queue.tracks || queue.tracks.length === 0">
+  <div class="queue--empty" data-ng-show="!queue.loading && (!queue.tracks || queue.tracks.length === 0)">
+    <p>You don't have any tracks in your queue.</p>
+  </div>
+  <div class="queue--loading" data-ng-show="queue.loading">
     <i class="fa fa-circle-o-notch fa-spin"></i>
   </div>
 </div>

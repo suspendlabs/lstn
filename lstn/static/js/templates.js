@@ -463,22 +463,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-activity.html',
     "<div class=\"room-activity\">\n" +
-    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading\">\n" +
-    "    <li data-ng-repeat=\"item in chat.messages\">\n" +
-    "      <lstn-chat-message\n" +
-    "        data-message=\"item\"\n" +
-    "        data-index=\"$index\"></lstn-chat-message>\n" +
-    "    </li>\n" +
-    "  </ul>\n" +
-    "  <div class=\"messages--empty text-center\" data-ng-show=\"chat.loading\">\n" +
-    "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
-    "  </div>\n" +
     "  <input\n" +
     "    id=\"chat-input\"\n" +
     "    data-mentio\n" +
     "    data-mentio-id=\"'chat-input'\"\n" +
     "    ng-trim=\"false\"\n" +
-    "    class=\"form-control\"\n" +
+    "    class=\"form-control chat__input\"\n" +
     "    type=\"text\"\n" +
     "    data-ng-show=\"!chat.loading\"\n" +
     "    data-ng-model=\"message.text\"\n" +
@@ -503,6 +493,18 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    mentio-template-url=\"/static/partials/directives/emoticon-list.html\"\n" +
     "    mentio-search=\"searchEmoticons(term)\"\n" +
     "    mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
+    "\n" +
+    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading && chat.messages && chat.messages.length > 0\">\n" +
+    "    <li data-ng-repeat=\"item in chat.messages\">\n" +
+    "      <lstn-chat-message\n" +
+    "        data-message=\"item\"\n" +
+    "        data-index=\"$index\"></lstn-chat-message>\n" +
+    "    </li>\n" +
+    "  </ul>\n" +
+    "  <div class=\"messages--empty\" data-ng-show=\"!chat.loading && (!chat.messages || chat.messages.length === 0)\"></div>\n" +
+    "  <div class=\"messages--loading\" data-ng-show=\"chat.loading\">\n" +
+    "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 
@@ -513,7 +515,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    type=\"button\"\n" +
     "    data-ng-show=\"!playing.downvoted && !isCurrentController\"\n" +
     "    data-ng-disabled=\"!playing.track.key || playing.track.voted\"\n" +
-    "    class=\"control__button btn btn-danger btn-lg\"\n" +
+    "    class=\"control__button btn btn-danger\"\n" +
     "    aria-label=\"Downvote\"\n" +
     "    data-ng-click=\"downvote()\"\n" +
     "    data-tooltip=\"Downvote\"\n" +
@@ -525,7 +527,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    type=\"button\"\n" +
     "    data-ng-show=\"playing.downvoted\"\n" +
     "    disabled=\"disabled\"\n" +
-    "    class=\"control__button btn btn-danger btn-lg\"\n" +
+    "    class=\"control__button btn btn-danger\"\n" +
     "    aria-label=\"Downvoted\"\n" +
     "    data-tooltip=\"Downvoted\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
@@ -536,18 +538,29 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
-  $templateCache.put('/static/partials/directives/room-control-shuffle.html',
+  $templateCache.put('/static/partials/directives/room-control-favorite.html',
     "<span>\n" +
     "  <button\n" +
     "    type=\"button\"\n" +
-    "    class=\"control__button btn btn-lg\"\n" +
-    "    data-ng-class=\"{'btn-default': !queue.shuffle, 'btn-primary': queue.shuffle}\"\n" +
-    "    aria-label=\"Shuffle\"\n" +
-    "    data-ng-click=\"queue.toggleShuffle()\"\n" +
-    "    data-tooltip=\"Shuffle Queue\"\n" +
+    "    data-ng-hide=\"favorites.bitset[playing.track.key]\"\n" +
+    "    class=\"control__button btn btn-default\"\n" +
+    "    aria-label=\"Favorite\"\n" +
+    "    data-ng-click=\"favorites.addTrack(playing.track)\"\n" +
+    "    data-tooltip=\"Favorite\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-random\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-heart-o text-danger\" aria-hidden=\"true\"></i>\n" +
+    "  </button>\n" +
+    "  <button\n" +
+    "    type=\"button\"\n" +
+    "    data-ng-show=\"favorites.bitset[playing.track.key]\"\n" +
+    "    class=\"control__button btn btn-default\"\n" +
+    "    aria-label=\"Unfavorite\"\n" +
+    "    data-ng-click=\"favorites.removeTrack(playing.track)\"\n" +
+    "    data-tooltip=\"Unfavorite\"\n" +
+    "    data-tooltip-placement=\"bottom\"\n" +
+    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    <i class=\"fa fa-heart text-danger\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
   );
@@ -559,7 +572,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    type=\"button\"\n" +
     "    data-ng-show=\"isCurrentController\"\n" +
     "    data-ng-disabled=\"!playing.track.key\"\n" +
-    "    class=\"control__button btn btn-danger btn-lg\"\n" +
+    "    class=\"control__button btn btn-danger\"\n" +
     "    aria-label=\"Skip Song\"\n" +
     "    data-ng-click=\"skipTrack()\"\n" +
     "    data-tooltip=\"Skip Song\"\n" +
@@ -577,7 +590,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    type=\"button\"\n" +
     "    data-ng-hide=\"playing.upvoted || isCurrentController\"\n" +
     "    data-ng-disabled=\"!playing.track.key || isCurrentController || playing.track.voted\"\n" +
-    "    class=\"control__button btn btn-success btn-lg\"\n" +
+    "    class=\"control__button btn btn-success\"\n" +
     "    aria-label=\"Upvote\"\n" +
     "    data-ng-click=\"upvote()\"\n" +
     "    data-tooltip=\"Upvote\"\n" +
@@ -589,7 +602,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    type=\"button\"\n" +
     "    data-ng-show=\"playing.upvoted\"\n" +
     "    disabled=\"disabled\"\n" +
-    "    class=\"control__button btn btn-success btn-lg\"\n" +
+    "    class=\"control__button btn btn-success\"\n" +
     "    aria-label=\"Upvoted\"\n" +
     "    data-tooltip=\"Upvoted\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
@@ -606,19 +619,19 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-ng-show=\"!mute\"\n" +
     "    data-ng-disabled=\"!playing.track.key\"\n" +
     "    type=\"button\"\n" +
-    "    class=\"control__button btn btn-default btn-lg\"\n" +
+    "    class=\"control__button btn btn-default\"\n" +
     "    aria-label=\"Mute\"\n" +
     "    data-ng-click=\"toggleMute()\"\n" +
     "    data-tooltip=\"Mute\"\n" +
     "    data-tooltip-placement=\"bottom\"\n" +
     "    data-tooltip-popup-delay=\"1000\">\n" +
-    "    <i class=\"fa fa-volume-off\" aria-hidden=\"true\"></i>\n" +
+    "    <i class=\"fa fa-lg fa-volume-off\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
     "    data-ng-show=\"mute\"\n" +
     "    data-ng-disabled=\"!playing.track.key\"\n" +
     "    type=\"button\"\n" +
-    "    class=\"control__button btn btn-default btn-lg\"\n" +
+    "    class=\"control__button btn btn-default\"\n" +
     "    aria-label=\"Unmute\"\n" +
     "    data-ng-click=\"toggleMute()\"\n" +
     "    data-tooltip=\"Unmute\"\n" +
@@ -636,7 +649,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <lstn-room-control-downvote></lstn-room-control-downvote>\n" +
     "  <lstn-room-control-skip></lstn-room-control-skip>\n" +
     "  <lstn-room-control-upvote></lstn-room-control-upvote>\n" +
-    "  <lstn-room-control-shuffle></lstn-room-control-shuffle>\n" +
+    "  <lstn-room-control-favorite></lstn-room-control-favorite>\n" +
     "</div>\n"
   );
 
@@ -702,7 +715,17 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
   $templateCache.put('/static/partials/directives/room-queue.html',
     "<div class=\"queue__container\">\n" +
-    "  <ul id=\"queue\" class=\"queue queue--full track__list drilldown__list\" data-ng-show=\"queue.tracks && queue.tracks.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue.tracks\">\n" +
+    "  <div class=\"queue__controls\" data-ng-show=\"!queue.loading && queue.tracks && queue.tracks.length > 0\">\n" +
+    "    <button class=\"btn\" data-ng-click=\"queue.toggleShuffle()\" data-ng-class=\"{'toggled': queue.shuffle}\">\n" +
+    "      <i class=\"fa fa-fw fa-random\"></i>\n" +
+    "      Shuffle\n" +
+    "    </button><!--\n" +
+    "    --><button class=\"btn btn-default\" data-ng-click=\"queue.clearTracks()\">\n" +
+    "      <i class=\"fa fa-fw fa-times\"></i>\n" +
+    "      Clear\n" +
+    "    </button>\n" +
+    "  </div>\n" +
+    "  <ul id=\"queue\" class=\"queue queue--full track__list drilldown__list\" data-ng-show=\"!queue.loading && queue.tracks && queue.tracks.length > 0\" data-ui-sortable=\"sortableOptions\" ng-model=\"queue.tracks\">\n" +
     "    <li data-ng-repeat=\"track in queue.tracks\">\n" +
     "      <lstn-track\n" +
     "        data-track=\"track\"\n" +
@@ -710,7 +733,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        data-index=\"$index\"></lstn-track>\n" +
     "    </li>\n" +
     "  </ul>\n" +
-    "  <div class=\"queue--empty text-center\" data-ng-show=\"!queue.tracks || queue.tracks.length === 0\">\n" +
+    "  <div class=\"queue--empty\" data-ng-show=\"!queue.loading && (!queue.tracks || queue.tracks.length === 0)\">\n" +
+    "    <p>You don't have any tracks in your queue.</p>\n" +
+    "  </div>\n" +
+    "  <div class=\"queue--loading\" data-ng-show=\"queue.loading\">\n" +
     "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -854,7 +880,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-ng-bind=\"track.duration | duration\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
-    "    <span class=\"dropdown\" data-dropdown>\n" +
+    "    <span class=\"dropdown\" data-dropdown data-is-open=\"status.open\">\n" +
     "      <i\n" +
     "        class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "        data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
@@ -865,12 +891,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        data-tooltip-placement=\"left\"\n" +
     "        data-tooltip-popup-delay=\"1000\"></i>\n" +
     "      <a\n" +
-    "        class=\"fa fa-fw fa-ellipsis-v dropdown-toggle\"\n" +
+    "        class=\"fa fa-fw fa-ellipsis-v\"\n" +
     "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')\"\n" +
-    "        data-dropdown-toggle></a>\n" +
+    "        data-ng-click=\"toggleDropdown($event)\"></a>\n" +
     "      <ul\n" +
     "        class=\"dropdown-menu dropdown-menu-right\"\n" +
-    "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue\">\n" +
+    "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue\"\n" +
+    "        role=\"menu\">\n" +
     "        <li data-ng-show=\"track.in_queue && context === 'queue'\">\n" +
     "          <a data-ng-click=\"queue.moveToTop(index)\">\n" +
     "            <i class=\"fa fa-fw fa-arrow-circle-up item__actions__move-to-top\"></i>\n" +
@@ -901,6 +928,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "            Add to Bottom of Queue\n" +
     "          </a>\n" +
     "        </li>\n" +
+    "        <li class=\"divider\"></li>\n" +
     "        <li data-ng-hide=\"favorites.bitset[track.key]\">\n" +
     "          <a data-ng-click=\"favorites.addTrack(track)\">\n" +
     "            <i class=\"fa fa-fw fa-heart item__actions__favorite\"></i>\n" +
@@ -915,6 +943,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        </li>\n" +
     "      </ul>\n" +
     "    </span>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-bars item__actions__drag-handle\"\n" +
+    "      data-ng-show=\"track.in_queue && context === 'queue'\"></i>\n" +
     "  </div>\n" +
     "</div>\n"
   );

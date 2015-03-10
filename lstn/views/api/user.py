@@ -178,11 +178,14 @@ def get_station_type(station_type):
 
   return jsonify(success=True, stations=stations)
 
-@user.route('/queue', methods=['GET', 'PUT'])
+@user.route('/queue', methods=['GET', 'PUT', 'DELETE'])
 @login_required
 def user_queue():
   if request.method == 'PUT':
     return update_queue()
+
+  if request.method == 'DELETE':
+    return clear_queue()
 
   queue = current_user.get_queue()
   return jsonify(success=True, queue=queue)
@@ -204,6 +207,27 @@ def update_queue():
   if tracks:
     try:
       rdio_manager.set_playlist_order(current_user.queue, tracks)
+    except Exception as e:
+      current_app.logger.debug(e)
+      raise APIException('Unable to reorder your queue: %s' % str(e))
+
+  return jsonify(success=True)
+
+def clear_queue():
+  if not current_user.queue:
+    raise APIException('Unable to clear user queue', 500)
+
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  queue = current_user.get_queue()
+  if queue:
+    tracks = [track['key'] for track in queue]
+
+    try:
+      rdio_manager.remove_from_playlist(current_user.queue, tracks)
     except Exception as e:
       current_app.logger.debug(e)
       raise APIException('Unable to reorder your queue: %s' % str(e))

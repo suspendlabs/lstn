@@ -16,7 +16,7 @@
       data-ng-bind="track.duration | duration"></div>
   </div>
   <div class="item__actions">
-    <span class="dropdown" data-dropdown>
+    <span class="dropdown" data-dropdown data-is-open="status.open">
       <i
         class="fa fa-fw fa-circle-o-notch fa-spin"
         data-ng-show="track.addingToQueue || track.removingFromQueue"></i>
@@ -27,12 +27,13 @@
         data-tooltip-placement="left"
         data-tooltip-popup-delay="1000"></i>
       <a
-        class="fa fa-fw fa-ellipsis-v dropdown-toggle"
+        class="fa fa-fw fa-ellipsis-v"
         data-ng-hide="track.addingToQueue || track.removingFromQueue || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')"
-        data-dropdown-toggle></a>
+        data-ng-click="toggleDropdown($event)"></a>
       <ul
         class="dropdown-menu dropdown-menu-right"
-        data-ng-hide="track.addingToQueue || track.removingFromQueue">
+        data-ng-hide="track.addingToQueue || track.removingFromQueue"
+        role="menu">
         <li data-ng-show="track.in_queue && context === 'queue'">
           <a data-ng-click="queue.moveToTop(index)">
             <i class="fa fa-fw fa-arrow-circle-up item__actions__move-to-top"></i>
@@ -63,6 +64,7 @@
             Add to Bottom of Queue
           </a>
         </li>
+        <li class="divider"></li>
         <li data-ng-hide="favorites.bitset[track.key]">
           <a data-ng-click="favorites.addTrack(track)">
             <i class="fa fa-fw fa-heart item__actions__favorite"></i>
@@ -77,5 +79,8 @@
         </li>
       </ul>
     </span>
+    <i
+      class="fa fa-fw fa-bars item__actions__drag-handle"
+      data-ng-show="track.in_queue && context === 'queue'"></i>
   </div>
 </div>

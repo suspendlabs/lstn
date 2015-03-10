@@ -374,7 +374,7 @@ Lstn.prototype.sendChatMessage = function(message) {
     chatHistory[this.roomId] = [];
   }
 
-  chatHistory[this.roomId].push(message);
+  chatHistory[this.roomId].unshift(message);
 
   if (chatHistory[this.roomId].length > 250) {
     chatHistory[this.roomId].splice(0, chatHistory[this.roomId].length - 250);
