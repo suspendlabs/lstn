@@ -385,7 +385,7 @@ body > .container > div {
 }
 .roster__container ul.roster {
   padding: 0;
-  margin: 10px 0 0 0;
+  margin: 15px 0 0 0;
   list-style-type: none;
 }
 .roster__container ul.roster li {
@@ -414,7 +414,7 @@ body > .container > div {
   border: 1px solid #fff;
 }
 .roster__container .roster__user img {
-  margin: 5px;
+  margin: 0 0 15px 0;
 }
 
 .progress {
