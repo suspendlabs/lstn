@@ -75,7 +75,7 @@ def get_playlists():
     current_user.oauth_token_secret)
 
   try:
-    playlist_set = rdio_manager.get_playlists()
+    playlist_set = rdio_manager.get_playlists(['radioKey'])
   except Exception as e:
     current_app.logger.debug(e)
     raise APIException('Unable to get playlists: %s' % str(e))
@@ -88,7 +88,7 @@ def get_playlists():
   }
 
   if hasattr(playlist_set, 'owned_playlists'):
-    playlists['owned'] = [playlist._data for playlist in playlist_set.owned_playlists if hasattr(playlist, '_data') and playlist.name != u'Lstn to Rdio']
+    playlists['owned'] = [playlist._data for playlist in playlist_set.owned_playlists if hasattr(playlist, '_data') and playlist.key != current_user.queue]
 
   if hasattr(playlist_set, 'collab_playlists'):
     playlists['collab'] = [playlist._data for playlist in playlist_set.collab_playlists if hasattr(playlist, '_data')]
@@ -116,6 +116,7 @@ def get_playlist_type(list_type):
     'method': 'getUserPlaylists',
     'user': current_user.external_id,
     'kind': list_type,
+    'extras': 'radioKey',
   }
 
   playlists = {}
@@ -126,6 +127,7 @@ def get_playlist_type(list_type):
     current_app.logger.debug(e)
     raise APIException('Unable to retrieve playlist: %s' % str(e))
 
+  playlists[list_type] = [playlist for playlist in playlists[list_type] if playlist['key'] != current_user.queue]
   return jsonify(success=True, playlists=playlists)
 
 @user.route('/stations/<station_type>', methods=['GET'])
@@ -140,20 +142,25 @@ def get_station_type(station_type):
     'you': {
       'method': 'getStations',
       'user': current_user.external_id,
+      'v': '20140512',
     },
     'friends': {
       'method': 'getFriendAndTastemakerStations',
+      'v': '20140512',
     },
     'recent': {
       'method': 'getRecentStationsHistoryForUser',
       'user': current_user.external_id,
+      'v': '20140512',
     },
     'genre': {
       'method': 'getGenreStations',
+      'v': '20140512'
     },
     'top': {
       'method': 'getCuratedContent',
       'curationType': 'top_stations',
+      'v': '20140512'
     },
     'new': {
       'method': 'getCuratedContent',
