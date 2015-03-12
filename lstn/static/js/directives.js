@@ -955,12 +955,28 @@ angular.module('lstn.directives', ['sc.twemoji'])
       restrict: 'E',
       replace: true,
       scope: {
-        station: '=',
+        context: '=',
         loadStationTracks: '=',
-        index: '=',
-        context: '='
+        station: '=?',
+        radio: '=?',
+        index: '=?'
       },
-      templateUrl: '/static/partials/directives/station.html'
+      templateUrl: '/static/partials/directives/station.html',
+      link: function($scope, $element, $attrs) {
+        console.log('lstnStation', $scope);
+        $scope.station  = $scope.station  || {};
+        $scope.radio    = $scope.radio    || {};
+
+        $scope.station.key  = $scope.station.key  || $scope.radio.radioKey;
+        $scope.station.name = $scope.station.name || $scope.radio.name;
+        $scope.station.icon = $scope.station.icon || $scope.radio.icon;
+
+        if ($scope.radio && $scope.radio.name) {
+          $scope.station.name = $scope.radio.name + ' Radio';
+        }
+
+        console.log('lstnStation station', $scope.station);
+      }
     };
   }
 ])
