@@ -37,7 +37,7 @@ def get_tracks(playlist_id):
     tracks = rdio_manager.get(playlist.track_keys, ['radioKey', 'streamRegions'])
   except Exception as e:
     current_app.logger.debug(e)
-    raise APIException('Unable to retrieve playlsit tracks: %s' % str(e))
+    raise APIException('Unable to retrieve playlist tracks: %s' % str(e))
 
   tracks = [track._data for track in tracks]
 
