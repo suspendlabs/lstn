@@ -813,7 +813,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <i\n" +
     "      class=\"fa fa-exclamation-triangle\"\n" +
     "      data-ng-show=\"!track.canStream\"\n" +
-    "      data-tooltip=\"This track can't be streamed\"\n" +
+    "      data-tooltip=\"This track can't be streamed in your region\"\n" +
+    "      data-tooltip-placement=\"left\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-exclamation-triangle\"\n" +
+    "      data-ng-show=\"track.canStream && track.restrictedRegions\"\n" +
+    "      data-tooltip=\"This track has limited region availability\"\n" +
     "      data-tooltip-placement=\"left\"></i>\n" +
     "\n" +
     "    <span class=\"dropdown\" data-dropdown data-is-open=\"status.open\">\n" +
