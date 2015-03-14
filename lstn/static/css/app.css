@@ -1019,7 +1019,7 @@ footer .container .text-muted {
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
+  overflow: visible;
 }
 .carousel__back a {
   color: #ffffff;
@@ -1027,11 +1027,26 @@ footer .container .text-muted {
   text-transform: uppercase;
   text-decoration: none;
 }
-.carousel__back .carousel__refresh {
-  padding-right: 10px;
+.carousel__back .dropdown-menu {
+  font-size: 12px;
+}
+.carousel__back .dropdown-menu li a {
+  cursor: pointer;
+  text-transform: none;
+  font-weight: 400;
+  padding: 3px 5px;
+}
+.carousel__back .carousel__dropdown--add {
+  color: #5cb85c;
+}
+.carousel__back .carousel__dropdown--refresh {
+  color: #d24242;
+}
+.carousel__back .carousel__action {
+  margin-right: 10px;
   color: white;
 }
-.carousel__back .carousel__refresh .fa {
+.carousel__back .carousel__action .fa {
   font-size: 1.25em;
 }
 

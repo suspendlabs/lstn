@@ -1102,7 +1102,7 @@ footer {
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
+  overflow: visible;
 
   a {
     color: $active-text-color;
@@ -1111,8 +1111,29 @@ footer {
     text-decoration: none;
   }
 
-  .carousel__refresh {
-    padding-right: 10px;
+  .dropdown-menu {
+    font-size: 12px;
+
+    li {
+      a {
+        cursor: pointer;
+        text-transform: none;
+        font-weight: 400;
+        padding: 3px 5px;
+      }
+    }
+  }
+
+  .carousel__dropdown--add {
+    color: $action-additive;
+  }
+
+  .carousel__dropdown--refresh {
+    color: $active-color;
+  }
+
+  .carousel__action {
+    margin-right: 10px;
     color: white;
 
     .fa {
