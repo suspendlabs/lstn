@@ -438,6 +438,15 @@ angular.module('lstn.directives', ['sc.twemoji'])
           open: false
         };
 
+        if ($scope.track.streamRegions) {
+          /**
+           * TODO: Eventually, this should be based on the regions of the
+           * room roster
+           */
+          $scope.track.restrictedRegions = $scope.track.streamRegions.indexOf('US') === -1 ||
+            $scope.track.streamRegions.indexOf('CA') === -1;
+        }
+
         $scope.toggleDropdown = function(event) {
           event.preventDefault();
           event.stopPropagation();
