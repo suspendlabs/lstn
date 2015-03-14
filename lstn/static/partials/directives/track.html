@@ -17,6 +17,16 @@
   </div>
   <div class="item__actions">
     <i
+      class="fa fa-exclamation-triangle"
+      data-ng-show="!track.canStream"
+      data-tooltip="This track can't be streamed in your region"
+      data-tooltip-placement="left"></i>
+    <i
+      class="fa fa-exclamation-triangle"
+      data-ng-show="track.canStream && track.restrictedRegions"
+      data-tooltip="This track has limited regional availability"
+      data-tooltip-placement="left"></i>
+    <i
       class="fa fa-fw fa-circle-o-notch fa-spin"
       data-ng-show="track.addingToQueue || track.removingFromQueue"></i>
     <i
@@ -25,16 +35,6 @@
       data-tooltip="This track is already in your queue"
       data-tooltip-placement="left"
       data-tooltip-popup-delay="1000"></i>
-    <i
-      class="fa fa-exclamation-triangle"
-      data-ng-show="!track.canStream"
-      data-tooltip="This track can't be streamed in your region"
-      data-tooltip-placement="left"></i>
-    <i
-      class="fa fa-exclamation-triangle"
-      data-ng-show="track.canStream && track.restrictedRegions"
-      data-tooltip="This track has limited region availability"
-      data-tooltip-placement="left"></i>
 
     <span class="dropdown" data-dropdown data-is-open="status.open">
       <a
@@ -64,7 +64,7 @@
           </a>
         </li>
         <li data-ng-hide="!track.canStream || track.in_queue || queue.bitset[track.key]">
-          <a data-ng-click="queue.addTrack(track, 'top')" data-ng-disabled="!track.canStream">
+          <a data-ng-click="queue.addTrack(track, 'top')">
             <i class="fa fa-fw fa-plus-circle item__actions__add"></i>
             Add to Top of Queue
           </a>
