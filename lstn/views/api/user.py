@@ -99,7 +99,7 @@ def get_playlists():
   if hasattr(playlist_set, 'favorites_playlists'):
     playlists['favorites'] = [playlist._data for playlist in playlist_set.favorites_playlists if hasattr(playlist, '_data')]
 
-  return jsonify(success=True, playlists=playlists)
+  return jsonify(success=True, data=playlists)
 
 @user.route('/playlists/<list_type>', methods=['GET'])
 @login_required
@@ -119,16 +119,15 @@ def get_playlist_type(list_type):
     'extras': 'radioKey',
   }
 
-  playlists = {}
-
   try:
-    playlists[list_type] = rdio_manager.call_api_authenticated(data)
+    response = rdio_manager.call_api_authenticated(data)
   except Exception as e:
     current_app.logger.debug(e)
     raise APIException('Unable to retrieve playlist: %s' % str(e))
 
-  playlists[list_type] = [playlist for playlist in playlists[list_type] if playlist['key'] != current_user.queue]
-  return jsonify(success=True, playlists=playlists)
+  playlists = [playlist for playlist in response if playlist['key'] != current_user.queue]
+
+  return jsonify(success=True, data=playlists)
 
 @user.route('/stations/<station_type>', methods=['GET'])
 @login_required
@@ -175,15 +174,13 @@ def get_station_type(station_type):
   if station_type not in methods:
     raise APIException('Invalid station type')
 
-  stations = {}
-
   try:
-    stations = rdio_manager.call_api_authenticated(methods[station_type])
+    response = rdio_manager.call_api_authenticated(methods[station_type])
   except Exception as e:
     current_app.logger.debug(e)
     raise APIException('Unable to retrieve station: %s' % str(e))
 
-  return jsonify(success=True, stations=stations)
+  return jsonify(success=True, data=response['items'])
 
 @user.route('/queue', methods=['GET', 'PUT', 'DELETE'])
 @login_required
@@ -311,7 +308,7 @@ def search():
     raise APIException('You must specify a search query')
 
   if len(query) < 3:
-    return jsonify(success=True, results=[])
+    return jsonify(success=True, data=[])
 
   rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
     current_app.config['RDIO_CONSUMER_SECRET'],
@@ -326,12 +323,12 @@ def search():
   }
 
   try:
-    results = rdio_manager.call_api(data)
+    response = rdio_manager.call_api(data)
   except Exception as e:
     current_app.logger.debug(e)
     raise APIException('Unable to search music: %s' % str(e))
 
-  return jsonify(success=True, results=results['results'])
+  return jsonify(success=True, data=response['results'])
 
 @user.route('/favorites', methods=['GET'])
 @login_required
