@@ -217,7 +217,11 @@ body {
   }
 
   &.navbar--login {
-    margin-right: 5px;
+    margin-right: 15px;
+
+    a {
+      margin-top: 18px;
+    }
   }
 
   .navbar__divider {

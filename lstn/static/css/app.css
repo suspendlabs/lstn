@@ -198,7 +198,10 @@ body > .container > div {
   color: #FFFFFF;
 }
 .navbar-right.navbar--login {
-  margin-right: 5px;
+  margin-right: 15px;
+}
+.navbar-right.navbar--login a {
+  margin-top: 18px;
 }
 .navbar-right .navbar__divider {
   margin-left: -10px;
