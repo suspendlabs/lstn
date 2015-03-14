@@ -1,15 +1,15 @@
 <div class="room-activity">
   <input
     id="chat-input"
+    type="text"
+    placeholder="Send message..."
     data-mentio
     data-mentio-id="'chat-input'"
-    ng-trim="false"
+    data-ng-trim="false"
     class="form-control chat__input"
-    type="text"
     data-ng-show="!chat.loading"
     data-ng-model="message.text"
-    data-lstn-enter="sendMessage()"
-    placeholder="Send message..."></input>
+    data-lstn-enter="sendMessage()"></input>
 
   <mentio-menu
     id="mention-menu"
