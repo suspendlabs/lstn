@@ -2,6 +2,7 @@
 @import "compass/css3/border-radius";
 @import "compass/css3/text-shadow";
 @import "compass/css3/box-shadow";
+@import "compass/css3/transition";
 @import "compass/css3/animation";
 @import "compass/css3/transform";
 @import "compass/css3/opacity";
@@ -151,7 +152,7 @@ body {
       display: none !important;
 }
 
-.nav, .pagination, .carousel, .panel-title a {
+.nav, .pagination, .panel-title a {
   cursor: pointer;
 }
 
@@ -1040,34 +1041,50 @@ footer {
   }
 }
 
-.more-music {
-  height: calc(100% - 36px);
+.lstn-carousel {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
 
-  .carousel-control {
-    display: none;
+  a {
+    cursor: pointer;
   }
 
-  .carousel-indicators {
-    display: none;
-  }
-
-  .carousel {
-    height: 100%;
-  }
-
-  .carousel-inner {
+  .slide__wrapper {
+    width: 100%;
     height: 100%;
     overflow: hidden;
+    position: relative;
+  }
 
-    .item {
-      height: calc(100% - 40px);
+  .slides {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 500%;
+    overflow: hidden;
+    position: relative;
+    left: 0px;
 
-      .tracks {
-        overflow-x: hidden;
-        overflow-y: auto;
+    @include transition(left .4s cubic-bezier(0.77, 0, 0.175, 1));
+
+    .slide__container {
+      width: 20%;
+      height: calc(100% - 36px);
+      float: left;
+      position: relative;
+
+      .slide {
+        height: calc(100% - 40px);
       }
     }
   }
+}
+
+.more-music {
+  height: calc(100% - 36px);
 }
 
 .carousel__back {
@@ -1088,7 +1105,7 @@ footer {
   }
 
   .carousel__refresh {
-    padding-right: 15px;
+    padding-right: 10px;
     color: white;
 
     .fa {
