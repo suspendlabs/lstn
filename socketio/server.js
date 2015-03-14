@@ -348,6 +348,19 @@ Lstn.prototype.sendRoster = function() {
     currentRoster.mentionNames = Object.keys(currentRoster.mentionNames || {}).map(function(key) {
       return currentRoster.mentionNames[key];
     });
+
+    var regions = {};
+    Object.keys(currentRoster.controllers).forEach(function(userId) {
+      var region = currentRoster.controllers[userId].region || 'US';
+      regions[region] = 1;
+    });
+
+    Object.keys(currentRoster.users).forEach(function(userId) {
+      var region = currentRoster.users[userId].region || 'US';
+      regions[region] = 1;
+    });
+
+    currentRoster.regions = Object.keys(regions);
   }
 
   io.sockets.in(this.roomId).emit('room:roster:update', currentRoster);
