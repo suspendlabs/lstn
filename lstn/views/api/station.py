@@ -36,9 +36,4 @@ def get_tracks(station_id):
   if 'tracks' in station:
       tracks = station['tracks']
 
-  response = {
-    'success': 1,
-    'tracks': tracks,
-  }
-
-  return jsonify(response)
+  return jsonify(success=True, data=tracks)

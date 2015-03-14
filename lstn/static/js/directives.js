@@ -5,6 +5,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
 .config(['twemojiProvider', function(twemojiProvider) {
   twemojiProvider.setOptions({ size: 16 });
 }])
+
 .directive('lstnEnter', function() {
   return function($scope, $element, $attrs) {
     $element.bind('keydown keypress', function(event) {
@@ -16,7 +17,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       var emoticonMenuVisible = $('#emoticon-menu').is(':visible');
 
       if (!mentionMenuVisible && !emoticonMenuVisible) {
-        $scope.$apply(function(){
+        $scope.$apply(function() {
           $scope.$eval($attrs.lstnEnter);
         });
       }
@@ -138,163 +139,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnMusicSearch', ['$timeout', 'Alert', 'CurrentUser', 'Artist', 'Album',
-  function($timeout, Alert, CurrentUser, Artist, Album) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/music-search.html',
-      link: function($scope, $element, $attrs) {
-        var lastRequest = null;
-        var lastTimeout = null;
-
-        // Build a map of slide names to indices
-        $scope.searchSlides = {};
-
-        angular.element('#search-carousel .carousel-inner div.item').each(function(index) {
-          var id = this.getAttribute('id');
-          $scope.searchSlides[id] = index;
-        });
-
-        $scope.searchResults = [];
-        $scope.searchQuery = null;
-
-        $scope.clearSearchResults = function() {
-          $scope.searchResults = [];
-          $scope.searchQuery = null;
-        };
-
-        $scope.currentArtist = null;
-
-        $scope.albums = [];
-        $scope.loadAlbums = function(artist) {
-          artist.loadingAlbums = true;
-
-          lastRequest = Artist.getAlbums(artist.key);
-          lastRequest.then(function(response) {
-            if (!response || !response.albums) {
-              artist.loadingAlbums = false;
-              Alert.error('Something happened while trying to load albums for the artist.');
-              return;
-            }
-
-            $scope.albums = response.albums;
-            $scope.currentArtist = artist;
-
-            lastTimeout = $timeout(function() {
-              artist.loadingAlbums = false;
-
-              var controller = angular.element('#search-carousel')
-                .controller('carousel');
-
-              var nextSlide = controller.slides[$scope.searchSlides.search_albums];
-              controller.select(nextSlide, 'next');
-            }, 100);
-          }, function(response) {
-            artist.loadingAlbums = false;
-            Alert.error('Something happened while trying to load albums for the artist.');
-          });
-        };
-
-        $scope.closeArtist = function() {
-          var controller = angular.element('#search-carousel')
-            .controller('carousel');
-
-          var prevSlide = controller.slides[$scope.searchSlides.search_results];
-          controller.select(prevSlide, 'prev');
-
-          $scope.currentArtist = null;
-        };
-
-        $scope.currentAlbum = null;
-
-        $scope.tracks = [];
-        $scope.loadAlbumTracks = function(album) {
-          album.loadingTracks = true;
-
-          lastRequest = Album.getTracks(album.key);
-          lastRequest.then(function(response) {
-            if (!response || !response.tracks) {
-              album.loadingTracks = false;
-              Alert.error('Something happened while trying to load tracks for the album.');
-              return;
-            }
-
-            $scope.tracks = response.tracks;
-            $scope.currentAlbum = album;
-
-            lastTimeout = $timeout(function() {
-              album.loadingTracks = false;
-
-              var controller = angular.element('#search-carousel')
-                .controller('carousel');
-
-              var nextSlide = controller.slides[$scope.searchSlides.search_tracks];
-              controller.select(nextSlide, 'next');
-            }, 100);
-          }, function(response) {
-            album.loadingTracks = false;
-            Alert.error('Something happened while trying to load tracks for the album.');
-          });
-        };
-
-        $scope.closeAlbum = function() {
-          var controller = angular.element('#search-carousel')
-            .controller('carousel');
-
-          var targetSlide = $scope.searchSlides.search_albums;
-          if (!$scope.currentArtist) {
-            targetSlide = $scope.searchSlides.search_results;
-          }
-
-          var prevSlide = controller.slides[targetSlide];
-          controller.select(prevSlide, 'prev');
-
-          $scope.currentAlbum = null;
-        };
-
-        $scope.$watch('searchQuery', function(newVal, oldVal) {
-          if (newVal === oldVal) {
-            return;
-          }
-
-          if (!newVal) {
-            $scope.searchResults = [];
-            return;
-          }
-
-          if (newVal.length < 3) {
-            return;
-          }
-
-          lastRequest = CurrentUser.search({
-            query: newVal
-          }, function(response) {
-            if (!response || !response.success || !response.results) {
-              // TODO: Error
-              return;
-            }
-
-            $scope.searchResults = response.results;
-          }, function(response) {
-            // TODO: Error
-          });
-        });
-
-        $scope.$on('$destroy', function() {
-          if (lastRequest) {
-            $scope.cancelPromise(lastRequest);
-          }
-
-          if (lastTimeout) {
-            $timeout.cancel(lastTimeout);
-          }
-        });
-      }
-    };
-  }
-])
-
 .directive('lstnPlayingImage', [
   function() {
     return {
@@ -305,7 +149,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-
 .directive('lstnPlayingInfo', [
   function() {
     return {
@@ -314,22 +157,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
       templateUrl: '/static/partials/directives/playing-info.html',
       link: function($scope, $element, $attrs) {
         $scope.playingStyle = '';
-      }
-    };
-  }
-])
-
-.directive('lstnVisualizer', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/visualizer.html',
-      link: function($scope, $element, $attrs) {
-        $scope.bands = 10;
-        $scope.getNumber = function(num) {
-          return new Array(num);
-        };
       }
     };
   }
@@ -395,14 +222,14 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnRoomQueue', ['$timeout', 'Alert', 'CurrentUser',
-  function($timeout, Alert, CurrentUser) {
+.directive('lstnRoomQueue', ['$timeout', 'Promise', 'Alert', 'CurrentUser',
+  function($timeout, Promise, Alert, CurrentUser) {
     return {
       restrict: 'E',
       replace: true,
       templateUrl: '/static/partials/directives/room-queue.html',
       link: function($scope, $element, $attrs) {
-        var lastRequest = null;
+        var request = null;
 
         $scope.oldQueue = null;
 
@@ -418,7 +245,9 @@ angular.module('lstn.directives', ['sc.twemoji'])
               return;
             }
 
-            lastRequest = CurrentUser.updateQueue({
+            $scope.oldQueue = null;
+
+            request = CurrentUser.updateQueue({
               queue: $scope.queue.tracks
             }, function(response) {
               if (!response || !response.success) {
@@ -432,21 +261,66 @@ angular.module('lstn.directives', ['sc.twemoji'])
         };
 
         $scope.$on('$destroy', function() {
-          if (lastRequest) {
-            $scope.cancelPromise(lastRequest);
-          }
+          Promise.cancel(request);
         });
       }
     };
   }
 ])
 
-.directive('lstnMoreMusic', [
-  function() {
+.directive('lstnMoreMusic', ['$timeout',
+  function($timeout) {
     return {
       restrict: 'E',
       replace: true,
-      templateUrl: '/static/partials/directives/more-music.html'
+      templateUrl: '/static/partials/directives/more-music.html',
+      link: function($scope, $element, $attrs) {
+        var timeout = null;
+
+        $scope.musicRoot = {
+          key: 'category',
+          name: 'Room',
+          type: 'music',
+          position: 0
+        };
+
+        $scope.searchRoot = {
+          key: 's',
+          name: 'Search',
+          type: 'search',
+          position: 0,
+          clear: function() {
+            $scope.searchQuery = '';
+          }
+        };
+
+        $scope.$watch('searchQuery', function(newVal, oldVal) {
+          if (timeout) {
+            $timeout.cancel(timeout);
+          }
+
+          if (newVal === oldVal) {
+            return;
+          }
+
+          if (!newVal) {
+            $scope.searchRoot.key = 's';
+            return;
+          }
+
+          timeout = $timeout(function() {
+            $scope.searchRoot.key = newVal;
+          }, 300);
+        });
+
+        $scope.$on('$destroy', function() {
+          if (!timeout) {
+            return;
+          }
+
+          $timeout.cancel(timeout);
+        });
+      }
     };
   }
 ])
@@ -458,353 +332,11 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         text: '=',
-        tooltipText: '=',
         clickHandler: '=',
         refreshHandler: '=',
-        refreshText: '=',
         loading: '=',
-        loadingText: '='
       },
       templateUrl: '/static/partials/directives/drilldown-back.html'
-    };
-  }
-])
-
-.directive('lstnMusicCategories', ['$timeout', 'Alert', 'CurrentUser', 'Playlist', 'Station',
-  function($timeout, Alert, CurrentUser, Playlist, Station) {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/music-categories.html',
-      link: function($scope, $element, $attrs) {
-        var lastRequest = null;
-        var lastTimeout = null;
-
-        // Build a map of slide names to indices
-        $scope.musicSlides = {};
-
-        angular.element('#category-carousel .carousel-inner div.item').each(function(index) {
-          var id = this.getAttribute('id');
-          $scope.musicSlides[id] = index;
-        });
-
-        // Categories
-        $scope.categories = [{
-          name: 'Playlists',
-          type: 'playlists'
-        },{
-          name: 'Stations',
-          type: 'stations'
-        },{
-          name: 'Collections',
-          type: 'collections'
-        }];
-
-        $scope.currentCategory = null;
-
-        $scope.loadChildren = function(category) {
-          category.loading = true;
-
-          if (category.type == 'playlists') {
-            $scope.loadPlaylistTypes(category);
-          } else if (category.type == 'stations') {
-            $scope.loadStationTypes(category);
-          } else if (category.type == 'collections') {
-            $scope.loadCollectionTypes(category);
-          }
-        };
-
-        // Playlist Types
-        $scope.playlistTypes = [{
-          name: 'Your Playlists',
-          key: 'owned'
-        },{
-          name: 'Collaborative Playlists',
-          key: 'collab'
-        },{
-          name: 'Subscribed Playlists',
-          key: 'subscribed'
-        },{
-          name: 'Favorited Playlists',
-          key: 'favorites'
-        }];
-
-        $scope.loadPlaylistTypes = function(category) {
-          category.loading = false;
-          $scope.currentCategory = category;
-
-          var controller = angular.element('#category-carousel')
-            .controller('carousel');
-
-          var nextSlide = controller.slides[$scope.musicSlides.playlist_types];
-          controller.select(nextSlide, 'next');
-        };
-
-        $scope.closeCategory = function() {
-          var controller = angular.element('#category-carousel')
-            .controller('carousel');
-
-          var prevSlide = controller.slides[$scope.musicSlides.categories];
-          controller.select(prevSlide, 'prev');
-
-          $scope.currentCategory = null;
-        };
-
-        // Playlists
-        $scope.currentPlaylistType = null;
-        $scope.playlists = [];
-
-        $scope.loadPlaylists = function(playlistType) {
-          playlistType.loadingPlaylists = true;
-
-          lastRequest = CurrentUser.getPlaylists(playlistType.key);
-          lastRequest.then(function(response) {
-            if (!response || !response.playlists || !response.playlists[playlistType.key]) {
-              playlistType.loadingPlaylists = false;
-              Alert.error('Something went wrong while trying to load the playlists.');
-              return;
-            }
-
-            $scope.playlists = response.playlists[playlistType.key];
-            $scope.currentPlaylistType = playlistType;
-
-            lastTimeout = $timeout(function() {
-              playlistType.loadingPlaylists = false;
-
-              var controller = angular.element('#category-carousel')
-                .controller('carousel');
-
-              var nextSlide = controller.slides[$scope.musicSlides.playlists];
-              controller.select(nextSlide, 'next');
-            }, 100);
-          }, function(response) {
-            playlistType.loadingPlaylists = false;
-            Alert.error('Something went wrong while trying to load the playlists.');
-          });
-        };
-
-        $scope.closePlaylistType = function() {
-          var controller = angular.element('#category-carousel')
-            .controller('carousel');
-
-          var prevSlide = controller.slides[$scope.musicSlides.playlist_types];
-          controller.select(prevSlide, 'prev');
-
-          $scope.currentPlaylistType = null;
-        };
-
-        $scope.refreshPlaylistType = function() {
-          if (!$scope.currentPlaylistType) {
-            return;
-          }
-
-          if ($scope.currentPlaylistType.loadingPlaylists) {
-            return;
-          }
-
-          $scope.loadPlaylists($scope.currentPlaylistType);
-        };
-
-        // Playlist Tracks
-        $scope.currentPlaylist = null;
-        $scope.tracks = [];
-
-        $scope.loadPlaylistTracks = function(playlist) {
-          playlist.loadingTracks = true;
-
-          lastRequest = Playlist.getTracks(playlist.key);
-          lastRequest.then(function(response) {
-            if (!response || !response.tracks) {
-              playlist.loadingTracks = false;
-              Alert.error('Something went wrong while trying to load the playlist tracks.');
-              return;
-            }
-
-            $scope.tracks = response.tracks;
-            $scope.currentPlaylist = playlist;
-            $scope.currentPlaylist.length = $scope.tracks.length;
-
-            lastTimeout = $timeout(function() {
-              playlist.loadingTracks = false;
-
-              var controller = angular.element('#category-carousel')
-                .controller('carousel');
-
-              var nextSlide = controller.slides[$scope.musicSlides.playlist_tracks];
-              controller.select(nextSlide, 'next');
-            }, 100);
-          }, function(response) {
-            playlist.loadingTracks = false;
-            Alert.error('Something went wrong while trying to load the playlist tracks.');
-          });
-        };
-
-        $scope.closePlaylist = function() {
-          var controller = angular.element('#category-carousel')
-            .controller('carousel');
-
-          var prevSlide = controller.slides[$scope.musicSlides.playlists];
-          controller.select(prevSlide, 'prev');
-
-          $scope.currentPlaylist = null;
-        };
-
-        $scope.refreshPlaylist = function() {
-          if (!$scope.currentPlaylist) {
-            return;
-          }
-
-          if ($scope.currentPlaylist.loadingTracks) {
-            return;
-          }
-
-          $scope.loadPlaylistTracks($scope.currentPlaylist);
-        };
-
-        // Station Types
-        $scope.stationTypes = [{
-          name: 'Your Stations',
-          key: 'you'
-        },{
-          name: 'Friends',
-          key: 'friends'
-        },{
-          name: 'Recent Stations',
-          key: 'recent'
-        }];
-
-        $scope.loadStationTypes = function(category) {
-          category.loading = false;
-          $scope.currentCategory = category;
-
-          var controller = angular.element('#category-carousel')
-            .controller('carousel');
-
-          var nextSlide = controller.slides[$scope.musicSlides.station_types];
-          controller.select(nextSlide, 'next');
-        };
-
-        // Stations
-        $scope.currentStationType = null;
-        $scope.stations = [];
-
-        $scope.loadStations = function(stationType) {
-          stationType.loadingStations = true;
-
-          lastRequest = CurrentUser.getStations(stationType.key);
-          lastRequest.then(function(response) {
-            if (!response || !response.stations) {
-              stationType.loadingStations = false;
-              Alert.error('Something went wrong while trying to load the stations.');
-              return;
-            }
-
-            $scope.stations = response.stations;
-            $scope.currentStationType = stationType;
-
-            lastTimeout = $timeout(function() {
-              stationType.loadingStations = false;
-
-              var controller = angular.element('#category-carousel')
-                .controller('carousel');
-
-              var nextSlide = controller.slides[$scope.musicSlides.stations];
-              controller.select(nextSlide, 'next');
-            }, 100);
-          }, function(response) {
-            stationType.loadingStations = false;
-            Alert.error('Something went wrong while trying to load the stations.');
-          });
-        };
-
-        $scope.closeStationType = function() {
-          var controller = angular.element('#category-carousel')
-            .controller('carousel');
-
-          var prevSlide = controller.slides[$scope.musicSlides.station_types];
-          controller.select(prevSlide, 'prev');
-
-          $scope.currentStationType = null;
-        };
-
-        $scope.refreshStationType = function() {
-          if (!$scope.currentStationType) {
-            return;
-          }
-
-          if ($scope.currentStationType.loadingStations) {
-            return;
-          }
-
-          $scope.loadStations($scope.currentStationType);
-        };
-
-        // Station Tracks
-        $scope.currentStation = null;
-        $scope.tracks = [];
-
-        $scope.loadStationTracks = function(station) {
-          station.loadingTracks = true;
-
-          lastRequest = Station.getTracks(station.key);
-          lastRequest.then(function(response) {
-            if (!response || !response.tracks) {
-              station.loadingTracks = false;
-              Alert.error('Something went wrong while trying to load the station tracks.');
-              return;
-            }
-
-            $scope.tracks = response.tracks;
-            $scope.currentStation = station;
-            $scope.currentStation.length = $scope.tracks.length;
-
-            lastTimeout = $timeout(function() {
-              station.loadingTracks = false;
-
-              var controller = angular.element('#category-carousel')
-                .controller('carousel');
-
-              var nextSlide = controller.slides[$scope.musicSlides.station_tracks];
-              controller.select(nextSlide, 'next');
-            }, 100);
-          }, function(response) {
-            station.loadingTracks = false;
-            Alert.error('Something went wrong while trying to load the station tracks.');
-          });
-        };
-
-        $scope.closeStation = function() {
-          var controller = angular.element('#category-carousel')
-            .controller('carousel');
-
-          var prevSlide = controller.slides[$scope.musicSlides.stations];
-          controller.select(prevSlide, 'prev');
-
-          $scope.currentStation = null;
-        };
-
-        $scope.refreshStation = function() {
-          if (!$scope.currentStation) {
-            return;
-          }
-
-          if ($scope.currentStation.loadingTracks) {
-            return;
-          }
-
-          $scope.loadStationTracks($scope.currentStation);
-        };
-
-        $scope.$on('$destroy', function() {
-          if (lastRequest) {
-            $scope.cancelPromise(lastRequest);
-          }
-
-          if (lastTimeout) {
-            $timeout.cancel(lastTimeout);
-          }
-        });
-      }
     };
   }
 ])
@@ -816,9 +348,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         category: '=',
-        loadChildren: '=',
-        index: '=',
-        context: '='
+        load: '=',
+        context: '=?'
       },
       templateUrl: '/static/partials/directives/category.html'
     };
@@ -832,9 +363,9 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         playlistType: '=',
-        loadPlaylists: '=',
+        load: '=',
         index: '=',
-        context: '='
+        context: '=?'
       },
       templateUrl: '/static/partials/directives/playlist-type.html'
     };
@@ -848,9 +379,9 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         playlist: '=',
-        loadPlaylistTracks: '=',
+        load: '=',
         index: '=',
-        context: '='
+        context: '=?'
       },
       templateUrl: '/static/partials/directives/playlist.html'
     };
@@ -864,9 +395,9 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         artist: '=',
-        loadAlbums: '=',
+        load: '=',
         index: '=',
-        context: '='
+        context: '=?'
       },
       templateUrl: '/static/partials/directives/artist.html'
     };
@@ -880,9 +411,9 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         album: '=',
-        loadAlbumTracks: '=',
+        load: '=',
         index: '=',
-        context: '='
+        context: '=?'
       },
       templateUrl: '/static/partials/directives/album.html'
     };
@@ -897,7 +428,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         track: '=',
         index: '=',
-        context: '='
+        context: '=?'
       },
       templateUrl: '/static/partials/directives/track.html',
       link: function($scope, $element, $attrs) {
@@ -940,7 +471,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         stationType: '=',
-        loadStations: '=',
+        load: '=',
         index: '=',
         context: '='
       },
@@ -955,15 +486,14 @@ angular.module('lstn.directives', ['sc.twemoji'])
       restrict: 'E',
       replace: true,
       scope: {
-        context: '=',
-        loadStationTracks: '=',
+        load: '=',
+        context: '=?',
         station: '=?',
         radio: '=?',
         index: '=?'
       },
       templateUrl: '/static/partials/directives/station.html',
       link: function($scope, $element, $attrs) {
-        console.log('lstnStation', $scope);
         $scope.station  = $scope.station  || {};
         $scope.radio    = $scope.radio    || {};
 
@@ -974,8 +504,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
         if ($scope.radio && $scope.radio.name) {
           $scope.station.name = $scope.radio.name + ' Radio';
         }
-
-        console.log('lstnStation station', $scope.station);
       }
     };
   }
@@ -1033,47 +561,185 @@ angular.module('lstn.directives', ['sc.twemoji'])
   return {
     link: function($scope, $element) {
       $scope.$watch('playing.track.image', function(imageUrl) {
-        if (imageUrl) {
-          $element.css('background-image', 'url(' + imageUrl + ')');
-          $element.css('background-size', 'cover');
-        } else {
-
+        if (!imageUrl) {
+          return;
         }
+
+        $element.css('background-image', 'url(' + imageUrl + ')');
+        $element.css('background-size', 'cover');
       });
     }
   };
 }])
 
-.directive('timeFromNow', ['$timeout', '$filter', function($timeout, $filter) {
+.directive('timeFromNow', ['$timeout', '$filter',
+  function($timeout, $filter) {
+    return {
+      scope: {
+        timeFromNow: '='
+      },
+      link: function($scope, element) {
+        var timeoutId;
+        var intervalLength = 1000 * 60;
+        var filter = $filter('timeFromNow');
+
+        function updateTime() {
+          element.text(filter($scope.timeFromNow));
+        }
+
+        function updateLater() {
+          timeoutId = $timeout(function() {
+            updateTime();
+            updateLater();
+          }, intervalLength);
+        }
+
+        element.bind('$destroy', function() {
+          $timeout.cancel(timeoutId);
+        });
+
+        updateTime();
+        updateLater();
+      }
+    };
+  }
+])
+
+.directive('lstnCarousel', ['$timeout', function($timeout) {
   return {
+    restrict: 'E',
+    replace: true,
     scope: {
-      timeFromNow: '='
+      root: '=',
+      context: '=?'
     },
-    link: function($scope, element) {
+    templateUrl: '/static/partials/directives/carousel.html',
+    link: function($scope, $element, $attrs) {
+      var slidesContainer = $('.slides', $element);
 
-      var timeoutId;
-      var intervalLength = 1000 * 60;
-      var filter = $filter('timeFromNow');
+      var init = function(newVal, oldVal) {
+        if (newVal === oldVal) {
+          return;
+        }
 
-      function updateTime() {
-        element.text(filter($scope.timeFromNow));
-      }
+        if (!newVal) {
+          return;
+        }
 
-      function updateLater() {
-        timeoutId = $timeout(function() {
-          updateTime();
-          updateLater();
-        }, intervalLength);
-      }
+        $scope.slides = [newVal];
+        slidesContainer.css('left', '0%');
+      };
 
-      element.bind('$destroy', function() {
-        $timeout.cancel(timeoutId);
-      });
+      $scope.$watch('root', init, true);
+      init($scope.root, null);
 
-      updateTime();
-      updateLater();
+      $scope.load = function(item) {
+        item.position = $scope.slides.length + 1;
+        $scope.slides.push(item);
+
+        $timeout(function() {
+          item.promise.then(function() {
+            $scope.next();
+          });
+        }, 100);
+      };
+
+      $scope.close = function() {
+        $scope.prev();
+        $timeout(function() {
+          $scope.slides.pop();
+        }, 400);
+      };
+
+      $scope.next = function() {
+        var offset = Math.max(0, $scope.slides.length - 1) * -100;
+        slidesContainer.css('left', offset + '%');
+      };
+
+      $scope.prev = function() {
+        var offset = Math.max(0, $scope.slides.length - 2) * -100;
+        slidesContainer.css('left', offset + '%');
+      };
     }
   };
-}
-]);
+}])
+
+.directive('lstnSlide', ['Promise', 'Alert', 'Loader', 'RdioType', function(Promise, Alert, Loader, RdioType) {
+  return {
+    restrict: 'E',
+    replace: true,
+    scope: {
+      load: '=',
+      close: '=',
+      current: '=',
+      context: '=?'
+    },
+    templateUrl: '/static/partials/directives/slide.html',
+    link: function($scope, $element, $attrs) {
+      var request = null;
+
+      // If the current slide's key changes, reload the data
+      $scope.$watch('current.key', function(newVal, oldVal) {
+        if (newVal === oldVal) {
+          return;
+        }
+
+        if (!newVal) {
+          return;
+        }
+
+        $scope.refresh();
+      });
+
+      $scope.refresh = function() {
+        if (!$scope.current) {
+          return;
+        }
+
+        $scope.current.loading = true;
+
+        // Cancel the current request
+        if (request) {
+          Promise.cancel(request);
+        }
+
+        request = $scope.current.promise = Loader.load($scope.current);
+        if (!request) {
+          Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
+          return;
+        }
+
+        request.then(function(response) {
+          $scope.current.loading = false;
+
+          if (!response || !response.success || !response.data) {
+            Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
+            return;
+          }
+
+          $scope.data = response.data;
+        }, function(response) {
+          $scope.current.loading = false;
+          Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
+          return;
+        });
+      };
+
+      $scope.refresh();
+
+      $scope.getType = function(type) {
+        if (!(type in RdioType)) {
+          return type;
+        }
+
+        return RdioType[type];
+      };
+
+      $scope.$on('$destroy', function() {
+        Promise.cancel(request);
+      });
+    }
+  };
+}]);
+
 })();
