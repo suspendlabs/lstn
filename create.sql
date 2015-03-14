@@ -8,6 +8,7 @@ CREATE TABLE `user` (
   `picture` VARCHAR(255) NULL,
   `queue` VARCHAR(255) NULL,
   `points` INT(10) NULL DEFAULT '0',
+  `region` CHAR(3) NOT NULL DEFAULT 'US',
   `settings` TEXT NULL,
   `created_at` DATETIME NOT NULL,
   PRIMARY KEY (`id`),
