@@ -20,17 +20,13 @@ def get_albums(artist_id):
     current_user.oauth_token_secret)
 
   try:
-    albums = rdio_manager.get_albums_for_artist(artist_id, ['radioKey'])
+    response = rdio_manager.get_albums_for_artist(artist_id, ['radioKey'])
   except Exception as e:
     current_app.logger.debug(e)
     raise APIException('Unable to retrieve albums: %s' % str(e))
 
-  if len(albums) > 0:
-      albums = [album._data for album in albums]
+  albums = []
+  if len(response) > 0:
+    albums = [album._data for album in response]
 
-  response = {
-    'success': 1,
-    'albums': albums,
-  }
-
-  return jsonify(response)
+  return jsonify(success=True, data=albums)
