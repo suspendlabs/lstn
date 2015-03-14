@@ -182,7 +182,7 @@ def get_station_type(station_type):
 
   return jsonify(success=True, data=response['items'])
 
-@user.route('/queue', methods=['GET', 'PUT', 'DELETE'])
+@user.route('/queue', methods=['GET', 'PUT', 'DELETE', 'POST'])
 @login_required
 def user_queue():
   if request.method == 'PUT':
@@ -190,6 +190,9 @@ def user_queue():
 
   if request.method == 'DELETE':
     return clear_queue()
+
+  if request.method == 'POST':
+    return bulk_add_queue()
 
   queue = current_user.get_queue()
   return jsonify(success=True, queue=queue)
@@ -237,6 +240,47 @@ def clear_queue():
       raise APIException('Unable to reorder your queue: %s' % str(e))
 
   return jsonify(success=True)
+
+def bulk_add_queue():
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  queue_playlist = current_user.get_queue_id()
+
+  data = request.get_json()
+
+  if not data or 'tracks' not in data:
+    raise APIException('Unable to add the tracks to your queue: %s' % str(e))
+
+  if queue_playlist:
+    try:
+      rdio_manager.add_to_playlist(queue_playlist, data['tracks'])
+    except Exception as e:
+      current_app.logger.debug(e)
+      raise APIException('Unable to add the tracks to your queue: %s' % str(e))
+  else:
+    try:
+      playlist = rdio_manager.create_playlist('Lstn to Rdio', 'User Queue for Lstn', data['tracks'])
+    except Exception as e:
+      current_app.logger.debug(e)
+      raise APIException('Unable to add the track to your queue: %s' % str(e))
+
+    # Throw an error if we couldn't create it
+    if not playlist:
+      raise APIException('Unable to create Rdio playlist', 500)
+
+    queue_playlist = playlist.key
+
+    # Update the user's queue field
+    current_user.queue = queue_playlist
+    db.session.add(current_user)
+    db.session.flush()
+
+  # Get the user's queue
+  queue = current_user.get_queue()
+  return jsonify(success=True, queue=queue)
 
 @user.route('/queue/<track_id>', methods=['POST', 'DELETE'])
 @login_required
