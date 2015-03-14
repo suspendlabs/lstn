@@ -250,6 +250,8 @@ angular.module('lstn.controllers', [])
       $scope.roster = data;
       $scope.roster.controllersCount = $scope.roster.controllerOrder.length;
       $scope.roster.usersCount = Object.keys($scope.roster.users).length;
+
+      CurrentRoom.setRegions($scope.roster.regions);
     });
 
     socket.on('room:controller:playing:request', function(data) {
