@@ -815,6 +815,10 @@ body {
   margin-right: 15px;
   line-height: 50px;
 
+  a {
+    cursor: pointer;
+  }
+
   .dropdown-menu {
     font-size: 12px;
     cursor: pointer;
@@ -831,7 +835,6 @@ body {
   }
 
   .fa {
-    cursor:pointer;
     color: $active-color;
     text-decoration: none;
     font-size: 1.25em;
