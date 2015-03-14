@@ -10,14 +10,14 @@
   <div class="item__actions">
     <a
       class="fa fa-fw fa-chevron-right"
-      data-ng-show="!station.loadingTracks"
-      data-ng-click="loadStationTracks(station)"
+      data-ng-show="!station.loading"
+      data-ng-click="load(station)"
       data-tooltip="Load Tracks"
       data-tooltip-placement="left"
       data-tooltip-popup-delay="1000"></a>
     <a
       class="fa fa-fw fa-circle-o-notch fa-spin"
-      data-ng-show="station.loadingTracks"
+      data-ng-show="station.loading"
       data-tooltip="Loading Tracks"
       data-tooltip-placement="left"
       data-tooltip-popup-delay="1000"></a>
