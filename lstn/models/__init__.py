@@ -152,10 +152,16 @@ class User(db.Model, ModelMixin, UserMixin):
       current_app.logger.debug(e)
       raise APIException('Unable to retrieve your queue: %s' % str(e))
 
+    trackDict = {}
     for track in tracks:
       data = track._data
       data['in_queue'] = 1
-      queue.append(data)
+
+      trackDict[track.key] = data
+
+    queue = []
+    for trackKey in playlist.track_keys:
+      queue.append(trackDict[trackKey])
 
     return queue
 
