@@ -15,6 +15,7 @@ html, body {
 .btn-accent {
   background-color: $accent-color;
   border-color: $accent-color;
+  border-radius: 0;
   color: $accent-text-color;
 
   &:hover {
@@ -31,6 +32,7 @@ html, body {
 .btn-active {
   background-color: $active-color;
   border-color: $active-color;
+  border-radius: 0;
   color: $active-text-color;
 
   &:hover {
@@ -406,6 +408,7 @@ body {
   margin-bottom: 15px;
 
   a {
+    display: block;
     color: white;
     cursor: pointer;
   }

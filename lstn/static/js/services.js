@@ -67,16 +67,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }, function(response) {
         track.addingToFavorites = false;
         if (!response || !response.success) {
-          console.log('CurrentUser.addToFavorites', response);
-
           Alert.error('Something went wrong while trying to add the track to your favorites.');
           return;
         }
 
         Favorite.bitset[track.key] = true;
       }, function(response) {
-        console.log('CurrentUser.addToFavorites', response);
-
         track.addingToFavorites = false;
         Alert.error('Something went wrong while trying to add the track to your favorites.');
       });
@@ -89,16 +85,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }, function(response) {
         track.removingFromFavorites = false;
         if (!response || !response.success) {
-          console.log('CurrentUser.removeFromFavorites', response);
-
           Alert.error('Something went wrong while trying to remove the track from your favorites.');
           return;
         }
 
         delete Favorite.bitset[track.key];
       }, function(response) {
-        console.log('CurrentUser.removeFromFavorites', response);
-
         track.removingFromFavorites = false;
         Alert.error('Something went wrong while trying to remove the track from your favorites.');
       });
@@ -125,8 +117,6 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }, function(response) {
         track.addingToQueue = false;
         if (!response || !response.success || !response.queue) {
-          console.log('CurrentUser.addToQueue', response);
-
           Alert.error('Something went wrong while trying to add the track to your queue.');
           return;
         }
@@ -137,8 +127,6 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           Queue.moveToTop(Queue.tracks.length - 1);
         }
       }, function(response) {
-        console.log('CurrentUser.addToQueue', response);
-
         track.addingToQueue = false;
         Alert.error('Something went wrong while trying to add the track to your queue.');
       });
@@ -152,16 +140,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }, function(response) {
         track.removingFromQueue = false;
         if (!response || !response.success || !response.queue) {
-          console.log('CurrentUser.removeFromQueue', response);
-
           Alert.error('Something went wrong while trying to remove the track from your queue.');
           return;
         }
 
         Queue.tracks = response.queue;
       }, function(response) {
-        console.log('CurrentUser.removeFromQueue', response);
-
         track.removingFromQueue = false;
         Alert.error('Something went wrong while trying to remove the track from your queue.');
       });
@@ -170,8 +154,6 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     Queue.moveToTop = function(index) {
       var tracks = Queue.tracks.splice(index, 1);
       if (!tracks || tracks.length === 0) {
-        console.log('moveToTopOfQueue', 'no tracks to move');
-
         Alert.error('Something went wrong while trying to move the track to the top of your queue.');
         return;
       }
@@ -182,14 +164,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
-          console.log('moveToTopOfQueue', response);
-
           Alert.error('Something went wrong while trying to move the track to the top of your queue.');
           return;
         }
       }, function(response) {
-        console.log('moveToTopOfQueue', response);
-
         Alert.error('Something went wrong while trying to move the track to the top of your queue.');
       });
     };
@@ -197,8 +175,6 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     Queue.moveToBottom = function(index) {
       var tracks = Queue.tracks.splice(index, 1);
       if (!tracks || tracks.length === 0) {
-        console.log('moveToBottomOfQueue', 'no tracks to move');
-
         Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
         return;
       }
@@ -209,14 +185,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
-          console.log('moveToBottomOfQueue', response);
-
           Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
           return;
         }
       }, function(response) {
-        console.log('moveToBottomOfQueue', response);
-
         Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
       });
     };
@@ -236,14 +208,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
-          console.log('clearTracks', response);
-
           Alert.error('Something went wrong while trying to clear your queue.');
           return;
         }
       }, function(response) {
-        console.log('clearTracks', response);
-
         Alert.error('Something went wrong while trying to clear your queue.');
       });
     };
@@ -288,17 +256,14 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   });
 
   socket.releaseControl = function(id, user) {
-    console.log('sending room:controller:release');
     this.emit('room:controller:release');
   };
 
   socket.requestControl = function(id, user) {
-    console.log('sending room:controller:request');
     this.emit('room:controller:request');
   };
 
   socket.roomConnect = function(id, user) {
-    console.log('sending room:connect');
     this.emit('room:connect', {
       id: id,
       user: user
@@ -306,7 +271,6 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   };
 
   socket.roomUpdate = function(user) {
-    console.log('sending room:update');
     this.emit('room:update', user);
   };
 
@@ -319,12 +283,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   };
 
   socket.updatePosition = function(position) {
-    console.log('sending room:controller:playing:position');
     this.emit('room:controller:playing:position', position);
   };
 
   socket.sendFinished = function() {
-    console.log('sending room:controller:playing:finished');
     this.emit('room:controller:playing:finished');
   };
 
@@ -334,22 +296,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       type += ':' + reason;
     }
 
-    console.log('sending ' + type);
     this.emit(type);
   };
 
   socket.sendUpvote = function() {
-    console.log('sending room:controller:upvote');
     this.emit('room:controller:upvote');
   };
 
   socket.sendDownvote = function() {
-    console.log('sending room:controller:downvote');
     this.emit('room:controller:downvote');
   };
 
   socket.sendMessage = function(message) {
-    console.log('sending room:chat:message', message);
     message.text = emojiToUnicodeFilter(message.text);
     message.created = moment().format();
     this.emit('room:chat:message', message);

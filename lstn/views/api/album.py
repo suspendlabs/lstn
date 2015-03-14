@@ -22,7 +22,7 @@ def get_tracks(album_id):
   tracks = []
 
   try:
-    albums = rdio_manager.get([album_id], ['tracks'])
+    albums = rdio_manager.get([album_id], ['tracks', 'radioKey'])
   except Exception as e:
     current_app.logger.debug(e)
     raise APIException('Unable to retrieve albums: %s' % str(e))

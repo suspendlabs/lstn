@@ -20,7 +20,7 @@ def get_albums(artist_id):
     current_user.oauth_token_secret)
 
   try:
-    albums = rdio_manager.get_albums_for_artist(artist_id)
+    albums = rdio_manager.get_albums_for_artist(artist_id, ['radioKey'])
   except Exception as e:
     current_app.logger.debug(e)
     raise APIException('Unable to retrieve albums: %s' % str(e))

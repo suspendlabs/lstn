@@ -422,14 +422,10 @@ angular.module('lstn.directives', ['sc.twemoji'])
               queue: $scope.queue.tracks
             }, function(response) {
               if (!response || !response.success) {
-                console.log('CurrentUser.updateQueue', response);
-
                 Alert.error('Something went wrong while updating your queue');
                 return;
               }
             }, function(response) {
-              console.log('CurrentUser.updateQueue', response);
-
               Alert.error('Something went wrong while updating your queue');
             });
           }
@@ -559,14 +555,11 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.playlists = [];
 
         $scope.loadPlaylists = function(playlistType) {
-          console.log('loadPlaylists', playlistType);
           playlistType.loadingPlaylists = true;
 
           lastRequest = CurrentUser.getPlaylists(playlistType.key);
           lastRequest.then(function(response) {
             if (!response || !response.playlists || !response.playlists[playlistType.key]) {
-              console.log('LoadPlaylists', response);
-
               playlistType.loadingPlaylists = false;
               Alert.error('Something went wrong while trying to load the playlists.');
               return;
@@ -622,8 +615,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
           lastRequest = Playlist.getTracks(playlist.key);
           lastRequest.then(function(response) {
             if (!response || !response.tracks) {
-              console.log('LoadTracks', response);
-
               playlist.loadingTracks = false;
               Alert.error('Something went wrong while trying to load the playlist tracks.');
               return;
@@ -698,14 +689,11 @@ angular.module('lstn.directives', ['sc.twemoji'])
         $scope.stations = [];
 
         $scope.loadStations = function(stationType) {
-          console.log('loadStations', stationType);
           stationType.loadingStations = true;
 
           lastRequest = CurrentUser.getStations(stationType.key);
           lastRequest.then(function(response) {
             if (!response || !response.stations) {
-              console.log('LoadStations', response);
-
               stationType.loadingStations = false;
               Alert.error('Something went wrong while trying to load the stations.');
               return;
@@ -761,8 +749,6 @@ angular.module('lstn.directives', ['sc.twemoji'])
           lastRequest = Station.getTracks(station.key);
           lastRequest.then(function(response) {
             if (!response || !response.tracks) {
-              console.log('LoadTracks', response);
-
               station.loadingTracks = false;
               Alert.error('Something went wrong while trying to load the station tracks.');
               return;
@@ -969,12 +955,28 @@ angular.module('lstn.directives', ['sc.twemoji'])
       restrict: 'E',
       replace: true,
       scope: {
-        station: '=',
+        context: '=',
         loadStationTracks: '=',
-        index: '=',
-        context: '='
+        station: '=?',
+        radio: '=?',
+        index: '=?'
       },
-      templateUrl: '/static/partials/directives/station.html'
+      templateUrl: '/static/partials/directives/station.html',
+      link: function($scope, $element, $attrs) {
+        console.log('lstnStation', $scope);
+        $scope.station  = $scope.station  || {};
+        $scope.radio    = $scope.radio    || {};
+
+        $scope.station.key  = $scope.station.key  || $scope.radio.radioKey;
+        $scope.station.name = $scope.station.name || $scope.radio.name;
+        $scope.station.icon = $scope.station.icon || $scope.radio.icon;
+
+        if ($scope.radio && $scope.radio.name) {
+          $scope.station.name = $scope.radio.name + ' Radio';
+        }
+
+        console.log('lstnStation station', $scope.station);
+      }
     };
   }
 ])

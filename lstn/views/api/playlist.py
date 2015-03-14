@@ -22,7 +22,7 @@ def get_tracks(playlist_id):
   tracks = []
 
   try:
-    playlists = rdio_manager.get([playlist_id], ['tracks'])
+    playlists = rdio_manager.get([playlist_id], ['tracks', 'radioKey'])
   except Exception as e:
     current_app.logger.debug(e)
     raise APIException('Unable to retrieve playlist tracks: %s' % str(e))

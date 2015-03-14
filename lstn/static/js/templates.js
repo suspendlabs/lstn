@@ -752,7 +752,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <div>STOP BROADCASTING</div>\n" +
     "      </a>\n" +
     "    </div>\n" +
-    "    <div data-ng-show=\"!isController\" class=\"broadcasting broadcasting--off\">\n" +
+    "    <div data-ng-show=\"!isController && queue && queue.tracks && queue.tracks.length > 0\" class=\"broadcasting broadcasting--off\">\n" +
     "      <a data-ng-click=\"toggleBroadcast()\">\n" +
     "        <i class=\"fa fa-microphone\"></i>\n" +
     "        <div>START BROADCASTING</div>\n" +

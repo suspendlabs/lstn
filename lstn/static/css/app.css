@@ -5,6 +5,7 @@ html, body {
 .btn-accent {
   background-color: #3d3d3d;
   border-color: #3d3d3d;
+  border-radius: 0;
   color: #ffffff;
 }
 .btn-accent:hover {
@@ -19,6 +20,7 @@ html, body {
 .btn-active {
   background-color: #d24242;
   border-color: #d24242;
+  border-radius: 0;
   color: #ffffff;
 }
 .btn-active:hover {
@@ -363,6 +365,7 @@ body > .container > div {
   margin-bottom: 15px;
 }
 .roster__broadcasting a {
+  display: block;
   color: white;
   cursor: pointer;
 }
