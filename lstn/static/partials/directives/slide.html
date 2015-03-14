@@ -3,17 +3,17 @@
     <a data-ng-click="current.clear()">
       <i class="fa fa-fw fa-times-circle-o"></i> Clear Search Results
     </a>
-    <div class="carousel__refresh pull-right" data-ng-show="current.loading">
+    <div class="carousel__action pull-right" data-ng-show="current.loading">
       <i class="fa fa-circle-o-notch fa-lg fa-spin"></i>
     </div>
   </div>
 
   <lstn-drilldown-back
     data-ng-if="current.position > 0"
-    data-text="current.name"
     data-click-handler="close"
     data-refresh-handler="refresh"
-    data-loading="current.loading"></lstn-drilldown-back>
+    data-bulk-add-handler="addTracks"
+    data-current="current"></lstn-drilldown-back>
   <ul class="drilldown__list text-left">
     <li data-ng-repeat="item in data">
       <div data-ng-switch="getType(item.type)">
