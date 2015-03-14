@@ -420,8 +420,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnTrack', ['Queue', 'Favorite',
-  function(Queue, Favorite) {
+.directive('lstnTrack', ['Queue', 'Favorite', 'CurrentRoom',
+  function(Queue, Favorite, CurrentRoom) {
     return {
       restrict: 'E',
       replace: true,
@@ -439,12 +439,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
         };
 
         if ($scope.track.streamRegions) {
-          /**
-           * TODO: Eventually, this should be based on the regions of the
-           * room roster
-           */
-          $scope.track.restrictedRegions = $scope.track.streamRegions.indexOf('US') === -1 ||
-            $scope.track.streamRegions.indexOf('CA') === -1;
+          var missing = $(CurrentRoom.regions).not($scope.track.streamRegions).get();
+          $scope.track.restrictedRegions = missing.length > 0;
         }
 
         $scope.toggleDropdown = function(event) {
