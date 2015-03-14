@@ -3,6 +3,20 @@
 
 angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
+.factory('Promise', [function() {
+  var Promise = {};
+  Promise.cancel = function(promise) {
+    if (promise &&
+      promise._httpTimeout &&
+      promise._httpTimeout.resolve) {
+
+      promise._httpTimeout.resolve();
+    }
+  };
+
+  return Promise;
+}])
+
 .factory('Alert', [
   function() {
     var Alert = {};
@@ -556,109 +570,150 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   return Station;
 }])
 
-.constant('MoreMusic', {
-  categories: [
-    {
-      name: 'Playlists',
-      type: 'playlists',
-    },{
-      name: 'Stations',
-      type: 'stations'
-    },{
-      name: 'Collections',
-      type: 'collections'
-    }
-  ],
-  playlistTypes: [
-    {
-      name: 'Your Playlists',
-      key: 'owned'
-    },{
-      name: 'Collaborative Playlists',
-      key: 'collab'
-    },{
-      name: 'Subscribed Playlists',
-      key: 'subscribed'
-    },{
-      name: 'Favorited Playlists',
-      key: 'favorites'
-    }
-  ],
-  stationTypes: [
-    {
-      name: 'Your Stations',
-      key: 'you'
-    },{
-      name: 'Friends',
-      key: 'friends'
-    },{
-      name: 'Recent Stations',
-      key: 'recent'
-    },{
-      name: 'Genre',
-      key: 'genre'
-    }
-  ],
-  genres: [
-    {
-      name: 'Reggae',
-      key: 'Reggae'
-    },{
-      name: 'Rock',
-      key: 'Rock'
-    },{
-      name: 'Latin',
-      key: 'Latin'
-    },{
-      name: 'Christian Gospel',
-      key: 'Christian_Gospel'
-    },{
-      name: 'World',
-      key: 'World'
-    },{
-      name: 'Classical',
-      key: 'Classical'
-    },{
-      name: 'Dance',
-      key: 'Dance'
-    },{
-      name: 'Country',
-      key: 'Country'
-    },{
-      name: 'Songwriters/Folk',
-      key: 'Songwriters_Folk'
-    },{
-      name: 'Jazz',
-      key: 'Jazz'
-    },{
-      name: 'Pop',
-      key: 'Pop'
-    },{
-      name: 'Indie',
-      key: 'Indie'
-    },{
-      name: 'R&B',
-      key: 'R_and_B'
-    },{
-      name: 'Hip Hop',
-      key: 'Hip_Hop'
-    },{
-      name: 'Alternative',
-      key: 'Alternative'
-    },{
-      name: 'Holiday',
-      key: 'Holiday'
-    },{
-      name: 'Electronic',
-      key: 'Electronic'
-    },{
-      name: 'Blues',
-      key: 'Blues'
-    },{
-      name: 'More',
-      key: 'More'
-    }
-  ]
+.constant('RdioType', {
+  r: 'artist',
+  a: 'album',
+  t: 'track',
+  p: 'playlist',
+  tp: 'station',
+  h: 'station',
+  gr: 'station',
+  rr: 'station'
+})
+
+.constant('Category', {
+  playlists: 'Playlists',
+  stations: 'Stations'
+})
+
+.constant('PlaylistType', {
+  owned: 'Your Playlists',
+  collab: 'Collaborative Playlists',
+  subscribed: 'Subscribed Playlists',
+  favorites: 'Favorited Playlists'
+})
+
+.constant('StationType', {
+  you: 'Your Stations',
+  friends: 'Friends',
+  recent: 'Recent Stations'
+})
+
+.factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album',
+  function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album) {
+    var Loader = {
+      toResponse: function(object, type) {
+        var data = [];
+
+        angular.forEach(object, function(value, key) {
+          this.push({
+            key: key,
+            name: value,
+            type: type
+          });
+        }, data);
+
+        return {
+          success: true,
+          data: data
+        };
+      },
+      search: function(query) {
+        if (!query || query.length < 3) {
+          var deferred = $q.defer();
+          deferred.resolve(Loader.toResponse([], 'searchResult'));
+          return deferred.promise;
+        }
+
+        return CurrentUser.search({
+          query: query
+        }).$promise;
+      },
+      music: function(key) {
+        var deferred = $q.defer();
+        deferred.resolve(Loader.toResponse(Category, 'category'));
+        return deferred.promise;
+      },
+      category: function(key) {
+        var deferred = $q.defer();
+
+        if (key === 'playlists') {
+          deferred.resolve(Loader.toResponse(PlaylistType, 'playlistType'));
+        } else if (key === 'stations') {
+          deferred.resolve(Loader.toResponse(StationType, 'stationType'));
+        } else {
+          deferred.reject('Category not found');
+        }
+
+        return deferred.promise;
+      },
+      playlistType: function(key) {
+        return CurrentUser.getPlaylists(key);
+      },
+      playlist: function(key) {
+        return Playlist.getTracks(key);
+      },
+      stationType: function(key) {
+        return CurrentUser.getStations(key);
+      },
+      station: function(key) {
+        return Station.getTracks(key);
+      },
+      artist: function(key) {
+        return Artist.getAlbums(key);
+      },
+      album: function(key) {
+        return Album.getTracks(key);
+      }
+    };
+
+    Loader.load = function(item) {
+      if (!item) {
+        return null;
+      }
+
+      if (!item.type || !item.key) {
+        Alert.error('Something went wrong while trying to load ' + item.name);
+        return null;
+      }
+
+      var type = item.type;
+      if (item.type in RdioType) {
+        type = RdioType[item.type];
+      }
+
+      if (!(type in Loader)) {
+        Alert.error('Something went wrong while trying to load ' + item.name);
+        return null;
+      }
+
+      return Loader[type](item.key);
+    };
+
+    return Loader;
+  }
+])
+
+.constant('Genre', {
+  Reggae: 'Reggae',
+  Rock: 'Rock',
+  Latin: 'Latin',
+  Christian_Gospel: 'Christian Gospel',
+  World: 'World',
+  Classical: 'Classical',
+  Dance: 'Dance',
+  Country: 'Country',
+  Songwriters_Folk: 'Songwriters/Folk',
+  Jazz: 'Jazz',
+  Pop: 'Pop',
+  Indie: 'Indie',
+  R_and_B: 'R&B',
+  Hip_Hop: 'Hip Hop',
+  Alternative: 'Alternative',
+  Holiday: 'Holiday',
+  Electronic: 'Electronic',
+  Blues: 'Blues',
+  More: 'More'
 });
 
 })();

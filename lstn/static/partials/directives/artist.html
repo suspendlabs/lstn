@@ -11,14 +11,14 @@
   <div class="item__actions">
     <a
       class="fa fa-fw fa-chevron-right"
-      data-ng-show="!artist.loadingAlbums"
-      data-ng-click="loadAlbums(artist)"
+      data-ng-show="!artist.loading"
+      data-ng-click="load(artist)"
       data-tooltip="Load Albums"
       data-tooltip-placement="left"
       data-tooltip-popup-delay="1000"></a>
     <a
       class="fa fa-fw fa-circle-o-notch fa-spin"
-      data-ng-show="artist.loadingAlbums"
+      data-ng-show="artist.loading"
       data-tooltip="Loading Albums"
       data-tooltip-placement="left"
       data-tooltip-popup-delay="1000"></a>

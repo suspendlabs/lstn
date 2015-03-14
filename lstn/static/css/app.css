@@ -140,7 +140,7 @@ body > .container > div {
   display: none !important;
 }
 
-.nav, .pagination, .carousel, .panel-title a {
+.nav, .pagination, .panel-title a {
   cursor: pointer;
 }
 
@@ -964,28 +964,47 @@ footer .container .text-muted {
   border-color: #FFFFFF;
 }
 
-.more-music {
-  height: calc(100% - 36px);
-}
-.more-music .carousel-control {
-  display: none;
-}
-.more-music .carousel-indicators {
-  display: none;
-}
-.more-music .carousel {
+.lstn-carousel {
+  display: block;
+  width: 100%;
   height: 100%;
+  position: relative;
 }
-.more-music .carousel-inner {
+.lstn-carousel a {
+  cursor: pointer;
+}
+.lstn-carousel .slide__wrapper {
+  width: 100%;
   height: 100%;
   overflow: hidden;
+  position: relative;
 }
-.more-music .carousel-inner .item {
+.lstn-carousel .slides {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 500%;
+  overflow: hidden;
+  position: relative;
+  left: 0px;
+  -moz-transition: left 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+  -o-transition: left 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+  -webkit-transition: left 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+  transition: left 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.lstn-carousel .slides .slide__container {
+  width: 20%;
+  height: calc(100% - 36px);
+  float: left;
+  position: relative;
+}
+.lstn-carousel .slides .slide__container .slide {
   height: calc(100% - 40px);
 }
-.more-music .carousel-inner .item .tracks {
-  overflow-x: hidden;
-  overflow-y: auto;
+
+.more-music {
+  height: calc(100% - 36px);
 }
 
 .carousel__back {
@@ -1004,7 +1023,7 @@ footer .container .text-muted {
   text-decoration: none;
 }
 .carousel__back .carousel__refresh {
-  padding-right: 15px;
+  padding-right: 10px;
   color: white;
 }
 .carousel__back .carousel__refresh .fa {

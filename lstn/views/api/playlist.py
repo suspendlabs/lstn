@@ -30,9 +30,4 @@ def get_tracks(playlist_id):
   if len(playlists) > 0 and hasattr(playlists[0], 'tracks'):
       tracks = [track._data for track in playlists[0].tracks]
 
-  response = {
-    'success': 1,
-    'tracks': tracks,
-  }
-
-  return jsonify(response)
+  return jsonify(success=True, data=tracks)

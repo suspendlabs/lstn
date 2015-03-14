@@ -38,9 +38,4 @@ def get_tracks(album_id):
       if len(tracks) > 0:
         tracks = [track._data for track in tracks]
 
-  response = {
-    'success': 1,
-    'tracks': tracks,
-  }
-
-  return jsonify(response)
+  return jsonify(success=True, data=tracks)
