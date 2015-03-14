@@ -12,15 +12,6 @@ angular.module('lstn.controllers', [])
     $scope.currentRoom = CurrentRoom;
     $scope.alerts = Alert;
 
-    $scope.cancelPromise = function(promise) {
-      if (promise &&
-        promise._httpTimeout &&
-        promise._httpTimeout.resolve) {
-
-        promise._httpTimeout.resolve();
-      }
-    };
-
     // Profile
     $scope.openProfile = function() {
       var profileInstance = $modal.open({
@@ -36,7 +27,7 @@ angular.module('lstn.controllers', [])
   }
 ])
 
-.controller('RoomsController', ['$scope', '$location', 'Room', 'Alert', function($scope, $location, Room, Alert) {
+.controller('RoomsController', ['$scope', '$location', 'Promise', 'Alert', 'Room', function($scope, $location, Promise, Alert, Room) {
   var promises = {};
 
   $scope.loading = true;
@@ -44,7 +35,7 @@ angular.module('lstn.controllers', [])
 
   $scope.$on('$destroy', function(e) {
     $.each(promises, function(name, promise) {
-      $scope.cancelPromise(promise);
+      Promise.cancel(promise);
     });
   });
 
@@ -87,7 +78,7 @@ angular.module('lstn.controllers', [])
     $scope.newRoom.name = null;
     
     if (promises.createRoom) {
-      $scope.cancelPromise(promises.createRoom);
+      Promise.cancel(promises.createRoom);
     }
   };
 
@@ -114,7 +105,7 @@ angular.module('lstn.controllers', [])
     $scope.rooms[index].editing = false;
 
     if (promises.updateRoom) {
-      $scope.cancelPromise(promises.updateRoom);
+      Promise.cancel(promises.updateRoom);
     }
   };
 
@@ -138,8 +129,8 @@ angular.module('lstn.controllers', [])
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert',
-  function($scope, $routeParams, $timeout, $log, socket, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert',
+  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert) {
     var promises = {};
     var timeouts = {};
 
@@ -173,7 +164,7 @@ angular.module('lstn.controllers', [])
 
     $scope.$on('$destroy', function(e) {
       $.each(promises, function(name, promise) {
-        $scope.cancelPromise(promise);
+        Promise.cancel(promise);
       });
 
       $.each(timeouts, function(name, promise) {
