@@ -334,7 +334,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   var Room = {
     id: 0,
     name: null,
-    slug: null
+    slug: null,
+    regions: []
   };
 
   Room.update = function(room) {
@@ -345,6 +346,20 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     this.id = 0;
     this.name = null;
     this.slug = null;
+    this.regions = [];
+  };
+
+  Room.setRegions = function(regions) {
+    regions = regions || [];
+    if (regions.indexOf('US') === -1) {
+      regions.push('US');
+    }
+
+    if (regions.indexOf('CA') === -1) {
+      regions.push('CA');
+    }
+
+    this.regions = regions;
   };
 
   return Room;
