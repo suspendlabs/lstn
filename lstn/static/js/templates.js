@@ -790,27 +790,33 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
     "      class=\"item__title\"\n" +
-    "      data-ng-class=\"{'text-muted': context !== 'queue' && queue.bitset[track.key]}\"\n" +
+    "      data-ng-class=\"{'text-muted': (context !== 'queue' && queue.bitset[track.key]) || !track.canStream}\"\n" +
     "      data-ng-bind=\"track.name\"></div>\n" +
     "    <div\n" +
     "      class=\"item__artist\"\n" +
-    "      data-ng-class=\"{'text-muted': context !== 'queue' && queue.bitset[track.key]}\"\n" +
+    "      data-ng-class=\"{'text-muted': (context !== 'queue' && queue.bitset[track.key]) || !track.canStream}\"\n" +
     "      data-ng-bind=\"track.artist\"></div>\n" +
     "    <div\n" +
     "      class=\"item__duration text-muted\"\n" +
     "      data-ng-bind=\"track.duration | duration\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-check\"\n" +
+    "      data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context !== 'queue'\"\n" +
+    "      data-tooltip=\"This track is already in your queue\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-exclamation-triangle\"\n" +
+    "      data-ng-show=\"!track.canStream\"\n" +
+    "      data-tooltip=\"This track can't be streamed\"\n" +
+    "      data-tooltip-placement=\"left\"></i>\n" +
+    "\n" +
     "    <span class=\"dropdown\" data-dropdown data-is-open=\"status.open\">\n" +
-    "      <i\n" +
-    "        class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "        data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
-    "      <i\n" +
-    "        class=\"fa fa-fw fa-check\"\n" +
-    "        data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context !== 'queue'\"\n" +
-    "        data-tooltip=\"This track is already in your queue\"\n" +
-    "        data-tooltip-placement=\"left\"\n" +
-    "        data-tooltip-popup-delay=\"1000\"></i>\n" +
     "      <a\n" +
     "        class=\"fa fa-fw fa-ellipsis-v\"\n" +
     "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')\"\n" +
@@ -837,19 +843,19 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "            Remove From Queue\n" +
     "          </a>\n" +
     "        </li>\n" +
-    "        <li data-ng-hide=\"track.in_queue || queue.bitset[track.key]\">\n" +
-    "          <a data-ng-click=\"queue.addTrack(track, 'top')\">\n" +
+    "        <li data-ng-hide=\"!track.canStream || track.in_queue || queue.bitset[track.key]\">\n" +
+    "          <a data-ng-click=\"queue.addTrack(track, 'top')\" data-ng-disabled=\"!track.canStream\">\n" +
     "            <i class=\"fa fa-fw fa-plus-circle item__actions__add\"></i>\n" +
     "            Add to Top of Queue\n" +
     "          </a>\n" +
     "        </li>\n" +
-    "        <li data-ng-hide=\"track.in_queue || queue.bitset[track.key]\">\n" +
+    "        <li data-ng-hide=\"!track.canStream || track.in_queue || queue.bitset[track.key]\">\n" +
     "          <a data-ng-click=\"queue.addTrack(track)\">\n" +
     "            <i class=\"fa fa-fw fa-plus-circle item__actions__add\"></i>\n" +
     "            Add to Bottom of Queue\n" +
     "          </a>\n" +
     "        </li>\n" +
-    "        <li class=\"divider\"></li>\n" +
+    "        <li class=\"divider\" data-ng-hide=\"!track.canStream && context != 'queue'\"></li>\n" +
     "        <li data-ng-hide=\"favorites.bitset[track.key]\">\n" +
     "          <a data-ng-click=\"favorites.addTrack(track)\">\n" +
     "            <i class=\"fa fa-fw fa-heart item__actions__favorite\"></i>\n" +

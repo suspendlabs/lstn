@@ -5,27 +5,33 @@
   <div class="item__info">
     <div
       class="item__title"
-      data-ng-class="{'text-muted': context !== 'queue' && queue.bitset[track.key]}"
+      data-ng-class="{'text-muted': (context !== 'queue' && queue.bitset[track.key]) || !track.canStream}"
       data-ng-bind="track.name"></div>
     <div
       class="item__artist"
-      data-ng-class="{'text-muted': context !== 'queue' && queue.bitset[track.key]}"
+      data-ng-class="{'text-muted': (context !== 'queue' && queue.bitset[track.key]) || !track.canStream}"
       data-ng-bind="track.artist"></div>
     <div
       class="item__duration text-muted"
       data-ng-bind="track.duration | duration"></div>
   </div>
   <div class="item__actions">
+    <i
+      class="fa fa-fw fa-circle-o-notch fa-spin"
+      data-ng-show="track.addingToQueue || track.removingFromQueue"></i>
+    <i
+      class="fa fa-fw fa-check"
+      data-ng-show="(track.in_queue || queue.bitset[track.key]) && context !== 'queue'"
+      data-tooltip="This track is already in your queue"
+      data-tooltip-placement="left"
+      data-tooltip-popup-delay="1000"></i>
+    <i
+      class="fa fa-exclamation-triangle"
+      data-ng-show="!track.canStream"
+      data-tooltip="This track can't be streamed"
+      data-tooltip-placement="left"></i>
+
     <span class="dropdown" data-dropdown data-is-open="status.open">
-      <i
-        class="fa fa-fw fa-circle-o-notch fa-spin"
-        data-ng-show="track.addingToQueue || track.removingFromQueue"></i>
-      <i
-        class="fa fa-fw fa-check"
-        data-ng-show="(track.in_queue || queue.bitset[track.key]) && context !== 'queue'"
-        data-tooltip="This track is already in your queue"
-        data-tooltip-placement="left"
-        data-tooltip-popup-delay="1000"></i>
       <a
         class="fa fa-fw fa-ellipsis-v"
         data-ng-hide="track.addingToQueue || track.removingFromQueue || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')"
@@ -52,19 +58,19 @@
             Remove From Queue
           </a>
         </li>
-        <li data-ng-hide="track.in_queue || queue.bitset[track.key]">
-          <a data-ng-click="queue.addTrack(track, 'top')">
+        <li data-ng-hide="!track.canStream || track.in_queue || queue.bitset[track.key]">
+          <a data-ng-click="queue.addTrack(track, 'top')" data-ng-disabled="!track.canStream">
             <i class="fa fa-fw fa-plus-circle item__actions__add"></i>
             Add to Top of Queue
           </a>
         </li>
-        <li data-ng-hide="track.in_queue || queue.bitset[track.key]">
+        <li data-ng-hide="!track.canStream || track.in_queue || queue.bitset[track.key]">
           <a data-ng-click="queue.addTrack(track)">
             <i class="fa fa-fw fa-plus-circle item__actions__add"></i>
             Add to Bottom of Queue
           </a>
         </li>
-        <li class="divider"></li>
+        <li class="divider" data-ng-hide="!track.canStream && context != 'queue'"></li>
         <li data-ng-hide="favorites.bitset[track.key]">
           <a data-ng-click="favorites.addTrack(track)">
             <i class="fa fa-fw fa-heart item__actions__favorite"></i>
