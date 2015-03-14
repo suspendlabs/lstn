@@ -28,7 +28,12 @@
     <i
       class="fa fa-exclamation-triangle"
       data-ng-show="!track.canStream"
-      data-tooltip="This track can't be streamed"
+      data-tooltip="This track can't be streamed in your region"
+      data-tooltip-placement="left"></i>
+    <i
+      class="fa fa-exclamation-triangle"
+      data-ng-show="track.canStream && track.restrictedRegions"
+      data-tooltip="This track has limited region availability"
       data-tooltip-placement="left"></i>
 
     <span class="dropdown" data-dropdown data-is-open="status.open">
