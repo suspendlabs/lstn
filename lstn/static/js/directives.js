@@ -66,7 +66,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           sender: $scope.current_user.id,
           user: $scope.current_user,
           text: null,
-          type: 'message',
+          type: 'message'
         };
 
         $scope.sendMessage = function() {
@@ -325,18 +325,47 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnDrilldownBack', [
-  function() {
+.directive('lstnDrilldownBack', ['RdioType',
+  function(RdioType) {
     return {
       restrict: 'E',
       replace: true,
       scope: {
-        text: '=',
-        clickHandler: '=',
-        refreshHandler: '=',
-        loading: '=',
+        current: '=',
+        clickHandler: '=?',
+        refreshHandler: '=?',
+        bulkAddHandler: '=?'
       },
-      templateUrl: '/static/partials/directives/drilldown-back.html'
+      templateUrl: '/static/partials/directives/drilldown-back.html',
+      link: function($scope, $element, $attrs) {
+        $scope.status = {
+          open: false
+        };
+
+        $scope.showMenu = function() {
+          if (!$scope.current) {
+            return false;
+          }
+
+          if (!$scope.bulkAddHandler) {
+            return;
+          }
+
+          var type = $scope.current.type;
+          if (type in RdioType) {
+            type = RdioType[type];
+          }
+
+          return type === 'playlist' || type === 'album' || type === 'station';
+        };
+
+        $scope.toggleDropdown = function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          $scope.status.open = !$scope.status.open;
+        };
+      }
     };
   }
 ])
@@ -438,10 +467,22 @@ angular.module('lstn.directives', ['sc.twemoji'])
           open: false
         };
 
-        if ($scope.track.streamRegions) {
+        var initRegions = function() {
+          if (!$scope.track.streamRegions) {
+            return;
+          }
+
           var missing = $(CurrentRoom.regions).not($scope.track.streamRegions).get();
           $scope.track.restrictedRegions = missing.length > 0;
-        }
+        };
+
+        var listenerId = $scope.$id;
+
+        CurrentRoom.addRegionListener(listenerId, $.proxy(function() {
+          initRegions();
+        }, this));
+
+        initRegions();
 
         $scope.toggleDropdown = function(event) {
           event.preventDefault();
@@ -464,6 +505,10 @@ angular.module('lstn.directives', ['sc.twemoji'])
 
           $scope.status.open = !$scope.status.open;
         };
+
+        $scope.$on('$destory', function() {
+          CurrentRoom.removeRegionListener(listenerId);
+        });
       }
     };
   }
@@ -669,82 +714,101 @@ angular.module('lstn.directives', ['sc.twemoji'])
   };
 }])
 
-.directive('lstnSlide', ['Promise', 'Alert', 'Loader', 'RdioType', function(Promise, Alert, Loader, RdioType) {
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: {
-      load: '=',
-      close: '=',
-      current: '=',
-      context: '=?'
-    },
-    templateUrl: '/static/partials/directives/slide.html',
-    link: function($scope, $element, $attrs) {
-      var request = null;
+.directive('lstnSlide', ['Promise', 'Alert', 'Loader', 'RdioType', 'Queue',
+  function(Promise, Alert, Loader, RdioType, Queue) {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        load: '=',
+        close: '=',
+        current: '=',
+        context: '=?'
+      },
+      templateUrl: '/static/partials/directives/slide.html',
+      link: function($scope, $element, $attrs) {
+        var request = null;
 
-      // If the current slide's key changes, reload the data
-      $scope.$watch('current.key', function(newVal, oldVal) {
-        if (newVal === oldVal) {
-          return;
-        }
+        $scope.addTracks = Queue.addTracks;
 
-        if (!newVal) {
-          return;
-        }
+        // If the current slide's key changes, reload the data
+        $scope.$watch('current.key', function(newVal, oldVal) {
+          if (newVal === oldVal) {
+            return;
+          }
 
-        $scope.refresh();
-      });
+          if (!newVal) {
+            return;
+          }
 
-      $scope.refresh = function() {
-        if (!$scope.current) {
-          return;
-        }
+          $scope.refresh();
+        });
 
-        $scope.current.loading = true;
+        $scope.refresh = function() {
+          if (!$scope.current) {
+            return;
+          }
 
-        // Cancel the current request
-        if (request) {
-          Promise.cancel(request);
-        }
+          $scope.current.loading = true;
 
-        request = $scope.current.promise = Loader.load($scope.current);
-        if (!request) {
-          Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
-          return;
-        }
+          // Cancel the current request
+          if (request) {
+            Promise.cancel(request);
+          }
 
-        request.then(function(response) {
-          $scope.current.loading = false;
-
-          if (!response || !response.success || !response.data) {
+          request = $scope.current.promise = Loader.load($scope.current);
+          if (!request) {
             Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
             return;
           }
 
-          $scope.data = response.data;
-        }, function(response) {
-          $scope.current.loading = false;
-          Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
-          return;
+          request.then(function(response) {
+            $scope.current.loading = false;
+
+            if (!response || !response.success || !response.data) {
+              Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
+              return;
+            }
+
+            $scope.data = response.data;
+
+            $scope.current.keys = [];
+            if (response.data) {
+              response.data.forEach(function(entry) {
+                if (!entry || !entry.key) {
+                  return;
+                }
+
+                if ('canStream' in entry && !entry.canStream) {
+                  return;
+                }
+
+                $scope.current.keys.push(entry.key);
+              });
+            }
+          }, function(response) {
+            $scope.current.loading = false;
+            Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
+            return;
+          });
+        };
+
+        $scope.refresh();
+
+        $scope.getType = function(type) {
+          if (!(type in RdioType)) {
+            return type;
+          }
+
+          return RdioType[type];
+        };
+
+        $scope.$on('$destroy', function() {
+          Promise.cancel(request);
         });
-      };
-
-      $scope.refresh();
-
-      $scope.getType = function(type) {
-        if (!(type in RdioType)) {
-          return type;
-        }
-
-        return RdioType[type];
-      };
-
-      $scope.$on('$destroy', function() {
-        Promise.cancel(request);
-      });
-    }
-  };
-}]);
+      }
+    };
+  }
+]);
 
 })();
