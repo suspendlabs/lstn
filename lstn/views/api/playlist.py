@@ -19,15 +19,26 @@ def get_tracks(playlist_id):
     current_user.oauth_token,
     current_user.oauth_token_secret)
 
-  tracks = []
-
   try:
-    playlists = rdio_manager.get([playlist_id], ['tracks', 'radioKey'])
+    playlists = rdio_manager.get([playlist_id], ['trackKeys'])
   except Exception as e:
     current_app.logger.debug(e)
     raise APIException('Unable to retrieve playlist tracks: %s' % str(e))
 
-  if len(playlists) > 0 and hasattr(playlists[0], 'tracks'):
-      tracks = [track._data for track in playlists[0].tracks]
+  if not playlists:
+    return []
+
+  playlist = playlists[0]
+
+  if not hasattr(playlist, 'track_keys') or len(playlist.track_keys) == 0:
+    return []
+
+  try:
+    tracks = rdio_manager.get(playlist.track_keys, ['radioKey', 'streamRegions'])
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to retrieve playlsit tracks: %s' % str(e))
+
+  tracks = [track._data for track in tracks]
 
   return jsonify(success=True, data=tracks)
