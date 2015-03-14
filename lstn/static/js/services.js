@@ -123,6 +123,25 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       loading: true
     };
 
+    Queue.addTracks = function(tracks, position) {
+      CurrentUser.addToQueue({
+        tracks: tracks
+      }, function(response) {
+        if (!response || !response.success || !response.queue) {
+          Alert.error('Something went wrong while trying to add the tracks to your queue.');
+          return;
+        }
+
+        Queue.tracks = response.queue;
+
+        if (position === 'top') {
+          Queue.moveToTop(Queue.tracks.length - tracks.length, tracks.length);
+        }
+      }, function(response) {
+        Alert.error('Something went wrong while trying to add the track to your queue.');
+      });
+    };
+
     Queue.addTrack = function(track, position) {
       track.addingToQueue = true;
 
@@ -165,14 +184,20 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       });
     };
 
-    Queue.moveToTop = function(index) {
-      var tracks = Queue.tracks.splice(index, 1);
+    Queue.moveToTop = function(index, length) {
+      length = length || 1;
+
+      var tracks = Queue.tracks.splice(index, length);
       if (!tracks || tracks.length === 0) {
         Alert.error('Something went wrong while trying to move the track to the top of your queue.');
         return;
       }
 
-      Queue.tracks.unshift(tracks[0]);
+      // Add the splice arguments to the front of the track list
+      tracks.splice(0, 0, 0, 0);
+
+      // Add the tracks to the top of the queue
+      Array.prototype.splice.apply(Queue.tracks, tracks);
 
       CurrentUser.updateQueue({
         queue: Queue.tracks
@@ -338,6 +363,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     regions: []
   };
 
+  var regionListeners = {};
+  
   Room.update = function(room) {
     $.extend(this, this, room);
   };
@@ -360,6 +387,22 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     }
 
     this.regions = regions;
+
+    Object.keys(regionListeners).forEach(function(id) {
+      regionListeners[id]();
+    });
+  };
+
+  Room.addRegionListener = function(id, callback) {
+    regionListeners[id] = callback;
+  };
+
+  Room.removeRegionListener = function(id) {
+    if (!(id in regionListeners)) {
+      return;
+    }
+
+    delete regionListeners[id];
   };
 
   return Room;
