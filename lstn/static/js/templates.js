@@ -147,20 +147,47 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/drilldown-back.html',
     "<div class=\"carousel__back text-left\">\n" +
     "  <a data-ng-click=\"clickHandler()\">\n" +
-    "    <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"text\" data-tooltip=\"Back\" data-tooltip-placement=\"right\"></span>\n" +
+    "    <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"current.name\" data-tooltip=\"Back\" data-tooltip-placement=\"right\"></span>\n" +
     "  </a>\n" +
-    "  <a class=\"carousel__refresh pull-right\" data-ng-click=\"refreshHandler()\" data-ng-show=\"refreshHandler\">\n" +
+    "\n" +
+    "  <div class=\"pull-right\">\n" +
+    "    <a data-ng-click=\"refreshHandler()\" class=\"carousel__action\" data-ng-show=\"!showMenu() && !current.loading\">\n" +
+    "      <i class=\"fa fa-fw fa-refresh fa-lg\"></i>\n" +
+    "    </a>\n" +
+    "\n" +
+    "    <span class=\"dropdown\" data-dropdown data-is-open=\"status.open\">\n" +
+    "      <a\n" +
+    "        class=\"fa fa-fw fa-ellipsis-v carousel__action\"\n" +
+    "        data-ng-hide=\"current.loading || !showMenu()\"\n" +
+    "        data-ng-click=\"toggleDropdown($event)\"></a>\n" +
+    "      <ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">\n" +
+    "        <li>\n" +
+    "          <a data-ng-click=\"bulkAddHandler(current.keys, 'top')\">\n" +
+    "            <i class=\"fa fa-fw fa-plus-circle carousel__dropdown--add\"></i>\n" +
+    "            Add All to Top of Queue\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "        <li>\n" +
+    "          <a data-ng-click=\"bulkAddHandler(current.keys)\">\n" +
+    "            <i class=\"fa fa-fw fa-plus-circle carousel__dropdown--add\"></i>\n" +
+    "            Add All to Bottom of Queue\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "        <li class=\"divider\"></li>\n" +
+    "        <li>\n" +
+    "          <a data-ng-click=\"refreshHandler()\" data-ng-show=\"refreshHandler\">\n" +
+    "            <i class=\"fa fa-fw fa-refresh carousel__dropdown--refresh\"></i>\n" +
+    "            Refresh\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </span>\n" +
     "    <i\n" +
-    "      class=\"fa fa-fw fa-refresh\"\n" +
-    "      data-ng-show=\"!loading\"\n" +
-    "      data-tooltip=\"Refresh\"\n" +
-    "      data-tooltip-placement=\"left\"></i>\n" +
-    "    <i\n" +
-    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"loading\"\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin fa-lg carousel__action\"\n" +
+    "      data-ng-show=\"current.loading\"\n" +
     "      data-tooltip=\"Refreshing\"\n" +
     "      data-tooltip-placement=\"left\"></i>\n" +
-    "  </a>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 
@@ -650,17 +677,17 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <a data-ng-click=\"current.clear()\">\n" +
     "      <i class=\"fa fa-fw fa-times-circle-o\"></i> Clear Search Results\n" +
     "    </a>\n" +
-    "    <div class=\"carousel__refresh pull-right\" data-ng-show=\"current.loading\">\n" +
+    "    <div class=\"carousel__action pull-right\" data-ng-show=\"current.loading\">\n" +
     "      <i class=\"fa fa-circle-o-notch fa-lg fa-spin\"></i>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
     "  <lstn-drilldown-back\n" +
     "    data-ng-if=\"current.position > 0\"\n" +
-    "    data-text=\"current.name\"\n" +
     "    data-click-handler=\"close\"\n" +
     "    data-refresh-handler=\"refresh\"\n" +
-    "    data-loading=\"current.loading\"></lstn-drilldown-back>\n" +
+    "    data-bulk-add-handler=\"addTracks\"\n" +
+    "    data-current=\"current\"></lstn-drilldown-back>\n" +
     "  <ul class=\"drilldown__list text-left\">\n" +
     "    <li data-ng-repeat=\"item in data\">\n" +
     "      <div data-ng-switch=\"getType(item.type)\">\n" +
@@ -802,6 +829,16 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
     "    <i\n" +
+    "      class=\"fa fa-exclamation-triangle\"\n" +
+    "      data-ng-show=\"!track.canStream\"\n" +
+    "      data-tooltip=\"This track can't be streamed in your region\"\n" +
+    "      data-tooltip-placement=\"left\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-exclamation-triangle\"\n" +
+    "      data-ng-show=\"track.canStream && track.restrictedRegions\"\n" +
+    "      data-tooltip=\"This track has limited regional availability\"\n" +
+    "      data-tooltip-placement=\"left\"></i>\n" +
+    "    <i\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
     "      data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
     "    <i\n" +
@@ -810,16 +847,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-tooltip=\"This track is already in your queue\"\n" +
     "      data-tooltip-placement=\"left\"\n" +
     "      data-tooltip-popup-delay=\"1000\"></i>\n" +
-    "    <i\n" +
-    "      class=\"fa fa-exclamation-triangle\"\n" +
-    "      data-ng-show=\"!track.canStream\"\n" +
-    "      data-tooltip=\"This track can't be streamed in your region\"\n" +
-    "      data-tooltip-placement=\"left\"></i>\n" +
-    "    <i\n" +
-    "      class=\"fa fa-exclamation-triangle\"\n" +
-    "      data-ng-show=\"track.canStream && track.restrictedRegions\"\n" +
-    "      data-tooltip=\"This track has limited region availability\"\n" +
-    "      data-tooltip-placement=\"left\"></i>\n" +
     "\n" +
     "    <span class=\"dropdown\" data-dropdown data-is-open=\"status.open\">\n" +
     "      <a\n" +
@@ -849,7 +876,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "          </a>\n" +
     "        </li>\n" +
     "        <li data-ng-hide=\"!track.canStream || track.in_queue || queue.bitset[track.key]\">\n" +
-    "          <a data-ng-click=\"queue.addTrack(track, 'top')\" data-ng-disabled=\"!track.canStream\">\n" +
+    "          <a data-ng-click=\"queue.addTrack(track, 'top')\">\n" +
     "            <i class=\"fa fa-fw fa-plus-circle item__actions__add\"></i>\n" +
     "            Add to Top of Queue\n" +
     "          </a>\n" +
