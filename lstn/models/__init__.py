@@ -65,6 +65,7 @@ class User(db.Model, ModelMixin, UserMixin):
   queue = db.Column(db.String(255))
   picture = db.Column(db.String(32))
   points = db.Column(db.BigInteger)
+  region = db.Column(db.String(3))
   settings = db.Column(JSONEncodedDict())
   created_at = db.Column(db.DateTime, nullable=False, default=db.func.now())
 
