@@ -4,7 +4,7 @@
   </a>
 
   <div class="pull-right">
-    <a data-ng-click="refreshHandler()" class="carousel__action" data-ng-show="!showMenu() && !current.loading">
+    <a data-ng-click="refreshHandler()" class="carousel__action" data-ng-show="!showMenu() && !current.loading && !current.constant">
       <i class="fa fa-fw fa-refresh fa-lg"></i>
     </a>
 
@@ -30,7 +30,7 @@
         <li>
           <a data-ng-click="refreshHandler()" data-ng-show="refreshHandler">
             <i class="fa fa-fw fa-refresh carousel__dropdown--refresh"></i>
-            Refresh
+            Refresh {{ name }}
           </a>
         </li>
       </ul>
