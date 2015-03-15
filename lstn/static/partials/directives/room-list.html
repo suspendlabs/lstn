@@ -16,7 +16,10 @@
         </td>
       </tr>
       <tr data-ng-repeat="room in rooms" data-ng-show="rooms && rooms.length > 0 && !loading">
-        <td data-ng-show="!room.editing"><a data-ng-href="/room/{{ room.slug }}" data-ng-bind="room.name"></a></td>
+        <td data-ng-show="!room.editing">
+          <a data-ng-href="/room/{{ room.slug }}" data-ng-bind="room.name"></a>
+          (<span data-ng-bind="room.slug"></span>)
+        </td>
         <td data-ng-show="room.editing" class="form-inline">
           <label for="room-name" class="sr-only">Room Name</label>
           <input type="text" id="room-name" data-ng-model="room.name" class="form-control input-sm" placeholder="Room Name" />
