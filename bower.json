@@ -22,7 +22,7 @@
     "angular-linkify": "~1.1.0",
     "svg4everybody": "~1.0.0",
     "emojione": "~1.3.0",
-    "angular-screenmatch": "~1.0.1"
+    "angular-screenmatch": "https://github.com/cisox/angular-screenmatch.git#8fd1fc7a6d7360d767143af43b31183e4809f834"
   },
   "version": "0.1.0",
   "homepage": "http://lstn.in",
@@ -39,5 +39,8 @@
     "lstn/static/bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "resolutions": {
+    "angular": "~1.3.14"
+  }
 }
