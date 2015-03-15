@@ -453,7 +453,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         track: '=',
         index: '=',
-        context: '@'
+        context: '@',
+        count: '='
       },
       templateUrl: '/static/partials/directives/track.html',
       link: function($scope, $element, $attrs) {
@@ -726,7 +727,14 @@ angular.module('lstn.directives', ['sc.twemoji'])
       link: function($scope, $element, $attrs) {
         var request = null;
 
-        $scope.addTracks = Queue.addTracks;
+        $scope.addTracks = function(tracks, position) {
+          $scope.current.loading = true;
+          request = Queue.addTracks(tracks, position).then(function(response) {
+            $scope.current.loading = false;
+          }, function(response) {
+            $scope.current.loading = false;
+          });
+        };
 
         // If the current slide's key changes, reload the data
         $scope.$watch('current.key', function(newVal, oldVal) {
