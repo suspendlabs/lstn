@@ -129,7 +129,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"chat__message__message\" data-ng-if=\"message.type === 'message'\">\n" +
-    "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|linkify|twemoji\"></div>\n" +
+    "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|linkify|emojione\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"chat__track-info text-muted\" data-ng-if=\"message.type !== 'message'\">\n" +
     "      <div class=\"chat__track text-truncate\">\n" +
@@ -195,7 +195,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/emoticon-list.html',
     "<ul class=\"list-group emoticon-list\">\n" +
     "  <li data-mentio-menu-item=\"emoticon\" data-ng-repeat=\"emoticon in items\" class=\"list-group-item\">\n" +
-    "    <span tooltip-placement=\"bottom\" tooltip=\"{{ emoticon.text }}\" data-ng-bind-html=\"emoticon.value|twemoji\"></span>\n" +
+    "    <span tooltip-placement=\"bottom\" tooltip=\"{{ emoticon.text }}\" data-ng-bind-html=\"emoticon.value|emojione\"></span>\n" +
     "  </li>\n" +
     "</ul>\n"
   );
