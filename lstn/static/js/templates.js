@@ -587,8 +587,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <li data-ng-repeat=\"track in queue.tracks\">\n" +
     "      <lstn-track\n" +
     "        data-track=\"track\"\n" +
-    "        data-context=\"'queue'\"\n" +
-    "        data-index=\"$index\"></lstn-track>\n" +
+    "        data-context=\"queue\"\n" +
+    "        data-index=\"$index\"\n" +
+    "        data-count=\"queue.tracks.length\"></lstn-track>\n" +
     "    </li>\n" +
     "  </ul>\n" +
     "  <div class=\"queue--empty\" data-ng-show=\"!queue.loading && (!queue.tracks || queue.tracks.length === 0)\">\n" +
@@ -691,49 +692,49 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <div data-ng-switch=\"getType(item.type)\">\n" +
     "        <lstn-category\n" +
     "          data-ng-switch-when=\"category\"\n" +
-    "          data-context=\"current.type\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-category=\"item\"\n" +
     "          data-load=\"load\"></lstn-category>\n" +
     "\n" +
     "        <lstn-playlist-type\n" +
     "          data-ng-switch-when=\"playlistType\"\n" +
-    "          data-context=\"current.type\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-playlist-type=\"item\"\n" +
     "          data-load=\"load\"></lstn-playlist-type>\n" +
     "\n" +
     "        <lstn-station-type\n" +
     "          data-ng-switch-when=\"stationType\"\n" +
-    "          data-context=\"current.type\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-station-type=\"item\"\n" +
     "          data-load=\"load\"></lstn-station-type>\n" +
     "\n" +
     "        <lstn-playlist\n" +
     "          data-ng-switch-when=\"playlist\"\n" +
-    "          data-context=\"current.type\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-playlist=\"item\"\n" +
     "          data-load=\"load\"></lstn-playlist>\n" +
     "\n" +
     "        <lstn-station\n" +
     "          data-ng-switch-when=\"station\"\n" +
-    "          data-context=\"current.type\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-station=\"item\"\n" +
     "          data-load=\"load\"></lstn-station>\n" +
     "\n" +
     "        <lstn-album\n" +
     "          data-ng-switch-when=\"album\"\n" +
-    "          data-context=\"current.type\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-album=\"item\"\n" +
     "          data-load=\"load\"></lstn-album>\n" +
     "\n" +
     "        <lstn-artist\n" +
     "          data-ng-switch-when=\"artist\"\n" +
-    "          data-context=\"current.type\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-artist=\"item\"\n" +
     "          data-load=\"load\"></lstn-artist>\n" +
     "\n" +
     "        <lstn-track\n" +
     "          data-ng-switch-when=\"track\"\n" +
-    "          data-context=\"current.type\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-track=\"item\"\n" +
     "          data-index=\"$index\"></lstn-track>\n" +
     "      </div>\n" +
@@ -832,7 +833,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      data-tooltip-placement=\"left\"></i>\n" +
     "    <i\n" +
     "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"track.processing\"></i>\n" +
+    "      data-ng-show=\"track.loading\"></i>\n" +
     "    <i\n" +
     "      class=\"fa fa-fw fa-check\"\n" +
     "      data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context !== 'queue'\"\n" +
@@ -843,20 +844,20 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <span class=\"dropdown\" data-dropdown data-is-open=\"status.open\">\n" +
     "      <a\n" +
     "        class=\"fa fa-fw fa-ellipsis-v\"\n" +
-    "        data-ng-hide=\"track.processing || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')\"\n" +
+    "        data-ng-hide=\"track.loading || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')\"\n" +
     "        data-ng-click=\"toggleDropdown($event)\"></a>\n" +
     "      <ul\n" +
     "        class=\"dropdown-menu dropdown-menu-right\"\n" +
-    "        data-ng-hide=\"track.processing\"\n" +
+    "        data-ng-hide=\"track.loading\"\n" +
     "        role=\"menu\">\n" +
-    "        <li data-ng-show=\"track.in_queue && context === 'queue'\">\n" +
+    "        <li data-ng-show=\"track.in_queue && context === 'queue' && count > 1 && index != 0\">\n" +
     "          <a data-ng-click=\"queue.moveToTop(index)\">\n" +
     "            <i class=\"fa fa-fw fa-arrow-circle-up item__actions__move-to-top\"></i>\n" +
     "            Move to Top of Queue\n" +
     "          </a>\n" +
     "        </li>\n" +
-    "        <li data-ng-show=\"track.in_queue && context === 'queue'\">\n" +
-    "          <a data-ng-click=\"queue.moveToBottom(index)\">\n" +
+    "        <li data-ng-show=\"track.in_queue && context === 'queue' && count > 1 && index != (count - 1)\">\n" +
+    "        <a data-ng-click=\"queue.moveToBottom(index)\">\n" +
     "            <i class=\"fa fa-fw fa-arrow-circle-down item__actions__move-to-bottom\"></i>\n" +
     "            Move to Bottom of Queue\n" +
     "          </a>\n" +
