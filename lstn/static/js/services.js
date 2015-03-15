@@ -74,12 +74,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     };
 
     Favorite.addTrack = function(track) {
-      track.addingToFavorites = true;
+      track.loading = true;
 
-      CurrentUser.addToFavorites({
+      return CurrentUser.addToFavorites({
         id: track.key
       }, function(response) {
-        track.addingToFavorites = false;
+        track.loading = false;
         if (!response || !response.success) {
           Alert.error('Something went wrong while trying to add the track to your favorites.');
           return;
@@ -87,17 +87,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
         Favorite.bitset[track.key] = true;
       }, function(response) {
-        track.addingToFavorites = false;
+        track.loading = false;
         Alert.error('Something went wrong while trying to add the track to your favorites.');
-      });
+      }).$promise;
     };
 
     Favorite.removeTrack = function(track) {
-      track.removingFromFavorites = true;
-      CurrentUser.removeFromFavorites({
+      track.loading = true;
+
+      return CurrentUser.removeFromFavorites({
         id: track.key
       }, function(response) {
-        track.removingFromFavorites = false;
+        track.loading = false;
         if (!response || !response.success) {
           Alert.error('Something went wrong while trying to remove the track from your favorites.');
           return;
@@ -105,9 +106,9 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
         delete Favorite.bitset[track.key];
       }, function(response) {
-        track.removingFromFavorites = false;
+        track.loading = false;
         Alert.error('Something went wrong while trying to remove the track from your favorites.');
-      });
+      }).$promise;
     };
 
     return Favorite;
@@ -143,12 +144,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     };
 
     Queue.addTrack = function(track, position) {
-      track.processing = true;
+      track.loading = true;
 
       return CurrentUser.addToQueue({
         id: track.key
       }, function(response) {
-        track.processing = false;
+        track.loading = false;
         if (!response || !response.success || !response.queue) {
           Alert.error('Something went wrong while trying to add the track to your queue.');
           return;
@@ -160,19 +161,19 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           Queue.moveToTop(Queue.tracks.length - 1);
         }
       }, function(response) {
-        track.processing = false;
+        track.loading = false;
         Alert.error('Something went wrong while trying to add the track to your queue.');
       }).$promise;
     };
 
     Queue.removeTrack = function(track, index) {
-      track.processing = true;
+      track.loading = true;
 
       return CurrentUser.removeFromQueue({
         id: track.key,
         index: index
       }, function(response) {
-        track.processing = false;
+        track.loading = false;
         if (!response || !response.success || !response.queue) {
           Alert.error('Something went wrong while trying to remove the track from your queue.');
           return;
@@ -180,7 +181,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
         Queue.tracks = response.queue;
       }, function(response) {
-        track.processing = false;
+        track.loading = false;
         Alert.error('Something went wrong while trying to remove the track from your queue.');
       }).$promise;
     };
