@@ -2,7 +2,7 @@
   "name": "lstn",
   "dependencies": {
     "jquery": "~2.1.0",
-    "angular": "~1.2.16",
+    "angular": "~1.3.14",
     "angular-cookies": "~1.2.16",
     "angular-resource": "~1.2.16",
     "angular-sanitize": "~1.3.13",
@@ -17,10 +17,11 @@
     "angular-ui-sortable": "~0.13.3",
     "moment": "~2.9.0",
     "ment.io": "~0.9.23",
-    "angular-twemoji": "~0.0.8",
     "angular-emoji-map": "~1.0.1",
     "snackbarjs": "~1.0.0",
-    "angular-linkify": "~1.1.0"
+    "angular-linkify": "~1.1.0",
+    "svg4everybody": "~1.0.0",
+    "emojione": "~1.3.0"
   },
   "version": "0.1.0",
   "homepage": "http://lstn.in",
@@ -37,8 +38,5 @@
     "lstn/static/bower_components",
     "test",
     "tests"
-  ],
-  "resolutions": {
-    "angular": "1.3.14"
-  }
+  ]
 }
