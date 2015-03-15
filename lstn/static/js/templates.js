@@ -522,7 +522,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        </td>\n" +
     "      </tr>\n" +
     "      <tr data-ng-repeat=\"room in rooms\" data-ng-show=\"rooms && rooms.length > 0 && !loading\">\n" +
-    "        <td data-ng-show=\"!room.editing\"><a data-ng-href=\"/room/{{ room.slug }}\" data-ng-bind=\"room.name\"></a></td>\n" +
+    "        <td data-ng-show=\"!room.editing\">\n" +
+    "          <a data-ng-href=\"/room/{{ room.slug }}\" data-ng-bind=\"room.name\"></a>\n" +
+    "          (<span data-ng-bind=\"room.slug\"></span>)\n" +
+    "        </td>\n" +
     "        <td data-ng-show=\"room.editing\" class=\"form-inline\">\n" +
     "          <label for=\"room-name\" class=\"sr-only\">Room Name</label>\n" +
     "          <input type=\"text\" id=\"room-name\" data-ng-model=\"room.name\" class=\"form-control input-sm\" placeholder=\"Room Name\" />\n" +
@@ -960,13 +963,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <tab-heading>MORE MUSIC</tab-heading>\n" +
     "        <lstn-more-music></lstn-more-music>\n" +
     "      </tab>\n" +
-    "      <tab data-ng-if=\"mobile.active\">\n" +
+    "      <tab data-ng-if=\"!desktop\">\n" +
     "        <tab-heading>ROOM ACTIVITY</tab-heading>\n" +
     "        <lstn-room-activity></lstn-room-activity>\n" +
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
-    "  <div class=\"col-md-4 room__right\" data-ng-if=\"!mobile.active\">\n" +
+    "  <div class=\"col-md-4 room__right\" data-ng-if=\"desktop\">\n" +
     "    <lstn-room-activity></lstn-room-activity>\n" +
     "  </div>\n" +
     "</div>\n"

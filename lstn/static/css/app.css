@@ -2,6 +2,13 @@ html, body {
   height: 100%;
 }
 
+a {
+  color: #d24242;
+}
+a:hover, a:focus {
+  color: #ca3030;
+}
+
 .btn-accent {
   background-color: #3d3d3d;
   border-color: #3d3d3d;

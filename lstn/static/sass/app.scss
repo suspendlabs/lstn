@@ -13,6 +13,14 @@ html, body {
   height: 100%;
 }
 
+a {
+  color: $active-color;
+
+  &:hover, &:focus {
+    color: darken($active-color, 5%);
+  }
+}
+
 .btn-accent {
   background-color: $accent-color;
   border-color: $accent-color;

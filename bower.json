@@ -20,9 +20,8 @@
     "angular-emoji-map": "~1.0.1",
     "snackbarjs": "~1.0.0",
     "angular-linkify": "~1.1.0",
-    "svg4everybody": "~1.0.0",
     "emojione": "~1.3.0",
-    "angular-screenmatch": "~1.0.1"
+    "angular-media-queries": "~0.4.0"
   },
   "version": "0.1.0",
   "homepage": "http://lstn.in",
@@ -39,5 +38,8 @@
     "lstn/static/bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "resolutions": {
+    "angular": "~1.3.14"
+  }
 }
