@@ -135,7 +135,7 @@ img.avatar {
 }
 
 body {
-  font-family: "proxima-nova", sans-serif;
+  font-family: 'proxima-nova', sans-serif;
   background-color: $background-color;
 
   > .container {
@@ -196,7 +196,8 @@ body {
 }
 
 .navbar-logo {
-  font-family: 'signo';
+  font-family: 'proxima-nova';
+  font-weight: 600;
   font-size: 1.8em;
   color: #FFFFFF;
   text-decoration: none;
