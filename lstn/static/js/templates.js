@@ -111,9 +111,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/chat-message.html',
-    "<div id=\"message-{{ $id }}\" class=\"chat__message\">\n" +
+    "<div id=\"message-{{ $id }}\" class=\"chat__message\" data-ng-class=\"getMessageClass()\">\n" +
     "  <div class=\"chat__image item__image\">\n" +
-    "    <img data-ng-src=\"{{ message.user.picture }}\" src=\"http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg\" />\n" +
+    "    <img data-ng-src=\"{{ message.user.picture }}\" src=\"/images/no-user.png\" />\n" +
     "  </div>\n" +
     "  <div class=\"chat__user-info item__info\">\n" +
     "    <div class=\"item__title\">\n" +
@@ -151,7 +151,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </a>\n" +
     "\n" +
     "  <div class=\"pull-right\">\n" +
-    "    <a data-ng-click=\"refreshHandler()\" class=\"carousel__action\" data-ng-show=\"!showMenu() && !current.loading\">\n" +
+    "    <a data-ng-click=\"refreshHandler()\" class=\"carousel__action\" data-ng-show=\"!showMenu() && !current.loading && !current.constant\">\n" +
     "      <i class=\"fa fa-fw fa-refresh fa-lg\"></i>\n" +
     "    </a>\n" +
     "\n" +
@@ -177,7 +177,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <li>\n" +
     "          <a data-ng-click=\"refreshHandler()\" data-ng-show=\"refreshHandler\">\n" +
     "            <i class=\"fa fa-fw fa-refresh carousel__dropdown--refresh\"></i>\n" +
-    "            Refresh\n" +
+    "            Refresh {{ name }}\n" +
     "          </a>\n" +
     "        </li>\n" +
     "      </ul>\n" +
