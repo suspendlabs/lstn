@@ -28,7 +28,7 @@
       data-tooltip-placement="left"></i>
     <i
       class="fa fa-fw fa-circle-o-notch fa-spin"
-      data-ng-show="track.processing"></i>
+      data-ng-show="track.loading"></i>
     <i
       class="fa fa-fw fa-check"
       data-ng-show="(track.in_queue || queue.bitset[track.key]) && context !== 'queue'"
@@ -39,20 +39,20 @@
     <span class="dropdown" data-dropdown data-is-open="status.open">
       <a
         class="fa fa-fw fa-ellipsis-v"
-        data-ng-hide="track.processing || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')"
+        data-ng-hide="track.loading || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')"
         data-ng-click="toggleDropdown($event)"></a>
       <ul
         class="dropdown-menu dropdown-menu-right"
-        data-ng-hide="track.processing"
+        data-ng-hide="track.loading"
         role="menu">
-        <li data-ng-show="track.in_queue && context === 'queue'">
+        <li data-ng-show="track.in_queue && context === 'queue' && count > 1 && index != 0">
           <a data-ng-click="queue.moveToTop(index)">
             <i class="fa fa-fw fa-arrow-circle-up item__actions__move-to-top"></i>
             Move to Top of Queue
           </a>
         </li>
-        <li data-ng-show="track.in_queue && context === 'queue'">
-          <a data-ng-click="queue.moveToBottom(index)">
+        <li data-ng-show="track.in_queue && context === 'queue' && count > 1 && index != (count - 1)">
+        <a data-ng-click="queue.moveToBottom(index)">
             <i class="fa fa-fw fa-arrow-circle-down item__actions__move-to-bottom"></i>
             Move to Bottom of Queue
           </a>
