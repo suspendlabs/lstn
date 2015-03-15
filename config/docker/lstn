@@ -68,6 +68,7 @@ ADD config/nginx.conf /etc/nginx/sites-available/default
 
 ADD config/uwsgi.ini /etc/uwsgi.ini
 ADD config/supervisord.conf /etc/supervisor/supervisord.conf
+ADD config/redis.conf /etc/redis/redis.conf
 
 EXPOSE 80 443 7000 3000 6379
 CMD ["/usr/bin/supervisord"]
