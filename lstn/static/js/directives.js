@@ -1,11 +1,7 @@
 (function() {
 'use strict';
 
-angular.module('lstn.directives', ['sc.twemoji'])
-.config(['twemojiProvider', function(twemojiProvider) {
-  twemojiProvider.setOptions({ size: 16 });
-}])
-
+angular.module('lstn.directives', [])
 .directive('lstnEnter', function() {
   return function($scope, $element, $attrs) {
     $element.bind('keydown keypress', function(event) {
