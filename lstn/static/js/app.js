@@ -9,7 +9,6 @@ angular.module('lstn', [
   'btford.socket-io',
   'mentio',
   'linkify',
-  'matchmedia-ng',
   'lstn.config',
   'lstn.services',
   'lstn.controllers',

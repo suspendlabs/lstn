@@ -1,7 +1,7 @@
 (function() {
 'use strict';
 
-angular.module('lstn.controllers', [])
+angular.module('lstn.controllers', ['matchmedia-ng'])
 
 .controller('AppController', ['$scope', '$modal', '$log', 'Alert', 'CurrentRoom', 'CurrentUser',
   function($scope, $modal, $log, Alert, CurrentRoom, CurrentUser) {
