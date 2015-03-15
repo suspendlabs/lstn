@@ -9,7 +9,7 @@ angular.module('lstn', [
   'btford.socket-io',
   'mentio',
   'linkify',
-  'angular.screenmatch',
+  'matchmedia-ng',
   'lstn.config',
   'lstn.services',
   'lstn.controllers',
