@@ -324,11 +324,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-activity.html',
     "<div class=\"room-activity\">\n" +
     "  <input\n" +
-    "    id=\"chat-input\"\n" +
+    "    id=\"chat-input-{{ $id }}\"\n" +
     "    type=\"text\"\n" +
     "    placeholder=\"Send message...\"\n" +
     "    data-mentio\n" +
-    "    data-mentio-id=\"'chat-input'\"\n" +
     "    data-ng-trim=\"false\"\n" +
     "    class=\"form-control chat__input\"\n" +
     "    data-ng-show=\"!chat.loading\"\n" +
@@ -336,8 +335,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-lstn-enter=\"sendMessage()\"></input>\n" +
     "\n" +
     "  <mentio-menu\n" +
-    "    id=\"mention-menu\"\n" +
-    "    mentio-for=\"'chat-input'\"\n" +
+    "    id=\"mention-menu-{{ $id }}\"\n" +
+    "    class=\"mention-menu\"\n" +
+    "    mentio-for=\"'chat-input-' + $id\"\n" +
     "    mentio-trigger-char=\"'@'\"\n" +
     "    mentio-items=\"mentionNames\"\n" +
     "    mentio-template-url=\"/static/partials/directives/roster-mention.html\"\n" +
@@ -345,9 +345,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    mentio-select=\"getUser(item)\"></mentio-menu>\n" +
     "\n" +
     "  <mentio-menu\n" +
-    "    id=\"emoticon-menu\"\n" +
+    "    id=\"emoticon-menu-{{ $id }}\"\n" +
     "    class=\"emoticon-menu\"\n" +
-    "    mentio-for=\"'chat-input'\"\n" +
+    "    mentio-for=\"'chat-input-' + $id\"\n" +
     "    mentio-trigger-char=\"':'\"\n" +
     "    mentio-items=\"emoticons\"\n" +
     "    mentio-template-url=\"/static/partials/directives/emoticon-list.html\"\n" +

@@ -1,10 +1,9 @@
 <div class="room-activity">
   <input
-    id="chat-input"
+    id="chat-input-{{ $id }}"
     type="text"
     placeholder="Send message..."
     data-mentio
-    data-mentio-id="'chat-input'"
     data-ng-trim="false"
     class="form-control chat__input"
     data-ng-show="!chat.loading"
@@ -12,8 +11,9 @@
     data-lstn-enter="sendMessage()"></input>
 
   <mentio-menu
-    id="mention-menu"
-    mentio-for="'chat-input'"
+    id="mention-menu-{{ $id }}"
+    class="mention-menu"
+    mentio-for="'chat-input-' + $id"
     mentio-trigger-char="'@'"
     mentio-items="mentionNames"
     mentio-template-url="/static/partials/directives/roster-mention.html"
@@ -21,9 +21,9 @@
     mentio-select="getUser(item)"></mentio-menu>
 
   <mentio-menu
-    id="emoticon-menu"
+    id="emoticon-menu-{{ $id }}"
     class="emoticon-menu"
-    mentio-for="'chat-input'"
+    mentio-for="'chat-input-' + $id"
     mentio-trigger-char="':'"
     mentio-items="emoticons"
     mentio-template-url="/static/partials/directives/emoticon-list.html"

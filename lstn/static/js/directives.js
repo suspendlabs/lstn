@@ -9,8 +9,8 @@ angular.module('lstn.directives', [])
         return;
       }
 
-      var mentionMenuVisible = $('#mention-menu').is(':visible');
-      var emoticonMenuVisible = $('#emoticon-menu').is(':visible');
+      var mentionMenuVisible = $('#mention-menu-' + $scope.$id).is(':visible');
+      var emoticonMenuVisible = $('#emoticon-menu-' + $scope.$id).is(':visible');
 
       if (!mentionMenuVisible && !emoticonMenuVisible) {
         $scope.$apply(function() {
