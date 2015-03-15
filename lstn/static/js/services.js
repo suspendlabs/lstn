@@ -143,12 +143,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     };
 
     Queue.addTrack = function(track, position) {
-      track.addingToQueue = true;
+      track.processing = true;
 
       CurrentUser.addToQueue({
         id: track.key
       }, function(response) {
-        track.addingToQueue = false;
+        track.processing = false;
         if (!response || !response.success || !response.queue) {
           Alert.error('Something went wrong while trying to add the track to your queue.');
           return;
@@ -160,18 +160,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           Queue.moveToTop(Queue.tracks.length - 1);
         }
       }, function(response) {
-        track.addingToQueue = false;
+        track.processing = false;
         Alert.error('Something went wrong while trying to add the track to your queue.');
       });
     };
 
     Queue.removeTrack = function(track, index) {
-      track.removingFromQueue = true;
+      track.processing = true;
       CurrentUser.removeFromQueue({
         id: track.key,
         index: index
       }, function(response) {
-        track.removingFromQueue = false;
+        track.processing = false;
         if (!response || !response.success || !response.queue) {
           Alert.error('Something went wrong while trying to remove the track from your queue.');
           return;
@@ -179,7 +179,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
         Queue.tracks = response.queue;
       }, function(response) {
-        track.removingFromQueue = false;
+        track.processing = false;
         Alert.error('Something went wrong while trying to remove the track from your queue.');
       });
     };
@@ -544,26 +544,28 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   return CurrentUser;
 }])
 
-.factory('Playlist', ['$resource', function($resource) {
-  var Playlist = $resource('/api/playlist/:id/:action', {
-    id: '@id'
-  },{
-    tracks: {
-      method: 'GET',
-      params: {
-        action: 'tracks'
+.factory('Playlist', ['$resource',
+  function($resource) {
+    var Playlist = $resource('/api/playlist/:id/:action', {
+      id: '@id'
+    },{
+      tracks: {
+        method: 'GET',
+        params: {
+          action: 'tracks'
+        }
       }
-    }
-  });
+    });
 
-  Playlist.getTracks = function(playlist) {
-    return this.tracks({
-      id: playlist
-    }).$promise;
-  };
+    Playlist.getTracks = function(playlist) {
+      return this.tracks({
+        id: playlist
+      }).$promise;
+    };
 
-  return Playlist;
-}])
+    return Playlist;
+  }
+])
 
 .factory('Artist', ['$resource', function($resource) {
   var Artist = $resource('/api/artist/:id/:action', {
