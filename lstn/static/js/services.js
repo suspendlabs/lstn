@@ -357,58 +357,57 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   return socket;
 }])
 
-.factory('CurrentRoom', ['$resource', function($resource) {
-  var Room = {
-    id: 0,
-    name: null,
-    slug: null,
-    regions: []
-  };
+.factory('CurrentRoom', [
+  function() {
+    var Room = {
+      id: 0,
+      name: null,
+      slug: null,
+      regions: ['US', 'CA']
+    };
 
-  var regionListeners = {};
-  
-  Room.update = function(room) {
-    $.extend(this, this, room);
-  };
+    var regionListeners = {};
+    
+    Room.update = function(room) {
+      $.extend(this, this, room);
+    };
 
-  Room.clear = function() {
-    this.id = 0;
-    this.name = null;
-    this.slug = null;
-    this.regions = [];
-  };
+    Room.clear = function() {
+      this.id = 0;
+      this.name = null;
+      this.slug = null;
+      this.regions = ['US', 'CA'];
+    };
 
-  Room.setRegions = function(regions) {
-    regions = regions || [];
-    if (regions.indexOf('US') === -1) {
+    Room.setRegions = function(regions) {
+      regions = regions || [];
+      
+      // Always set US and CA
       regions.push('US');
-    }
-
-    if (regions.indexOf('CA') === -1) {
       regions.push('CA');
-    }
 
-    this.regions = regions;
+      this.regions = regions;
 
-    Object.keys(regionListeners).forEach(function(id) {
-      regionListeners[id]();
-    });
-  };
+      Object.keys(regionListeners).forEach(function(id) {
+        regionListeners[id]();
+      });
+    };
 
-  Room.addRegionListener = function(id, callback) {
-    regionListeners[id] = callback;
-  };
+    Room.addRegionListener = function(id, callback) {
+      regionListeners[id] = callback;
+    };
 
-  Room.removeRegionListener = function(id) {
-    if (!(id in regionListeners)) {
-      return;
-    }
+    Room.removeRegionListener = function(id) {
+      if (!(id in regionListeners)) {
+        return;
+      }
 
-    delete regionListeners[id];
-  };
+      delete regionListeners[id];
+    };
 
-  return Room;
-}])
+    return Room;
+  }
+])
 
 .factory('Room', ['$resource', function($resource) {
   var Room = $resource('/api/room/:id/:action/:target', {
