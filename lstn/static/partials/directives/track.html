@@ -1,4 +1,4 @@
-<div id="track-{{ $id }}-{{ index }}-{{ track.key }}" class="drilldown__item track">
+<div id="track-{{ $id }}" class="drilldown__item track">
   <div class="item__image">
     <img data-ng-src="{{ track.icon }}" alt="{{ track.album }}">
   </div>
@@ -28,7 +28,7 @@
       data-tooltip-placement="left"></i>
     <i
       class="fa fa-fw fa-circle-o-notch fa-spin"
-      data-ng-show="track.addingToQueue || track.removingFromQueue"></i>
+      data-ng-show="track.processing"></i>
     <i
       class="fa fa-fw fa-check"
       data-ng-show="(track.in_queue || queue.bitset[track.key]) && context !== 'queue'"
@@ -39,11 +39,11 @@
     <span class="dropdown" data-dropdown data-is-open="status.open">
       <a
         class="fa fa-fw fa-ellipsis-v"
-        data-ng-hide="track.addingToQueue || track.removingFromQueue || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')"
+        data-ng-hide="track.processing || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')"
         data-ng-click="toggleDropdown($event)"></a>
       <ul
         class="dropdown-menu dropdown-menu-right"
-        data-ng-hide="track.addingToQueue || track.removingFromQueue"
+        data-ng-hide="track.processing"
         role="menu">
         <li data-ng-show="track.in_queue && context === 'queue'">
           <a data-ng-click="queue.moveToTop(index)">
