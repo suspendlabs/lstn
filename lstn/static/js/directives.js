@@ -286,7 +286,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
 
         $scope.searchRoot = {
           key: 's',
-          name: 'Search',
+          name: 'Search Results',
           type: 'search',
           position: 0,
           clear: function() {
@@ -378,7 +378,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         category: '=',
         load: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/category.html'
     };
@@ -393,8 +393,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         playlistType: '=',
         load: '=',
-        index: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/playlist-type.html'
     };
@@ -409,8 +408,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         playlist: '=',
         load: '=',
-        index: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/playlist.html'
     };
@@ -425,8 +423,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         artist: '=',
         load: '=',
-        index: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/artist.html'
     };
@@ -441,8 +438,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         album: '=',
         load: '=',
-        index: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/album.html'
     };
@@ -457,16 +453,14 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         track: '=',
         index: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/track.html',
       link: function($scope, $element, $attrs) {
         $scope.queue = Queue;
         $scope.favorites = Favorite;
-        $scope.status = {
-          open: false
-        };
 
+        // Init the restricted regions flag
         var initRegions = function() {
           if (!$scope.track.streamRegions) {
             return;
@@ -476,13 +470,18 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.track.restrictedRegions = missing.length > 0;
         };
 
-        var listenerId = $scope.$id;
+        initRegions();
 
+        // Registery to get region updates from the room service
+        var listenerId = $scope.$id;
         CurrentRoom.addRegionListener(listenerId, $.proxy(function() {
           initRegions();
         }, this));
 
-        initRegions();
+        // Handle the Track dropdown
+        $scope.status = {
+          open: false
+        };
 
         $scope.toggleDropdown = function(event) {
           event.preventDefault();
@@ -506,6 +505,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.status.open = !$scope.status.open;
         };
 
+        // Handle the destroy event
         $scope.$on('$destory', function() {
           CurrentRoom.removeRegionListener(listenerId);
         });
@@ -522,8 +522,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         stationType: '=',
         load: '=',
-        index: '=',
-        context: '='
+        context: '@'
       },
       templateUrl: '/static/partials/directives/station-type.html'
     };
@@ -537,10 +536,9 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         load: '=',
-        context: '=?',
+        context: '@',
         station: '=?',
-        radio: '=?',
-        index: '=?'
+        radio: '=?'
       },
       templateUrl: '/static/partials/directives/station.html',
       link: function($scope, $element, $attrs) {
@@ -575,8 +573,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       restrict: 'E',
       replace: true,
       scope: {
-        message: '=',
-        index: '='
+        message: '='
       },
       templateUrl: '/static/partials/directives/chat-message.html',
       link: function($scope, $element, $attrs) {
@@ -661,7 +658,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
     replace: true,
     scope: {
       root: '=',
-      context: '=?'
+      context: '@'
     },
     templateUrl: '/static/partials/directives/carousel.html',
     link: function($scope, $element, $attrs) {
@@ -723,7 +720,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
         load: '=',
         close: '=',
         current: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/slide.html',
       link: function($scope, $element, $attrs) {
@@ -744,6 +741,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           $scope.refresh();
         });
 
+        // Reload the data
         $scope.refresh = function() {
           if (!$scope.current) {
             return;
@@ -795,6 +793,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
 
         $scope.refresh();
 
+        // Translate the Rdio type to a Lstn type
         $scope.getType = function(type) {
           if (!(type in RdioType)) {
             return type;
