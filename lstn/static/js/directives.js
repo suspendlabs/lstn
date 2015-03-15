@@ -325,8 +325,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnDrilldownBack', ['RdioType',
-  function(RdioType) {
+.directive('lstnDrilldownBack', ['RdioType', 'RdioName',
+  function(RdioType, RdioName) {
     return {
       restrict: 'E',
       replace: true,
@@ -338,6 +338,11 @@ angular.module('lstn.directives', ['sc.twemoji'])
       },
       templateUrl: '/static/partials/directives/drilldown-back.html',
       link: function($scope, $element, $attrs) {
+        $scope.name = '';
+        if ($scope.current.type in RdioName) {
+          $scope.name = RdioName[$scope.current.type];
+        }
+
         $scope.status = {
           open: false
         };
@@ -578,27 +583,12 @@ angular.module('lstn.directives', ['sc.twemoji'])
       },
       templateUrl: '/static/partials/directives/chat-message.html',
       link: function($scope, $element, $attrs) {
-        var messageClasses = {
-          playing: 'list-group-item-warning',
-          skipped: 'list-group-item-danger',
-          upvote: 'list-group-item-success',
-          downvote: 'list-group-item-danger'
-        };
-
         $scope.getMessageClass = function() {
           if (!$scope.message) {
             return null;
           }
 
-          if ($scope.message.sender === $scope.current_user.id && $scope.message.type === 'message') {
-            return 'list-group-item-info';
-          }
-
-          if (!($scope.message.type in messageClasses)) {
-            return null;
-          }
-
-          return messageClasses[$scope.message.type];
+          return 'chat__message--' + $scope.message.type;
         };
       }
     };
