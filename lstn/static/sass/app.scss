@@ -971,6 +971,11 @@ footer {
   }
 }
 
+svg.emojione {
+  height: 16px;
+  min-height: 16px;
+} 
+
 .chat__message {
   min-height: 60px;
   background-color: $first-layer;
