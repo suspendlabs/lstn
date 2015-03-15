@@ -231,7 +231,7 @@ body {
 
   .navbar__room {
     a {
-      font-weight: bold;
+      font-weight: 600;
     }
   }
 
@@ -377,12 +377,12 @@ body {
 
   .playing__title {
     margin-top: 1em;
-    font-weight: 700;
-    font-size:22px;
+    font-weight: 600;
+    font-size: 22px;
   }
 
   .playing__artist {
-    font-weight: 100;
+    font-weight: 400;
   }
 }
 
@@ -576,7 +576,7 @@ body {
           text-align: center;
           background: none;
           color: $active-text-color;
-          font-weight: 700;
+          font-weight: 600;
       }
     }
   }
@@ -749,7 +749,7 @@ body {
 }
 
 .chat__track {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .chat__artist {
@@ -789,7 +789,7 @@ body {
   }
 
   .item__title {
-    font-weight: bold;
+    font-weight: 600;
     font-size: 16px;
 
     width: 100%;
@@ -975,7 +975,7 @@ footer {
   background-color: $first-layer;
   padding: 0;
   border-bottom: 2px solid $accent-color;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 div.chat__message--message {
@@ -989,7 +989,7 @@ div.chat__message--message {
 
 .chat__message__user {
   color: $first-layer-text-color;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .chat__message--playing {
@@ -1115,7 +1115,7 @@ div.chat__message--message {
 
   a {
     color: $active-text-color;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     text-decoration: none;
   }
