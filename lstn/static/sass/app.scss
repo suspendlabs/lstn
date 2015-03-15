@@ -135,7 +135,7 @@ img.avatar {
 }
 
 body {
-  font-family: "proxima-nova", sans-serif;
+  font-family: 'proxima-nova', sans-serif;
   background-color: $background-color;
 
   > .container {
@@ -196,7 +196,8 @@ body {
 }
 
 .navbar-logo {
-  font-family: 'signo';
+  font-family: 'proxima-nova';
+  font-weight: 600;
   font-size: 1.8em;
   color: #FFFFFF;
   text-decoration: none;
@@ -217,7 +218,11 @@ body {
   }
 
   &.navbar--login {
-    margin-right: 5px;
+    margin-right: 15px;
+
+    a {
+      margin-top: 18px;
+    }
   }
 
   .navbar__divider {
@@ -227,7 +232,7 @@ body {
 
   .navbar__room {
     a {
-      font-weight: bold;
+      font-weight: 600;
     }
   }
 
@@ -373,12 +378,12 @@ body {
 
   .playing__title {
     margin-top: 1em;
-    font-weight: 700;
-    font-size:22px;
+    font-weight: 600;
+    font-size: 22px;
   }
 
   .playing__artist {
-    font-weight: 100;
+    font-weight: 400;
   }
 }
 
@@ -539,17 +544,14 @@ body {
 
   .nav-tabs {
     height: 36px;
+    border-bottom: 1px solid $accent-color;
 
     > li {
-      &:last-child {
-        width: 34%;
-      }
-
       &:hover {
         background-color: darken($accent-color, 5%);
       }
 
-      width: 33%;
+      width: 33.33%;
       background-color: $accent-color;
 
       &.active {
@@ -572,7 +574,7 @@ body {
           text-align: center;
           background: none;
           color: $active-text-color;
-          font-weight: 700;
+          font-weight: 600;
       }
     }
   }
@@ -745,7 +747,7 @@ body {
 }
 
 .chat__track {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .chat__artist {
@@ -785,7 +787,7 @@ body {
   }
 
   .item__title {
-    font-weight: bold;
+    font-weight: 600;
     font-size: 16px;
 
     width: 100%;
@@ -815,6 +817,10 @@ body {
   margin-right: 15px;
   line-height: 50px;
 
+  a {
+    cursor: pointer;
+  }
+
   .dropdown-menu {
     font-size: 12px;
     cursor: pointer;
@@ -831,7 +837,6 @@ body {
   }
 
   .fa {
-    cursor:pointer;
     color: $active-color;
     text-decoration: none;
     font-size: 1.25em;
@@ -963,17 +968,31 @@ footer {
   }
 }
 
+svg.emojione {
+  height: 16px;
+  min-height: 16px;
+} 
+
 .chat__message {
   min-height: 60px;
   background-color: $first-layer;
   padding: 0;
   border-bottom: 2px solid $accent-color;
-  font-weight: 700;
+  font-weight: 600;
+}
+
+div.chat__message--message {
+  background-color: #FFFFFF;
+  border-right: 2px solid $active-color;
+
+  div.item__title {
+    width: calc(100% + 2px);
+  }
 }
 
 .chat__message__user {
   color: $first-layer-text-color;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .chat__message--playing {
@@ -1095,17 +1114,38 @@ footer {
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
+  overflow: visible;
 
   a {
     color: $active-text-color;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     text-decoration: none;
   }
 
-  .carousel__refresh {
-    padding-right: 10px;
+  .dropdown-menu {
+    font-size: 12px;
+
+    li {
+      a {
+        cursor: pointer;
+        text-transform: none;
+        font-weight: 400;
+        padding: 3px 5px;
+      }
+    }
+  }
+
+  .carousel__dropdown--add {
+    color: $action-additive;
+  }
+
+  .carousel__dropdown--refresh {
+    color: $accent-color;
+  }
+
+  .carousel__action {
+    margin-right: 10px;
     color: white;
 
     .fa {

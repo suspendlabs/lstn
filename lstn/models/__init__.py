@@ -65,6 +65,7 @@ class User(db.Model, ModelMixin, UserMixin):
   queue = db.Column(db.String(255))
   picture = db.Column(db.String(32))
   points = db.Column(db.BigInteger)
+  region = db.Column(db.String(3))
   settings = db.Column(JSONEncodedDict())
   created_at = db.Column(db.DateTime, nullable=False, default=db.func.now())
 
@@ -131,7 +132,7 @@ class User(db.Model, ModelMixin, UserMixin):
       return []
 
     try:
-      playlists = rdio_manager.get([queue_id], ['tracks'])
+      playlists = rdio_manager.get([queue_id], ['trackKeys'])
     except Exception as e:
       current_app.logger.debug(e)
       raise APIException('Unable to retrieve your queue: %s' % str(e))
@@ -142,11 +143,25 @@ class User(db.Model, ModelMixin, UserMixin):
     playlist = playlists[0]
 
     queue = []
-    for track in playlist.tracks:
+    if not hasattr(playlist, 'track_keys') or len(playlist.track_keys) == 0:
+      return []
+
+    try:
+      tracks = rdio_manager.get(playlist.track_keys, ['radioKey', 'streamRegions'])
+    except Exception as e:
+      current_app.logger.debug(e)
+      raise APIException('Unable to retrieve your queue: %s' % str(e))
+
+    trackDict = {}
+    for track in tracks:
       data = track._data
       data['in_queue'] = 1
 
-      queue.append(data)
+      trackDict[track.key] = data
+
+    queue = []
+    for trackKey in playlist.track_keys:
+      queue.append(trackDict[trackKey])
 
     return queue
 

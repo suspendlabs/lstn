@@ -61,7 +61,7 @@ def auth():
   if not auth or 'oauth_token' not in auth or 'oauth_token_secret' not in auth:
     raise WebException('Missing authentication response from Rdio', 500)
 
-  rdio_user = rdio_manager.current_user()
+  rdio_user = rdio_manager.current_user(['streamRegion'])
   if not rdio_user:
     raise WebException('Unable to retrieve user information from Rdio', 500)
 
@@ -74,18 +74,20 @@ def auth():
       profile=rdio_user.url,
       picture=rdio_user._data['icon250'],
       points=0,
+      region=rdio_user._data['streamRegion'],
       oauth_token=auth['oauth_token'],
       oauth_token_secret=auth['oauth_token_secret'],
     )
     db.session.add(user)
     db.session.commit()
   else:
-    user.name = rdio_user.name;
-    user.profile = rdio_user.url;
-    user.picture = rdio_user._data['icon250'];
-    user.oauth_token = auth['oauth_token'];
-    user.oauth_token_secret = auth['oauth_token_secret'];
-    db.session.add(user)
+    user.name = rdio_user.name
+    user.profile = rdio_user.url
+    user.picture = rdio_user._data['icon250']
+    user.region = rdio_user._data['streamRegion']
+    user.oauth_token = auth['oauth_token']
+    user.oauth_token_secret = auth['oauth_token_secret']
+
     db.session.commit()
 
   if not user:

@@ -19,23 +19,22 @@ def get_tracks(album_id):
     current_user.oauth_token,
     current_user.oauth_token_secret)
 
-  tracks = []
-
   try:
-    albums = rdio_manager.get([album_id], ['tracks', 'radioKey'])
+    albums = rdio_manager.get([album_id], ['trackKeys'])
   except Exception as e:
     current_app.logger.debug(e)
     raise APIException('Unable to retrieve albums: %s' % str(e))
 
+  tracks = []
+
   if len(albums) > 0:
     if hasattr(albums[0], 'track_keys') and len(albums[0].track_keys) > 0:
       try:
-        tracks = rdio_manager.get(albums[0].track_keys)
+        tracks = rdio_manager.get(albums[0].track_keys, ['radioKey', 'streamRegions'])
       except Exception as e:
         current_app.logger.debug(e)
         raise APIException('Unable to retrieve album tracks: %s' % str(e))
 
-      if len(tracks) > 0:
-        tracks = [track._data for track in tracks]
+      tracks = [track._data for track in tracks]
 
   return jsonify(success=True, data=tracks)

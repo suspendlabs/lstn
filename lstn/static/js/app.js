@@ -9,6 +9,7 @@ angular.module('lstn', [
   'btford.socket-io',
   'mentio',
   'linkify',
+  'angular.screenmatch',
   'lstn.config',
   'lstn.services',
   'lstn.controllers',
@@ -47,6 +48,10 @@ angular.module('lstn', [
   $locationProvider.html5Mode(true);
 
   $logProvider.debugEnabled(true);
+
+  emojione.imageType = 'svg';
+  emojione.sprites = true;
+  emojione.imagePathSVGSprites = '/bower_components/emojione/assets/sprites/emojione.sprites.svg';
 }])
 
 .run(['$rootScope', function($rootScope) {

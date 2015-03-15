@@ -3,71 +3,65 @@
     <a data-ng-click="current.clear()">
       <i class="fa fa-fw fa-times-circle-o"></i> Clear Search Results
     </a>
-    <div class="carousel__refresh pull-right" data-ng-show="current.loading">
+    <div class="carousel__action pull-right" data-ng-show="current.loading">
       <i class="fa fa-circle-o-notch fa-lg fa-spin"></i>
     </div>
   </div>
 
   <lstn-drilldown-back
     data-ng-if="current.position > 0"
-    data-text="current.name"
     data-click-handler="close"
     data-refresh-handler="refresh"
-    data-loading="current.loading"></lstn-drilldown-back>
+    data-bulk-add-handler="addTracks"
+    data-current="current"></lstn-drilldown-back>
   <ul class="drilldown__list text-left">
     <li data-ng-repeat="item in data">
       <div data-ng-switch="getType(item.type)">
         <lstn-category
           data-ng-switch-when="category"
-          data-context="context"
+          data-context="{{ current.type }}"
           data-category="item"
           data-load="load"></lstn-category>
 
         <lstn-playlist-type
           data-ng-switch-when="playlistType"
-          data-context="context"
+          data-context="{{ current.type }}"
           data-playlist-type="item"
-          data-index="$index"
           data-load="load"></lstn-playlist-type>
 
         <lstn-station-type
           data-ng-switch-when="stationType"
-          data-context="context"
+          data-context="{{ current.type }}"
           data-station-type="item"
-          data-index="$index"
           data-load="load"></lstn-station-type>
 
         <lstn-playlist
           data-ng-switch-when="playlist"
-          data-context="context"
+          data-context="{{ current.type }}"
           data-playlist="item"
-          data-index="$index"
           data-load="load"></lstn-playlist>
 
         <lstn-station
           data-ng-switch-when="station"
-          data-context="context"
+          data-context="{{ current.type }}"
           data-station="item"
-          data-index="$index"
           data-load="load"></lstn-station>
 
         <lstn-album
           data-ng-switch-when="album"
-          data-context="context"
+          data-context="{{ current.type }}"
           data-album="item"
-          data-index="$index"
           data-load="load"></lstn-album>
 
         <lstn-artist
           data-ng-switch-when="artist"
-          data-context="context"
+          data-context="{{ current.type }}"
           data-artist="item"
-          data-index="$index"
           data-load="load"></lstn-artist>
 
         <lstn-track
           data-ng-switch-when="track"
-          data-context="context"
+          data-context="{{ current.type }}"
           data-track="item"
           data-index="$index"></lstn-track>
       </div>

@@ -125,7 +125,7 @@ img.avatar.lg {
 }
 
 body {
-  font-family: "proxima-nova", sans-serif;
+  font-family: 'proxima-nova', sans-serif;
   background-color: #333;
 }
 body > .container {
@@ -179,7 +179,8 @@ body > .container > div {
 }
 
 .navbar-logo {
-  font-family: 'signo';
+  font-family: 'proxima-nova';
+  font-weight: 600;
   font-size: 1.8em;
   color: #FFFFFF;
   text-decoration: none;
@@ -198,14 +199,17 @@ body > .container > div {
   color: #FFFFFF;
 }
 .navbar-right.navbar--login {
-  margin-right: 5px;
+  margin-right: 15px;
+}
+.navbar-right.navbar--login a {
+  margin-top: 18px;
 }
 .navbar-right .navbar__divider {
   margin-left: -10px;
   margin-right: -10px;
 }
 .navbar-right .navbar__room a {
-  font-weight: bold;
+  font-weight: 600;
 }
 .navbar-right .navbar__photo {
   border: 2px solid #FFFFFF;
@@ -332,11 +336,11 @@ body > .container > div {
 }
 .playing__meta .playing__title {
   margin-top: 1em;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 22px;
 }
 .playing__meta .playing__artist {
-  font-weight: 100;
+  font-weight: 400;
 }
 
 .playing__controls {
@@ -472,13 +476,11 @@ body > .container > div {
 }
 .queue__tabs .nav-tabs {
   height: 36px;
+  border-bottom: 1px solid #3d3d3d;
 }
 .queue__tabs .nav-tabs > li {
-  width: 33%;
+  width: 33.33%;
   background-color: #3d3d3d;
-}
-.queue__tabs .nav-tabs > li:last-child {
-  width: 34%;
 }
 .queue__tabs .nav-tabs > li:hover {
   background-color: #303030;
@@ -501,7 +503,7 @@ body > .container > div {
   text-align: center;
   background: none;
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .tab-content {
@@ -660,7 +662,7 @@ body > .container > div {
 }
 
 .chat__track {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .chat__artist {
@@ -695,7 +697,7 @@ body > .container > div {
   cursor: pointer;
 }
 .item__info .item__title {
-  font-weight: bold;
+  font-weight: 600;
   font-size: 16px;
   width: 100%;
   white-space: nowrap;
@@ -720,6 +722,9 @@ body > .container > div {
   margin-right: 15px;
   line-height: 50px;
 }
+.item__actions a {
+  cursor: pointer;
+}
 .item__actions .dropdown-menu {
   font-size: 12px;
   cursor: pointer;
@@ -731,7 +736,6 @@ body > .container > div {
   padding: 3px 5px;
 }
 .item__actions .fa {
-  cursor: pointer;
   color: #d24242;
   text-decoration: none;
   font-size: 1.25em;
@@ -884,17 +888,30 @@ footer .container .text-muted {
   border-color: #FFFFFF;
 }
 
+svg.emojione {
+  height: 16px;
+  min-height: 16px;
+}
+
 .chat__message {
   min-height: 60px;
   background-color: #eee;
   padding: 0;
   border-bottom: 2px solid #3d3d3d;
-  font-weight: 700;
+  font-weight: 600;
+}
+
+div.chat__message--message {
+  background-color: #FFFFFF;
+  border-right: 2px solid #d24242;
+}
+div.chat__message--message div.item__title {
+  width: calc(100% + 2px);
 }
 
 .chat__message__user {
   color: #333;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .chat__message--playing {
@@ -1014,19 +1031,34 @@ footer .container .text-muted {
   width: 100%;
   white-space: nowrap;
   text-overflow: ellipsis;
-  overflow: hidden;
+  overflow: visible;
 }
 .carousel__back a {
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 600;
   text-transform: uppercase;
   text-decoration: none;
 }
-.carousel__back .carousel__refresh {
-  padding-right: 10px;
+.carousel__back .dropdown-menu {
+  font-size: 12px;
+}
+.carousel__back .dropdown-menu li a {
+  cursor: pointer;
+  text-transform: none;
+  font-weight: 400;
+  padding: 3px 5px;
+}
+.carousel__back .carousel__dropdown--add {
+  color: #5cb85c;
+}
+.carousel__back .carousel__dropdown--refresh {
+  color: #3d3d3d;
+}
+.carousel__back .carousel__action {
+  margin-right: 10px;
   color: white;
 }
-.carousel__back .carousel__refresh .fa {
+.carousel__back .carousel__action .fa {
   font-size: 1.25em;
 }
 

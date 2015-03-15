@@ -74,12 +74,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     };
 
     Favorite.addTrack = function(track) {
-      track.addingToFavorites = true;
+      track.loading = true;
 
-      CurrentUser.addToFavorites({
+      return CurrentUser.addToFavorites({
         id: track.key
       }, function(response) {
-        track.addingToFavorites = false;
+        track.loading = false;
         if (!response || !response.success) {
           Alert.error('Something went wrong while trying to add the track to your favorites.');
           return;
@@ -87,17 +87,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
         Favorite.bitset[track.key] = true;
       }, function(response) {
-        track.addingToFavorites = false;
+        track.loading = false;
         Alert.error('Something went wrong while trying to add the track to your favorites.');
-      });
+      }).$promise;
     };
 
     Favorite.removeTrack = function(track) {
-      track.removingFromFavorites = true;
-      CurrentUser.removeFromFavorites({
+      track.loading = true;
+
+      return CurrentUser.removeFromFavorites({
         id: track.key
       }, function(response) {
-        track.removingFromFavorites = false;
+        track.loading = false;
         if (!response || !response.success) {
           Alert.error('Something went wrong while trying to remove the track from your favorites.');
           return;
@@ -105,9 +106,9 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
         delete Favorite.bitset[track.key];
       }, function(response) {
-        track.removingFromFavorites = false;
+        track.loading = false;
         Alert.error('Something went wrong while trying to remove the track from your favorites.');
-      });
+      }).$promise;
     };
 
     return Favorite;
@@ -123,13 +124,32 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       loading: true
     };
 
-    Queue.addTrack = function(track, position) {
-      track.addingToQueue = true;
+    Queue.addTracks = function(tracks, position) {
+      return CurrentUser.addToQueue({
+        tracks: tracks
+      }, function(response) {
+        if (!response || !response.success || !response.queue) {
+          Alert.error('Something went wrong while trying to add the tracks to your queue.');
+          return;
+        }
 
-      CurrentUser.addToQueue({
+        Queue.tracks = response.queue;
+
+        if (position === 'top') {
+          Queue.moveToTop(Queue.tracks.length - tracks.length, tracks.length);
+        }
+      }, function(response) {
+        Alert.error('Something went wrong while trying to add the track to your queue.');
+      }).$promise;
+    };
+
+    Queue.addTrack = function(track, position) {
+      track.loading = true;
+
+      return CurrentUser.addToQueue({
         id: track.key
       }, function(response) {
-        track.addingToQueue = false;
+        track.loading = false;
         if (!response || !response.success || !response.queue) {
           Alert.error('Something went wrong while trying to add the track to your queue.');
           return;
@@ -141,18 +161,19 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           Queue.moveToTop(Queue.tracks.length - 1);
         }
       }, function(response) {
-        track.addingToQueue = false;
+        track.loading = false;
         Alert.error('Something went wrong while trying to add the track to your queue.');
-      });
+      }).$promise;
     };
 
     Queue.removeTrack = function(track, index) {
-      track.removingFromQueue = true;
-      CurrentUser.removeFromQueue({
+      track.loading = true;
+
+      return CurrentUser.removeFromQueue({
         id: track.key,
         index: index
       }, function(response) {
-        track.removingFromQueue = false;
+        track.loading = false;
         if (!response || !response.success || !response.queue) {
           Alert.error('Something went wrong while trying to remove the track from your queue.');
           return;
@@ -160,21 +181,27 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
         Queue.tracks = response.queue;
       }, function(response) {
-        track.removingFromQueue = false;
+        track.loading = false;
         Alert.error('Something went wrong while trying to remove the track from your queue.');
-      });
+      }).$promise;
     };
 
-    Queue.moveToTop = function(index) {
-      var tracks = Queue.tracks.splice(index, 1);
+    Queue.moveToTop = function(index, length) {
+      length = length || 1;
+
+      var tracks = Queue.tracks.splice(index, length);
       if (!tracks || tracks.length === 0) {
         Alert.error('Something went wrong while trying to move the track to the top of your queue.');
         return;
       }
 
-      Queue.tracks.unshift(tracks[0]);
+      // Add the splice arguments to the front of the track list
+      tracks.splice(0, 0, 0, 0);
 
-      CurrentUser.updateQueue({
+      // Add the tracks to the top of the queue
+      Array.prototype.splice.apply(Queue.tracks, tracks);
+
+      return CurrentUser.updateQueue({
         queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
@@ -183,7 +210,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         }
       }, function(response) {
         Alert.error('Something went wrong while trying to move the track to the top of your queue.');
-      });
+      }).$promise;
     };
 
     Queue.moveToBottom = function(index) {
@@ -195,7 +222,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
       Queue.tracks.push(tracks[0]);
 
-      CurrentUser.updateQueue({
+      return CurrentUser.updateQueue({
         queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
@@ -204,7 +231,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         }
       }, function(response) {
         Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
-      });
+      }).$promise;
     };
 
     Queue.toggleShuffle = function() {
@@ -218,7 +245,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
       Queue.tracks = [];
 
-      CurrentUser.clearQueue({
+      return CurrentUser.clearQueue({
         queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
@@ -227,7 +254,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         }
       }, function(response) {
         Alert.error('Something went wrong while trying to clear your queue.');
-      });
+      }).$promise;
     };
 
     return Queue;
@@ -330,25 +357,57 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   return socket;
 }])
 
-.factory('CurrentRoom', ['$resource', function($resource) {
-  var Room = {
-    id: 0,
-    name: null,
-    slug: null
-  };
+.factory('CurrentRoom', [
+  function() {
+    var Room = {
+      id: 0,
+      name: null,
+      slug: null,
+      regions: ['US', 'CA']
+    };
 
-  Room.update = function(room) {
-    $.extend(this, this, room);
-  };
+    var regionListeners = {};
+    
+    Room.update = function(room) {
+      $.extend(this, this, room);
+    };
 
-  Room.clear = function() {
-    this.id = 0;
-    this.name = null;
-    this.slug = null;
-  };
+    Room.clear = function() {
+      this.id = 0;
+      this.name = null;
+      this.slug = null;
+      this.regions = ['US', 'CA'];
+    };
 
-  return Room;
-}])
+    Room.setRegions = function(regions) {
+      regions = regions || [];
+      
+      // Always set US and CA
+      regions.push('US');
+      regions.push('CA');
+
+      this.regions = regions;
+
+      Object.keys(regionListeners).forEach(function(id) {
+        regionListeners[id]();
+      });
+    };
+
+    Room.addRegionListener = function(id, callback) {
+      regionListeners[id] = callback;
+    };
+
+    Room.removeRegionListener = function(id) {
+      if (!(id in regionListeners)) {
+        return;
+      }
+
+      delete regionListeners[id];
+    };
+
+    return Room;
+  }
+])
 
 .factory('Room', ['$resource', function($resource) {
   var Room = $resource('/api/room/:id/:action/:target', {
@@ -486,26 +545,28 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   return CurrentUser;
 }])
 
-.factory('Playlist', ['$resource', function($resource) {
-  var Playlist = $resource('/api/playlist/:id/:action', {
-    id: '@id'
-  },{
-    tracks: {
-      method: 'GET',
-      params: {
-        action: 'tracks'
+.factory('Playlist', ['$resource',
+  function($resource) {
+    var Playlist = $resource('/api/playlist/:id/:action', {
+      id: '@id'
+    },{
+      tracks: {
+        method: 'GET',
+        params: {
+          action: 'tracks'
+        }
       }
-    }
-  });
+    });
 
-  Playlist.getTracks = function(playlist) {
-    return this.tracks({
-      id: playlist
-    }).$promise;
-  };
+    Playlist.getTracks = function(playlist) {
+      return this.tracks({
+        id: playlist
+      }).$promise;
+    };
 
-  return Playlist;
-}])
+    return Playlist;
+  }
+])
 
 .factory('Artist', ['$resource', function($resource) {
   var Artist = $resource('/api/artist/:id/:action', {
@@ -581,6 +642,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   rr: 'station'
 })
 
+.constant('RdioName', {
+  r: 'Artist',
+  a: 'Album',
+  t: 'Track',
+  p: 'Playlist',
+  tp: 'Station',
+  h: 'Station',
+  gr: 'Station',
+  rr: 'Station'
+})
+
+
 .constant('Category', {
   playlists: 'Playlists',
   stations: 'Stations'
@@ -602,14 +675,15 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 .factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album',
   function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album) {
     var Loader = {
-      toResponse: function(object, type) {
+      toResponse: function(object, type, constant) {
         var data = [];
 
         angular.forEach(object, function(value, key) {
           this.push({
             key: key,
             name: value,
-            type: type
+            type: type,
+            constant: constant
           });
         }, data);
 
@@ -621,7 +695,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       search: function(query) {
         if (!query || query.length < 3) {
           var deferred = $q.defer();
-          deferred.resolve(Loader.toResponse([], 'searchResult'));
+          deferred.resolve(Loader.toResponse([], 'searchResult', true));
           return deferred.promise;
         }
 
@@ -631,7 +705,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       },
       music: function(key) {
         var deferred = $q.defer();
-        deferred.resolve(Loader.toResponse(Category, 'category'));
+        deferred.resolve(Loader.toResponse(Category, 'category', true));
         return deferred.promise;
       },
       category: function(key) {

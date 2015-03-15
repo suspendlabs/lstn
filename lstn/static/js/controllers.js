@@ -3,7 +3,7 @@
 
 angular.module('lstn.controllers', [])
 
-.controller('AppController', ['$scope', '$modal', 'Alert', 'CurrentRoom', 'CurrentUser',
+.controller('AppController', ['$scope', '$modal', '$log', 'Alert', 'CurrentRoom', 'CurrentUser',
   function($scope, $modal, $log, Alert, CurrentRoom, CurrentUser) {
     $scope.$on('socket:error', function(ev, data) {
       $log.debug('socket:error', ev, data);
@@ -129,8 +129,8 @@ angular.module('lstn.controllers', [])
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert',
-  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert', 'screenmatch',
+  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert, screenmatch) {
     var promises = {};
     var timeouts = {};
 
@@ -171,9 +171,12 @@ angular.module('lstn.controllers', [])
         $timeout.cancel(promise);
       });
 
-      $scope.currentRoom.clear();
+      $scope.room.clear();
       $scope.alerts.clear();
     });
+
+    // Screen size
+    $scope.mobile = screenmatch.bind('xs, sm', $scope);
 
     // Notifications
     $scope.notificationPermission = 'default';
@@ -250,6 +253,8 @@ angular.module('lstn.controllers', [])
       $scope.roster = data;
       $scope.roster.controllersCount = $scope.roster.controllerOrder.length;
       $scope.roster.usersCount = Object.keys($scope.roster.users).length;
+
+      $scope.room.setRegions($scope.roster.regions);
     });
 
     socket.on('room:controller:playing:request', function(data) {

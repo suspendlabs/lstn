@@ -1,11 +1,7 @@
 (function() {
 'use strict';
 
-angular.module('lstn.directives', ['sc.twemoji'])
-.config(['twemojiProvider', function(twemojiProvider) {
-  twemojiProvider.setOptions({ size: 16 });
-}])
-
+angular.module('lstn.directives', [])
 .directive('lstnEnter', function() {
   return function($scope, $element, $attrs) {
     $element.bind('keydown keypress', function(event) {
@@ -13,8 +9,8 @@ angular.module('lstn.directives', ['sc.twemoji'])
         return;
       }
 
-      var mentionMenuVisible = $('#mention-menu').is(':visible');
-      var emoticonMenuVisible = $('#emoticon-menu').is(':visible');
+      var mentionMenuVisible = $('#mention-menu-' + $scope.$id).is(':visible');
+      var emoticonMenuVisible = $('#emoticon-menu-' + $scope.$id).is(':visible');
 
       if (!mentionMenuVisible && !emoticonMenuVisible) {
         $scope.$apply(function() {
@@ -66,7 +62,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
           sender: $scope.current_user.id,
           user: $scope.current_user,
           text: null,
-          type: 'message',
+          type: 'message'
         };
 
         $scope.sendMessage = function() {
@@ -286,7 +282,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
 
         $scope.searchRoot = {
           key: 's',
-          name: 'Search',
+          name: 'Search Results',
           type: 'search',
           position: 0,
           clear: function() {
@@ -325,18 +321,52 @@ angular.module('lstn.directives', ['sc.twemoji'])
   }
 ])
 
-.directive('lstnDrilldownBack', [
-  function() {
+.directive('lstnDrilldownBack', ['RdioType', 'RdioName',
+  function(RdioType, RdioName) {
     return {
       restrict: 'E',
       replace: true,
       scope: {
-        text: '=',
-        clickHandler: '=',
-        refreshHandler: '=',
-        loading: '=',
+        current: '=',
+        clickHandler: '=?',
+        refreshHandler: '=?',
+        bulkAddHandler: '=?'
       },
-      templateUrl: '/static/partials/directives/drilldown-back.html'
+      templateUrl: '/static/partials/directives/drilldown-back.html',
+      link: function($scope, $element, $attrs) {
+        $scope.name = '';
+        if ($scope.current.type in RdioName) {
+          $scope.name = RdioName[$scope.current.type];
+        }
+
+        $scope.status = {
+          open: false
+        };
+
+        $scope.showMenu = function() {
+          if (!$scope.current) {
+            return false;
+          }
+
+          if (!$scope.bulkAddHandler) {
+            return;
+          }
+
+          var type = $scope.current.type;
+          if (type in RdioType) {
+            type = RdioType[type];
+          }
+
+          return type === 'playlist' || type === 'album' || type === 'station';
+        };
+
+        $scope.toggleDropdown = function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          $scope.status.open = !$scope.status.open;
+        };
+      }
     };
   }
 ])
@@ -349,7 +379,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         category: '=',
         load: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/category.html'
     };
@@ -364,8 +394,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         playlistType: '=',
         load: '=',
-        index: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/playlist-type.html'
     };
@@ -380,8 +409,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         playlist: '=',
         load: '=',
-        index: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/playlist.html'
     };
@@ -396,8 +424,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         artist: '=',
         load: '=',
-        index: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/artist.html'
     };
@@ -412,28 +439,48 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         album: '=',
         load: '=',
-        index: '=',
-        context: '=?'
+        context: '@'
       },
       templateUrl: '/static/partials/directives/album.html'
     };
   }
 ])
 
-.directive('lstnTrack', ['Queue', 'Favorite',
-  function(Queue, Favorite) {
+.directive('lstnTrack', ['Queue', 'Favorite', 'CurrentRoom',
+  function(Queue, Favorite, CurrentRoom) {
     return {
       restrict: 'E',
       replace: true,
       scope: {
         track: '=',
         index: '=',
-        context: '=?'
+        context: '@',
+        count: '='
       },
       templateUrl: '/static/partials/directives/track.html',
       link: function($scope, $element, $attrs) {
         $scope.queue = Queue;
         $scope.favorites = Favorite;
+
+        // Init the restricted regions flag
+        var initRegions = function() {
+          if (!$scope.track.streamRegions) {
+            return;
+          }
+
+          var missing = $(CurrentRoom.regions).not($scope.track.streamRegions).get();
+          $scope.track.restrictedRegions = missing.length > 0;
+        };
+
+        initRegions();
+
+        // Registery to get region updates from the room service
+        var listenerId = $scope.$id;
+        CurrentRoom.addRegionListener(listenerId, $.proxy(function() {
+          initRegions();
+        }, this));
+
+        // Handle the Track dropdown
         $scope.status = {
           open: false
         };
@@ -459,6 +506,11 @@ angular.module('lstn.directives', ['sc.twemoji'])
 
           $scope.status.open = !$scope.status.open;
         };
+
+        // Handle the destroy event
+        $scope.$on('$destory', function() {
+          CurrentRoom.removeRegionListener(listenerId);
+        });
       }
     };
   }
@@ -472,8 +524,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
       scope: {
         stationType: '=',
         load: '=',
-        index: '=',
-        context: '='
+        context: '@'
       },
       templateUrl: '/static/partials/directives/station-type.html'
     };
@@ -487,10 +538,9 @@ angular.module('lstn.directives', ['sc.twemoji'])
       replace: true,
       scope: {
         load: '=',
-        context: '=?',
+        context: '@',
         station: '=?',
-        radio: '=?',
-        index: '=?'
+        radio: '=?'
       },
       templateUrl: '/static/partials/directives/station.html',
       link: function($scope, $element, $attrs) {
@@ -525,32 +575,16 @@ angular.module('lstn.directives', ['sc.twemoji'])
       restrict: 'E',
       replace: true,
       scope: {
-        message: '=',
-        index: '='
+        message: '='
       },
       templateUrl: '/static/partials/directives/chat-message.html',
       link: function($scope, $element, $attrs) {
-        var messageClasses = {
-          playing: 'list-group-item-warning',
-          skipped: 'list-group-item-danger',
-          upvote: 'list-group-item-success',
-          downvote: 'list-group-item-danger'
-        };
-
         $scope.getMessageClass = function() {
           if (!$scope.message) {
             return null;
           }
 
-          if ($scope.message.sender === $scope.current_user.id && $scope.message.type === 'message') {
-            return 'list-group-item-info';
-          }
-
-          if (!($scope.message.type in messageClasses)) {
-            return null;
-          }
-
-          return messageClasses[$scope.message.type];
+          return 'chat__message--' + $scope.message.type;
         };
       }
     };
@@ -611,7 +645,7 @@ angular.module('lstn.directives', ['sc.twemoji'])
     replace: true,
     scope: {
       root: '=',
-      context: '=?'
+      context: '@'
     },
     templateUrl: '/static/partials/directives/carousel.html',
     link: function($scope, $element, $attrs) {
@@ -664,82 +698,110 @@ angular.module('lstn.directives', ['sc.twemoji'])
   };
 }])
 
-.directive('lstnSlide', ['Promise', 'Alert', 'Loader', 'RdioType', function(Promise, Alert, Loader, RdioType) {
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: {
-      load: '=',
-      close: '=',
-      current: '=',
-      context: '=?'
-    },
-    templateUrl: '/static/partials/directives/slide.html',
-    link: function($scope, $element, $attrs) {
-      var request = null;
+.directive('lstnSlide', ['Promise', 'Alert', 'Loader', 'RdioType', 'Queue',
+  function(Promise, Alert, Loader, RdioType, Queue) {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: {
+        load: '=',
+        close: '=',
+        current: '=',
+        context: '@'
+      },
+      templateUrl: '/static/partials/directives/slide.html',
+      link: function($scope, $element, $attrs) {
+        var request = null;
 
-      // If the current slide's key changes, reload the data
-      $scope.$watch('current.key', function(newVal, oldVal) {
-        if (newVal === oldVal) {
-          return;
-        }
+        $scope.addTracks = function(tracks, position) {
+          $scope.current.loading = true;
+          request = Queue.addTracks(tracks, position).then(function(response) {
+            $scope.current.loading = false;
+          }, function(response) {
+            $scope.current.loading = false;
+          });
+        };
 
-        if (!newVal) {
-          return;
-        }
+        // If the current slide's key changes, reload the data
+        $scope.$watch('current.key', function(newVal, oldVal) {
+          if (newVal === oldVal) {
+            return;
+          }
 
-        $scope.refresh();
-      });
+          if (!newVal) {
+            return;
+          }
 
-      $scope.refresh = function() {
-        if (!$scope.current) {
-          return;
-        }
+          $scope.refresh();
+        });
 
-        $scope.current.loading = true;
+        // Reload the data
+        $scope.refresh = function() {
+          if (!$scope.current) {
+            return;
+          }
 
-        // Cancel the current request
-        if (request) {
-          Promise.cancel(request);
-        }
+          $scope.current.loading = true;
 
-        request = $scope.current.promise = Loader.load($scope.current);
-        if (!request) {
-          Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
-          return;
-        }
+          // Cancel the current request
+          if (request) {
+            Promise.cancel(request);
+          }
 
-        request.then(function(response) {
-          $scope.current.loading = false;
-
-          if (!response || !response.success || !response.data) {
+          request = $scope.current.promise = Loader.load($scope.current);
+          if (!request) {
             Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
             return;
           }
 
-          $scope.data = response.data;
-        }, function(response) {
-          $scope.current.loading = false;
-          Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
-          return;
+          request.then(function(response) {
+            $scope.current.loading = false;
+
+            if (!response || !response.success || !response.data) {
+              Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
+              return;
+            }
+
+            $scope.data = response.data;
+
+            $scope.current.keys = [];
+            if (response.data) {
+              response.data.forEach(function(entry) {
+                if (!entry || !entry.key) {
+                  return;
+                }
+
+                if ('canStream' in entry && !entry.canStream) {
+                  return;
+                }
+
+                $scope.current.keys.push(entry.key);
+              });
+            }
+          }, function(response) {
+            $scope.current.loading = false;
+            Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
+            return;
+          });
+        };
+
+        $scope.refresh();
+
+        // Translate the Rdio type to a Lstn type
+        $scope.getType = function(type) {
+          if (!(type in RdioType)) {
+            return type;
+          }
+
+          return RdioType[type];
+        };
+
+        $scope.$on('$destroy', function() {
+          Promise.cancel(request);
         });
-      };
-
-      $scope.refresh();
-
-      $scope.getType = function(type) {
-        if (!(type in RdioType)) {
-          return type;
-        }
-
-        return RdioType[type];
-      };
-
-      $scope.$on('$destroy', function() {
-        Promise.cancel(request);
-      });
-    }
-  };
-}]);
+      }
+    };
+  }
+]);
 
 })();

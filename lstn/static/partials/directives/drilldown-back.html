@@ -1,17 +1,44 @@
 <div class="carousel__back text-left">
   <a data-ng-click="clickHandler()">
-    <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="text" data-tooltip="Back" data-tooltip-placement="right"></span>
+    <i class="fa fa-fw fa-chevron-left"></i><span data-ng-bind="current.name" data-tooltip="Back" data-tooltip-placement="right"></span>
   </a>
-  <a class="carousel__refresh pull-right" data-ng-click="refreshHandler()" data-ng-show="refreshHandler">
+
+  <div class="pull-right">
+    <a data-ng-click="refreshHandler()" class="carousel__action" data-ng-show="!showMenu() && !current.loading && !current.constant">
+      <i class="fa fa-fw fa-refresh fa-lg"></i>
+    </a>
+
+    <span class="dropdown" data-dropdown data-is-open="status.open">
+      <a
+        class="fa fa-fw fa-ellipsis-v carousel__action"
+        data-ng-hide="current.loading || !showMenu()"
+        data-ng-click="toggleDropdown($event)"></a>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <li>
+          <a data-ng-click="bulkAddHandler(current.keys, 'top')">
+            <i class="fa fa-fw fa-plus-circle carousel__dropdown--add"></i>
+            Add All to Top of Queue
+          </a>
+        </li>
+        <li>
+          <a data-ng-click="bulkAddHandler(current.keys)">
+            <i class="fa fa-fw fa-plus-circle carousel__dropdown--add"></i>
+            Add All to Bottom of Queue
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+          <a data-ng-click="refreshHandler()" data-ng-show="refreshHandler">
+            <i class="fa fa-fw fa-refresh carousel__dropdown--refresh"></i>
+            Refresh {{ name }}
+          </a>
+        </li>
+      </ul>
+    </span>
     <i
-      class="fa fa-fw fa-refresh"
-      data-ng-show="!loading"
-      data-tooltip="Refresh"
-      data-tooltip-placement="left"></i>
-    <i
-      class="fa fa-fw fa-circle-o-notch fa-spin"
-      data-ng-show="loading"
+      class="fa fa-fw fa-circle-o-notch fa-spin fa-lg carousel__action"
+      data-ng-show="current.loading"
       data-tooltip="Refreshing"
       data-tooltip-placement="left"></i>
-  </a>
+  </div>
 </div>

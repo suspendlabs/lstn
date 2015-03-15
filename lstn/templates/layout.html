@@ -43,6 +43,7 @@
   <!-- build:css /css/vendor.css -->
   <link rel="stylesheet" href="bower_components/snackbarjs/dist/snackbar.min.css" />
   <link rel="stylesheet" href="bower_components/snackbarjs/themes-css/material.css" />
+  <link rel="stylesheet" href="bower_components/emojione/assets/css/emojione.min.css" />
   <!-- endbuild -->
 
   <!-- build:css /css/lstn.css -->
@@ -87,9 +88,9 @@
             </li>
           </ul>
           <% else %>
-          <ul class="nav navbar-nav navbar-right navbar--login">
-            <li><p><a class="btn btn-success navbar-btn" href="/login" target="_self">Login</a></p></li>
-          </ul>
+          <div class="nav navbar-right navbar--login">
+            <a class="btn btn-success navbar-btn" href="/login" target="_self">Login</a>
+          </div>
           <% endif %>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
@@ -115,11 +116,14 @@
   <script src="bower_components/angular-ui-sortable/sortable.js"></script>
   <script src="bower_components/moment/moment.js"></script>
   <script src="bower_components/ment.io/dist/mentio.js"></script>
-  <script src="bower_components/angular-twemoji/dist/angular-twemoji.min.js"></script>
   <script src="bower_components/angular-emoji-map/angular-emoji-map.js"></script>
   <script src="bower_components/angular-linkify/angular-linkify.js"></script>
+  <script src="bower_components/svg4everybody/svg4everybody.min.js"></script>
+  <script src="bower_components/svg4everybody/svg4everybody.ie8.min.js"></script>
+  <script src="bower_components/angular-screenmatch/dist/angular-screenmatch.min.js"></script>
   <!-- endbower -->
   <script src="bower_components/snackbarjs/dist/snackbar.min.js"></script>
+  <script src="bower_components/emojione/lib/js/emojione.min.js"></script>
   <!-- endbuild -->
 
   <script src="/socket.io/socket.io.js"></script>

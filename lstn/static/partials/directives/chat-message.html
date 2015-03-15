@@ -1,6 +1,6 @@
-<div id="message-{{ $id }}-{{ index }}-{{ message.user }}" class="chat__message">
+<div id="message-{{ $id }}" class="chat__message" data-ng-class="getMessageClass()">
   <div class="chat__image item__image">
-    <img data-ng-src="{{ message.user.picture }}" src="http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg" />
+    <img data-ng-src="{{ message.user.picture }}" src="/images/no-image.png" />
   </div>
   <div class="chat__user-info item__info">
     <div class="item__title">
@@ -16,7 +16,7 @@
       <div class="chat__timestamp text-muted" data-time-from-now="message.created"></div>
     </div>
     <div class="chat__message__message" data-ng-if="message.type === 'message'">
-      <div class="wordwrap" data-ng-bind-html="message.text|linkify|twemoji"></div>
+      <div class="wordwrap" data-ng-bind-html="message.text|linkify|emojione"></div>
     </div>
     <div class="chat__track-info text-muted" data-ng-if="message.type !== 'message'">
       <div class="chat__track text-truncate">

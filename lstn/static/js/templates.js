@@ -2,7 +2,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   'use strict';
 
   $templateCache.put('/static/partials/directives/album.html',
-    "<div id=\"album-{{ $id }}-{{ index }}-{{ album.key }}\" class=\"drilldown__item album\">\n" +
+    "<div id=\"album-{{ $id }}\" class=\"drilldown__item album\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <img data-ng-src=\"{{ album.icon }}\" alt=\"{{ album.album }}\">\n" +
     "  </div>\n" +
@@ -35,7 +35,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/artist.html',
-    "<div id=\"artist-{{ $id }}-{{ index }}-{{ artist.key }}\" class=\"drilldown__item artist clearfix\">\n" +
+    "<div id=\"artist-{{ $id }}\" class=\"drilldown__item artist clearfix\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <img data-ng-src=\"{{ artist.icon }}\" alt=\"{{ artist.artist }}\">\n" +
     "  </div>\n" +
@@ -111,9 +111,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/chat-message.html',
-    "<div id=\"message-{{ $id }}-{{ index }}-{{ message.user }}\" class=\"chat__message\">\n" +
+    "<div id=\"message-{{ $id }}\" class=\"chat__message\" data-ng-class=\"getMessageClass()\">\n" +
     "  <div class=\"chat__image item__image\">\n" +
-    "    <img data-ng-src=\"{{ message.user.picture }}\" src=\"http://rdio3img-a.akamaihd.net/user/no-user-image-square.jpg\" />\n" +
+    "    <img data-ng-src=\"{{ message.user.picture }}\" src=\"/images/no-image.png\" />\n" +
     "  </div>\n" +
     "  <div class=\"chat__user-info item__info\">\n" +
     "    <div class=\"item__title\">\n" +
@@ -129,7 +129,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"chat__message__message\" data-ng-if=\"message.type === 'message'\">\n" +
-    "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|linkify|twemoji\"></div>\n" +
+    "      <div class=\"wordwrap\" data-ng-bind-html=\"message.text|linkify|emojione\"></div>\n" +
     "    </div>\n" +
     "    <div class=\"chat__track-info text-muted\" data-ng-if=\"message.type !== 'message'\">\n" +
     "      <div class=\"chat__track text-truncate\">\n" +
@@ -147,20 +147,47 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/drilldown-back.html',
     "<div class=\"carousel__back text-left\">\n" +
     "  <a data-ng-click=\"clickHandler()\">\n" +
-    "    <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"text\" data-tooltip=\"Back\" data-tooltip-placement=\"right\"></span>\n" +
+    "    <i class=\"fa fa-fw fa-chevron-left\"></i><span data-ng-bind=\"current.name\" data-tooltip=\"Back\" data-tooltip-placement=\"right\"></span>\n" +
     "  </a>\n" +
-    "  <a class=\"carousel__refresh pull-right\" data-ng-click=\"refreshHandler()\" data-ng-show=\"refreshHandler\">\n" +
+    "\n" +
+    "  <div class=\"pull-right\">\n" +
+    "    <a data-ng-click=\"refreshHandler()\" class=\"carousel__action\" data-ng-show=\"!showMenu() && !current.loading && !current.constant\">\n" +
+    "      <i class=\"fa fa-fw fa-refresh fa-lg\"></i>\n" +
+    "    </a>\n" +
+    "\n" +
+    "    <span class=\"dropdown\" data-dropdown data-is-open=\"status.open\">\n" +
+    "      <a\n" +
+    "        class=\"fa fa-fw fa-ellipsis-v carousel__action\"\n" +
+    "        data-ng-hide=\"current.loading || !showMenu()\"\n" +
+    "        data-ng-click=\"toggleDropdown($event)\"></a>\n" +
+    "      <ul class=\"dropdown-menu dropdown-menu-right\" role=\"menu\">\n" +
+    "        <li>\n" +
+    "          <a data-ng-click=\"bulkAddHandler(current.keys, 'top')\">\n" +
+    "            <i class=\"fa fa-fw fa-plus-circle carousel__dropdown--add\"></i>\n" +
+    "            Add All to Top of Queue\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "        <li>\n" +
+    "          <a data-ng-click=\"bulkAddHandler(current.keys)\">\n" +
+    "            <i class=\"fa fa-fw fa-plus-circle carousel__dropdown--add\"></i>\n" +
+    "            Add All to Bottom of Queue\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "        <li class=\"divider\"></li>\n" +
+    "        <li>\n" +
+    "          <a data-ng-click=\"refreshHandler()\" data-ng-show=\"refreshHandler\">\n" +
+    "            <i class=\"fa fa-fw fa-refresh carousel__dropdown--refresh\"></i>\n" +
+    "            Refresh {{ name }}\n" +
+    "          </a>\n" +
+    "        </li>\n" +
+    "      </ul>\n" +
+    "    </span>\n" +
     "    <i\n" +
-    "      class=\"fa fa-fw fa-refresh\"\n" +
-    "      data-ng-show=\"!loading\"\n" +
-    "      data-tooltip=\"Refresh\"\n" +
-    "      data-tooltip-placement=\"left\"></i>\n" +
-    "    <i\n" +
-    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"loading\"\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin fa-lg carousel__action\"\n" +
+    "      data-ng-show=\"current.loading\"\n" +
     "      data-tooltip=\"Refreshing\"\n" +
     "      data-tooltip-placement=\"left\"></i>\n" +
-    "  </a>\n" +
+    "  </div>\n" +
     "</div>\n"
   );
 
@@ -168,7 +195,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/emoticon-list.html',
     "<ul class=\"list-group emoticon-list\">\n" +
     "  <li data-mentio-menu-item=\"emoticon\" data-ng-repeat=\"emoticon in items\" class=\"list-group-item\">\n" +
-    "    <span tooltip-placement=\"bottom\" tooltip=\"{{ emoticon.text }}\" data-ng-bind-html=\"emoticon.value|twemoji\"></span>\n" +
+    "    <span tooltip-placement=\"bottom\" tooltip=\"{{ emoticon.text }}\" data-ng-bind-html=\"emoticon.value|emojione\"></span>\n" +
     "  </li>\n" +
     "</ul>\n"
   );
@@ -297,11 +324,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-activity.html',
     "<div class=\"room-activity\">\n" +
     "  <input\n" +
-    "    id=\"chat-input\"\n" +
+    "    id=\"chat-input-{{ $id }}\"\n" +
     "    type=\"text\"\n" +
     "    placeholder=\"Send message...\"\n" +
     "    data-mentio\n" +
-    "    data-mentio-id=\"'chat-input'\"\n" +
     "    data-ng-trim=\"false\"\n" +
     "    class=\"form-control chat__input\"\n" +
     "    data-ng-show=\"!chat.loading\"\n" +
@@ -309,8 +335,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-lstn-enter=\"sendMessage()\"></input>\n" +
     "\n" +
     "  <mentio-menu\n" +
-    "    id=\"mention-menu\"\n" +
-    "    mentio-for=\"'chat-input'\"\n" +
+    "    id=\"mention-menu-{{ $id }}\"\n" +
+    "    class=\"mention-menu\"\n" +
+    "    mentio-for=\"'chat-input-' + $id\"\n" +
     "    mentio-trigger-char=\"'@'\"\n" +
     "    mentio-items=\"mentionNames\"\n" +
     "    mentio-template-url=\"/static/partials/directives/roster-mention.html\"\n" +
@@ -318,9 +345,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    mentio-select=\"getUser(item)\"></mentio-menu>\n" +
     "\n" +
     "  <mentio-menu\n" +
-    "    id=\"emoticon-menu\"\n" +
+    "    id=\"emoticon-menu-{{ $id }}\"\n" +
     "    class=\"emoticon-menu\"\n" +
-    "    mentio-for=\"'chat-input'\"\n" +
+    "    mentio-for=\"'chat-input-' + $id\"\n" +
     "    mentio-trigger-char=\"':'\"\n" +
     "    mentio-items=\"emoticons\"\n" +
     "    mentio-template-url=\"/static/partials/directives/emoticon-list.html\"\n" +
@@ -329,9 +356,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "\n" +
     "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading && chat.messages && chat.messages.length > 0\">\n" +
     "    <li data-ng-repeat=\"item in chat.messages\">\n" +
-    "      <lstn-chat-message\n" +
-    "        data-message=\"item\"\n" +
-    "        data-index=\"$index\"></lstn-chat-message>\n" +
+    "      <lstn-chat-message data-message=\"item\"></lstn-chat-message>\n" +
     "    </li>\n" +
     "  </ul>\n" +
     "  <div class=\"messages--empty\" data-ng-show=\"!chat.loading && (!chat.messages || chat.messages.length === 0)\"></div>\n" +
@@ -352,8 +377,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Downvote\"\n" +
     "    data-ng-click=\"downvote()\"\n" +
     "    data-tooltip=\"Downvote\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-thumbs-down fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
@@ -363,8 +387,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    class=\"control__button btn btn-danger\"\n" +
     "    aria-label=\"Downvoted\"\n" +
     "    data-tooltip=\"Downvoted\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-check fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -380,8 +403,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Favorite\"\n" +
     "    data-ng-click=\"favorites.addTrack(playing.track)\"\n" +
     "    data-tooltip=\"Favorite\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-heart-o fa-lg text-danger\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
@@ -391,8 +413,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Unfavorite\"\n" +
     "    data-ng-click=\"favorites.removeTrack(playing.track)\"\n" +
     "    data-tooltip=\"Unfavorite\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-heart fa-lg text-danger\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -409,8 +430,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Skip Song\"\n" +
     "    data-ng-click=\"skipTrack()\"\n" +
     "    data-tooltip=\"Skip Song\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <span class=\"fa fa-step-forward fa-lg\" aria-hidden=\"true\"></span>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -427,8 +447,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Upvote\"\n" +
     "    data-ng-click=\"upvote()\"\n" +
     "    data-tooltip=\"Upvote\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-thumbs-up fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
@@ -438,8 +457,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    class=\"control__button btn btn-success\"\n" +
     "    aria-label=\"Upvoted\"\n" +
     "    data-tooltip=\"Upvoted\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-check fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -456,8 +474,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Mute\"\n" +
     "    data-ng-click=\"toggleMute()\"\n" +
     "    data-tooltip=\"Mute\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-lg fa-volume-off\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
@@ -468,8 +485,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Unmute\"\n" +
     "    data-ng-click=\"toggleMute()\"\n" +
     "    data-tooltip=\"Unmute\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-lg fa-volume-up\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -562,8 +578,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <li data-ng-repeat=\"track in queue.tracks\">\n" +
     "      <lstn-track\n" +
     "        data-track=\"track\"\n" +
-    "        data-context=\"'queue'\"\n" +
-    "        data-index=\"$index\"></lstn-track>\n" +
+    "        data-context=\"queue\"\n" +
+    "        data-index=\"$index\"\n" +
+    "        data-count=\"queue.tracks.length\"></lstn-track>\n" +
     "    </li>\n" +
     "  </ul>\n" +
     "  <div class=\"queue--empty\" data-ng-show=\"!queue.loading && (!queue.tracks || queue.tracks.length === 0)\">\n" +
@@ -650,71 +667,65 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <a data-ng-click=\"current.clear()\">\n" +
     "      <i class=\"fa fa-fw fa-times-circle-o\"></i> Clear Search Results\n" +
     "    </a>\n" +
-    "    <div class=\"carousel__refresh pull-right\" data-ng-show=\"current.loading\">\n" +
+    "    <div class=\"carousel__action pull-right\" data-ng-show=\"current.loading\">\n" +
     "      <i class=\"fa fa-circle-o-notch fa-lg fa-spin\"></i>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
     "  <lstn-drilldown-back\n" +
     "    data-ng-if=\"current.position > 0\"\n" +
-    "    data-text=\"current.name\"\n" +
     "    data-click-handler=\"close\"\n" +
     "    data-refresh-handler=\"refresh\"\n" +
-    "    data-loading=\"current.loading\"></lstn-drilldown-back>\n" +
+    "    data-bulk-add-handler=\"addTracks\"\n" +
+    "    data-current=\"current\"></lstn-drilldown-back>\n" +
     "  <ul class=\"drilldown__list text-left\">\n" +
     "    <li data-ng-repeat=\"item in data\">\n" +
     "      <div data-ng-switch=\"getType(item.type)\">\n" +
     "        <lstn-category\n" +
     "          data-ng-switch-when=\"category\"\n" +
-    "          data-context=\"context\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-category=\"item\"\n" +
     "          data-load=\"load\"></lstn-category>\n" +
     "\n" +
     "        <lstn-playlist-type\n" +
     "          data-ng-switch-when=\"playlistType\"\n" +
-    "          data-context=\"context\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-playlist-type=\"item\"\n" +
-    "          data-index=\"$index\"\n" +
     "          data-load=\"load\"></lstn-playlist-type>\n" +
     "\n" +
     "        <lstn-station-type\n" +
     "          data-ng-switch-when=\"stationType\"\n" +
-    "          data-context=\"context\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-station-type=\"item\"\n" +
-    "          data-index=\"$index\"\n" +
     "          data-load=\"load\"></lstn-station-type>\n" +
     "\n" +
     "        <lstn-playlist\n" +
     "          data-ng-switch-when=\"playlist\"\n" +
-    "          data-context=\"context\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-playlist=\"item\"\n" +
-    "          data-index=\"$index\"\n" +
     "          data-load=\"load\"></lstn-playlist>\n" +
     "\n" +
     "        <lstn-station\n" +
     "          data-ng-switch-when=\"station\"\n" +
-    "          data-context=\"context\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-station=\"item\"\n" +
-    "          data-index=\"$index\"\n" +
     "          data-load=\"load\"></lstn-station>\n" +
     "\n" +
     "        <lstn-album\n" +
     "          data-ng-switch-when=\"album\"\n" +
-    "          data-context=\"context\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-album=\"item\"\n" +
-    "          data-index=\"$index\"\n" +
     "          data-load=\"load\"></lstn-album>\n" +
     "\n" +
     "        <lstn-artist\n" +
     "          data-ng-switch-when=\"artist\"\n" +
-    "          data-context=\"context\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-artist=\"item\"\n" +
-    "          data-index=\"$index\"\n" +
     "          data-load=\"load\"></lstn-artist>\n" +
     "\n" +
     "        <lstn-track\n" +
     "          data-ng-switch-when=\"track\"\n" +
-    "          data-context=\"context\"\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
     "          data-track=\"item\"\n" +
     "          data-index=\"$index\"></lstn-track>\n" +
     "      </div>\n" +
@@ -783,50 +794,61 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
 
 
   $templateCache.put('/static/partials/directives/track.html',
-    "<div id=\"track-{{ $id }}-{{ index }}-{{ track.key }}\" class=\"drilldown__item track\">\n" +
+    "<div id=\"track-{{ $id }}\" class=\"drilldown__item track\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <img data-ng-src=\"{{ track.icon }}\" alt=\"{{ track.album }}\">\n" +
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
     "      class=\"item__title\"\n" +
-    "      data-ng-class=\"{'text-muted': context !== 'queue' && queue.bitset[track.key]}\"\n" +
+    "      data-ng-class=\"{'text-muted': (context !== 'queue' && queue.bitset[track.key]) || !track.canStream}\"\n" +
     "      data-ng-bind=\"track.name\"></div>\n" +
     "    <div\n" +
     "      class=\"item__artist\"\n" +
-    "      data-ng-class=\"{'text-muted': context !== 'queue' && queue.bitset[track.key]}\"\n" +
+    "      data-ng-class=\"{'text-muted': (context !== 'queue' && queue.bitset[track.key]) || !track.canStream}\"\n" +
     "      data-ng-bind=\"track.artist\"></div>\n" +
     "    <div\n" +
     "      class=\"item__duration text-muted\"\n" +
     "      data-ng-bind=\"track.duration | duration\"></div>\n" +
     "  </div>\n" +
     "  <div class=\"item__actions\">\n" +
+    "    <i\n" +
+    "      class=\"fa fa-exclamation-triangle\"\n" +
+    "      data-ng-show=\"!track.canStream\"\n" +
+    "      data-tooltip=\"This track can't be streamed in your region\"\n" +
+    "      data-tooltip-placement=\"left\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-exclamation-triangle\"\n" +
+    "      data-ng-show=\"track.canStream && track.restrictedRegions\"\n" +
+    "      data-tooltip=\"This track has limited regional availability\"\n" +
+    "      data-tooltip-placement=\"left\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"track.loading\"></i>\n" +
+    "    <i\n" +
+    "      class=\"fa fa-fw fa-check\"\n" +
+    "      data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context !== 'queue'\"\n" +
+    "      data-tooltip=\"This track is already in your queue\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></i>\n" +
+    "\n" +
     "    <span class=\"dropdown\" data-dropdown data-is-open=\"status.open\">\n" +
-    "      <i\n" +
-    "        class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "        data-ng-show=\"track.addingToQueue || track.removingFromQueue\"></i>\n" +
-    "      <i\n" +
-    "        class=\"fa fa-fw fa-check\"\n" +
-    "        data-ng-show=\"(track.in_queue || queue.bitset[track.key]) && context !== 'queue'\"\n" +
-    "        data-tooltip=\"This track is already in your queue\"\n" +
-    "        data-tooltip-placement=\"left\"\n" +
-    "        data-tooltip-popup-delay=\"1000\"></i>\n" +
     "      <a\n" +
     "        class=\"fa fa-fw fa-ellipsis-v\"\n" +
-    "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')\"\n" +
+    "        data-ng-hide=\"track.loading || ((track.in_queue || queue.bitset[track.key]) && context !== 'queue')\"\n" +
     "        data-ng-click=\"toggleDropdown($event)\"></a>\n" +
     "      <ul\n" +
     "        class=\"dropdown-menu dropdown-menu-right\"\n" +
-    "        data-ng-hide=\"track.addingToQueue || track.removingFromQueue\"\n" +
+    "        data-ng-hide=\"track.loading\"\n" +
     "        role=\"menu\">\n" +
-    "        <li data-ng-show=\"track.in_queue && context === 'queue'\">\n" +
+    "        <li data-ng-show=\"track.in_queue && context === 'queue' && count > 1 && index != 0\">\n" +
     "          <a data-ng-click=\"queue.moveToTop(index)\">\n" +
     "            <i class=\"fa fa-fw fa-arrow-circle-up item__actions__move-to-top\"></i>\n" +
     "            Move to Top of Queue\n" +
     "          </a>\n" +
     "        </li>\n" +
-    "        <li data-ng-show=\"track.in_queue && context === 'queue'\">\n" +
-    "          <a data-ng-click=\"queue.moveToBottom(index)\">\n" +
+    "        <li data-ng-show=\"track.in_queue && context === 'queue' && count > 1 && index != (count - 1)\">\n" +
+    "        <a data-ng-click=\"queue.moveToBottom(index)\">\n" +
     "            <i class=\"fa fa-fw fa-arrow-circle-down item__actions__move-to-bottom\"></i>\n" +
     "            Move to Bottom of Queue\n" +
     "          </a>\n" +
@@ -837,19 +859,19 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "            Remove From Queue\n" +
     "          </a>\n" +
     "        </li>\n" +
-    "        <li data-ng-hide=\"track.in_queue || queue.bitset[track.key]\">\n" +
+    "        <li data-ng-hide=\"!track.canStream || track.in_queue || queue.bitset[track.key]\">\n" +
     "          <a data-ng-click=\"queue.addTrack(track, 'top')\">\n" +
     "            <i class=\"fa fa-fw fa-plus-circle item__actions__add\"></i>\n" +
     "            Add to Top of Queue\n" +
     "          </a>\n" +
     "        </li>\n" +
-    "        <li data-ng-hide=\"track.in_queue || queue.bitset[track.key]\">\n" +
+    "        <li data-ng-hide=\"!track.canStream || track.in_queue || queue.bitset[track.key]\">\n" +
     "          <a data-ng-click=\"queue.addTrack(track)\">\n" +
     "            <i class=\"fa fa-fw fa-plus-circle item__actions__add\"></i>\n" +
     "            Add to Bottom of Queue\n" +
     "          </a>\n" +
     "        </li>\n" +
-    "        <li class=\"divider\"></li>\n" +
+    "        <li class=\"divider\" data-ng-hide=\"!track.canStream && context != 'queue'\"></li>\n" +
     "        <li data-ng-hide=\"favorites.bitset[track.key]\">\n" +
     "          <a data-ng-click=\"favorites.addTrack(track)\">\n" +
     "            <i class=\"fa fa-fw fa-heart item__actions__favorite\"></i>\n" +
@@ -938,13 +960,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <tab-heading>MORE MUSIC</tab-heading>\n" +
     "        <lstn-more-music></lstn-more-music>\n" +
     "      </tab>\n" +
-    "      <tab class=\"hidden-md hidden-lg\">\n" +
+    "      <tab data-ng-if=\"mobile.active\">\n" +
     "        <tab-heading>ROOM ACTIVITY</tab-heading>\n" +
-    "        <lstn-room-activity class=\"hidden-md hidden-lg\"></lstn-room-activity>\n" +
+    "        <lstn-room-activity></lstn-room-activity>\n" +
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
-    "  <div class=\"col-md-4 hidden-sm hidden-xs room__right\">\n" +
+    "  <div class=\"col-md-4 room__right\" data-ng-if=\"!mobile.active\">\n" +
     "    <lstn-room-activity></lstn-room-activity>\n" +
     "  </div>\n" +
     "</div>\n"

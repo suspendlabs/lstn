@@ -13,8 +13,9 @@
     <li data-ng-repeat="track in queue.tracks">
       <lstn-track
         data-track="track"
-        data-context="'queue'"
-        data-index="$index"></lstn-track>
+        data-context="queue"
+        data-index="$index"
+        data-count="queue.tracks.length"></lstn-track>
     </li>
   </ul>
   <div class="queue--empty" data-ng-show="!queue.loading && (!queue.tracks || queue.tracks.length === 0)">
