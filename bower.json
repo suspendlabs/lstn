@@ -22,7 +22,7 @@
     "angular-linkify": "~1.1.0",
     "svg4everybody": "~1.0.0",
     "emojione": "~1.3.0",
-    "matchmedia-ng": "~1.0.5"
+    "angular-media-queries": "~0.4.0"
   },
   "version": "0.1.0",
   "homepage": "http://lstn.in",
