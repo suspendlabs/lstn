@@ -32,9 +32,7 @@
 
   <ul id="messages" class="messages list-group" data-ng-show="!chat.loading && chat.messages && chat.messages.length > 0">
     <li data-ng-repeat="item in chat.messages">
-      <lstn-chat-message
-        data-message="item"
-        data-index="$index"></lstn-chat-message>
+      <lstn-chat-message data-message="item"></lstn-chat-message>
     </li>
   </ul>
   <div class="messages--empty" data-ng-show="!chat.loading && (!chat.messages || chat.messages.length === 0)"></div>
