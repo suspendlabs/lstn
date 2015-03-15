@@ -544,17 +544,14 @@ body {
 
   .nav-tabs {
     height: 36px;
+    border-bottom: 1px solid $accent-color;
 
     > li {
-      &:last-child {
-        width: 34%;
-      }
-
       &:hover {
         background-color: darken($accent-color, 5%);
       }
 
-      width: 33%;
+      width: 33.33%;
       background-color: $accent-color;
 
       &.active {
