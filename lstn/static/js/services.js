@@ -124,7 +124,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     };
 
     Queue.addTracks = function(tracks, position) {
-      CurrentUser.addToQueue({
+      return CurrentUser.addToQueue({
         tracks: tracks
       }, function(response) {
         if (!response || !response.success || !response.queue) {
@@ -139,13 +139,13 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         }
       }, function(response) {
         Alert.error('Something went wrong while trying to add the track to your queue.');
-      });
+      }).$promise;
     };
 
     Queue.addTrack = function(track, position) {
       track.processing = true;
 
-      CurrentUser.addToQueue({
+      return CurrentUser.addToQueue({
         id: track.key
       }, function(response) {
         track.processing = false;
@@ -162,12 +162,13 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }, function(response) {
         track.processing = false;
         Alert.error('Something went wrong while trying to add the track to your queue.');
-      });
+      }).$promise;
     };
 
     Queue.removeTrack = function(track, index) {
       track.processing = true;
-      CurrentUser.removeFromQueue({
+
+      return CurrentUser.removeFromQueue({
         id: track.key,
         index: index
       }, function(response) {
@@ -181,7 +182,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }, function(response) {
         track.processing = false;
         Alert.error('Something went wrong while trying to remove the track from your queue.');
-      });
+      }).$promise;
     };
 
     Queue.moveToTop = function(index, length) {
@@ -199,7 +200,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       // Add the tracks to the top of the queue
       Array.prototype.splice.apply(Queue.tracks, tracks);
 
-      CurrentUser.updateQueue({
+      return CurrentUser.updateQueue({
         queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
@@ -208,7 +209,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         }
       }, function(response) {
         Alert.error('Something went wrong while trying to move the track to the top of your queue.');
-      });
+      }).$promise;
     };
 
     Queue.moveToBottom = function(index) {
@@ -220,7 +221,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
       Queue.tracks.push(tracks[0]);
 
-      CurrentUser.updateQueue({
+      return CurrentUser.updateQueue({
         queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
@@ -229,7 +230,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         }
       }, function(response) {
         Alert.error('Something went wrong while trying to move the track to the bottom of your queue.');
-      });
+      }).$promise;
     };
 
     Queue.toggleShuffle = function() {
@@ -243,7 +244,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
       Queue.tracks = [];
 
-      CurrentUser.clearQueue({
+      return CurrentUser.clearQueue({
         queue: Queue.tracks
       }, function(response) {
         if (!response || !response.success) {
@@ -252,7 +253,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         }
       }, function(response) {
         Alert.error('Something went wrong while trying to clear your queue.');
-      });
+      }).$promise;
     };
 
     return Queue;
