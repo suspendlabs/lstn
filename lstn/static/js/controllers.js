@@ -129,8 +129,8 @@ angular.module('lstn.controllers', [])
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert', 'screenmatch',
-  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert, screenmatch) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert', 'matchmedia',
+  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert, matchmedia) {
     var promises = {};
     var timeouts = {};
 
@@ -162,6 +162,15 @@ angular.module('lstn.controllers', [])
     $scope.room = CurrentRoom;
     $scope.favorites = Favorite;
 
+    // Screen size
+    var phoneUnregister = matchmedia.onPhone(function(mql) {
+      $scope.isPhone = mql.matches;
+    });
+
+    var tabletUnregister = matchmedia.onTablet(function(mql) {
+      $scope.isTablet = mql.matches;
+    });
+
     $scope.$on('$destroy', function(e) {
       $.each(promises, function(name, promise) {
         Promise.cancel(promise);
@@ -173,10 +182,15 @@ angular.module('lstn.controllers', [])
 
       $scope.room.clear();
       $scope.alerts.clear();
-    });
 
-    // Screen size
-    $scope.mobile = screenmatch.bind('xs, sm', $scope);
+      if (phoneUnregister) {
+        phoneUnregister();
+      }
+
+      if (tabletUnregister) {
+        tabletUnregister();
+      }
+    });
 
     // Notifications
     $scope.notificationPermission = 'default';
