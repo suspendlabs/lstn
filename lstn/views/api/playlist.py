@@ -42,3 +42,35 @@ def get_tracks(playlist_id):
   tracks = [track._data for track in tracks]
 
   return jsonify(success=True, data=tracks)
+
+@playlist.route('/<playlist_id>/<track_id>', methods=['DELETE'])
+@login_required
+def remove_track(playlist_id, track_id):
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  try:
+    playlists = rdio_manager.remove_from_playlist(playlist_id, [track_id])
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to remove the track from the playlist: %s' % str(e))
+
+  return jsonify(success=True)
+
+@playlist.route('', methods=['DELETE'])
+@login_required
+def remove_playlist():
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  try:
+    playlists = rdio_manager.delete_playlist(playlist_id)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to remove the track from the playlist: %s' % str(e))
+
+  return jsonify(success=True)
