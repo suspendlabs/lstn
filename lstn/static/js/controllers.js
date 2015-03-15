@@ -1,7 +1,7 @@
 (function() {
 'use strict';
 
-angular.module('lstn.controllers', ['matchmedia-ng'])
+angular.module('lstn.controllers', [])
 
 .controller('AppController', ['$scope', '$modal', '$log', 'Alert', 'CurrentRoom', 'CurrentUser',
   function($scope, $modal, $log, Alert, CurrentRoom, CurrentUser) {
@@ -129,8 +129,8 @@ angular.module('lstn.controllers', ['matchmedia-ng'])
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert', 'matchmedia',
-  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert, matchmedia) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert', 'screenSize',
+  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert, screenSize) {
     var promises = {};
     var timeouts = {};
 
@@ -163,12 +163,8 @@ angular.module('lstn.controllers', ['matchmedia-ng'])
     $scope.favorites = Favorite;
 
     // Screen size
-    var phoneUnregister = matchmedia.onPhone(function(mql) {
-      $scope.isPhone = mql.matches;
-    });
-
-    var tabletUnregister = matchmedia.onTablet(function(mql) {
-      $scope.isTablet = mql.matches;
+    $scope.desktop = screenSize.on('md, lg', function(match) {
+      $scope.desktop = match;
     });
 
     $scope.$on('$destroy', function(e) {
@@ -182,14 +178,6 @@ angular.module('lstn.controllers', ['matchmedia-ng'])
 
       $scope.room.clear();
       $scope.alerts.clear();
-
-      if (phoneUnregister) {
-        phoneUnregister();
-      }
-
-      if (tabletUnregister) {
-        tabletUnregister();
-      }
     });
 
     // Notifications
