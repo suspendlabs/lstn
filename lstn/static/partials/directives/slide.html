@@ -19,49 +19,49 @@
       <div data-ng-switch="getType(item.type)">
         <lstn-category
           data-ng-switch-when="category"
-          data-context="current.type"
+          data-context="{{ current.type }}"
           data-category="item"
           data-load="load"></lstn-category>
 
         <lstn-playlist-type
           data-ng-switch-when="playlistType"
-          data-context="current.type"
+          data-context="{{ current.type }}"
           data-playlist-type="item"
           data-load="load"></lstn-playlist-type>
 
         <lstn-station-type
           data-ng-switch-when="stationType"
-          data-context="current.type"
+          data-context="{{ current.type }}"
           data-station-type="item"
           data-load="load"></lstn-station-type>
 
         <lstn-playlist
           data-ng-switch-when="playlist"
-          data-context="current.type"
+          data-context="{{ current.type }}"
           data-playlist="item"
           data-load="load"></lstn-playlist>
 
         <lstn-station
           data-ng-switch-when="station"
-          data-context="current.type"
+          data-context="{{ current.type }}"
           data-station="item"
           data-load="load"></lstn-station>
 
         <lstn-album
           data-ng-switch-when="album"
-          data-context="current.type"
+          data-context="{{ current.type }}"
           data-album="item"
           data-load="load"></lstn-album>
 
         <lstn-artist
           data-ng-switch-when="artist"
-          data-context="current.type"
+          data-context="{{ current.type }}"
           data-artist="item"
           data-load="load"></lstn-artist>
 
         <lstn-track
           data-ng-switch-when="track"
-          data-context="current.type"
+          data-context="{{ current.type }}"
           data-track="item"
           data-index="$index"></lstn-track>
       </div>
