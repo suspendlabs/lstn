@@ -16,7 +16,7 @@
       <div class="chat__timestamp text-muted" data-time-from-now="message.created"></div>
     </div>
     <div class="chat__message__message" data-ng-if="message.type === 'message'">
-      <div class="wordwrap" data-ng-bind-html="message.text|linkify|twemoji"></div>
+      <div class="wordwrap" data-ng-bind-html="message.text|linkify|emojione"></div>
     </div>
     <div class="chat__track-info text-muted" data-ng-if="message.type !== 'message'">
       <div class="chat__track text-truncate">
