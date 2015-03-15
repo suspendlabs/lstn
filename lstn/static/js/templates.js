@@ -960,13 +960,13 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <tab-heading>MORE MUSIC</tab-heading>\n" +
     "        <lstn-more-music></lstn-more-music>\n" +
     "      </tab>\n" +
-    "      <tab class=\"hidden-md hidden-lg\">\n" +
+    "      <tab data-ng-if=\"mobile.active\">\n" +
     "        <tab-heading>ROOM ACTIVITY</tab-heading>\n" +
-    "        <lstn-room-activity class=\"hidden-md hidden-lg\"></lstn-room-activity>\n" +
+    "        <lstn-room-activity></lstn-room-activity>\n" +
     "      </tab>\n" +
     "    </tabset>\n" +
     "  </div>\n" +
-    "  <div class=\"col-md-4 hidden-sm hidden-xs room__right\">\n" +
+    "  <div class=\"col-md-4 room__right\" data-ng-if=\"!mobile.active\">\n" +
     "    <lstn-room-activity></lstn-room-activity>\n" +
     "  </div>\n" +
     "</div>\n"
