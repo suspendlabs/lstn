@@ -978,6 +978,15 @@ footer {
   font-weight: 700;
 }
 
+div.chat__message--message {
+  background-color: #FFFFFF;
+  border-right: 2px solid $active-color;
+
+  div.item__title {
+    width: calc(100% + 2px);
+  }
+}
+
 .chat__message__user {
   color: $first-layer-text-color;
   font-weight: 800;
@@ -1129,7 +1138,7 @@ footer {
   }
 
   .carousel__dropdown--refresh {
-    color: $active-color;
+    color: $accent-color;
   }
 
   .carousel__action {
