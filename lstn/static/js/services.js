@@ -643,6 +643,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   rr: 'station'
 })
 
+.constant('RdioName', {
+  r: 'Artist',
+  a: 'Album',
+  t: 'Track',
+  p: 'Playlist',
+  tp: 'Station',
+  h: 'Station',
+  gr: 'Station',
+  rr: 'Station'
+})
+
+
 .constant('Category', {
   playlists: 'Playlists',
   stations: 'Stations'
@@ -664,14 +676,15 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 .factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album',
   function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album) {
     var Loader = {
-      toResponse: function(object, type) {
+      toResponse: function(object, type, constant) {
         var data = [];
 
         angular.forEach(object, function(value, key) {
           this.push({
             key: key,
             name: value,
-            type: type
+            type: type,
+            constant: constant
           });
         }, data);
 
@@ -683,7 +696,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       search: function(query) {
         if (!query || query.length < 3) {
           var deferred = $q.defer();
-          deferred.resolve(Loader.toResponse([], 'searchResult'));
+          deferred.resolve(Loader.toResponse([], 'searchResult', true));
           return deferred.promise;
         }
 
@@ -693,7 +706,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       },
       music: function(key) {
         var deferred = $q.defer();
-        deferred.resolve(Loader.toResponse(Category, 'category'));
+        deferred.resolve(Loader.toResponse(Category, 'category', true));
         return deferred.promise;
       },
       category: function(key) {
