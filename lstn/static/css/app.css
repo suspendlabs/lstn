@@ -897,6 +897,14 @@ footer .container .text-muted {
   font-weight: 700;
 }
 
+div.chat__message--message {
+  background-color: #FFFFFF;
+  border-right: 2px solid #d24242;
+}
+div.chat__message--message div.item__title {
+  width: calc(100% + 2px);
+}
+
 .chat__message__user {
   color: #333;
   font-weight: 800;
@@ -1040,7 +1048,7 @@ footer .container .text-muted {
   color: #5cb85c;
 }
 .carousel__back .carousel__dropdown--refresh {
-  color: #d24242;
+  color: #3d3d3d;
 }
 .carousel__back .carousel__action {
   margin-right: 10px;
