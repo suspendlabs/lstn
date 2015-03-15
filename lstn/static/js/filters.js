@@ -3,6 +3,12 @@
 
 angular.module('lstn.filters', [])
 
+.filter('emojione', [function() {
+  return function(text) {
+    return emojione.toImage(text);
+  };
+}])
+
 .filter('timediff', [function() {
   return function(start, finish) {
     start  = moment(start);
@@ -78,6 +84,7 @@ angular.module('lstn.filters', [])
     return moment(date).fromNow(true);
   };
 }])
+
 .filter('truncate', function() {
   return function(input, targetLength, separator) {
     targetLength = parseInt(targetLength, 10);
