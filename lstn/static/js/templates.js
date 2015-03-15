@@ -377,8 +377,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Downvote\"\n" +
     "    data-ng-click=\"downvote()\"\n" +
     "    data-tooltip=\"Downvote\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-thumbs-down fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
@@ -388,8 +387,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    class=\"control__button btn btn-danger\"\n" +
     "    aria-label=\"Downvoted\"\n" +
     "    data-tooltip=\"Downvoted\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-check fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -405,8 +403,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Favorite\"\n" +
     "    data-ng-click=\"favorites.addTrack(playing.track)\"\n" +
     "    data-tooltip=\"Favorite\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-heart-o fa-lg text-danger\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
@@ -416,8 +413,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Unfavorite\"\n" +
     "    data-ng-click=\"favorites.removeTrack(playing.track)\"\n" +
     "    data-tooltip=\"Unfavorite\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-heart fa-lg text-danger\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -434,8 +430,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Skip Song\"\n" +
     "    data-ng-click=\"skipTrack()\"\n" +
     "    data-tooltip=\"Skip Song\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <span class=\"fa fa-step-forward fa-lg\" aria-hidden=\"true\"></span>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -452,8 +447,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Upvote\"\n" +
     "    data-ng-click=\"upvote()\"\n" +
     "    data-tooltip=\"Upvote\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-thumbs-up fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
@@ -463,8 +457,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    class=\"control__button btn btn-success\"\n" +
     "    aria-label=\"Upvoted\"\n" +
     "    data-tooltip=\"Upvoted\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-check fa-lg\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
@@ -481,8 +474,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Mute\"\n" +
     "    data-ng-click=\"toggleMute()\"\n" +
     "    data-tooltip=\"Mute\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-lg fa-volume-off\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
@@ -493,8 +485,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    aria-label=\"Unmute\"\n" +
     "    data-ng-click=\"toggleMute()\"\n" +
     "    data-tooltip=\"Unmute\"\n" +
-    "    data-tooltip-placement=\"bottom\"\n" +
-    "    data-tooltip-popup-delay=\"1000\">\n" +
+    "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-lg fa-volume-up\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "</span>\n"
