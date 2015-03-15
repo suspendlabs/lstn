@@ -13,13 +13,13 @@
         <tab-heading>MORE MUSIC</tab-heading>
         <lstn-more-music></lstn-more-music>
       </tab>
-      <tab data-ng-if="isPhone || isTablet">
+      <tab data-ng-if="!desktop">
         <tab-heading>ROOM ACTIVITY</tab-heading>
         <lstn-room-activity></lstn-room-activity>
       </tab>
     </tabset>
   </div>
-  <div class="col-md-4 room__right" data-ng-if="!isTablet && !isPhone">
+  <div class="col-md-4 room__right" data-ng-if="desktop">
     <lstn-room-activity></lstn-room-activity>
   </div>
 </div>
