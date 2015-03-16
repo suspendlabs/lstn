@@ -301,14 +301,22 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           Rdio.source = source;
         });
 
-        Rdio.api.bind('positionChanged.rdio', function(e, source) {
-          window.playingPosition = position;
+        Rdio.api.bind('positionChanged.rdio', function(e, position) {
+          window.playingPosition = position || 0;
 
           var progressBar = $('#progress');
 
           var maxValue = parseInt(progressBar.attr('aria-valuemax'), 10);
+          maxValue = isNaN(maxValue) ? 0 : maxValue;
+
           var currentValue = parseInt(position, 10);
-          var percentage = Math.ceil((currentValue / maxValue) * 100);
+          currentValue = isNaN(currentValue) ? 0 : currentValue;
+
+          var percentage = 0;
+          if (maxValue > 0) {
+            percentage = Math.ceil((currentValue / maxValue) * 100);
+            percentage = isNaN(percentage) ? 0 : Math.min(100, percentage);
+          }
 
           var currentSeconds = currentValue % 60;
           var currentMinutes = (currentValue - currentSeconds) / 60;
