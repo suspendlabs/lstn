@@ -765,16 +765,46 @@ body {
 .item__image {
   width: 17%;
   min-height: 60px;
+  position: relative;
 
   img {
-    width: 60px;
     height: 60px;
+    width: 60px;
   }
 
   .fa {
-    width: 60px;
     height: 60px;
+    width: 60px;
     line-height: 60px;
+  }
+
+  .item__image__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 60px;
+    width: 60px;
+    background-color: #FFFFFF;
+
+    @include opacity(0.3);
+  }
+
+  .item__image__overlay__icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 60px;
+    width: 60px;
+    line-height: 60px;
+    font-size: 3em;
+    color: #000000;
+    text-align: center;
+
+    @include opacity(0.6);
+
+    &.fa-heart {
+      color: $active-color;
+    }
   }
 }
 
@@ -1025,31 +1055,6 @@ div.chat__message--message {
 .chat__image {
   width: 16%;
   position: relative;
-
-  .chat__image__overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 60px;
-    width: 60px;
-    background-color: #FFFFFF;
-
-    @include opacity(0.3);
-  }
-
-  .fa {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 60px;
-    width: 60px;
-    line-height: 60px;
-    font-size: 3em;
-    color: #000000;
-    text-align: center;
-
-    @include opacity(0.6);
-  }
 }
 
 .chat__user-info {

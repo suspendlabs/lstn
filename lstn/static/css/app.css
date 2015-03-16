@@ -679,15 +679,42 @@ body > .container > div {
 .item__image {
   width: 17%;
   min-height: 60px;
+  position: relative;
 }
 .item__image img {
-  width: 60px;
   height: 60px;
+  width: 60px;
 }
 .item__image .fa {
-  width: 60px;
   height: 60px;
+  width: 60px;
   line-height: 60px;
+}
+.item__image .item__image__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 60px;
+  background-color: #FFFFFF;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+  opacity: 0.3;
+}
+.item__image .item__image__overlay__icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 60px;
+  line-height: 60px;
+  font-size: 3em;
+  color: #000000;
+  text-align: center;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
+  opacity: 0.6;
+}
+.item__image .item__image__overlay__icon.fa-heart {
+  color: #d24242;
 }
 
 .item__info {
@@ -944,29 +971,6 @@ div.chat__message--message {
 .chat__image {
   width: 16%;
   position: relative;
-}
-.chat__image .chat__image__overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 60px;
-  width: 60px;
-  background-color: #FFFFFF;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
-  opacity: 0.3;
-}
-.chat__image .fa {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 60px;
-  width: 60px;
-  line-height: 60px;
-  font-size: 3em;
-  color: #000000;
-  text-align: center;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
-  opacity: 0.6;
 }
 
 .chat__user-info {
