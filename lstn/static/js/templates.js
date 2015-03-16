@@ -5,6 +5,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div id=\"album-{{ $id }}\" class=\"drilldown__item album\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <img data-ng-src=\"{{ album.icon }}\" alt=\"{{ album.album }}\">\n" +
+    "    <div class=\"item__image__overlay\" data-ng-if=\"favorites.bitset[album.key]\"></div>\n" +
+    "    <i class=\"fa fa-heart item__image__overlay__icon\" data-ng-if=\"favorites.bitset[album.key]\"></i>\n" +
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
@@ -38,10 +40,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div id=\"artist-{{ $id }}\" class=\"drilldown__item artist clearfix\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <img data-ng-src=\"{{ artist.icon }}\" alt=\"{{ artist.artist }}\">\n" +
+    "    <div class=\"item__image__overlay\" data-ng-if=\"favorites.bitset[artist.key]\"></div>\n" +
+    "    <i class=\"fa fa-heart item__image__overlay__icon\" data-ng-if=\"favorites.bitset[artist.key]\"></i>\n" +
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
-    "      class=\"item__title\"\n" +
+    "      class=\"item__title item__title--couple\"\n" +
     "      data-ng-bind=\"artist.name\"></div>\n" +
     "    <div class=\"item__count\" data-ng-pluralize count=\"artist.albumCount\" when=\"{'one': '{} album', 'other': '{} albums'}\"></div>\n" +
     "  </div>\n" +
@@ -114,8 +118,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div id=\"message-{{ $id }}\" class=\"chat__message\" data-ng-class=\"getMessageClass()\">\n" +
     "  <div class=\"chat__image item__image\">\n" +
     "    <img data-ng-src=\"{{ message.user.picture }}\" src=\"/images/no-image.png\" />\n" +
-    "    <div class=\"chat__image__overlay\"></div>\n" +
-    "    <i class=\"fa\" data-ng-class=\"getOverlayClass()\"></i>\n" +
+    "    <div class=\"item__image__overlay\"></div>\n" +
+    "    <i class=\"fa item__image__overlay__icon\" data-ng-class=\"getOverlayClass()\"></i>\n" +
     "  </div>\n" +
     "  <div class=\"chat__user-info item__info\">\n" +
     "    <div class=\"item__title\">\n" +
@@ -297,6 +301,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div id=\"playlist{{ $id }}\" class=\"drilldown__item playlist clearfix\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <img data-ng-src=\"{{ playlist.icon }}\" alt=\"{{ playlist.name }}\">\n" +
+    "    <div class=\"item__image__overlay\" data-ng-if=\"favorites.bitset[playlist.key]\"></div>\n" +
+    "    <i class=\"fa fa-heart item__image__overlay__icon\" data-ng-if=\"favorites.bitset[playlist.key]\"></i>\n" +
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
@@ -773,6 +779,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div id=\"station{{ $id }}\" class=\"drilldown__item station clearfix\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <img data-ng-src=\"{{ station.icon }}\" alt=\"{{ station.name }}\">\n" +
+    "    <div class=\"item__image__overlay\" data-ng-if=\"favorites.bitset[station.key]\"></div>\n" +
+    "    <i class=\"fa fa-heart item__image__overlay__icon\" data-ng-if=\"favorites.bitset[station.key]\"></i>\n" +
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
@@ -802,6 +810,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div id=\"track-{{ $id }}\" class=\"drilldown__item track\">\n" +
     "  <div class=\"item__image\">\n" +
     "    <img data-ng-src=\"{{ track.icon }}\" alt=\"{{ track.album }}\">\n" +
+    "    <div class=\"item__image__overlay\" data-ng-if=\"favorites.bitset[track.key]\"></div>\n" +
+    "    <i class=\"fa fa-heart item__image__overlay__icon\" data-ng-if=\"favorites.bitset[track.key]\"></i>\n" +
     "  </div>\n" +
     "  <div class=\"item__info\">\n" +
     "    <div\n" +
