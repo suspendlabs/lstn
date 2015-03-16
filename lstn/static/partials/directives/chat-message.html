@@ -1,8 +1,8 @@
 <div id="message-{{ $id }}" class="chat__message" data-ng-class="getMessageClass()">
   <div class="chat__image item__image">
     <img data-ng-src="{{ message.user.picture }}" src="/images/no-image.png" />
-    <div class="chat__image__overlay"></div>
-    <i class="fa" data-ng-class="getOverlayClass()"></i>
+    <div class="item__image__overlay"></div>
+    <i class="fa item__image__overlay__icon" data-ng-class="getOverlayClass()"></i>
   </div>
   <div class="chat__user-info item__info">
     <div class="item__title">
