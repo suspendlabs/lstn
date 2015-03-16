@@ -134,24 +134,11 @@ angular.module('lstn.controllers', [])
     var promises = {};
     var timeouts = {};
 
-    $scope.playingTrack = null;
     $scope.isController = false;
     $scope.isCurrentController = false;
     $scope.currentController = null;
 
-    $scope.rdioReady = false;
-    $scope.rdioPlay = null;
-
-    $scope.mute = false;
-    $scope.visualize = false;
     $scope.voting = false;
-
-    $scope.playingSomewhereElse = false;
-    $scope.hasRemaining = false;
-    $scope.remaining = 0;
-    $scope.hideRemaining = false;
-
-    $scope.flashEnabled = false;
 
     $scope.chat = {
       loading: true,
@@ -161,12 +148,14 @@ angular.module('lstn.controllers', [])
     $scope.queue = Queue;
     $scope.room = CurrentRoom;
     $scope.favorites = Favorite;
+    $scope.rdio = Rdio;
 
     // Screen size
     $scope.desktop = screenSize.on('md, lg', function(match) {
       $scope.desktop = match;
     });
 
+    // Handle destroy
     $scope.$on('$destroy', function(e) {
       $.each(promises, function(name, promise) {
         Promise.cancel(promise);
@@ -180,7 +169,7 @@ angular.module('lstn.controllers', [])
       $scope.alerts.clear();
     });
 
-    // Notifications
+    // Notifications (TODO: Move to service)
     $scope.notificationPermission = 'default';
     if (window.Notification) {
       Notification.requestPermission(function(status) {
@@ -312,8 +301,8 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:playing', function(data) {
-      if (!$scope.rdioReady) {
-        $scope.rdioPlay = data;
+      if (!$scope.rdio.ready) {
+        $scope.rdio.queued = data;
         return;
       }
 
@@ -392,23 +381,21 @@ angular.module('lstn.controllers', [])
       }, 10);
     });
 
-    // TODO: Move these to Room service (badjokeeel) if possible
     $scope.playTrack = function(data) {
-      if (!$scope.rdioReady) {
-        $scope.rdioPlay = data;
+      if (!$scope.rdio.ready) {
+        $scope.rdio.queued = data;
         return;
       }
 
       if (!data || !data.key) {
         $scope.isCurrentController = false;
-        $scope.playing = null;
 
-        apiswf.rdio_stop();
+        $scope.rdio.stop();
         return;
       }
 
       // Play the track through Rdio
-      apiswf.rdio_play(data.key, {
+      $scope.rdio.play(data.key, {
         initialPosition: data.position || 0
       });
 
@@ -450,16 +437,6 @@ angular.module('lstn.controllers', [])
 
     window.toggleBroadcast = $scope.toggleBroadcast = function() {
       $scope.isController = !$scope.isController;
-    };
-
-    window.toggleMute = $scope.toggleMute = function() {
-      $scope.mute = !$scope.mute;
-      apiswf.rdio_setMute($scope.mute);
-
-      // Adjust the volume if unmuting. This may not be necessary.
-      if (!$scope.mute) {
-        apiswf.rdio_setVolume(0.7);
-      }
     };
 
     window.upvote = $scope.upvote = function() {
@@ -603,7 +580,7 @@ angular.module('lstn.controllers', [])
       }
     });
 
-    $scope.$watch('rdioReady', function(newVal, oldVal) {
+    $scope.$watch('rdio.ready', function(newVal, oldVal) {
       if (newVal === oldVal) {
         return;
       }
@@ -614,21 +591,21 @@ angular.module('lstn.controllers', [])
       }
 
       // Set initial volume
-      apiswf.rdio_setVolume(0.7);
+      $scope.rdio.volume(0.7);
 
       // If we don't have a track to play, return
-      if (!$scope.rdioPlay) {
+      if (!$scope.rdio.queued) {
         return;
       }
 
       // Play the track
-      $scope.playTrack($scope.rdioPlay);
+      $scope.playTrack($scope.rdio.queued);
     });
 
-    $scope.$watch('playingTrack', function(newVal, oldVal) {
+    $scope.$watch('rdio.track', function(newVal, oldVal) {
       Alert.remove('canStream');
 
-      $log.debug('playingTrack', newVal, oldVal);
+      $log.debug('rdio.track', newVal, oldVal);
       if (newVal === oldVal) {
         return;
       }
@@ -659,125 +636,21 @@ angular.module('lstn.controllers', [])
         downvoted: 0
       };
 
-      if ($scope.rdioPlay) {
-        $scope.playing.voted = $scope.rdioPlay.voted || 0;
-        $scope.playing.upvoted = $scope.rdioPlay.upvoted || 0;
-        $scope.playing.downvoted = $scope.rdioPlay.downvoted || 0;
+      if ($scope.rdio.queued) {
+        $scope.playing.voted = $scope.rdio.queued.voted || 0;
+        $scope.playing.upvoted = $scope.rdio.queued.upvoted || 0;
+        $scope.playing.downvoted = $scope.rdio.queued.downvoted || 0;
 
-        // Clear the rdioPlay variable
-        $scope.rdioPlay = null;
+        // Clear the rdio queued variable
+        $scope.rdio.queued = null;
       }
 
       if (!newVal.canStream) {
         Alert.error('Streaming for this track is unavailable in your area', 'canStream');
-        $scope.playing.status = 'stopped';
+        $scope.playing = false;
         return;
       }
     }, true);
-
-    // Rdio Callback (TODO: Move to Rdio service? Redo with jQuery)
-    var initPlayback = function() {
-      window.playbackHandler = {
-        ready: function(user) {
-          window.apiswf = $('#apiswf').get(0);
-
-          $scope.$evalAsync(function() {
-            $scope.flashEnabled = true;
-            $scope.rdioReady = true;
-            $scope.rdioUser = user;
-          });
-        },
-        freeRemainingChanged: function(remaining) {
-          $scope.$evalAsync(function() {
-            Alert.info('You have ' + remaining + ' remaining tracks left on your free account.');
-          });
-        },
-        playStateChanged: function(playState) {
-          $scope.$evalAsync(function() {
-            $scope.playState = playState;
-          });
-        },
-        playingTrackChanged: function(playingTrack, sourcePosition) {
-          $scope.$evalAsync(function() {
-            $scope.playingTrack = playingTrack;
-            $scope.sourcePosition = sourcePosition;
-          });
-        },
-        playingSourceChanged: function(playingSource) {
-          $scope.$evalAsync(function() {
-            $scope.playingSource = $scope.playingSource;
-          });
-        },
-        volumeChanged: function(volume) {},
-        muteChanged: function(mute) {},
-        positionChanged: function(position) {
-          window.playingPosition = position;
-
-          var progressBar = $('#progress');
-
-          var maxValue = parseInt(progressBar.attr('aria-valuemax'), 10);
-          var currentValue = parseInt(position, 10);
-          var percentage = Math.ceil((currentValue / maxValue) * 100);
-
-          var currentSeconds = currentValue % 60;
-          var currentMinutes = (currentValue - currentSeconds) / 60;
-
-          var maxSeconds = maxValue % 60;
-          var maxMinutes = (maxValue - maxSeconds) / 60;
-
-          var time = currentMinutes + ':';
-          time += (currentSeconds < 10) ? '0' + currentSeconds : currentSeconds;
-          time += ' / ' + maxMinutes + ':';
-          time += (maxSeconds < 10) ? '0' + maxSeconds : maxSeconds;
-
-          $('#time').html(time);
-
-          progressBar.attr('aria-valuenow', currentValue);
-          progressBar.css('width', percentage + '%');
-        },
-        queueChanged: function(newQueue) {},
-        shuffleChanged: function(shuffle) {},
-        repeatChanged: function(repeatMode) {},
-        playingSomewhereElse: function() {
-          $scope.$evalAsync(function() {
-            Alert.error("You're playing music from a different source. Rdio only allows one source to play music at a time.");
-          });
-        },
-        updateFrequencyData: function(data) {
-          var frequencies = data.split(',');
-
-          $('.playing__visualization div').each(function(i) {
-            var height = Math.max(0, Math.min(parseInt(parseFloat(frequencies[i]) * 175, 10), 175));
-            var marginTop = 175 - height;
-
-            $(this).height(height);
-            $(this).css('margin-top', marginTop + 'px');
-          });
-        }
-      };
-
-      var flashVars = {
-        playbackToken: $scope.playback,
-        domain: document.domain,
-        listener: 'playbackHandler'
-      };
-
-      var params = {
-        allowScriptAccess: 'always'
-      };
-
-      var flashCheck = function(e) {
-        timeouts.flashCheck = $timeout(function() {
-          if ($scope.flashEnabled === false) {
-            Alert.error('Flash doesn\'t appear to be enabled. Make sure it\'s installed and you\'ve enabled it.');
-          }
-        }, 5000);
-      };
-
-      swfobject.embedSWF('//www.rdio.com/api/swf/',
-        'apiswf', 1, 1, '9.0.0', 'expressInstall.swf',
-        flashVars, params, {}, flashCheck);
-    };
 
     promises.getRoom = Room.get({
       id: $routeParams.id
@@ -790,7 +663,6 @@ angular.module('lstn.controllers', [])
       }
 
       $scope.room.update(response.room);
-      $scope.playback = response.playback;
 
       if (response.queue) {
         $scope.queue.tracks = response.queue;
@@ -803,7 +675,13 @@ angular.module('lstn.controllers', [])
       }
 
       socket.registerRoom($scope.room.id, $scope.current_user);
-      initPlayback();
+      $scope.rdio.init(response.playback);
+
+      timeouts.flashCheck = $timeout(function() {
+        if ($scope.rdio.flash === false) {
+          Alert.error('Flash doesn\'t appear to be enabled. Make sure it\'s installed and you\'ve enabled it.');
+        }
+      }, 5000);
     }, function(response) {
       Alert.error('Something went wrong while trying to load the room data.');
     });
