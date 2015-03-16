@@ -98,7 +98,7 @@ def room_id_action(room_id):
       raise APIException('Unable to retrieve playback token', 500)
 
   queue = current_user.get_queue()
-  favorites = current_user.get_favorites()
+  favorites = current_user.get_favorite_keys()
 
   response = {
     'success': 1,

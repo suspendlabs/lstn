@@ -1,6 +1,8 @@
 <div id="playlist{{ $id }}" class="drilldown__item playlist clearfix">
   <div class="item__image">
     <img data-ng-src="{{ playlist.icon }}" alt="{{ playlist.name }}">
+    <div class="item__image__overlay" data-ng-if="favorites.bitset[playlist.key]"></div>
+    <i class="fa fa-heart item__image__overlay__icon item__image__overlay__icon--favorite" data-ng-if="favorites.bitset[playlist.key]"></i>
   </div>
   <div class="item__info">
     <div
