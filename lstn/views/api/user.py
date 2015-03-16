@@ -383,7 +383,7 @@ def user_favorites():
     current_app.logger.debug(e)
     raise APIException('Unable to get your favorites: %s' % str(e))
 
-  return jsonify(success=True, favorites=favorites)
+  return jsonify(success=True, data=favorites)
 
 @user.route('/favorites/<track_id>', methods=['POST', 'DELETE'])
 @login_required

@@ -391,8 +391,8 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnPlaylist', [
-  function() {
+.directive('lstnPlaylist', ['Favorite',
+  function(Favorite) {
     return {
       restrict: 'E',
       replace: true,
@@ -401,13 +401,16 @@ angular.module('lstn.directives', [])
         load: '=',
         context: '@'
       },
-      templateUrl: '/static/partials/directives/playlist.html'
+      templateUrl: '/static/partials/directives/playlist.html',
+      link: function($scope, $element, $attrs) {
+        $scope.favorites = Favorite;
+      }
     };
   }
 ])
 
-.directive('lstnArtist', [
-  function() {
+.directive('lstnArtist', ['Favorite',
+  function(Favorite) {
     return {
       restrict: 'E',
       replace: true,
@@ -416,13 +419,16 @@ angular.module('lstn.directives', [])
         load: '=',
         context: '@'
       },
-      templateUrl: '/static/partials/directives/artist.html'
+      templateUrl: '/static/partials/directives/artist.html',
+      link: function($scope, $element, $attrs) {
+        $scope.favorites = Favorite;
+      }
     };
   }
 ])
 
-.directive('lstnAlbum', [
-  function() {
+.directive('lstnAlbum', ['Favorite',
+  function(Favorite) {
     return {
       restrict: 'E',
       replace: true,
@@ -431,7 +437,10 @@ angular.module('lstn.directives', [])
         load: '=',
         context: '@'
       },
-      templateUrl: '/static/partials/directives/album.html'
+      templateUrl: '/static/partials/directives/album.html',
+      link: function($scope, $element, $attrs) {
+        $scope.favorites = Favorite;
+      }
     };
   }
 ])
@@ -521,8 +530,8 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnStation', [
-  function() {
+.directive('lstnStation', ['Favorite',
+  function(Favorite) {
     return {
       restrict: 'E',
       replace: true,
@@ -534,6 +543,8 @@ angular.module('lstn.directives', [])
       },
       templateUrl: '/static/partials/directives/station.html',
       link: function($scope, $element, $attrs) {
+        $scope.favorites = Favorite;
+
         $scope.station  = $scope.station  || {};
         $scope.radio    = $scope.radio    || {};
 
@@ -575,6 +586,23 @@ angular.module('lstn.directives', [])
           }
 
           return 'chat__message--' + $scope.message.type;
+        };
+
+        var overlays = {
+          playing: 'item__image__overlay__icon--playing fa-music',
+          upvote: 'item__image__overlay__icon--upvote fa-thumbs-up',
+          downvote: 'item__image__overlay__icon--downvote fa-thumbs-down',
+          skipped: 'item__image__overlay__icon--skipped fa-step-forward',
+          'skipped:downvoted': 'item__image__overlay__icon--skipped fa-thumbs-down',
+          message: 'item__image__overlay__icon--message fa-comment'
+        };
+
+        $scope.getOverlayClass = function() {
+          if (!$scope.message || !($scope.message.type in overlays)) {
+            return null;
+          }
+
+          return overlays[$scope.message.type];
         };
       }
     };
@@ -664,6 +692,8 @@ angular.module('lstn.directives', [])
         $timeout(function() {
           item.promise.then(function() {
             $scope.next();
+          }, function() {
+            $scope.slides.pop();
           });
         }, 100);
       };
@@ -725,8 +755,8 @@ angular.module('lstn.directives', [])
           $scope.refresh();
         });
 
-        // Reload the data
-        $scope.refresh = function() {
+        // Load the data
+        var loadSlide = function(refresh) {
           if (!$scope.current) {
             return;
           }
@@ -738,7 +768,7 @@ angular.module('lstn.directives', [])
             Promise.cancel(request);
           }
 
-          request = $scope.current.promise = Loader.load($scope.current);
+          request = $scope.current.promise = Loader.load($scope.current, refresh);
           if (!request) {
             Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
             return;
@@ -775,7 +805,11 @@ angular.module('lstn.directives', [])
           });
         };
 
-        $scope.refresh();
+        loadSlide();
+
+        $scope.refresh = function() {
+          return loadSlide(true);
+        };
 
         // Translate the Rdio type to a Lstn type
         $scope.getType = function(type) {

@@ -21,7 +21,8 @@
     "angular-linkify": "~1.1.0",
     "emojione": "~1.3.0",
     "angular-media-queries": "~0.4.0",
-    "jquery.rdio": "~0.1.1"
+    "jquery.rdio": "~0.1.1",
+    "ngstorage": "~0.3.0"
   },
   "version": "0.1.0",
   "homepage": "http://lstn.in",

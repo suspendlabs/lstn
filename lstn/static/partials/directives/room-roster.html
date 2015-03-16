@@ -17,9 +17,7 @@
   <div class="roster__category">
     <div class="roster__category-label">Broadcasting</div>
     <ul class="roster roster--controllers">
-      <li class="empty" data-ng-show="!roster || roster.controllersCount === 0">
-        No Broadcasters
-      </li>
+      <li class="empty" data-ng-show="!roster || roster.controllersCount === 0">No Broadcasters</li>
       <li class="roster__item--controller"
         data-ng-show="roster && roster.controllersCount > 0" data-ng-repeat="user_id in roster.controllerOrder">
         <a data-ng-href="http://www.rdio.com{{ roster.controllers[user_id].profile }}" target="_blank"
@@ -36,9 +34,7 @@
   <div class="roster__category">
     <div class="roster__category-label">Listening</div>
     <ul class="roster roster--listeners" data-ng-show="roster && roster.usersCount > 0">
-      <li class="empty" data-ng-show="!roster || roster.users.length === 0">
-        No one is listening
-      </li>
+      <li class="empty" data-ng-show="!roster || roster.users.length === 0">No Listeners</li>
       <li data-ng-repeat="(user_id, user) in roster.users | orderBy:name">
       <a class="roster__user"
         data-ng-href="http://www.rdio.com{{ user.profile }}"

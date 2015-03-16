@@ -10,6 +10,7 @@ angular.module('lstn', [
   'mentio',
   'linkify',
   'matchMedia',
+  'ngStorage',
   'lstn.config',
   'lstn.services',
   'lstn.controllers',

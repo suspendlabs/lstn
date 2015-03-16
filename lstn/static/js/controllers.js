@@ -129,8 +129,8 @@ angular.module('lstn.controllers', [])
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert', 'screenSize',
-  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert, screenSize) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert', 'screenSize', '$localStorage',
+  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert, screenSize, $localStorage) {
     var promises = {};
     var timeouts = {};
 
@@ -154,6 +154,9 @@ angular.module('lstn.controllers', [])
     $scope.desktop = screenSize.on('md, lg', function(match) {
       $scope.desktop = match;
     });
+
+    // Clear localStorage
+    $localStorage.$reset();
 
     // Handle destroy
     $scope.$on('$destroy', function(e) {

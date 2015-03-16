@@ -1,6 +1,8 @@
 <div id="message-{{ $id }}" class="chat__message" data-ng-class="getMessageClass()">
   <div class="chat__image item__image">
     <img data-ng-src="{{ message.user.picture }}" src="/images/no-image.png" />
+    <div class="item__image__overlay"></div>
+    <i class="fa item__image__overlay__icon" data-ng-class="getOverlayClass()"></i>
   </div>
   <div class="chat__user-info item__info">
     <div class="item__title">
@@ -11,7 +13,7 @@
         <span class="chat__message--downvoted" data-ng-switch-when="downvote">downvoted</span>
         <span class="chat__message--skipped" data-ng-switch-when="skipped">skipped</span>
         <span class="chat__message--skipped" data-ng-switch-when="skipped:downvoted">skipped (downvoted)</span>
-        <span class="chat__message--said" data-ng-switch-when="message">said</span>
+        <span class="chat__message--message" data-ng-switch-when="message">said</span>
       </span>
       <div class="chat__timestamp text-muted" data-time-from-now="message.created"></div>
     </div>
