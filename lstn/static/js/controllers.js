@@ -650,7 +650,6 @@ angular.module('lstn.controllers', [])
 
       if (!newVal.canStream) {
         Alert.error('Streaming for this track is unavailable in your area', 'canStream');
-        $scope.playing = false;
         return;
       }
     }, true);
