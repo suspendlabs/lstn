@@ -739,8 +739,8 @@ div.progress-bar-info {
 }
 .item__image .item__image__overlay__icon--message {
   color: #777;
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=70);
-  opacity: 0.7;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  opacity: 0.8;
 }
 .item__image .item__image__overlay__icon--upvote {
   color: #2fa661;
