@@ -599,12 +599,12 @@ angular.module('lstn.directives', [])
         };
 
         var overlays = {
-          playing: 'fa-music',
-          upvote: 'fa-thumbs-up',
-          downvote: 'fa-thumbs-down',
-          skipped: 'fa-step-forward',
-          'skipped:downvoted': 'fa-thumbs-down',
-          message: 'fa-comment'
+          playing: 'item__image__overlay__icon--playing fa-music',
+          upvote: 'item__image__overlay__icon--upvote fa-thumbs-up',
+          downvote: 'item__image__overlay__icon--downvote fa-thumbs-down',
+          skipped: 'item__image__overlay__icon--skipped fa-step-forward',
+          'skipped:downvoted': 'item__image__overlay__icon--skipped fa-thumbs-down',
+          message: 'item__image__overlay__icon--message fa-comment'
         };
 
         $scope.getOverlayClass = function() {
