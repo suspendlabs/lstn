@@ -586,6 +586,23 @@ angular.module('lstn.directives', [])
 
           return 'chat__message--' + $scope.message.type;
         };
+
+        var overlays = {
+          playing: 'fa-music',
+          upvote: 'fa-thumbs-up',
+          downvote: 'fa-thumbs-down',
+          skipped: 'fa-step-forward',
+          'skipped:downvoted': 'fa-thumbs-down',
+          message: 'fa-comment'
+        };
+
+        $scope.getOverlayClass = function() {
+          if (!$scope.message || !($scope.message.type in overlays)) {
+            return null;
+          }
+
+          return overlays[$scope.message.type];
+        };
       }
     };
   }

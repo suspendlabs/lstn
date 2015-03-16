@@ -910,10 +910,6 @@ svg.emojione {
 
 div.chat__message--message {
   background-color: #FFFFFF;
-  border-right: 2px solid #d24242;
-}
-div.chat__message--message div.item__title {
-  width: calc(100% + 2px);
 }
 
 .chat__message__user {
@@ -947,6 +943,30 @@ div.chat__message--message div.item__title {
 
 .chat__image {
   width: 16%;
+  position: relative;
+}
+.chat__image .chat__image__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 60px;
+  background-color: #FFFFFF;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=30);
+  opacity: 0.3;
+}
+.chat__image .fa {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 60px;
+  width: 60px;
+  line-height: 60px;
+  font-size: 3em;
+  color: #000000;
+  text-align: center;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=60);
+  opacity: 0.6;
 }
 
 .chat__user-info {

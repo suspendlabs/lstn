@@ -114,6 +114,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div id=\"message-{{ $id }}\" class=\"chat__message\" data-ng-class=\"getMessageClass()\">\n" +
     "  <div class=\"chat__image item__image\">\n" +
     "    <img data-ng-src=\"{{ message.user.picture }}\" src=\"/images/no-image.png\" />\n" +
+    "    <div class=\"chat__image__overlay\"></div>\n" +
+    "    <i class=\"fa\" data-ng-class=\"getOverlayClass()\"></i>\n" +
     "  </div>\n" +
     "  <div class=\"chat__user-info item__info\">\n" +
     "    <div class=\"item__title\">\n" +
