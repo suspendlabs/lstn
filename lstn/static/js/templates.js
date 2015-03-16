@@ -962,6 +962,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  <div class=\"col-md-4 room__right\" data-ng-if=\"desktop\">\n" +
     "    <lstn-room-activity></lstn-room-activity>\n" +
     "  </div>\n" +
+    "  <div id=\"api\"></div>\n" +
     "</div>\n"
   );
 
