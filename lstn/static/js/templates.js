@@ -130,7 +130,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <span class=\"chat__message--downvoted\" data-ng-switch-when=\"downvote\">downvoted</span>\n" +
     "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped\">skipped</span>\n" +
     "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped:downvoted\">skipped (downvoted)</span>\n" +
-    "        <span class=\"chat__message--said\" data-ng-switch-when=\"message\">said</span>\n" +
+    "        <span class=\"chat__message--message\" data-ng-switch-when=\"message\">said</span>\n" +
     "      </span>\n" +
     "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "    </div>\n" +
@@ -927,7 +927,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div>\n" +
     "  <div class=\"hero jumbotron\">\n" +
     "    <div class=\"container\">\n" +
-    "      <h1><span class=\"lstn\">Lstn</span> to <span class=\"rdio\">Music</span> with Friends</h1>\n" +
+    "      <h1><span class=\"hero-lstn\">Lstn</span> to <span class=\"hero-music\">Music</span> with Friends</h1>\n" +
     "      <p>Create a room and start listening to music with your friends.</p>\n" +
     "      <p>\n" +
     "        <a data-ng-show=\"!current_user.id\" class=\"btn btn-primary btn-lg\" href=\"/login\" role=\"button\" target=\"_self\">Get Started</a>\n" +
