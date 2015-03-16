@@ -676,7 +676,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 .factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album', '$localStorage',
   function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album, $localStorage) {
     var Loader = {
-      skipCache: ['station', 'search'],
+      skipCache: ['station', 'search', 'favorites'],
       toResponse: function(object, type) {
         var data = [];
 
