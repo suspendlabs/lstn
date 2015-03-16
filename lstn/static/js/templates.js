@@ -226,16 +226,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
-  $templateCache.put('/static/partials/directives/playing-image.html',
-    "<div class=\"playing__art\" class=\"text-center\">\n" +
-    "  <img data-ng-show=\"playing.track.image\" data-ng-src=\"{{ playing.track.image }}\" alt=\"{{ playing.track.title }} - {{ playing.track.artist }}\">\n" +
-    "  <div data-ng-show=\"!playing.track.image\" class=\"text-center\">\n" +
-    "    <i class=\"glyphicon glyphicon-music playing__placeholder text-muted\"></i>\n" +
-    "  </div>\n" +
-    "</div>\n"
-  );
-
-
   $templateCache.put('/static/partials/directives/playing-info.html',
     "<div class=\"playing__info-container\">\n" +
     "\n" +
@@ -467,23 +457,23 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   $templateCache.put('/static/partials/directives/room-control-volume.html',
     "<span>\n" +
     "  <button\n" +
-    "    data-ng-show=\"!mute\"\n" +
+    "    data-ng-show=\"!rdio.muted\"\n" +
     "    data-ng-disabled=\"!playing.track.key\"\n" +
     "    type=\"button\"\n" +
     "    class=\"control__button btn btn-default\"\n" +
     "    aria-label=\"Mute\"\n" +
-    "    data-ng-click=\"toggleMute()\"\n" +
+    "    data-ng-click=\"rdio.mute()\"\n" +
     "    data-tooltip=\"Mute\"\n" +
     "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-lg fa-volume-off\" aria-hidden=\"true\"></i>\n" +
     "  </button>\n" +
     "  <button\n" +
-    "    data-ng-show=\"mute\"\n" +
+    "    data-ng-show=\"rdio.muted\"\n" +
     "    data-ng-disabled=\"!playing.track.key\"\n" +
     "    type=\"button\"\n" +
     "    class=\"control__button btn btn-default\"\n" +
     "    aria-label=\"Unmute\"\n" +
-    "    data-ng-click=\"toggleMute()\"\n" +
+    "    data-ng-click=\"rdio.mute()\"\n" +
     "    data-tooltip=\"Unmute\"\n" +
     "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-lg fa-volume-up\" aria-hidden=\"true\"></i>\n" +
