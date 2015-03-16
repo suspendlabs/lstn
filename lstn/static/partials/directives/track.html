@@ -1,6 +1,8 @@
 <div id="track-{{ $id }}" class="drilldown__item track">
   <div class="item__image">
     <img data-ng-src="{{ track.icon }}" alt="{{ track.album }}">
+    <div class="item__image__overlay" data-ng-if="favorites.bitset[track.key]"></div>
+    <i class="fa fa-heart item__image__overlay__icon" data-ng-if="favorites.bitset[track.key]"></i>
   </div>
   <div class="item__info">
     <div
