@@ -13,6 +13,30 @@ html, body {
   height: 100%;
 }
 
+.btn-primary {
+  background-color: $blue !important;
+
+  &:hover {
+    background-color: darken($blue, 5%) !important;
+  }
+}
+
+.btn-warning {
+  background-color: $orange !important;
+
+  &:hover {
+    background-color: darken($orange, 5%) !important;
+  }
+}
+
+.btn-danger {
+  background-color: $red !important;
+
+  &:hover {
+    background-color: darken($red, 5%) !important;
+  }
+}
+
 a {
   color: $active-color;
 
@@ -69,23 +93,23 @@ div.snackbar {
   @include border-radius(0);
 
   &.snackbar--error {
-    background-color: #f44336;
-    color: #ffffff;
+    background-color: $activity-danger;
+    color: white;
   }
 
   &.snackbar--warning {
-    background-color: #ff5722;
-    color: #ffffff;
+    background-color: $activity-warning;
+    color: white;
   }
 
   &.snackbar--info {
-    background-color: #03a9f4;
-    color: #ffffff;
+    background-color: $activity-primary;
+    color: white;
   }
 
   &.snackbar--success {
-    background-color: #0f9d58;
-    color: #ffffff;
+    background-color: $activity-success;
+    color: white;
   }
 }
 
@@ -108,23 +132,28 @@ img.avatar {
   @include border-radius(50%);
 
   &.upvoted {
-    border: 2px solid #4cae4c;
+    border: 2px solid $green;
   }
+
   &.downvoted {
-    border: 2px solid #d43f3a;
+    border: 2px solid $red;
   }
+
   &.xs {
-    width:39px;
-    height:39px;
+    width: 39px;
+    height: 39px;
   }
+
   &.sm {
     width: 50px;
-    height:50px;
+    height: 50px;
   }
+
   &.md {
     width: 64px;
     height: 64px;
   }
+
   &.lg {
     width: 75px;
     height: 75px;
@@ -207,22 +236,22 @@ body {
   font-family: 'proxima-nova';
   font-weight: 600;
   font-size: 1.8em;
-  color: #FFFFFF;
+  color: white;
   text-decoration: none;
   display: block;
   margin-top: 0.26em;
 
   &:link, &:hover, &:visited, &:focus {
-    color: #FFFFFF;
+    color: white;
     text-decoration: none;
   }
 }
 
 .navbar-right {
-  color: #FFFFFF;
+  color: white;
 
   a, a:link, a:hover, a:visited, a:active {
-    color: #FFFFFF;
+    color: white;
   }
 
   &.navbar--login {
@@ -245,17 +274,17 @@ body {
   }
 
   .navbar__photo {
-    border: 2px solid #FFFFFF;
+    border: 2px solid white;
     margin-right: 5px;
   }
 }
 
-.lstn {
-  color: $rdio-red;
+.hero-lstn {
+  color: $red;
 }
 
-.rdio {
-  color: $rdio-blue;
+.hero-music {
+  color: $blue;
 }
 
 .hero {
@@ -283,7 +312,7 @@ body {
 }
 
 .rooms__container {
-  border: 1px solid #DDD;
+  border: 1px solid $light-gray;
   @include border-radius(4px);
 
   table {
@@ -343,15 +372,19 @@ body {
   }
 }
 
+div.progress-bar-info {
+  background-color: $activity-primary;
+}
+
 .playing__info-container {
   margin-bottom: 15px;
 }
 
 .playing__info--stopped {
-  background: #3d3d3d;
+  background: $dark-gray;
   min-height: 180px;
   text-align: center;
-  color: #fff;
+  color: white;
   font-size: 1.7rem;
 
   .fa.fa-play-circle {
@@ -380,7 +413,7 @@ body {
   min-height: 180px;
 
   h3, h4 {
-    color: #fff;
+    color: white;
     margin:0;
   }
 
@@ -397,12 +430,6 @@ body {
 
 .playing__controls {
   margin-top: 1em;
-}
-
-.bootstrap-switch {
-  span.bootstrap-switch-handle-on.bootstrap-switch-primary {
-    background: $active-color;
-  }
 }
 
 .control__button {
@@ -477,9 +504,10 @@ body {
 .roster__container {
   border: none;
   border-radius: 0;
+
   .roster__category-label {
-    color:#fff;
-    text-transform:uppercase;
+    color: white;
+    text-transform: uppercase;
 
     .bootstrap-switch {
       float: right;
@@ -492,31 +520,32 @@ body {
     list-style-type: none;
     
     li {  
-      display:inline;
-      margin-right:6px;
+      display: inline;
+      margin-right: 6px;
 
       &.empty {
         display: inline-block;
-        width:100%;
-        background-color:#eee;
-        padding:6px;
+        width: 100%;
+        background-color: $lighter-gray;
+        padding: 6px;
 
       }
 
       &.roster__item--controller {
         a {
           position: relative;
+
           .fa.fa-volume-up {
             position: absolute;
             top: 10px;
             left: 28px;
             z-index:1;
-            background: #337ab7;
+            background: $blue;
             padding: 4px;
             border-radius: 50%;
-            color: #fff;
+            color: white;
             font-size: 0.9rem;
-            border: 1px solid #fff;
+            border: 1px solid white;
           }
         }
       }
@@ -784,7 +813,7 @@ body {
     left: 0;
     height: 60px;
     width: 60px;
-    background-color: #FFFFFF;
+    background-color: white;
 
     @include opacity(0.3);
   }
@@ -797,14 +826,35 @@ body {
     width: 60px;
     line-height: 60px;
     font-size: 3em;
-    color: #000000;
+    color: black;
     text-align: center;
 
     @include opacity(0.6);
+  }
 
-    &.fa-heart {
-      color: $active-color;
-    }
+  .item__image__overlay__icon--favorite {
+    color: $active-color;
+  }
+
+  .item__image__overlay__icon--message {
+    color: $activity-default;
+    @include opacity(0.7);
+  }
+
+  .item__image__overlay__icon--upvote {
+    color: $activity-success;
+  }
+
+  .item__image__overlay__icon--downvote {
+    color: $activity-danger;
+  }
+
+  .item__image__overlay__icon--skipped {
+    color: $activity-danger;
+  }
+
+  .item__image__overlay__icon--playing {
+    color: $activity-primary;
   }
 }
 
@@ -893,7 +943,7 @@ body {
   }
 
   .item__actions__move-to-top, .item__actions__move-to-bottom, .item__actions__add {
-    color: $action-additive;
+    color: $activity-success;
   }
 }
 
@@ -905,20 +955,6 @@ body {
   width: 100%;
   margin-bottom: 0;
   list-style: none;
-}
-
-footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 40px;
-  background-color: #F5F5F5;
-
-  .container {
-    .text-muted {
-      margin: 12px 0;
-    }
-  }
 }
 
 .clear {
@@ -940,16 +976,16 @@ footer {
     padding: 5px;
 
     &.active {
-      color: #fff;
-      background-color: #428bca;
-      border-color: #428bca;
+      color: white;
+      background-color: $blue;
+      border-color: $blue;
 
       .text-muted {
-        color: #ccc;
+        color: $gray;
       }
 
       .text-primary {
-        color: #fff;
+        color: white;
       }
     }
   }
@@ -966,31 +1002,9 @@ footer {
     }
 
     &.active {
-      background-color: #428bca;
-      border-color: #428bca;
+      background-color: $blue;
+      border-color: $blue;
     }
-  }
-}
-
-.mentioned {
-  @include animation(mentioned 5s infinite ease);
-}
-
-@include keyframes(mentioned) {
-  0% {
-    background: #777;
-  }
-  40% {
-    background: #FF0000;
-    color: white;
-  }
-  60% {
-    background: #FF0000;
-    color: white;
-  }
-  100% {
-    background: #777;
-    color: white;
   }
 }
 
@@ -1002,7 +1016,7 @@ footer {
     @include border-radius(0);
     @include box-shadow(none);
 
-    border-color: #FFFFFF;
+    border-color: white;
   }
 }
 
@@ -1020,7 +1034,7 @@ svg.emojione {
 }
 
 div.chat__message--message {
-  background-color: #FFFFFF;
+  background-color: white;
 }
 
 .chat__message__user {
@@ -1044,7 +1058,7 @@ div.chat__message--message {
   color: $activity-danger;
 }
 
-.chat__message--said {
+.chat__message--message {
   color: $activity-default;
 }
 
@@ -1090,7 +1104,7 @@ div.chat__message--message {
   .form-control {
     @include border-radius(0);
     @include box-shadow(none);
-    border-color: #FFFFFF;
+    border-color: white;
   }
 }
 
@@ -1171,7 +1185,7 @@ div.chat__message--message {
   }
 
   .carousel__dropdown--add {
-    color: $action-additive;
+    color: $green;
   }
 
   .carousel__dropdown--refresh {

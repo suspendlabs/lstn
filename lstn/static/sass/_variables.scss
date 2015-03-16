@@ -1,28 +1,37 @@
 $rdio-red: #E84961;
 $rdio-blue: #008fd5;
 
-$background-color: #333;
+$green: #2fa661;
+$blue: #2573a6;
+$red: #d24242;
+$orange: #e74c3c;
+$darker-gray: #333;
+$dark-gray: #3d3d3d;
+$gray: #777;
+$light-gray: #ddd;
+$lighter-gray: #eee;
 
-$accent-color: #3d3d3d;
+$background-color: $darker-gray;
+
+$accent-color: $dark-gray;
 $accent-text-color: #ffffff;
 
-$active-color: #d24242;
+$active-color: $red;
 $active-text-color: #ffffff;
 
-$first-layer: #eee;
-$first-layer-text-color: #333;
+$first-layer: $lighter-gray;
+$first-layer-text-color: $darker-gray;
 
-$second-layer: #ddd;
-$second-layer-text-color: #333;
+$second-layer: $light-gray;
+$second-layer-text-color: $darker-gray;
 
-$activity-success: #2ecc71;
-$activity-primary: #2573a6;
-$activity-default: #777;
-$activity-danger: #e74c3c;
+$activity-success: $green;
+$activity-primary: $blue;
+$activity-default: $gray;
+$activity-danger: $red;
+$activity-warning: $orange;
 
-$action-additive: #5cb85c; 
-
-$broadcasting-on-light: #aa403d;
-$broadcasting-on-dark: #883331;
-$broadcasting-off-light: #2fa661;
-$broadcasting-off-dark: #1e8c4d;
+$broadcasting-on-light: $red;
+$broadcasting-on-dark: darken($red, 10%);
+$broadcasting-off-light: $green;
+$broadcasting-off-dark: darken($green, 10%);
