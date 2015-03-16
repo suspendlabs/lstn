@@ -735,8 +735,8 @@ angular.module('lstn.directives', [])
           $scope.refresh();
         });
 
-        // Reload the data
-        $scope.refresh = function() {
+        // Load the data
+        var loadSlide = function(refresh) {
           if (!$scope.current) {
             return;
           }
@@ -748,7 +748,7 @@ angular.module('lstn.directives', [])
             Promise.cancel(request);
           }
 
-          request = $scope.current.promise = Loader.load($scope.current);
+          request = $scope.current.promise = Loader.load($scope.current, refresh);
           if (!request) {
             Alert.error('Something when wrong when trying to load "' + $scope.current.name + '"');
             return;
@@ -785,7 +785,11 @@ angular.module('lstn.directives', [])
           });
         };
 
-        $scope.refresh();
+        loadSlide();
+
+        $scope.refresh = function() {
+          return loadSlide(true);
+        };
 
         // Translate the Rdio type to a Lstn type
         $scope.getType = function(type) {
