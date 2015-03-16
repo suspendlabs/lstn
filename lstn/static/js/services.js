@@ -261,32 +261,122 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   }
 ])
 
-.factory('Rdio', [
-  function() {
-    var rdio = {
-      status: {
-        mute: false,
-        visualize: false
-      },
-      toggleMute: function() {
-        this.mute = !this.mute;
-        this.apiswf.rdio_setMute(this.mute);
-      },
-      toggleVisualize: function() {
-        this.visualize = !this.visualize;
+.factory('Rdio', ['Alert',
+  function(Alert) {
+    var Rdio = {
+      api: null,
+      state: 0,
+      ready: false,
+      flash: false,
+      muted: false,
+      user: null,
+      queued: null,
 
-        if (this.visualize) {
-          this.apiswf.rdio_startFrequencyAnalyzer({
-            frequencies: '10-band',
-            period: 100
-          });
-        } else {
-          this.apiswf.rdio_stopFrequencyAnalyzer();
+      init: function(playbackToken) {
+        Rdio.api = $('#api');
+        if (!Rdio.api) {
+          return;
         }
+
+        Rdio.api.bind('ready.rdio', function(e, user) {
+          Rdio.flash = true;
+          Rdio.ready = true;
+          Rdio.user = user;
+        });
+
+        Rdio.api.bind('freeRemainingChanged.rdio', function(e, remaining) {
+          Alert.info('You have ' + remaining + ' remaining tracks left on your free account.');
+        });
+
+        Rdio.api.bind('playStateChanged.rdio', function(e, state) {
+          Rdio.state = state;
+        });
+
+        Rdio.api.bind('playingTrackChanged.rdio', function(e, track, position) {
+          Rdio.track = track;
+          Rdio.position = position;
+        });
+
+        Rdio.api.bind('playingSourceChanged.rdio', function(e, source) {
+          Rdio.source = source;
+        });
+
+        Rdio.api.bind('positionChanged.rdio', function(e, source) {
+          window.playingPosition = position;
+
+          var progressBar = $('#progress');
+
+          var maxValue = parseInt(progressBar.attr('aria-valuemax'), 10);
+          var currentValue = parseInt(position, 10);
+          var percentage = Math.ceil((currentValue / maxValue) * 100);
+
+          var currentSeconds = currentValue % 60;
+          var currentMinutes = (currentValue - currentSeconds) / 60;
+
+          var maxSeconds = maxValue % 60;
+          var maxMinutes = (maxValue - maxSeconds) / 60;
+
+          var time = currentMinutes + ':';
+          time += (currentSeconds < 10) ? '0' + currentSeconds : currentSeconds;
+          time += ' / ' + maxMinutes + ':';
+          time += (maxSeconds < 10) ? '0' + maxSeconds : maxSeconds;
+
+          $('#time').html(time);
+
+          progressBar.attr('aria-valuenow', currentValue);
+          progressBar.css('width', percentage + '%');
+        });
+
+        Rdio.api.bind('playingSomewhereElse.rdio', function() {
+          Alert.error("You're playing music from a different source. Rdio only allows one source to play music at a time.");
+        });
+
+        // volumeChanged.rdio
+        // muteChanged.rdio
+        // queueChanged.rdio
+        // shuffleChanged.rdio
+        // repeatChanged.rdio
+        // updateFrequencyData.rdio
+
+        Rdio.api.rdio(playbackToken);
+      },
+      play: function(track, config) {
+        if (!Rdio.api || !Rdio.ready) {
+          return;
+        }
+
+        Rdio.api.rdio().play(track, config);
+      },
+      stop: function() {
+        if (!Rdio.api) {
+          return;
+        }
+
+        Rdio.api.rdio().stop();
+      },
+      mute: function() {
+        Rdio.muted = !Rdio.muted;
+
+        if (!Rdio.api) {
+          return;
+        }
+
+        Rdio.api.rdio().setMute(Rdio.muted);
+
+        if (!Rdio.muted) {
+          Rdio.volume(0.7);
+        }
+      },
+      volume: function(volume) {
+        if (!Rdio.api) {
+          return;
+        }
+
+        Rdio.api.rdio().setVolume(volume);
       }
     };
 
-    return rdio;
+    return Rdio;
   }
 ])
 
