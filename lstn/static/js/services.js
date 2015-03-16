@@ -672,9 +672,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   recent: 'Recent Stations'
 })
 
-.factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album',
-  function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album) {
+.factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album', '$localStorage',
+  function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album, $localStorage) {
     var Loader = {
+      skipCache: ['station', 'search'],
       toResponse: function(object, type, constant) {
         var data = [];
 
@@ -741,7 +742,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       }
     };
 
-    Loader.load = function(item) {
+    Loader.load = function(item, refresh) {
       if (!item) {
         return null;
       }
@@ -761,7 +762,31 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         return null;
       }
 
-      return Loader[type](item.key);
+      if (!refresh && this.skipCache.indexOf(type) === -1 && type in $localStorage && item.key in $localStorage[type]) {
+        var deferred = $q.defer();
+        deferred.resolve($localStorage[type][item.key]);
+        return deferred.promise;
+      }
+
+      var promise = Loader[type](item.key, refresh);
+      promise.then(function(response) {
+        if (!response ||
+          !response.success ||
+          !response.data ||
+          !$localStorage ||
+          Loader.skipCache.indexOf(type) !== -1) {
+
+          return;
+        }
+
+        if (!(type in $localStorage)) {
+          $localStorage[type] = {};
+        }
+
+        $localStorage[type][item.key] = response;
+      });
+
+      return promise;
     };
 
     return Loader;
