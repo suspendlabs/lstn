@@ -13,6 +13,26 @@ html, body {
   height: 100%;
 }
 
+.text-muted {
+  color: $gray !important;
+}
+
+.text-primary {
+  color: $blue !important;
+}
+
+.text-success {
+  color: $green !important;
+}
+
+.text-warning {
+  color: $orange !important;
+}
+
+.text-danger {
+  color: $red !important;
+}
+
 .btn-primary {
   background-color: $blue !important;
 

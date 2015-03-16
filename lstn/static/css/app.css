@@ -2,6 +2,26 @@ html, body {
   height: 100%;
 }
 
+.text-muted {
+  color: #777 !important;
+}
+
+.text-primary {
+  color: #2573a6 !important;
+}
+
+.text-success {
+  color: #2fa661 !important;
+}
+
+.text-warning {
+  color: #e74c3c !important;
+}
+
+.text-danger {
+  color: #d24242 !important;
+}
+
 .btn-primary {
   background-color: #2573a6 !important;
 }
