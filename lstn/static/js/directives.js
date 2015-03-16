@@ -401,8 +401,8 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnPlaylist', [
-  function() {
+.directive('lstnPlaylist', ['Favorite',
+  function(Favorite) {
     return {
       restrict: 'E',
       replace: true,
@@ -411,13 +411,16 @@ angular.module('lstn.directives', [])
         load: '=',
         context: '@'
       },
-      templateUrl: '/static/partials/directives/playlist.html'
+      templateUrl: '/static/partials/directives/playlist.html',
+      link: function($scope, $element, $attrs) {
+        $scope.favorites = Favorite;
+      }
     };
   }
 ])
 
-.directive('lstnArtist', [
-  function() {
+.directive('lstnArtist', ['Favorite',
+  function(Favorite) {
     return {
       restrict: 'E',
       replace: true,
@@ -426,13 +429,16 @@ angular.module('lstn.directives', [])
         load: '=',
         context: '@'
       },
-      templateUrl: '/static/partials/directives/artist.html'
+      templateUrl: '/static/partials/directives/artist.html',
+      link: function($scope, $element, $attrs) {
+        $scope.favorites = Favorite;
+      }
     };
   }
 ])
 
-.directive('lstnAlbum', [
-  function() {
+.directive('lstnAlbum', ['Favorite',
+  function(Favorite) {
     return {
       restrict: 'E',
       replace: true,
@@ -441,7 +447,10 @@ angular.module('lstn.directives', [])
         load: '=',
         context: '@'
       },
-      templateUrl: '/static/partials/directives/album.html'
+      templateUrl: '/static/partials/directives/album.html',
+      link: function($scope, $element, $attrs) {
+        $scope.favorites = Favorite;
+      }
     };
   }
 ])
@@ -531,8 +540,8 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnStation', [
-  function() {
+.directive('lstnStation', ['Favorite',
+  function(Favorite) {
     return {
       restrict: 'E',
       replace: true,
@@ -544,6 +553,8 @@ angular.module('lstn.directives', [])
       },
       templateUrl: '/static/partials/directives/station.html',
       link: function($scope, $element, $attrs) {
+        $scope.favorites = Favorite;
+
         $scope.station  = $scope.station  || {};
         $scope.radio    = $scope.radio    || {};
 
@@ -691,6 +702,8 @@ angular.module('lstn.directives', [])
         $timeout(function() {
           item.promise.then(function() {
             $scope.next();
+          }, function() {
+            $scope.slides.pop();
           });
         }, 100);
       };
