@@ -1,22 +1,22 @@
 <span>
   <button
-    data-ng-show="!mute"
+    data-ng-show="!rdio.muted"
     data-ng-disabled="!playing.track.key"
     type="button"
     class="control__button btn btn-default"
     aria-label="Mute"
-    data-ng-click="toggleMute()"
+    data-ng-click="rdio.mute()"
     data-tooltip="Mute"
     data-tooltip-placement="bottom">
     <i class="fa fa-lg fa-volume-off" aria-hidden="true"></i>
   </button>
   <button
-    data-ng-show="mute"
+    data-ng-show="rdio.muted"
     data-ng-disabled="!playing.track.key"
     type="button"
     class="control__button btn btn-default"
     aria-label="Unmute"
-    data-ng-click="toggleMute()"
+    data-ng-click="rdio.mute()"
     data-tooltip="Unmute"
     data-tooltip-placement="bottom">
     <i class="fa fa-lg fa-volume-up" aria-hidden="true"></i>
