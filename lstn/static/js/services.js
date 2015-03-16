@@ -655,35 +655,36 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
 
 .constant('Category', {
-  playlists: 'Playlists',
-  stations: 'Stations'
+  playlists: ['Playlists', true],
+  stations: ['Stations', true],
+  favorites: ['Favorites', false]
 })
 
 .constant('PlaylistType', {
-  owned: 'Your Playlists',
-  collab: 'Collaborative Playlists',
-  subscribed: 'Subscribed Playlists',
-  favorites: 'Favorited Playlists'
+  owned: ['Your Playlists', false],
+  collab: ['Collaborative Playlists', false],
+  subscribed: ['Subscribed Playlists', false],
+  favorites: ['Favorited Playlists', false]
 })
 
 .constant('StationType', {
-  you: 'Your Stations',
-  friends: 'Friends',
-  recent: 'Recent Stations'
+  you: ['Your Stations', false],
+  friends: ['Friends', false],
+  recent: ['Recent Stations', false]
 })
 
 .factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album',
   function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album) {
     var Loader = {
-      toResponse: function(object, type, constant) {
+      toResponse: function(object, type) {
         var data = [];
 
-        angular.forEach(object, function(value, key) {
+        angular.forEach(object, function(data, key) {
           this.push({
             key: key,
-            name: value,
+            name: data[0],
             type: type,
-            constant: constant
+            constant: data[1],
           });
         }, data);
 
@@ -695,7 +696,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       search: function(query) {
         if (!query || query.length < 3) {
           var deferred = $q.defer();
-          deferred.resolve(Loader.toResponse([], 'searchResult', true));
+          deferred.resolve(Loader.toResponse([], 'searchResult'));
           return deferred.promise;
         }
 
@@ -705,7 +706,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       },
       music: function(key) {
         var deferred = $q.defer();
-        deferred.resolve(Loader.toResponse(Category, 'category', true));
+        deferred.resolve(Loader.toResponse(Category, 'category'));
         return deferred.promise;
       },
       category: function(key) {
@@ -715,6 +716,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           deferred.resolve(Loader.toResponse(PlaylistType, 'playlistType'));
         } else if (key === 'stations') {
           deferred.resolve(Loader.toResponse(StationType, 'stationType'));
+        } else if (key === 'favorites') {
+          return CurrentUser.getFavorites();
         } else {
           deferred.reject('Category not found');
         }
