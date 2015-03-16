@@ -135,16 +135,6 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnPlayingImage', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/playing-image.html'
-    };
-  }
-])
-
 .directive('lstnPlayingInfo', [
   function() {
     return {
