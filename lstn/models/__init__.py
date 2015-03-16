@@ -165,7 +165,7 @@ class User(db.Model, ModelMixin, UserMixin):
 
     return queue
 
-  def get_favorites(self):
+  def get_favorite_keys(self):
     rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
       current_app.config['RDIO_CONSUMER_SECRET'],
       self.oauth_token,
@@ -186,6 +186,33 @@ class User(db.Model, ModelMixin, UserMixin):
       return []
 
     return response['keys']
+
+  def get_favorites(self):
+    rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+      current_app.config['RDIO_CONSUMER_SECRET'],
+      self.oauth_token,
+      self.oauth_token_secret)
+
+    keys = self.get_favorite_keys()
+
+    if not keys:
+      return []
+
+    try:
+      response = rdio_manager.get(keys, ['radioKey', 'streamRegions'])
+    except Exception as e:
+      current_app.logger.debug(e)
+      raise APIException('Unable to retrieve favorites: %s' % str(e))
+
+    favoriteDict = {}
+    for favorite in response:
+      favoriteDict[favorite.key] = favorite._data
+
+    favorites = []
+    for key in keys:
+      favorites.append(favoriteDict[key])
+
+    return favorites;
 
   def get_owned_rooms(self):
     rooms = {}
