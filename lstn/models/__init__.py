@@ -194,12 +194,13 @@ class User(db.Model, ModelMixin, UserMixin):
       self.oauth_token_secret)
 
     keys = self.get_favorite_keys()
+    keys = [key for key in keys if not key.startswith('tp')]
 
     if not keys:
       return []
 
     try:
-      response = rdio_manager.get(keys, ['radioKey', 'streamRegions'])
+      response = rdio_manager.get(keys, ['radioKey', 'streamRegions', 'albumCount'])
     except Exception as e:
       current_app.logger.debug(e)
       raise APIException('Unable to retrieve favorites: %s' % str(e))
