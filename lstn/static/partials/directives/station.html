@@ -2,7 +2,7 @@
   <div class="item__image">
     <img data-ng-src="{{ station.icon }}" alt="{{ station.name }}">
     <div class="item__image__overlay" data-ng-if="favorites.bitset[station.key]"></div>
-    <i class="fa fa-heart item__image__overlay__icon" data-ng-if="favorites.bitset[station.key]"></i>
+    <i class="fa fa-heart item__image__overlay__icon item__image__overlay__icon--favorite" data-ng-if="favorites.bitset[station.key]"></i>
   </div>
   <div class="item__info">
     <div
