@@ -783,7 +783,9 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           !$localStorage ||
           Loader.skipCache.indexOf(type) !== -1) {
 
-          return;
+          var deferred = $q.defer();
+          deferred.reject(response);
+          return deferred.promise;
         }
 
         if (!(type in $localStorage)) {
