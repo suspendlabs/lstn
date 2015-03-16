@@ -444,7 +444,6 @@ angular.module('lstn.controllers', [])
 
     window.upvote = $scope.upvote = function() {
       if (!$scope.playing ||
-        $scope.playing.voted ||
         $scope.voting ||
         !$scope.currentController ||
         $scope.isCurrentController) {
@@ -478,6 +477,7 @@ angular.module('lstn.controllers', [])
 
         $scope.playing.voted = true;
         $scope.playing.upvoted = true;
+        $scope.playing.downvoted = false;
 
         socket.sendUpvote();
       }, function(response) {
@@ -488,7 +488,6 @@ angular.module('lstn.controllers', [])
 
     window.downvote = $scope.downvote = function() {
       if (!$scope.playing ||
-        $scope.playing.voted ||
         $scope.voting ||
         !$scope.currentController ||
         $scope.isCurentController) {
@@ -523,6 +522,7 @@ angular.module('lstn.controllers', [])
 
         $scope.playing.voted = true;
         $scope.playing.downvoted = true;
+        $scope.playing.upvoted = false;
 
         socket.sendDownvote();
       }, function(response) {
@@ -632,7 +632,6 @@ angular.module('lstn.controllers', [])
       }
 
       $scope.playing = {
-        status: 'playing',
         track: $scope.rdioToLstn(newVal),
         voted: 0,
         upvoted: 0,

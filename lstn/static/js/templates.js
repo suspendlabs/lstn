@@ -439,10 +439,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<span>\n" +
     "  <button\n" +
     "    type=\"button\"\n" +
-    "    data-ng-hide=\"playing.upvoted || isCurrentController\"\n" +
-    "    data-ng-disabled=\"!playing.track.key || isCurrentController || playing.track.voted\"\n" +
     "    class=\"control__button btn btn-success\"\n" +
     "    aria-label=\"Upvote\"\n" +
+    "    data-ng-if=\"!playing.upvoted && !isCurrentController && playing.track.key\"\n" +
     "    data-ng-click=\"upvote()\"\n" +
     "    data-tooltip=\"Upvote\"\n" +
     "    data-tooltip-placement=\"bottom\">\n" +
@@ -450,10 +449,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </button>\n" +
     "  <button\n" +
     "    type=\"button\"\n" +
-    "    data-ng-show=\"playing.upvoted\"\n" +
-    "    disabled=\"disabled\"\n" +
     "    class=\"control__button btn btn-success\"\n" +
     "    aria-label=\"Upvoted\"\n" +
+    "    disabled=\"disabled\"\n" +
+    "    data-ng-if=\"playing.upvoted\"\n" +
     "    data-tooltip=\"Upvoted\"\n" +
     "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-check fa-lg\" aria-hidden=\"true\"></i>\n" +
