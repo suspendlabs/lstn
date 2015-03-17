@@ -551,6 +551,7 @@ angular.module('lstn.directives', [])
         $scope.station.key  = $scope.station.key  || $scope.radio.radioKey;
         $scope.station.name = $scope.station.name || $scope.radio.name;
         $scope.station.icon = $scope.station.icon || $scope.radio.icon;
+        $scope.station.type = $scope.station.type || 'station';
 
         if ($scope.radio && $scope.radio.name) {
           $scope.station.name = $scope.radio.name + ' Radio';
@@ -690,6 +691,11 @@ angular.module('lstn.directives', [])
         $scope.slides.push(item);
 
         $timeout(function() {
+          if (!item.promise) {
+            $scope.slides.pop();
+            return;
+          }
+
           item.promise.then(function() {
             $scope.next();
           }, function() {
