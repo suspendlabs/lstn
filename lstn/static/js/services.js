@@ -261,8 +261,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   }
 ])
 
-.factory('Rdio', ['Alert',
-  function(Alert) {
+.factory('Rdio', ['Alert', '$log',
+  function(Alert, $log) {
     var Rdio = {
       scope: null,
       api: null,
@@ -282,7 +282,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         }
 
         Rdio.api.bind('ready.rdio', function(e, user) {
-          console.log('ready.rdio', user);
+          $log.debug('ready.rdio', user);
 
           Rdio.scope.$evalAsync(function() {
             Rdio.flash = true;
@@ -302,7 +302,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         });
 
         Rdio.api.bind('playingTrackChanged.rdio', function(e, track, position) {
-          console.log('playingTrackChanged.rdio', track, position);
+          $log.debug('playingTrackChanged.rdio', track, position);
           Rdio.scope.$evalAsync(function() {
             Rdio.track = track;
             Rdio.position = position;
@@ -310,24 +310,22 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         });
 
         Rdio.api.bind('playingSourceChanged.rdio', function(e, source) {
-          console.log('playingSourceChanged.rdio', source);
+          $log.debug('playingSourceChanged.rdio', source);
           Rdio.scope.$evalAsync(function() {
             Rdio.source = source;
           });
         });
 
         Rdio.api.bind('positionChanged.rdio', function(e, position) {
-          console.log('positionChanged.rdio', position);
+          $log.debug('positionChanged.rdio', position);
           window.playingPosition = position || 0;
 
           var progressBar = $('#progress');
 
           var duration = parseInt(progressBar.attr('data-duration'), 10);
-          console.log('duration', duration);
           duration = isNaN(duration) ? 0 : duration;
 
           var currentValue = parseInt(position, 10);
-          console.log('currentValue', currentValue);
           currentValue = isNaN(currentValue) ? 0 : currentValue;
 
           var percentage = 0;
