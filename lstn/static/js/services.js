@@ -264,6 +264,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 .factory('Rdio', ['Alert',
   function(Alert) {
     var Rdio = {
+      scope: null,
       api: null,
       state: 0,
       ready: false,
@@ -272,7 +273,9 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       user: null,
       queued: null,
 
-      init: function(playbackToken) {
+      init: function(scope, playbackToken) {
+        Rdio.scope = scope;
+
         Rdio.api = $('#api');
         if (!Rdio.api) {
           return;
@@ -280,9 +283,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
         Rdio.api.bind('ready.rdio', function(e, user) {
           console.log('ready.rdio', user);
-          Rdio.flash = true;
-          Rdio.ready = true;
-          Rdio.user = user;
+
+          Rdio.scope.$evalAsync(function() {
+            Rdio.flash = true;
+            Rdio.ready = true;
+            Rdio.user = user;
+          });
         });
 
         Rdio.api.bind('freeRemainingChanged.rdio', function(e, remaining) {
@@ -290,18 +296,24 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         });
 
         Rdio.api.bind('playStateChanged.rdio', function(e, state) {
-          Rdio.state = state;
+          Rdio.scope.$evalAsync(function() {
+            Rdio.state = state;
+          });
         });
 
         Rdio.api.bind('playingTrackChanged.rdio', function(e, track, position) {
           console.log('playingTrackChanged.rdio', track, position);
-          Rdio.track = track;
-          Rdio.position = position;
+          Rdio.scope.$evalAsync(function() {
+            Rdio.track = track;
+            Rdio.position = position;
+          });
         });
 
         Rdio.api.bind('playingSourceChanged.rdio', function(e, source) {
           console.log('playingSourceChanged.rdio', source);
-          Rdio.source = source;
+          Rdio.scope.$evalAsync(function() {
+            Rdio.source = source;
+          });
         });
 
         Rdio.api.bind('positionChanged.rdio', function(e, position) {
