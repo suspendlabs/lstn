@@ -251,7 +251,15 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "\n" +
     "  <div class=\"progress\" data-ng-show=\"playing.track.duration && playing.track.canStream\">\n" +
-    "    <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.track.duration }}\"></div>\n" +
+    "    <div\n" +
+    "      id=\"progress\"\n" +
+    "      class=\"progress-bar progress-bar-info progress-bar-striped active\"\n" +
+    "      role=\"progressbar\"\n" +
+    "      data-duration=\"{{ playing.track.duration }}\"\n" +
+    "      aria-valuenow=\"0\"\n" +
+    "      aria-valuemin=\"0\"\n" +
+    "      aria-valuemax=\"{{ playing.track.duration }}\"></div>\n" +
+    "\n" +
     "    <span id=\"time\" class=\"time\"></span>\n" +
     "  </div>\n" +
     "</div>\n"
