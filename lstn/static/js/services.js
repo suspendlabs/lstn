@@ -279,6 +279,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         }
 
         Rdio.api.bind('ready.rdio', function(e, user) {
+          console.log('ready.rdio', user);
           Rdio.flash = true;
           Rdio.ready = true;
           Rdio.user = user;
@@ -293,36 +294,41 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         });
 
         Rdio.api.bind('playingTrackChanged.rdio', function(e, track, position) {
+          console.log('playingTrackChanged.rdio', track, position);
           Rdio.track = track;
           Rdio.position = position;
         });
 
         Rdio.api.bind('playingSourceChanged.rdio', function(e, source) {
+          console.log('playingSourceChanged.rdio', source);
           Rdio.source = source;
         });
 
         Rdio.api.bind('positionChanged.rdio', function(e, position) {
+          console.log('positionChanged.rdio', position);
           window.playingPosition = position || 0;
 
           var progressBar = $('#progress');
 
-          var maxValue = parseInt(progressBar.attr('aria-valuemax'), 10);
-          maxValue = isNaN(maxValue) ? 0 : maxValue;
+          var duration = parseInt(progressBar.attr('data-duration'), 10);
+          console.log('duration', duration);
+          duration = isNaN(duration) ? 0 : duration;
 
           var currentValue = parseInt(position, 10);
+          console.log('currentValue', currentValue);
           currentValue = isNaN(currentValue) ? 0 : currentValue;
 
           var percentage = 0;
-          if (maxValue > 0) {
-            percentage = Math.ceil((currentValue / maxValue) * 100);
+          if (duration > 0) {
+            percentage = Math.ceil((currentValue / duration) * 100);
             percentage = isNaN(percentage) ? 0 : Math.min(100, percentage);
           }
 
           var currentSeconds = currentValue % 60;
           var currentMinutes = (currentValue - currentSeconds) / 60;
 
-          var maxSeconds = maxValue % 60;
-          var maxMinutes = (maxValue - maxSeconds) / 60;
+          var maxSeconds = duration % 60;
+          var maxMinutes = (duration - maxSeconds) / 60;
 
           var time = currentMinutes + ':';
           time += (currentSeconds < 10) ? '0' + currentSeconds : currentSeconds;
