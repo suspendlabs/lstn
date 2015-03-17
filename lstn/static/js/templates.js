@@ -683,6 +683,12 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-bulk-add-handler=\"addTracks\"\n" +
     "    data-current=\"current\"></lstn-drilldown-back>\n" +
     "  <ul class=\"drilldown__list text-left\">\n" +
+    "    <lstn-station\n" +
+    "      data-ng-if=\"current.radioKey\"\n" +
+    "      data-context=\"{{ current.type }}\"\n" +
+    "      data-radio=\"current\"\n" +
+    "      data-load=\"load\"></lstn-station>\n" +
+    "\n" +
     "    <li data-ng-repeat=\"item in data\">\n" +
     "      <div data-ng-switch=\"getType(item.type)\">\n" +
     "        <lstn-category\n" +
