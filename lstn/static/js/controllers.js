@@ -3,14 +3,17 @@
 
 angular.module('lstn.controllers', [])
 
-.controller('AppController', ['$scope', '$modal', '$log', 'Alert', 'CurrentRoom', 'CurrentUser',
-  function($scope, $modal, $log, Alert, CurrentRoom, CurrentUser) {
+.controller('AppController', ['$scope', '$modal', '$log', 'Alert', 'CurrentRoom', 'CurrentUser', 'AuthUser',
+  function($scope, $modal, $log, Alert, CurrentRoom, CurrentUser, AuthUser) {
     $scope.$on('socket:error', function(ev, data) {
       $log.debug('socket:error', ev, data);
     });
 
     $scope.currentRoom = CurrentRoom;
     $scope.alerts = Alert;
+    
+    // Update AuthUser
+    AuthUser.update($scope.current_user);
 
     // Profile
     $scope.openProfile = function() {
@@ -155,8 +158,8 @@ angular.module('lstn.controllers', [])
       $scope.desktop = match;
     });
 
-    // Clear sessionStorage for Loader
-    delete $sessionStorage.loader;
+    // Clear sessionStorage
+    $sessionStorage.$reset();
 
     // Handle destroy
     $scope.$on('$destroy', function(e) {
@@ -218,11 +221,18 @@ angular.module('lstn.controllers', [])
     // Setup sockets
     socket.on('connect', function() {
       $log.debug('socket', 'connect');
-      socket.isConnected = true;
 
       if ($scope.room && $scope.room.id) {
         socket.registerRoom($scope.room.id, $scope.current_user);
       }
+    });
+
+    socket.on('disconnect', function() {
+      $scope.isController = false;
+      $scope.isCurrentController = false;
+
+      $scope.playing = false;
+      $scope.rdio.stop();
     });
 
     socket.on('room:connect:error', function(data) {
@@ -261,6 +271,7 @@ angular.module('lstn.controllers', [])
 
       if (!$scope.queue.tracks || $scope.queue.tracks.length === 0) {
         $scope.isController = false;
+        $scope.isCurrentController = false;
         socket.emit('room:controller:empty');
 
         Alert.info("You've been made a listener because your queue ran out of music.");

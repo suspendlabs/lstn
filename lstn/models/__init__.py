@@ -80,7 +80,6 @@ class User(db.Model, ModelMixin, UserMixin):
   def to_array(self, for_public=False):
     data = super(User, self).to_array()
     if for_public:
-      data.pop('external_id', None)
       data.pop('oauth_token', None)
       data.pop('oauth_token_secret', None)
 

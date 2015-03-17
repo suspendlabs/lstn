@@ -83,7 +83,6 @@ def get_playlists():
   playlists = {
     'owned': [],
     'collab': [],
-    'subscribed': [],
     'favorites': [],
   }
 
@@ -92,9 +91,6 @@ def get_playlists():
 
   if hasattr(playlist_set, 'collab_playlists'):
     playlists['collab'] = [playlist._data for playlist in playlist_set.collab_playlists if hasattr(playlist, '_data')]
-
-  if hasattr(playlist_set, 'subscribed_playlists'):
-    playlists['subscribed'] = [playlist._data for playlist in playlist_set.subscribed_playlists if hasattr(playlist, '_data')]
 
   if hasattr(playlist_set, 'favorites_playlists'):
     playlists['favorites'] = [playlist._data for playlist in playlist_set.favorites_playlists if hasattr(playlist, '_data')]
@@ -109,7 +105,7 @@ def get_playlist_type(list_type):
     current_user.oauth_token,
     current_user.oauth_token_secret)
 
-  if list_type not in ['owned', 'collab', 'subscribed', 'favorites']:
+  if list_type not in ['owned', 'collab', 'favorites']:
     raise APIException('Invalid list type')
 
   data = {
@@ -154,7 +150,8 @@ def get_station_type(station_type):
     },
     'genre': {
       'method': 'getGenreStations',
-      'v': '20140512'
+      'v': '20140512',
+      'genre': request.args.get('genre')
     },
     'top': {
       'method': 'getCuratedContent',
@@ -363,7 +360,7 @@ def search():
     'method': 'search',
     'query': query,
     'types': 'track,artist,album',
-    'extras': 'albumCount,streamRegions',
+    'extras': 'albumCount,streamRegions,radioKey',
   }
 
   try:
@@ -430,6 +427,28 @@ def delete_favorite(track_id):
     raise APIException('Unable to remove that track from your favorites: %s' % str(e))
 
   return jsonify(success=True)
+
+@user.route('/collection', methods=['GET'])
+@login_required
+def user_collection():
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  data = {
+    'method': 'getArtistsInCollection',
+    'user': current_user.external_id,
+    'extras': 'albumCount,radioKey',
+  }
+
+  try:
+    response = rdio_manager.call_api_authenticated(data)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to get your collection: %s' % str(e))
+
+  return jsonify(success=True, data=response)
 
 @user.route('/settings', methods=['POST'])
 @login_required
