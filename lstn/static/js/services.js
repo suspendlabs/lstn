@@ -430,10 +430,6 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   };
 
   socket.registerRoom = function(id, user) {
-    if (!this.isConnected) {
-      return;
-    }
-
     this.roomConnect(id, user);
   };
 
@@ -566,6 +562,44 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   });
 }])
 
+.factory('AuthUser', [
+  function() {
+    var AuthUser = {};
+
+    AuthUser.update = function(user) {
+      $.extend(this, this, this, user);
+    };
+
+    AuthUser.getCollectionKey = function() {
+      if (!AuthUser.external_id) {
+        return null;
+      }
+
+      var id = AuthUser.external_id.replace(/\D/g, '');
+      if (!id) {
+        return null;
+      }
+
+      return 'c' + id;
+    };
+
+    AuthUser.getHeavyRotationKey = function() {
+      if (!AuthUser.external_id) {
+        return null;
+      }
+
+      var id = AuthUser.external_id.replace(/\D/g, '');
+      if (!id) {
+        return null;
+      }
+
+      return 'e' + id;
+    };
+
+    return AuthUser;
+  }
+])
+
 .factory('CurrentUser', ['$resource', function($resource) {
   var CurrentUser = $resource('/api/user/:action/:id', {
     id: '@id'
@@ -644,10 +678,16 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     }).$promise;
   };
 
-  CurrentUser.getStations = function(type) {
-    return CurrentUser.stations({
+  CurrentUser.getStations = function(type, genre) {
+    var data = {
       id: type
-    }).$promise;
+    };
+
+    if (genre) {
+      data.genre = genre;
+    }
+    
+    return CurrentUser.stations(data).$promise;
   };
 
   CurrentUser.getFavorites = function(type) {
@@ -746,27 +786,42 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 }])
 
 .constant('RdioType', {
-  r: 'artist',
-  a: 'album',
-  t: 'track',
-  p: 'playlist',
-  tp: 'station',
-  h: 'station',
-  gr: 'station',
-  rr: 'station'
+  a: 'album', // Album
+  c: 'station', // UserCollectionStation
+  e: 'station', // HeavyRotationUserStation
+  h: 'station', // HeavyRotationStation
+  p: 'playlist', // Playlist
+  r: 'artist', // Artist
+  t: 'track', // Track
+  ap: 'station', // AutoplayStation
+  tp: 'station', // TasteProfileStation
+  ar: 'station', // AlbumStation
+  gr: 'station', // GenreStation
+  lr: 'station', // LabelStation
+  pr: 'station', // PlaylistStation
+  rr: 'station', // ArtistStation
+  sr: 'station', // SongStation
+  tr: 'station', // ArtistTopSongsStation
 })
 
 .constant('RdioName', {
-  r: 'Artist',
-  a: 'Album',
-  t: 'Track',
-  p: 'Playlist',
-  tp: 'Station',
-  h: 'Station',
-  gr: 'Station',
-  rr: 'Station'
+  a: 'Album', // Album
+  c: 'Station', // UserCollectionStation
+  e: 'Station', // HeavyRotationUserStation
+  h: 'Station', // HeavyRotationStation
+  p: 'Playlist', // Playlist
+  r: 'Artist', // Artist
+  t: 'Track', // Track
+  ap: 'Station', // AutoplayStation
+  tp: 'Station', // TasteProfileStation
+  ar: 'Station', // AlbumStation
+  gr: 'Station', // GenreStation
+  lr: 'Station', // LabelStation
+  pr: 'Station', // PlaylistStation
+  rr: 'Station', // ArtistStation
+  sr: 'Station', // SongStation
+  tr: 'Station', // ArtistTopSongsStation
 })
-
 
 .constant('Category', {
   playlists: ['Playlists', true],
@@ -783,12 +838,37 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
 .constant('StationType', {
   you: ['Your Stations', false],
-  friends: ['Friends', false],
-  recent: ['Recent Stations', false]
+  friends: ["Friend's Stations", false],
+  recent: ['Recent Stations', false],
+  genre: ['Genre Stations', true, 'genre'],
+  collection: ['Collection Station', false, 'station'],
+  heavyRotation: ['Heavy Rotation Station', false, 'station']
 })
 
-.factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album', '$sessionStorage',
-  function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album, $sessionStorage) {
+.constant('Genre', {
+  Reggae: ['Reggae', false],
+  Rock: ['Rock', false],
+  Latin: ['Latin', false],
+  Christian_Gospel: ['Christian Gospel', false],
+  World: ['World', false],
+  Classical: ['Classical', false],
+  Dance: ['Dance', false],
+  Country: ['Country', false],
+  Songwriters_Folk: ['Songwriters/Folk', false],
+  Jazz: ['Jazz', false],
+  Pop: ['Pop', false],
+  Indie: ['Indie', false],
+  R_and_B: ['R&B', false],
+  Hip_Hop: ['Hip Hop', false],
+  Alternative: ['Alternative', false],
+  Holiday: ['Holiday', false],
+  Electronic: ['Electronic', false],
+  Blues: ['Blues', false],
+  More: ['More', false]
+})
+
+.factory('Loader', ['$q', 'Alert', 'AuthUser', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album', 'Genre', '$sessionStorage',
+  function($q, Alert, AuthUser, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album, Genre, $sessionStorage) {
     var Loader = {
       skipCache: ['station', 'search', 'favorites'],
       toResponse: function(object, type) {
@@ -798,7 +878,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           this.push({
             key: key,
             name: data[0],
-            type: type,
+            type: data[2] || type,
             constant: data[1],
           });
         }, data);
@@ -823,6 +903,14 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         var deferred = $q.defer();
         deferred.resolve(Loader.toResponse(Category, 'category'));
         return deferred.promise;
+      },
+      genre: function(key) {
+        var deferred = $q.defer();
+        deferred.resolve(Loader.toResponse(Genre, 'genreStationType'));
+        return deferred.promise;
+      },
+      genreStationType: function(key) {
+        return CurrentUser.getStations('genre', key);
       },
       category: function(key) {
         var deferred = $q.defer();
@@ -849,6 +937,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         return CurrentUser.getStations(key);
       },
       station: function(key) {
+        if (key === 'collection') {
+          key = AuthUser.getCollectionKey();
+        } else if (key === 'heavyRotation') {
+          key = AuthUser.getHeavyRotationKey();
+        }
+
+        if (!key) {
+          var deferred = $q.defer();
+          deferred.reject('Station not found');
+          return deferred.promise;
+        }
+
         return Station.getTracks(key);
       },
       artist: function(key) {
@@ -873,6 +973,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       if (item.type in RdioType) {
         type = RdioType[item.type];
       }
+      
+      console.log(type);
 
       if (!(type in Loader)) {
         Alert.error('Something went wrong while trying to load ' + item.name);
@@ -920,28 +1022,6 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
     return Loader;
   }
-])
-
-.constant('Genre', {
-  Reggae: 'Reggae',
-  Rock: 'Rock',
-  Latin: 'Latin',
-  Christian_Gospel: 'Christian Gospel',
-  World: 'World',
-  Classical: 'Classical',
-  Dance: 'Dance',
-  Country: 'Country',
-  Songwriters_Folk: 'Songwriters/Folk',
-  Jazz: 'Jazz',
-  Pop: 'Pop',
-  Indie: 'Indie',
-  R_and_B: 'R&B',
-  Hip_Hop: 'Hip Hop',
-  Alternative: 'Alternative',
-  Holiday: 'Holiday',
-  Electronic: 'Electronic',
-  Blues: 'Blues',
-  More: 'More'
-});
+]);
 
 })();
