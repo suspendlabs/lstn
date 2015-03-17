@@ -992,25 +992,28 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         type = RdioType[item.type];
       }
       
-      console.log(type);
-
       if (!(type in Loader)) {
         Alert.error('Something went wrong while trying to load ' + item.name);
         return null;
       }
 
+      /*
+      var loaderKey = 'loader-' + type;
+
       if (!refresh &&
           this.skipCache.indexOf(type) === -1 &&
-          'loader' in $sessionStorage &&
-          type in $sessionStorage.loader && item.key in $sessionStorage.loader[type] &&
-          ($sessionStorage.loader[type][item.key].cached + (60 * 60 * 12)) > Date.now()) {
+          $sessionStorage &&
+          loaderKey in $sessionStorage && item.key in $sessionStorage[loaderKey] &&
+          ($sessionStorage[loaderKey][item.key].cached + (60 * 60 * 12)) > Date.now()) {
 
         var deferred = $q.defer();
-        deferred.resolve($sessionStorage.loader[type][item.key]);
+        deferred.resolve($sessionStorage[loaderKey][item.key]);
         return deferred.promise;
       }
+      */
 
       var promise = Loader[type](item.key, refresh);
+      /*
       promise.then(function(response) {
         if (!response ||
           !response.success ||
@@ -1023,17 +1026,14 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           return deferred.promise;
         }
 
-        if (!('loader' in $sessionStorage)) {
-          $sessionStorage.loader = {};
+        if (!(loaderKey in $sessionStorage)) {
+          $sessionStorage[loaderKey] = {};
         }
 
-        if (!(type in $sessionStorage.loader)) {
-          $sessionStorage.loader[type] = {};
-        }
-
-        $sessionStorage.loader[type][item.key] = response;
-        $sessionStorage.loader[type][item.key].cached = Date.now();
+        response.cached = Date.now();
+        $sessionStorage[loaderKey][item.key] = response;
       });
+      */
 
       return promise;
     };
