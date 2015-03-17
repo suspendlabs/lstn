@@ -1,10 +1,9 @@
 <span>
   <button
     type="button"
-    data-ng-hide="playing.upvoted || isCurrentController"
-    data-ng-disabled="!playing.track.key || isCurrentController || playing.track.voted"
     class="control__button btn btn-success"
     aria-label="Upvote"
+    data-ng-if="!playing.upvoted && !isCurrentController && playing.track.key"
     data-ng-click="upvote()"
     data-tooltip="Upvote"
     data-tooltip-placement="bottom">
@@ -12,10 +11,10 @@
   </button>
   <button
     type="button"
-    data-ng-show="playing.upvoted"
-    disabled="disabled"
     class="control__button btn btn-success"
     aria-label="Upvoted"
+    disabled="disabled"
+    data-ng-if="playing.upvoted"
     data-tooltip="Upvoted"
     data-tooltip-placement="bottom">
     <i class="fa fa-check fa-lg" aria-hidden="true"></i>

@@ -251,7 +251,15 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "\n" +
     "  <div class=\"progress\" data-ng-show=\"playing.track.duration && playing.track.canStream\">\n" +
-    "    <div id=\"progress\" class=\"progress-bar progress-bar-info progress-bar-striped active\" role=\"progressbar\" aria-valuenow=\"0\" aria-valuemin=\"0\" aria-valuemax=\"{{ playing.track.duration }}\"></div>\n" +
+    "    <div\n" +
+    "      id=\"progress\"\n" +
+    "      class=\"progress-bar progress-bar-info progress-bar-striped active\"\n" +
+    "      role=\"progressbar\"\n" +
+    "      data-duration=\"{{ playing.track.duration }}\"\n" +
+    "      aria-valuenow=\"0\"\n" +
+    "      aria-valuemin=\"0\"\n" +
+    "      aria-valuemax=\"{{ playing.track.duration }}\"></div>\n" +
+    "\n" +
     "    <span id=\"time\" class=\"time\"></span>\n" +
     "  </div>\n" +
     "</div>\n"
@@ -439,10 +447,9 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<span>\n" +
     "  <button\n" +
     "    type=\"button\"\n" +
-    "    data-ng-hide=\"playing.upvoted || isCurrentController\"\n" +
-    "    data-ng-disabled=\"!playing.track.key || isCurrentController || playing.track.voted\"\n" +
     "    class=\"control__button btn btn-success\"\n" +
     "    aria-label=\"Upvote\"\n" +
+    "    data-ng-if=\"!playing.upvoted && !isCurrentController && playing.track.key\"\n" +
     "    data-ng-click=\"upvote()\"\n" +
     "    data-tooltip=\"Upvote\"\n" +
     "    data-tooltip-placement=\"bottom\">\n" +
@@ -450,10 +457,10 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </button>\n" +
     "  <button\n" +
     "    type=\"button\"\n" +
-    "    data-ng-show=\"playing.upvoted\"\n" +
-    "    disabled=\"disabled\"\n" +
     "    class=\"control__button btn btn-success\"\n" +
     "    aria-label=\"Upvoted\"\n" +
+    "    disabled=\"disabled\"\n" +
+    "    data-ng-if=\"playing.upvoted\"\n" +
     "    data-tooltip=\"Upvoted\"\n" +
     "    data-tooltip-placement=\"bottom\">\n" +
     "    <i class=\"fa fa-check fa-lg\" aria-hidden=\"true\"></i>\n" +

@@ -261,9 +261,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   }
 ])
 
-.factory('Rdio', ['Alert',
-  function(Alert) {
+.factory('Rdio', ['Alert', '$log',
+  function(Alert, $log) {
     var Rdio = {
+      scope: null,
       api: null,
       state: 0,
       ready: false,
@@ -272,16 +273,22 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       user: null,
       queued: null,
 
-      init: function(playbackToken) {
+      init: function(scope, playbackToken) {
+        Rdio.scope = scope;
+
         Rdio.api = $('#api');
         if (!Rdio.api) {
           return;
         }
 
         Rdio.api.bind('ready.rdio', function(e, user) {
-          Rdio.flash = true;
-          Rdio.ready = true;
-          Rdio.user = user;
+          $log.debug('ready.rdio', user);
+
+          Rdio.scope.$evalAsync(function() {
+            Rdio.flash = true;
+            Rdio.ready = true;
+            Rdio.user = user;
+          });
         });
 
         Rdio.api.bind('freeRemainingChanged.rdio', function(e, remaining) {
@@ -289,40 +296,49 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         });
 
         Rdio.api.bind('playStateChanged.rdio', function(e, state) {
-          Rdio.state = state;
+          Rdio.scope.$evalAsync(function() {
+            Rdio.state = state;
+          });
         });
 
         Rdio.api.bind('playingTrackChanged.rdio', function(e, track, position) {
-          Rdio.track = track;
-          Rdio.position = position;
+          $log.debug('playingTrackChanged.rdio', track, position);
+          Rdio.scope.$evalAsync(function() {
+            Rdio.track = track;
+            Rdio.position = position;
+          });
         });
 
         Rdio.api.bind('playingSourceChanged.rdio', function(e, source) {
-          Rdio.source = source;
+          $log.debug('playingSourceChanged.rdio', source);
+          Rdio.scope.$evalAsync(function() {
+            Rdio.source = source;
+          });
         });
 
         Rdio.api.bind('positionChanged.rdio', function(e, position) {
+          $log.debug('positionChanged.rdio', position);
           window.playingPosition = position || 0;
 
           var progressBar = $('#progress');
 
-          var maxValue = parseInt(progressBar.attr('aria-valuemax'), 10);
-          maxValue = isNaN(maxValue) ? 0 : maxValue;
+          var duration = parseInt(progressBar.attr('data-duration'), 10);
+          duration = isNaN(duration) ? 0 : duration;
 
           var currentValue = parseInt(position, 10);
           currentValue = isNaN(currentValue) ? 0 : currentValue;
 
           var percentage = 0;
-          if (maxValue > 0) {
-            percentage = Math.ceil((currentValue / maxValue) * 100);
+          if (duration > 0) {
+            percentage = Math.ceil((currentValue / duration) * 100);
             percentage = isNaN(percentage) ? 0 : Math.min(100, percentage);
           }
 
           var currentSeconds = currentValue % 60;
           var currentMinutes = (currentValue - currentSeconds) / 60;
 
-          var maxSeconds = maxValue % 60;
-          var maxMinutes = (maxValue - maxSeconds) / 60;
+          var maxSeconds = duration % 60;
+          var maxMinutes = (duration - maxSeconds) / 60;
 
           var time = currentMinutes + ':';
           time += (currentSeconds < 10) ? '0' + currentSeconds : currentSeconds;
@@ -771,8 +787,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   recent: ['Recent Stations', false]
 })
 
-.factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album', '$localStorage',
-  function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album, $localStorage) {
+.factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album', '$sessionStorage',
+  function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album, $sessionStorage) {
     var Loader = {
       skipCache: ['station', 'search', 'favorites'],
       toResponse: function(object, type) {
@@ -865,11 +881,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
       if (!refresh &&
           this.skipCache.indexOf(type) === -1 &&
-          type in $localStorage && item.key in $localStorage[type] &&
-          ($localStorage[type][item.key].cached + (60 * 60 * 12)) > Date.now()) {
+          'loader' in $sessionStorage &&
+          type in $sessionStorage.loader && item.key in $sessionStorage.loader[type] &&
+          ($sessionStorage.loader[type][item.key].cached + (60 * 60 * 12)) > Date.now()) {
 
         var deferred = $q.defer();
-        deferred.resolve($localStorage[type][item.key]);
+        deferred.resolve($sessionStorage.loader[type][item.key]);
         return deferred.promise;
       }
 
@@ -878,7 +895,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         if (!response ||
           !response.success ||
           !response.data ||
-          !$localStorage ||
+          !$sessionStorage ||
           Loader.skipCache.indexOf(type) !== -1) {
 
           var deferred = $q.defer();
@@ -886,12 +903,16 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           return deferred.promise;
         }
 
-        if (!(type in $localStorage)) {
-          $localStorage[type] = {};
+        if (!('loader' in $sessionStorage)) {
+          $sessionStorage.loader = {};
         }
 
-        $localStorage[type][item.key] = response;
-        $localStorage[type][item.key].cached = Date.now();
+        if (!(type in $sessionStorage.loader)) {
+          $sessionStorage.loader[type] = {};
+        }
+
+        $sessionStorage.loader[type][item.key] = response;
+        $sessionStorage.loader[type][item.key].cached = Date.now();
       });
 
       return promise;
