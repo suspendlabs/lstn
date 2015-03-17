@@ -154,7 +154,8 @@ def get_station_type(station_type):
     },
     'genre': {
       'method': 'getGenreStations',
-      'v': '20140512'
+      'v': '20140512',
+      'genre': request.args.get('genre')
     },
     'top': {
       'method': 'getCuratedContent',
