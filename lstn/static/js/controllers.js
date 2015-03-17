@@ -158,8 +158,8 @@ angular.module('lstn.controllers', [])
       $scope.desktop = match;
     });
 
-    // Clear sessionStorage for Loader
-    delete $sessionStorage.loader;
+    // Clear sessionStorage
+    $sessionStorage.$reset();
 
     // Handle destroy
     $scope.$on('$destroy', function(e) {
@@ -227,6 +227,14 @@ angular.module('lstn.controllers', [])
       }
     });
 
+    socket.on('disconnect', function() {
+      $scope.isController = false;
+      $scope.isCurrentController = false;
+
+      $scope.playing = false;
+      $scope.rdio.stop();
+    });
+
     socket.on('room:connect:error', function(data) {
       $log.debug('socket', 'room:connect:error', data);
       Alert.error('Something went wrong while trying to connect to the room.');
@@ -263,6 +271,7 @@ angular.module('lstn.controllers', [])
 
       if (!$scope.queue.tracks || $scope.queue.tracks.length === 0) {
         $scope.isController = false;
+        $scope.isCurrentController = false;
         socket.emit('room:controller:empty');
 
         Alert.info("You've been made a listener because your queue ran out of music.");
