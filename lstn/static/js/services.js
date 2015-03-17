@@ -622,6 +622,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         action: 'favorites'
       }
     },
+    collection: {
+      method: 'GET',
+      params: {
+        action: 'collection'
+      }
+    },
     addToFavorites: {
       method: 'POST',
       params: {
@@ -694,6 +700,10 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
     return CurrentUser.favorites({
       id: type
     }).$promise;
+  };
+
+  CurrentUser.getCollection = function() {
+    return CurrentUser.collection().$promise;
   };
 
   return CurrentUser;
@@ -790,15 +800,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   c: 'station', // UserCollectionStation
   e: 'station', // HeavyRotationUserStation
   h: 'station', // HeavyRotationStation
+  l: 'label', // Label
   p: 'playlist', // Playlist
   r: 'artist', // Artist
   t: 'track', // Track
+  al: 'album', // CollectionAlbum
   ap: 'station', // AutoplayStation
   tp: 'station', // TasteProfileStation
   ar: 'station', // AlbumStation
   gr: 'station', // GenreStation
   lr: 'station', // LabelStation
   pr: 'station', // PlaylistStation
+  rl: 'artist', // CollectionArtist
   rr: 'station', // ArtistStation
   sr: 'station', // SongStation
   tr: 'station', // ArtistTopSongsStation
@@ -809,15 +822,18 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   c: 'Station', // UserCollectionStation
   e: 'Station', // HeavyRotationUserStation
   h: 'Station', // HeavyRotationStation
+  l: 'Label', // Label
   p: 'Playlist', // Playlist
   r: 'Artist', // Artist
   t: 'Track', // Track
+  al: 'Album', // CollectionAlbum
   ap: 'Station', // AutoplayStation
   tp: 'Station', // TasteProfileStation
   ar: 'Station', // AlbumStation
   gr: 'Station', // GenreStation
   lr: 'Station', // LabelStation
   pr: 'Station', // PlaylistStation
+  rl: 'Artist', // CollectionArtist
   rr: 'Station', // ArtistStation
   sr: 'Station', // SongStation
   tr: 'Station', // ArtistTopSongsStation
@@ -826,7 +842,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 .constant('Category', {
   playlists: ['Playlists', true],
   stations: ['Stations', true],
-  favorites: ['Favorites', false]
+  favorites: ['Favorites', false],
+  collection: ['Collection', false]
 })
 
 .constant('PlaylistType', {
@@ -921,6 +938,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           deferred.resolve(Loader.toResponse(StationType, 'stationType'));
         } else if (key === 'favorites') {
           return CurrentUser.getFavorites();
+        } else if (key === 'collection') {
+          return CurrentUser.getCollection();
         } else {
           deferred.reject('Category not found');
         }
