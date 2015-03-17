@@ -363,7 +363,7 @@ def search():
     'method': 'search',
     'query': query,
     'types': 'track,artist,album',
-    'extras': 'albumCount,streamRegions',
+    'extras': 'albumCount,streamRegions,radioKey',
   }
 
   try:
