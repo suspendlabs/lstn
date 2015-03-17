@@ -155,8 +155,8 @@ angular.module('lstn.controllers', [])
       $scope.desktop = match;
     });
 
-    // Clear localStorage
-    $localStorage.$reset();
+    // Clear localStorage for Loader
+    delete $localStorage.loader;
 
     // Handle destroy
     $scope.$on('$destroy', function(e) {
@@ -217,6 +217,7 @@ angular.module('lstn.controllers', [])
 
     // Setup sockets
     socket.on('connect', function() {
+      $log.debug('socket', 'connect');
       socket.isConnected = true;
 
       if ($scope.room && $scope.room.id) {
@@ -225,10 +226,12 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:connect:error', function(data) {
+      $log.debug('socket', 'room:connect:error', data);
       Alert.error('Something went wrong while trying to connect to the room.');
     });
 
     socket.on('room:chat:history', function(data) {
+      $log.debug('socket', 'room:chat:history', data);
       $scope.chat.messages = data;
       $scope.chat.loading = false;
 
@@ -244,6 +247,7 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:roster:update', function(data) {
+      $log.debug('socket', 'room:roster:update', data);
       $scope.roster = data;
       $scope.roster.controllersCount = $scope.roster.controllerOrder.length;
       $scope.roster.usersCount = Object.keys($scope.roster.users).length;
@@ -252,7 +256,9 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:controller:playing:request', function(data) {
+      $log.debug('socket', 'room:controller:playing:request', data);
       $scope.isCurrentController = true;
+
       if (!$scope.queue.tracks || $scope.queue.tracks.length === 0) {
         $scope.isController = false;
         socket.emit('room:controller:empty');
@@ -304,6 +310,7 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:playing', function(data) {
+      $log.debug('socket', 'room:playing', data);
       if (!$scope.rdio.ready) {
         $scope.rdio.queued = data;
         return;
@@ -313,6 +320,7 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:upvote', function(upvote) {
+      $log.debug('socket', 'room:upvote', upvote);
       if ($scope.playing) {
         if (!$scope.playing.upvotes) {
           $scope.playing.upvotes = {};
@@ -338,6 +346,7 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:downvote', function(downvote) {
+      $log.debug('socket', 'room:downvote', downvote);
       if ($scope.playing) {
         if (!$scope.playing.downvotes) {
           $scope.playing.downvotes = {};
@@ -367,6 +376,7 @@ angular.module('lstn.controllers', [])
     });
 
     socket.on('room:chat:message', function(message) {
+      $log.debug('socket', 'room:chat:message', message);
       $scope.chat.messages.unshift(message);
 
       if (message &&
@@ -479,6 +489,15 @@ angular.module('lstn.controllers', [])
         $scope.playing.upvoted = true;
         $scope.playing.downvoted = false;
 
+        if (!('vote' in $localStorage)) {
+          $localStorage.vote = {};
+        }
+
+        $localStorage.vote[$scope.playing.track.key] = {
+          expires: Date.now() + remaining,
+          type: 'upvote'
+        };
+
         socket.sendUpvote();
       }, function(response) {
         $scope.voting = false;
@@ -523,6 +542,15 @@ angular.module('lstn.controllers', [])
         $scope.playing.voted = true;
         $scope.playing.downvoted = true;
         $scope.playing.upvoted = false;
+
+        if (!('vote' in $localStorage)) {
+          $localStorage.vote = {};
+        }
+
+        $localStorage.vote[$scope.playing.track.key] = {
+          expires: Date.now() + remaining,
+          type: 'downvote'
+        };
 
         socket.sendDownvote();
       }, function(response) {
@@ -605,13 +633,15 @@ angular.module('lstn.controllers', [])
       $scope.playTrack($scope.rdio.queued);
     });
 
-    $scope.$watch('rdio.track', function(newVal, oldVal) {
+    $scope.$watch('rdio.track.key', function(newVal, oldVal) {
       Alert.remove('canStream');
 
-      $log.debug('rdio.track', newVal, oldVal);
+      $log.debug('rdio.track.key', newVal, oldVal);
       if (newVal === oldVal) {
         return;
       }
+
+      $log.debug('rdio.track', $scope.rdio.track);
 
       // Signal that the track is finished
       if (!newVal) {
@@ -619,20 +649,20 @@ angular.module('lstn.controllers', [])
 
         // If we're the current controller, tell the server we finished
         if (oldVal && $scope.isCurrentController) {
-          $scope.trackFinished(oldVal.key);
+          $scope.trackFinished(oldVal);
         }
 
         return;
       }
 
       // Skip auto play tracks from Rdio
-      if (newVal.type === 'ap') {
+      if ($scope.rdio.track.type === 'ap') {
         $scope.playing = null;
         return;
       }
 
       $scope.playing = {
-        track: $scope.rdioToLstn(newVal),
+        track: $scope.rdioToLstn($scope.rdio.track),
         voted: 0,
         upvoted: 0,
         downvoted: 0
@@ -647,11 +677,21 @@ angular.module('lstn.controllers', [])
         $scope.rdio.queued = null;
       }
 
-      if (!newVal.canStream) {
+      if ('vote' in $localStorage) {
+        if (newVal in $localStorage.vote && $localStorage.vote[newVal].expires > Date.now()) {
+          $scope.playing.voted = true;
+          $scope.playing.upvoted = $localStorage.vote[newVal].type === 'upvote';
+          $scope.playing.downvoted = !$scope.playing.upvoted;
+        } else {
+          delete $localStorage.vote;
+        }
+      }
+
+      if (!$scope.rdio.track.canStream) {
         Alert.error('Streaming for this track is unavailable in your area', 'canStream');
         return;
       }
-    }, true);
+    });
 
     promises.getRoom = Room.get({
       id: $routeParams.id
