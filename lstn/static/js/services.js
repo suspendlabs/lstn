@@ -771,8 +771,8 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   recent: ['Recent Stations', false]
 })
 
-.factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album', '$localStorage',
-  function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album, $localStorage) {
+.factory('Loader', ['$q', 'Alert', 'CurrentUser', 'RdioType', 'Category', 'PlaylistType', 'Playlist', 'StationType', 'Station', 'Artist', 'Album', '$sessionStorage',
+  function($q, Alert, CurrentUser, RdioType, Category, PlaylistType, Playlist, StationType, Station, Artist, Album, $sessionStorage) {
     var Loader = {
       skipCache: ['station', 'search', 'favorites'],
       toResponse: function(object, type) {
@@ -865,12 +865,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
       if (!refresh &&
           this.skipCache.indexOf(type) === -1 &&
-          'loader' in $localStorage &&
-          type in $localStorage.loader && item.key in $localStorage.loader[type] &&
-          ($localStorage.loader[type][item.key].cached + (60 * 60 * 12)) > Date.now()) {
+          'loader' in $sessionStorage &&
+          type in $sessionStorage.loader && item.key in $sessionStorage.loader[type] &&
+          ($sessionStorage.loader[type][item.key].cached + (60 * 60 * 12)) > Date.now()) {
 
         var deferred = $q.defer();
-        deferred.resolve($localStorage.loader[type][item.key]);
+        deferred.resolve($sessionStorage.loader[type][item.key]);
         return deferred.promise;
       }
 
@@ -879,7 +879,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
         if (!response ||
           !response.success ||
           !response.data ||
-          !$localStorage ||
+          !$sessionStorage ||
           Loader.skipCache.indexOf(type) !== -1) {
 
           var deferred = $q.defer();
@@ -887,16 +887,16 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           return deferred.promise;
         }
 
-        if (!('loader' in $localStorage)) {
-          $localStorage.loader = {};
+        if (!('loader' in $sessionStorage)) {
+          $sessionStorage.loader = {};
         }
 
-        if (!(type in $localStorage.loader)) {
-          $localStorage.loader[type] = {};
+        if (!(type in $sessionStorage.loader)) {
+          $sessionStorage.loader[type] = {};
         }
 
-        $localStorage.loader[type][item.key] = response;
-        $localStorage.loader[type][item.key].cached = Date.now();
+        $sessionStorage.loader[type][item.key] = response;
+        $sessionStorage.loader[type][item.key].cached = Date.now();
       });
 
       return promise;

@@ -129,8 +129,8 @@ angular.module('lstn.controllers', [])
   };
 }])
 
-.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert', 'screenSize', '$localStorage',
-  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert, screenSize, $localStorage) {
+.controller('RoomController', ['$scope', '$routeParams', '$timeout', '$log', 'socket', 'Promise', 'Rdio', 'CurrentRoom', 'Room', 'CurrentUser', 'User', 'Queue', 'Favorite', 'Alert', 'screenSize', '$localStorage', '$sessionStorage',
+  function($scope, $routeParams, $timeout, $log, socket, Promise, Rdio, CurrentRoom, Room, CurrentUser, User, Queue, Favorite, Alert, screenSize, $localStorage, $sessionStorage) {
     var promises = {};
     var timeouts = {};
 
@@ -155,8 +155,8 @@ angular.module('lstn.controllers', [])
       $scope.desktop = match;
     });
 
-    // Clear localStorage for Loader
-    delete $localStorage.loader;
+    // Clear sessionStorage for Loader
+    delete $sessionStorage.loader;
 
     // Handle destroy
     $scope.$on('$destroy', function(e) {
