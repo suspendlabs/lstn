@@ -796,10 +796,10 @@ div.progress-bar-info {
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.item__info .item__title.item__title--single {
+.item__info .item__title.item__title--1 {
   padding-top: 17px;
 }
-.item__info .item__title.item__title--couple {
+.item__info .item__title.item__title--2 {
   padding-top: 8px;
 }
 .item__info .item__artist {
