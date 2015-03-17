@@ -218,7 +218,6 @@ angular.module('lstn.controllers', [])
     // Setup sockets
     socket.on('connect', function() {
       $log.debug('socket', 'connect');
-      socket.isConnected = true;
 
       if ($scope.room && $scope.room.id) {
         socket.registerRoom($scope.room.id, $scope.current_user);
