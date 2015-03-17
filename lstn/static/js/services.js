@@ -865,11 +865,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 
       if (!refresh &&
           this.skipCache.indexOf(type) === -1 &&
-          type in $localStorage && item.key in $localStorage[type] &&
-          ($localStorage[type][item.key].cached + (60 * 60 * 12)) > Date.now()) {
+          'loader' in $localStorage &&
+          type in $localStorage.loader && item.key in $localStorage.loader[type] &&
+          ($localStorage.loader[type][item.key].cached + (60 * 60 * 12)) > Date.now()) {
 
         var deferred = $q.defer();
-        deferred.resolve($localStorage[type][item.key]);
+        deferred.resolve($localStorage.loader[type][item.key]);
         return deferred.promise;
       }
 
@@ -886,12 +887,16 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           return deferred.promise;
         }
 
-        if (!(type in $localStorage)) {
-          $localStorage[type] = {};
+        if (!('loader' in $localStorage)) {
+          $localStorage.loader = {};
         }
 
-        $localStorage[type][item.key] = response;
-        $localStorage[type][item.key].cached = Date.now();
+        if (!(type in $localStorage.loader)) {
+          $localStorage.loader[type] = {};
+        }
+
+        $localStorage.loader[type][item.key] = response;
+        $localStorage.loader[type][item.key].cached = Date.now();
       });
 
       return promise;
