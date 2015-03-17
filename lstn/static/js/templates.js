@@ -1,73 +1,6 @@
 angular.module('lstn.templates', []).run(['$templateCache', function($templateCache) {
   'use strict';
 
-  $templateCache.put('/static/partials/directives/album.html',
-    "<div id=\"album-{{ $id }}\" class=\"drilldown__item album\">\n" +
-    "  <div class=\"item__image\">\n" +
-    "    <img data-ng-src=\"{{ album.icon }}\" alt=\"{{ album.album }}\">\n" +
-    "    <div class=\"item__image__overlay\" data-ng-if=\"favorites.bitset[album.key]\"></div>\n" +
-    "    <i class=\"fa fa-heart item__image__overlay__icon item__image__overlay__icon--favorite\" data-ng-if=\"favorites.bitset[album.key]\"></i>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__info\">\n" +
-    "    <div\n" +
-    "      class=\"item__title\"\n" +
-    "      data-ng-bind=\"album.name\"></div>\n" +
-    "    <div\n" +
-    "      class=\"item__artist\"\n" +
-    "      data-ng-bind=\"album.artist\"></div>\n" +
-    "    <div class=\"item__count\" data-ng-pluralize count=\"album.length\" when=\"{'one': '{} track', 'other': '{} tracks'}\"></div>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__actions\">\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-chevron-right\"\n" +
-    "      data-ng-show=\"!album.loading\"\n" +
-    "      data-ng-click=\"load(album)\"\n" +
-    "      data-tooltip=\"Load Tracks\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"album.loading\"\n" +
-    "      data-tooltip=\"Loading Tracks\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "  </div>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/static/partials/directives/artist.html',
-    "<div id=\"artist-{{ $id }}\" class=\"drilldown__item artist clearfix\">\n" +
-    "  <div class=\"item__image\">\n" +
-    "    <img data-ng-src=\"{{ artist.icon }}\" alt=\"{{ artist.artist }}\">\n" +
-    "    <div class=\"item__image__overlay\" data-ng-if=\"favorites.bitset[artist.key]\"></div>\n" +
-    "    <i class=\"fa fa-heart item__image__overlay__icon item__image__overlay__icon--favorite\" data-ng-if=\"favorites.bitset[artist.key]\"></i>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__info\">\n" +
-    "    <div\n" +
-    "      class=\"item__title item__title--couple\"\n" +
-    "      data-ng-bind=\"artist.name\"></div>\n" +
-    "    <div class=\"item__count\" data-ng-pluralize count=\"artist.albumCount\" when=\"{'one': '{} album', 'other': '{} albums'}\"></div>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__actions\">\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-chevron-right\"\n" +
-    "      data-ng-show=\"!artist.loading\"\n" +
-    "      data-ng-click=\"load(artist)\"\n" +
-    "      data-tooltip=\"Load Albums\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"artist.loading\"\n" +
-    "      data-tooltip=\"Loading Albums\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "  </div>\n" +
-    "</div>\n"
-  );
-
-
   $templateCache.put('/static/partials/directives/carousel.html',
     "<div class=\"lstn-carousel\">\n" +
     "  <div class=\"slide__wrapper\">\n" +
@@ -80,35 +13,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "          data-context=\"context\"></lstn-slide>\n" +
     "      </li>\n" +
     "    </ul>\n" +
-    "  </div>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/static/partials/directives/category.html',
-    "<div id=\"category{{ $id }}\" class=\"drilldown__item category\">\n" +
-    "  <div class=\"item__image\">\n" +
-    "    <i class=\"fa fa-fw fa-music fa-3x\"></i>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__info\">\n" +
-    "    <div\n" +
-    "      class=\"item__title item__title--single\"\n" +
-    "      data-ng-bind=\"category.name\"></div>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__actions\">\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-chevron-right\"\n" +
-    "      data-ng-show=\"!category.loading\"\n" +
-    "      data-ng-click=\"load(category)\"\n" +
-    "      data-tooltip=\"Load\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"category.loading\"\n" +
-    "      data-tooltip=\"Loading\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -198,6 +102,59 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
+  $templateCache.put('/static/partials/directives/drilldown-item.html',
+    "<div id=\"generic{{ $id }}\" class=\"drilldown__item generic\">\n" +
+    "  <div class=\"item__image\">\n" +
+    "    <span data-ng-if=\"!content.icon\">\n" +
+    "      <i class=\"fa fa-fw fa-music fa-3x\"></i>\n" +
+    "    </span>\n" +
+    "    <span data-ng-if=\"content.icon\">\n" +
+    "      <img data-ng-src=\"{{ content.icon }}\" alt=\"{{ content.name }}\">\n" +
+    "      <div class=\"item__image__overlay\" data-ng-if=\"favorites.bitset[content.key]\"></div>\n" +
+    "      <i class=\"fa fa-heart item__image__overlay__icon item__image__overlay__icon--favorite\" data-ng-if=\"favorites.bitset[content.key]\"></i>\n" +
+    "    </span>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__info\">\n" +
+    "    <div\n" +
+    "      class=\"item__title\"\n" +
+    "      data-ng-class=\"className\"\n" +
+    "      data-ng-bind=\"content.name\"></div>\n" +
+    "    <div\n" +
+    "      class=\"item__artist\"\n" +
+    "      data-ng-if=\"content.artist\"\n" +
+    "      data-ng-bind=\"content.artist\"></div>\n" +
+    "    <div\n" +
+    "      class=\"item__count\"\n" +
+    "      data-ng-if=\"content.albumCount\"\n" +
+    "      data-ng-pluralize\n" +
+    "      count=\"content.albumCount\"\n" +
+    "      when=\"{'one': '{} album', 'other': '{} albums'}\"></div>\n" +
+    "    <div\n" +
+    "      class=\"item__count\"\n" +
+    "      data-ng-if=\"content.length\"\n" +
+    "      data-ng-pluralize\n" +
+    "      count=\"content.length\"\n" +
+    "      when=\"{'one': '{} track', 'other': '{} tracks'}\"></div>\n" +
+    "  </div>\n" +
+    "  <div class=\"item__actions\">\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-chevron-right\"\n" +
+    "      data-ng-show=\"!content.loading\"\n" +
+    "      data-ng-click=\"load(content)\"\n" +
+    "      data-tooltip=\"Load\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "    <a\n" +
+    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
+    "      data-ng-show=\"content.loading\"\n" +
+    "      data-tooltip=\"Loading\"\n" +
+    "      data-tooltip-placement=\"left\"\n" +
+    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
+    "  </div>\n" +
+    "</div>\n"
+  );
+
+
   $templateCache.put('/static/partials/directives/emoticon-list.html',
     "<ul class=\"list-group emoticon-list\">\n" +
     "  <li data-mentio-menu-item=\"emoticon\" data-ng-repeat=\"emoticon in items\" class=\"list-group-item\">\n" +
@@ -261,67 +218,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      aria-valuemax=\"{{ playing.track.duration }}\"></div>\n" +
     "\n" +
     "    <span id=\"time\" class=\"time\"></span>\n" +
-    "  </div>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/static/partials/directives/playlist-type.html',
-    "<div id=\"playlist-type{{ $id }}\" class=\"drilldown__item playlist-type\">\n" +
-    "  <div class=\"item__image\">\n" +
-    "    <i class=\"fa fa-fw fa-music fa-3x\"></i>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__info\">\n" +
-    "    <div\n" +
-    "      class=\"item__title item__title--single\"\n" +
-    "      data-ng-bind=\"playlistType.name\"></div>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__actions\">\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-chevron-right\"\n" +
-    "      data-ng-show=\"!playlistType.loading\"\n" +
-    "      data-ng-click=\"load(playlistType)\"\n" +
-    "      data-tooltip=\"Load Playlists\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"playlistType.loading\"\n" +
-    "      data-tooltip=\"Loading Playlists\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "  </div>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/static/partials/directives/playlist.html',
-    "<div id=\"playlist{{ $id }}\" class=\"drilldown__item playlist clearfix\">\n" +
-    "  <div class=\"item__image\">\n" +
-    "    <img data-ng-src=\"{{ playlist.icon }}\" alt=\"{{ playlist.name }}\">\n" +
-    "    <div class=\"item__image__overlay\" data-ng-if=\"favorites.bitset[playlist.key]\"></div>\n" +
-    "    <i class=\"fa fa-heart item__image__overlay__icon item__image__overlay__icon--favorite\" data-ng-if=\"favorites.bitset[playlist.key]\"></i>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__info\">\n" +
-    "    <div\n" +
-    "      class=\"item__title item__title--couple\"\n" +
-    "      data-ng-bind=\"playlist.name\"></div>\n" +
-    "    <div class=\"item__count\" data-ng-pluralize count=\"playlist.length\" when=\"{'one': '{} track', 'other': '{} tracks'}\"></div>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__actions\">\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-chevron-right\"\n" +
-    "      data-ng-show=\"!playlist.loading\"\n" +
-    "      data-ng-click=\"load(playlist)\"\n" +
-    "      data-tooltip=\"Load Tracks\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"playlist.loading\"\n" +
-    "      data-tooltip=\"Loading Tracks\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
     "  </div>\n" +
     "</div>\n"
   );
@@ -562,14 +458,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
   );
 
 
-  $templateCache.put('/static/partials/directives/room-music.html',
-    "<div class=\"music__container room__container\">\n" +
-    "  <lstn-music-search></lstn-music-search>\n" +
-    "  <lstn-music-categories></lstn-music-categories\">\n" +
-    "</div>\n"
-  );
-
-
   $templateCache.put('/static/partials/directives/room-queue.html',
     "<div class=\"queue__container\">\n" +
     "  <div class=\"queue__controls\" data-ng-show=\"!queue.loading && queue.tracks && queue.tracks.length > 0\">\n" +
@@ -683,124 +571,28 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-bulk-add-handler=\"addTracks\"\n" +
     "    data-current=\"current\"></lstn-drilldown-back>\n" +
     "  <ul class=\"drilldown__list text-left\">\n" +
-    "    <lstn-station\n" +
+    "    <lstn-drilldown-item\n" +
     "      data-ng-if=\"current.radioKey\"\n" +
     "      data-context=\"{{ current.type }}\"\n" +
     "      data-radio=\"current\"\n" +
-    "      data-load=\"load\"></lstn-station>\n" +
+    "      data-load=\"load\"></lstn-drilldown-item>\n" +
     "\n" +
     "    <li data-ng-repeat=\"item in data\">\n" +
     "      <div data-ng-switch=\"getType(item.type)\">\n" +
-    "        <lstn-category\n" +
-    "          data-ng-switch-when=\"category\"\n" +
-    "          data-context=\"{{ current.type }}\"\n" +
-    "          data-category=\"item\"\n" +
-    "          data-load=\"load\"></lstn-category>\n" +
-    "\n" +
-    "        <lstn-playlist-type\n" +
-    "          data-ng-switch-when=\"playlistType\"\n" +
-    "          data-context=\"{{ current.type }}\"\n" +
-    "          data-playlist-type=\"item\"\n" +
-    "          data-load=\"load\"></lstn-playlist-type>\n" +
-    "\n" +
-    "        <lstn-station-type\n" +
-    "          data-ng-switch-when=\"stationType\"\n" +
-    "          data-context=\"{{ current.type }}\"\n" +
-    "          data-station-type=\"item\"\n" +
-    "          data-load=\"load\"></lstn-station-type>\n" +
-    "\n" +
-    "        <lstn-playlist\n" +
-    "          data-ng-switch-when=\"playlist\"\n" +
-    "          data-context=\"{{ current.type }}\"\n" +
-    "          data-playlist=\"item\"\n" +
-    "          data-load=\"load\"></lstn-playlist>\n" +
-    "\n" +
-    "        <lstn-station\n" +
-    "          data-ng-switch-when=\"station\"\n" +
-    "          data-context=\"{{ current.type }}\"\n" +
-    "          data-station=\"item\"\n" +
-    "          data-load=\"load\"></lstn-station>\n" +
-    "\n" +
-    "        <lstn-album\n" +
-    "          data-ng-switch-when=\"album\"\n" +
-    "          data-context=\"{{ current.type }}\"\n" +
-    "          data-album=\"item\"\n" +
-    "          data-load=\"load\"></lstn-album>\n" +
-    "\n" +
-    "        <lstn-artist\n" +
-    "          data-ng-switch-when=\"artist\"\n" +
-    "          data-context=\"{{ current.type }}\"\n" +
-    "          data-artist=\"item\"\n" +
-    "          data-load=\"load\"></lstn-artist>\n" +
-    "\n" +
     "        <lstn-track\n" +
     "          data-ng-switch-when=\"track\"\n" +
     "          data-context=\"{{ current.type }}\"\n" +
     "          data-track=\"item\"\n" +
     "          data-index=\"$index\"></lstn-track>\n" +
+    "\n" +
+    "        <lstn-drilldown-item\n" +
+    "          data-ng-switch-default\n" +
+    "          data-context=\"{{ current.type }}\"\n" +
+    "          data-content=\"item\"\n" +
+    "          data-load=\"load\"></lstn-drilldown-item>\n" +
     "      </div>\n" +
     "    </li>\n" +
     "  </ul>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/static/partials/directives/station-type.html',
-    "<div id=\"station-type{{ $id }}\" class=\"drilldown__item station-type clearfix\">\n" +
-    "  <div class=\"item__image\">\n" +
-    "    <i class=\"fa fa-fw fa-music fa-3x\"></i>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__info\">\n" +
-    "    <div\n" +
-    "      class=\"item__title item__title--single\"\n" +
-    "      data-ng-bind=\"stationType.name\"></div>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__actions\">\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-chevron-right\"\n" +
-    "      data-ng-show=\"!stationType.loading\"\n" +
-    "      data-ng-click=\"load(stationType)\"\n" +
-    "      data-tooltip=\"Load Stations\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"stationType.loading\"\n" +
-    "      data-tooltip=\"Loading Stations\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "  </div>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/static/partials/directives/station.html',
-    "<div id=\"station{{ $id }}\" class=\"drilldown__item station clearfix\">\n" +
-    "  <div class=\"item__image\">\n" +
-    "    <img data-ng-src=\"{{ station.icon }}\" alt=\"{{ station.name }}\">\n" +
-    "    <div class=\"item__image__overlay\" data-ng-if=\"favorites.bitset[station.key]\"></div>\n" +
-    "    <i class=\"fa fa-heart item__image__overlay__icon item__image__overlay__icon--favorite\" data-ng-if=\"favorites.bitset[station.key]\"></i>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__info\">\n" +
-    "    <div\n" +
-    "      class=\"item__title item__title--single\"\n" +
-    "      data-ng-bind=\"station.name\"></div>\n" +
-    "  </div>\n" +
-    "  <div class=\"item__actions\">\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-chevron-right\"\n" +
-    "      data-ng-show=\"!station.loading\"\n" +
-    "      data-ng-click=\"load(station)\"\n" +
-    "      data-tooltip=\"Load Tracks\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "    <a\n" +
-    "      class=\"fa fa-fw fa-circle-o-notch fa-spin\"\n" +
-    "      data-ng-show=\"station.loading\"\n" +
-    "      data-tooltip=\"Loading Tracks\"\n" +
-    "      data-tooltip-placement=\"left\"\n" +
-    "      data-tooltip-popup-delay=\"1000\"></a>\n" +
-    "  </div>\n" +
     "</div>\n"
   );
 
@@ -904,13 +696,6 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "      class=\"fa fa-fw fa-bars item__actions__drag-handle\"\n" +
     "      data-ng-show=\"track.in_queue && context === 'queue'\"></i>\n" +
     "  </div>\n" +
-    "</div>\n"
-  );
-
-
-  $templateCache.put('/static/partials/directives/visualizer.html',
-    "<div class=\"playing__visualization text-center\">\n" +
-    "  <div data-ng-repeat=\"i in getNumber(bands) track by $index\"></div>\n" +
     "</div>\n"
   );
 
