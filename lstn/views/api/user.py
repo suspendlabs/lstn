@@ -83,7 +83,6 @@ def get_playlists():
   playlists = {
     'owned': [],
     'collab': [],
-    'subscribed': [],
     'favorites': [],
   }
 
@@ -92,9 +91,6 @@ def get_playlists():
 
   if hasattr(playlist_set, 'collab_playlists'):
     playlists['collab'] = [playlist._data for playlist in playlist_set.collab_playlists if hasattr(playlist, '_data')]
-
-  if hasattr(playlist_set, 'subscribed_playlists'):
-    playlists['subscribed'] = [playlist._data for playlist in playlist_set.subscribed_playlists if hasattr(playlist, '_data')]
 
   if hasattr(playlist_set, 'favorites_playlists'):
     playlists['favorites'] = [playlist._data for playlist in playlist_set.favorites_playlists if hasattr(playlist, '_data')]
@@ -109,7 +105,7 @@ def get_playlist_type(list_type):
     current_user.oauth_token,
     current_user.oauth_token_secret)
 
-  if list_type not in ['owned', 'collab', 'subscribed', 'favorites']:
+  if list_type not in ['owned', 'collab', 'favorites']:
     raise APIException('Invalid list type')
 
   data = {

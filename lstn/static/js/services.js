@@ -849,7 +849,6 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 .constant('PlaylistType', {
   owned: ['Your Playlists', false],
   collab: ['Collaborative Playlists', false],
-  subscribed: ['Subscribed Playlists', false],
   favorites: ['Favorited Playlists', false]
 })
 
