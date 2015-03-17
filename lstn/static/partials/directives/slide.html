@@ -15,6 +15,12 @@
     data-bulk-add-handler="addTracks"
     data-current="current"></lstn-drilldown-back>
   <ul class="drilldown__list text-left">
+    <lstn-station
+      data-ng-if="current.radioKey"
+      data-context="{{ current.type }}"
+      data-radio="current"
+      data-load="load"></lstn-station>
+
     <li data-ng-repeat="item in data">
       <div data-ng-switch="getType(item.type)">
         <lstn-category
