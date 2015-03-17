@@ -3,14 +3,17 @@
 
 angular.module('lstn.controllers', [])
 
-.controller('AppController', ['$scope', '$modal', '$log', 'Alert', 'CurrentRoom', 'CurrentUser',
-  function($scope, $modal, $log, Alert, CurrentRoom, CurrentUser) {
+.controller('AppController', ['$scope', '$modal', '$log', 'Alert', 'CurrentRoom', 'CurrentUser', 'AuthUser',
+  function($scope, $modal, $log, Alert, CurrentRoom, CurrentUser, AuthUser) {
     $scope.$on('socket:error', function(ev, data) {
       $log.debug('socket:error', ev, data);
     });
 
     $scope.currentRoom = CurrentRoom;
     $scope.alerts = Alert;
+    
+    // Update AuthUser
+    AuthUser.update($scope.current_user);
 
     // Profile
     $scope.openProfile = function() {
