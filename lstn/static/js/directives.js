@@ -33,16 +33,6 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnRoomPlaying', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/room-playing.html'
-    };
-  }
-])
-
 .directive('lstnRoomActivity', ['socket', 'emojiMap',
   function(socket, emojiMap) {
     return {
@@ -121,16 +111,6 @@ angular.module('lstn.directives', [])
           return emoticon.text;
         };
       }
-    };
-  }
-])
-
-.directive('lstnRoomMusic', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      templateUrl: '/static/partials/directives/room-music.html'
     };
   }
 ])
@@ -361,85 +341,50 @@ angular.module('lstn.directives', [])
   }
 ])
 
-.directive('lstnCategory', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      scope: {
-        category: '=',
-        load: '=',
-        context: '@'
-      },
-      templateUrl: '/static/partials/directives/category.html'
-    };
-  }
-])
-
-.directive('lstnPlaylistType', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      scope: {
-        playlistType: '=',
-        load: '=',
-        context: '@'
-      },
-      templateUrl: '/static/partials/directives/playlist-type.html'
-    };
-  }
-])
-
-.directive('lstnPlaylist', ['Favorite',
+.directive('lstnDrilldownItem', ['Favorite',
   function(Favorite) {
     return {
       restrict: 'E',
       replace: true,
       scope: {
-        playlist: '=',
         load: '=',
-        context: '@'
+        context: '@',
+        content: '=?',
+        radio: '=?'
       },
-      templateUrl: '/static/partials/directives/playlist.html',
+      templateUrl: '/static/partials/directives/drilldown-item.html',
       link: function($scope, $element, $attrs) {
-        $scope.favorites = Favorite;
-      }
-    };
-  }
-])
+        // Support passing Radio in
+        $scope.content  = $scope.content  || {};
+        $scope.radio    = $scope.radio    || {};
 
-.directive('lstnArtist', ['Favorite',
-  function(Favorite) {
-    return {
-      restrict: 'E',
-      replace: true,
-      scope: {
-        artist: '=',
-        load: '=',
-        context: '@'
-      },
-      templateUrl: '/static/partials/directives/artist.html',
-      link: function($scope, $element, $attrs) {
-        $scope.favorites = Favorite;
-      }
-    };
-  }
-])
+        $scope.content.key  = $scope.content.key  || $scope.radio.radioKey;
+        $scope.content.name = $scope.content.name || $scope.radio.name;
+        $scope.content.icon = $scope.content.icon || $scope.radio.icon;
+        $scope.content.type = $scope.content.type || 'station';
 
-.directive('lstnAlbum', ['Favorite',
-  function(Favorite) {
-    return {
-      restrict: 'E',
-      replace: true,
-      scope: {
-        album: '=',
-        load: '=',
-        context: '@'
-      },
-      templateUrl: '/static/partials/directives/album.html',
-      link: function($scope, $element, $attrs) {
+        if ($scope.radio && $scope.radio.name) {
+          $scope.content.name = $scope.radio.name + ' Radio';
+        }
+
+        // Support Favorites
         $scope.favorites = Favorite;
+
+        // Handle content class name
+        var count = 1;
+        if ($scope.content.artist) {
+          count++;
+        }
+
+        if ($scope.content.albumCount) {
+          count++;
+        }
+
+        if ($scope.content.length) {
+          count++;
+        }
+
+        $scope.className = 'item__title--' + count;
       }
     };
   }
@@ -510,52 +455,6 @@ angular.module('lstn.directives', [])
         $scope.$on('$destory', function() {
           CurrentRoom.removeRegionListener(listenerId);
         });
-      }
-    };
-  }
-])
-
-.directive('lstnStationType', [
-  function() {
-    return {
-      restrict: 'E',
-      replace: true,
-      scope: {
-        stationType: '=',
-        load: '=',
-        context: '@'
-      },
-      templateUrl: '/static/partials/directives/station-type.html'
-    };
-  }
-])
-
-.directive('lstnStation', ['Favorite',
-  function(Favorite) {
-    return {
-      restrict: 'E',
-      replace: true,
-      scope: {
-        load: '=',
-        context: '@',
-        station: '=?',
-        radio: '=?'
-      },
-      templateUrl: '/static/partials/directives/station.html',
-      link: function($scope, $element, $attrs) {
-        $scope.favorites = Favorite;
-
-        $scope.station  = $scope.station  || {};
-        $scope.radio    = $scope.radio    || {};
-
-        $scope.station.key  = $scope.station.key  || $scope.radio.radioKey;
-        $scope.station.name = $scope.station.name || $scope.radio.name;
-        $scope.station.icon = $scope.station.icon || $scope.radio.icon;
-        $scope.station.type = $scope.station.type || 'station';
-
-        if ($scope.radio && $scope.radio.name) {
-          $scope.station.name = $scope.radio.name + ' Radio';
-        }
       }
     };
   }
