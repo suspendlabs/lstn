@@ -15,61 +15,25 @@
     data-bulk-add-handler="addTracks"
     data-current="current"></lstn-drilldown-back>
   <ul class="drilldown__list text-left">
-    <lstn-station
+    <lstn-drilldown-item
       data-ng-if="current.radioKey"
       data-context="{{ current.type }}"
       data-radio="current"
-      data-load="load"></lstn-station>
+      data-load="load"></lstn-drilldown-item>
 
     <li data-ng-repeat="item in data">
       <div data-ng-switch="getType(item.type)">
-        <lstn-category
-          data-ng-switch-when="category"
-          data-context="{{ current.type }}"
-          data-category="item"
-          data-load="load"></lstn-category>
-
-        <lstn-playlist-type
-          data-ng-switch-when="playlistType"
-          data-context="{{ current.type }}"
-          data-playlist-type="item"
-          data-load="load"></lstn-playlist-type>
-
-        <lstn-station-type
-          data-ng-switch-when="stationType"
-          data-context="{{ current.type }}"
-          data-station-type="item"
-          data-load="load"></lstn-station-type>
-
-        <lstn-playlist
-          data-ng-switch-when="playlist"
-          data-context="{{ current.type }}"
-          data-playlist="item"
-          data-load="load"></lstn-playlist>
-
-        <lstn-station
-          data-ng-switch-when="station"
-          data-context="{{ current.type }}"
-          data-station="item"
-          data-load="load"></lstn-station>
-
-        <lstn-album
-          data-ng-switch-when="album"
-          data-context="{{ current.type }}"
-          data-album="item"
-          data-load="load"></lstn-album>
-
-        <lstn-artist
-          data-ng-switch-when="artist"
-          data-context="{{ current.type }}"
-          data-artist="item"
-          data-load="load"></lstn-artist>
-
         <lstn-track
           data-ng-switch-when="track"
           data-context="{{ current.type }}"
           data-track="item"
           data-index="$index"></lstn-track>
+
+        <lstn-drilldown-item
+          data-ng-switch-default
+          data-context="{{ current.type }}"
+          data-content="item"
+          data-load="load"></lstn-drilldown-item>
       </div>
     </li>
   </ul>
