@@ -716,7 +716,7 @@ angular.module('lstn.controllers', [])
       }
 
       socket.registerRoom($scope.room.id, $scope.current_user);
-      $scope.rdio.init(response.playback);
+      $scope.rdio.init($scope, response.playback);
 
       timeouts.flashCheck = $timeout(function() {
         if ($scope.rdio.flash === false) {
