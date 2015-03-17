@@ -432,6 +432,28 @@ def delete_favorite(track_id):
 
   return jsonify(success=True)
 
+@user.route('/collection', methods=['GET'])
+@login_required
+def user_collection():
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  data = {
+    'method': 'getArtistsInCollection',
+    'user': current_user.external_id,
+    'extras': 'albumCount,radioKey',
+  }
+
+  try:
+    response = rdio_manager.call_api_authenticated(data)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to get your collection: %s' % str(e))
+
+  return jsonify(success=True, data=response)
+
 @user.route('/settings', methods=['POST'])
 @login_required
 def set_settings():
