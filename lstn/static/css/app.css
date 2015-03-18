@@ -499,6 +499,9 @@ div.progress-bar-info {
   font-size: 0.9rem;
   border: 1px solid white;
 }
+.roster__container .roster__user {
+  color: #333;
+}
 .roster__container .roster__user img {
   margin: 0 0 15px 0;
 }
