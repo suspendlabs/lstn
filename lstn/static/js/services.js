@@ -309,13 +309,6 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           });
         });
 
-        Rdio.api.bind('playingSourceChanged.rdio', function(e, source) {
-          $log.debug('playingSourceChanged.rdio', source);
-          Rdio.scope.$evalAsync(function() {
-            Rdio.source = source;
-          });
-        });
-
         Rdio.api.bind('positionChanged.rdio', function(e, position) {
           $log.debug('positionChanged.rdio', position);
           window.playingPosition = position || 0;
@@ -355,6 +348,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           Alert.error("You're playing music from a different source. Rdio only allows one source to play music at a time.");
         });
 
+        // playingSourceChanged.rdio
         // volumeChanged.rdio
         // muteChanged.rdio
         // queueChanged.rdio
