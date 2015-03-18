@@ -30,11 +30,17 @@ def get_tracks(album_id):
   if len(albums) > 0:
     if hasattr(albums[0], 'track_keys') and len(albums[0].track_keys) > 0:
       try:
-        tracks = rdio_manager.get(albums[0].track_keys, ['radioKey', 'streamRegions'])
+        response = rdio_manager.get(albums[0].track_keys, ['radioKey', 'streamRegions'])
       except Exception as e:
         current_app.logger.debug(e)
         raise APIException('Unable to retrieve album tracks: %s' % str(e))
 
-      tracks = [track._data for track in tracks]
+      trackDict = {}
+      for track in response:
+        trackDict[track.key] = track._data
+
+      tracks = []
+      for trackKey in albums[0].track_keys:
+        tracks.append(trackDict[trackKey])
 
   return jsonify(success=True, data=tracks)
