@@ -430,7 +430,7 @@ div.progress-bar-info {
   font-size: 1.4em;
   text-align: center;
 }
-.roster__broadcasting .broadcasting div {
+.roster__broadcasting .broadcasting .broadcasting-btn {
   display: inline-block;
   line-height: 50px;
   margin-left: 15px;
@@ -441,7 +441,7 @@ div.progress-bar-info {
 .roster__broadcasting .broadcasting--on .fa {
   background-color: #b62b2b;
 }
-.roster__broadcasting .broadcasting--on div {
+.roster__broadcasting .broadcasting--on .broadcasting-btn {
   text-shadow: 1px 1px 1px #b62b2b;
 }
 .roster__broadcasting .broadcasting--off {
@@ -450,8 +450,17 @@ div.progress-bar-info {
 .roster__broadcasting .broadcasting--off .fa {
   background-color: #247e4a;
 }
-.roster__broadcasting .broadcasting--off div {
+.roster__broadcasting .broadcasting--off .broadcasting-btn {
   text-shadow: 1px 1px 1px #247e4a;
+}
+.roster__broadcasting .broadcasting--disabled {
+  background-color: #777;
+}
+.roster__broadcasting .broadcasting--disabled .fa {
+  background-color: #5e5e5e;
+}
+.roster__broadcasting .broadcasting--disabled .broadcasting-btn {
+  text-shadow: 1px 1px 1px #5e5e5e;
 }
 
 .roster__category {

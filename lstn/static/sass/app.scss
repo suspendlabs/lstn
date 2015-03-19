@@ -485,7 +485,7 @@ div.progress-bar-info {
   }
 
   .broadcasting {
-    div {
+    .broadcasting-btn {
       display: inline-block;
       line-height: 50px;
       margin-left: 15px;
@@ -499,7 +499,7 @@ div.progress-bar-info {
       background-color: $broadcasting-on-dark;
     }
 
-    div {
+    .broadcasting-btn {
       @include text-shadow(1px 1px 1px $broadcasting-on-dark);
     }
   }
@@ -511,8 +511,20 @@ div.progress-bar-info {
       background-color: $broadcasting-off-dark;
     }
 
-    div {
+    .broadcasting-btn {
       @include text-shadow(1px 1px 1px $broadcasting-off-dark);
+    }
+  }
+
+  .broadcasting--disabled {
+    background-color: $gray;
+
+    .fa {
+      background-color: darken($gray, 10%);
+    }
+
+    .broadcasting-btn {
+      @include text-shadow(1px 1px 1px darken($gray, 10%));
     }
   }
 }
