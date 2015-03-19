@@ -663,6 +663,16 @@ div.progress-bar-info {
   color: #333;
 }
 
+.messages--empty {
+  height: calc(100% - 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 10em;
+  color: #333;
+}
+
 .drilldown__list {
   height: 100%;
   list-style: none;
@@ -770,6 +780,16 @@ div.progress-bar-info {
   color: #d24242;
 }
 .item__image .item__image__overlay__icon--message {
+  color: #777;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  opacity: 0.8;
+}
+.item__image .item__image__overlay__icon--disconnect {
+  color: #777;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  opacity: 0.8;
+}
+.item__image .item__image__overlay__icon--connect {
   color: #777;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
   opacity: 0.8;
@@ -1053,7 +1073,7 @@ div.chat__message--message {
   height: calc(100% - 40px);
 }
 .lstn-carousel .slides .slide__container .slide .slide--empty {
-  height: 100%;
+  height: calc(100% - 76px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1102,6 +1122,10 @@ div.chat__message--message {
 }
 .carousel__back .carousel__action .fa {
   font-size: 1.25em;
+}
+
+.profile__header {
+  font-size: 20px;
 }
 
 /* sm */

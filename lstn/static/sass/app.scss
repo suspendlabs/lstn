@@ -761,6 +761,17 @@ div.progress-bar-info {
   color: $background-color;
 }
 
+.messages--empty {
+  height: calc(100% - 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 10em;
+  color: $background-color;
+}
+
 .drilldown__list {
   height: 100%;
 
@@ -870,6 +881,16 @@ div.progress-bar-info {
   }
 
   .item__image__overlay__icon--message {
+    color: $gray;
+    @include opacity(0.8);
+  }
+
+  .item__image__overlay__icon--disconnect {
+    color: $gray;
+    @include opacity(0.8);
+  }
+
+  .item__image__overlay__icon--connect {
     color: $gray;
     @include opacity(0.8);
   }
@@ -1180,7 +1201,7 @@ div.chat__message--message {
         height: calc(100% - 40px);
 
         .slide--empty {
-          height: 100%;
+          height: calc(100% - 76px);
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -1243,6 +1264,10 @@ div.chat__message--message {
       font-size: 1.25em;
     }
   }
+}
+
+.profile__header {
+  font-size: 20px;
 }
 
 /* sm */
