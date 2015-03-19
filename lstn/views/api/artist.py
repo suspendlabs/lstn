@@ -11,6 +11,28 @@ from lstn.exceptions import APIException
 
 artist = Blueprint('artist', __name__, url_prefix='/api/artist')
 
+@artist.route('/<artist_id>/albums/collection', methods=['GET'])
+@login_required
+def get_collection_albums(artist_id):
+  rdio_manager = rdio.Api(current_app.config['RDIO_CONSUMER_KEY'],
+    current_app.config['RDIO_CONSUMER_SECRET'],
+    current_user.oauth_token,
+    current_user.oauth_token_secret)
+
+  data = {
+    'method': 'getAlbumsForArtistInCollection',
+    'artist': artist_id,
+    'extras': 'radioKey,-tracks',
+  };
+
+  try:
+    response = rdio_manager.call_api_authenticated(data)
+  except Exception as e:
+    current_app.logger.debug(e)
+    raise APIException('Unable to retrieve albums: %s' % str(e))
+
+  return jsonify(success=True, data=response)
+
 @artist.route('/<artist_id>/albums', methods=['GET'])
 @login_required
 def get_albums(artist_id):
