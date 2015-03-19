@@ -137,6 +137,27 @@ angular.module('lstn.controllers', [])
     var promises = {};
     var timeouts = {};
 
+    var setEmoticons = function(newVal, oldVal) {
+      if (newVal === oldVal) {
+        return;
+      }
+
+      emojione.ascii = newVal === 'replace';
+    };
+
+    $scope.$watch('current_user.settings.chat.emoticons', setEmoticons);
+
+    var emoticons = 'keep';
+    if ($scope.current_user &&
+      $scope.current_user.settings &&
+      $scope.current_user.settings.chat &&
+      $scope.current_user.settings.chat.emoticons) {
+
+      emoticons = $scope.current_user.settings.chat.emoticons;
+    }
+
+    setEmoticons(emoticons, 'keep');
+
     $scope.tabs = {
       queue: true,
       music: false
