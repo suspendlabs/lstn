@@ -35,6 +35,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped\">skipped</span>\n" +
     "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped:downvoted\">skipped (downvoted)</span>\n" +
     "        <span class=\"chat__message--message\" data-ng-switch-when=\"message\">said</span>\n" +
+    "        <span class=\"chat__message--disconnect\" data-ng-switch-when=\"disconnect\">left the room</span>\n" +
+    "        <span class=\"chat__message--connect\" data-ng-switch-when=\"connect\">joined the room</span>\n" +
     "      </span>\n" +
     "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "    </div>\n" +
@@ -256,12 +258,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    mentio-search=\"searchEmoticons(term)\"\n" +
     "    mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
     "\n" +
-    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading && chat.messages && chat.messages.length > 0\">\n" +
-    "    <li data-ng-repeat=\"item in chat.messages\">\n" +
+    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading && messageCount > 0\">\n" +
+    "    <li data-ng-repeat=\"item in chat.messages\" data-ng-show=\"current_user.settings.chat.joinleave === 'show' || (item.type !== 'connect' && item.type !== 'disconnect')\">\n" +
     "      <lstn-chat-message data-message=\"item\"></lstn-chat-message>\n" +
     "    </li>\n" +
     "  </ul>\n" +
-    "  <div class=\"messages--empty\" data-ng-show=\"!chat.loading && (!chat.messages || chat.messages.length === 0)\"></div>\n" +
+    "  <div class=\"messages--empty\" data-ng-show=\"!chat.loading && messageCount === 0\">\n" +
+    "    <i class=\"fa fa-comment\"></i>\n" +
+    "  </div>\n" +
     "  <div class=\"messages--loading\" data-ng-show=\"chat.loading\">\n" +
     "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
     "  </div>\n" +
@@ -737,11 +741,27 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div>\n" +
     "  <div class=\"modal-header\"><h3 data-ng-bind=\"current_user.name\"></h3></div>\n" +
     "  <div class=\"modal-body\">\n" +
+    "    <div class=\"profile__header\">Queue</div>\n" +
     "    <div class=\"form-group\">\n" +
     "      <label for=\"queue-behavior\">When a track is played from my queue:</label>\n" +
     "      <select data-ng-model=\"settings.queue.behavior\">\n" +
     "        <option value=\"bottom\">Move to bottom of queue</option>\n" +
     "        <option value=\"remove\">Remove the track</option>\n" +
+    "      </select>\n" +
+    "    </div>\n" +
+    "    <div class=\"profile__header\">Chat</div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label for=\"joinleave\">When a user joins/leaves the room:</label>\n" +
+    "      <select data-ng-model=\"settings.chat.joinleave\">\n" +
+    "        <option value=\"show\">Show join/leave messages</option>\n" +
+    "        <option value=\"hide\">Hide join/leave messages</option>\n" +
+    "      </select>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label for=\"emoticons\">When sending a text emoticon:</label>\n" +
+    "      <select data-ng-model=\"settings.chat.emoticons\">\n" +
+    "        <option value=\"keep\">Keep as text emoticon</option>\n" +
+    "        <option value=\"replace\">Replace with image emoticon</option>\n" +
     "      </select>\n" +
     "    </div>\n" +
     "  </div>\n" +
