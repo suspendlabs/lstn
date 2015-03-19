@@ -19,7 +19,8 @@
     </li>
   </ul>
   <div class="queue--empty" data-ng-show="!queue.loading && (!queue.tracks || queue.tracks.length === 0)">
-    <p>You don't have any tracks in your queue.</p>
+    <p>Your queue is empty.</p>
+    <div><button type="button" class="btn btn-danger" data-ng-click="addMusic()">Add Music</button></div>
   </div>
   <div class="queue--loading" data-ng-show="queue.loading">
     <i class="fa fa-circle-o-notch fa-spin"></i>
