@@ -20,7 +20,7 @@
   </ul>
   <div class="queue--empty" data-ng-show="!queue.loading && (!queue.tracks || queue.tracks.length === 0)">
     <p>Your queue is empty.</p>
-    <div><button type="button" class="btn btn-danger" data-ng-click="addMusic()">Add Music</button></div>
+    <div><button type="button" class="btn btn-danger" data-ng-click="selectTab('music')">Add Music</button></div>
   </div>
   <div class="queue--loading" data-ng-show="queue.loading">
     <i class="fa fa-circle-o-notch fa-spin"></i>
