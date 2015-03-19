@@ -47,6 +47,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       };
 
       if (id) {
+        Alert.remove(id);
         options.id = id;
       }
 
