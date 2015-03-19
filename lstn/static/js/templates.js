@@ -481,7 +481,7 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </ul>\n" +
     "  <div class=\"queue--empty\" data-ng-show=\"!queue.loading && (!queue.tracks || queue.tracks.length === 0)\">\n" +
     "    <p>Your queue is empty.</p>\n" +
-    "    <div><button type=\"button\" class=\"btn btn-danger\" data-ng-click=\"selectTab('music')\">Add Music</button></div>\n" +
+    "    <div><button type=\"button\" class=\"btn btn-active\" data-ng-click=\"selectTab('music')\">Add Music</button></div>\n" +
     "  </div>\n" +
     "  <div class=\"queue--loading\" data-ng-show=\"queue.loading\">\n" +
     "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
