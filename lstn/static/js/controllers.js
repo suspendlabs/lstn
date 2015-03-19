@@ -755,11 +755,14 @@ angular.module('lstn.controllers', [])
 ])
 
 .controller('ProfileController', ['$scope', '$modalInstance', function($scope, $modalInstance) {
-  $scope.settings = $scope.current_user.settings || {
-    queue: {
-      behavior: 'bottom'
-    }
-  };
+  $scope.settings = $scope.current_user.settings || {};
+
+  $scope.settings.queue = $scope.settings.queue || {};
+  $scope.settings.queue.behavior = $scope.settings.queue.behavior || 'bottom';
+
+  $scope.settings.chat = $scope.settings.chat || {};
+  $scope.settings.chat.joinleave = $scope.settings.chat.joinleave || 'show';
+  $scope.settings.chat.emoticons = $scope.settings.chat.emoticons || 'keep';
 
   $scope.ok = function() {
     $modalInstance.close($scope.settings);
