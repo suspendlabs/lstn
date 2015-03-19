@@ -14,6 +14,8 @@
         <span class="chat__message--skipped" data-ng-switch-when="skipped">skipped</span>
         <span class="chat__message--skipped" data-ng-switch-when="skipped:downvoted">skipped (downvoted)</span>
         <span class="chat__message--message" data-ng-switch-when="message">said</span>
+        <span class="chat__message--disconnect" data-ng-switch-when="disconnect">left the room</span>
+        <span class="chat__message--connect" data-ng-switch-when="connect">joined the room</span>
       </span>
       <div class="chat__timestamp text-muted" data-time-from-now="message.created"></div>
     </div>
