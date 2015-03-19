@@ -287,7 +287,7 @@ angular.module('lstn.controllers', [])
         $scope.isCurrentController = false;
         socket.emit('room:controller:empty');
 
-        Alert.info("You've been made a listener because your queue ran out of music.");
+        Alert.info("You've been made a listener because your queue ran out of music.", 'listener');
         return;
       }
 
@@ -473,6 +473,7 @@ angular.module('lstn.controllers', [])
     };
 
     window.toggleBroadcast = $scope.toggleBroadcast = function() {
+      Alert.remove('listener');
       $scope.isController = !$scope.isController;
     };
 
