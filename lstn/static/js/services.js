@@ -728,20 +728,22 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 ])
 
 .factory('Artist', ['$resource', function($resource) {
-  var Artist = $resource('/api/artist/:id/:action', {
+  var Artist = $resource('/api/artist/:id/:action/:type', {
     id: '@id'
   },{
     albums: {
       method: 'GET',
       params: {
-        action: 'albums'
+        action: 'albums',
+        type: '@collection'
       }
     }
   });
 
-  Artist.getAlbums = function(artistId) {
+  Artist.getAlbums = function(artistId, type) {
     return Artist.albums({
-      id: artistId
+      id: artistId,
+      type: type
     }).$promise;
   };
 
@@ -749,20 +751,22 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 }])
 
 .factory('Album', ['$resource', function($resource) {
-  var Album = $resource('/api/album/:id/:action', {
+  var Album = $resource('/api/album/:id/:action/:type', {
     id: '@id'
   },{
     tracks: {
       method: 'GET',
       params: {
-        action: 'tracks'
+        action: 'tracks',
+        type: '@collection'
       }
     }
   });
 
-  Album.getTracks = function(artistId) {
+  Album.getTracks = function(artistId, type) {
     return this.tracks({
-      id: artistId
+      id: artistId,
+      type: type
     }).$promise;
   };
 
@@ -799,14 +803,14 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   p: 'playlist', // Playlist
   r: 'artist', // Artist
   t: 'track', // Track
-  al: 'album', // CollectionAlbum
+  al: 'collectionAlbum', // CollectionAlbum
   ap: 'station', // AutoplayStation
   tp: 'station', // TasteProfileStation
   ar: 'station', // AlbumStation
   gr: 'station', // GenreStation
   lr: 'station', // LabelStation
   pr: 'station', // PlaylistStation
-  rl: 'artist', // CollectionArtist
+  rl: 'collectionArtist', // CollectionArtist
   rr: 'station', // ArtistStation
   sr: 'station', // SongStation
   tr: 'station', // ArtistTopSongsStation
@@ -969,6 +973,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       },
       album: function(key) {
         return Album.getTracks(key);
+      },
+      collectionArtist: function(key) {
+        return Artist.getAlbums(key, 'collection');
+      },
+      collectionAlbum: function(key) {
+        return Album.getTracks(key, 'collection');
       }
     };
 
