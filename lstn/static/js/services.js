@@ -47,6 +47,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       };
 
       if (id) {
+        Alert.remove(id);
         options.id = id;
       }
 
@@ -309,13 +310,6 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           });
         });
 
-        Rdio.api.bind('playingSourceChanged.rdio', function(e, source) {
-          $log.debug('playingSourceChanged.rdio', source);
-          Rdio.scope.$evalAsync(function() {
-            Rdio.source = source;
-          });
-        });
-
         Rdio.api.bind('positionChanged.rdio', function(e, position) {
           $log.debug('positionChanged.rdio', position);
           window.playingPosition = position || 0;
@@ -355,6 +349,7 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
           Alert.error("You're playing music from a different source. Rdio only allows one source to play music at a time.");
         });
 
+        // playingSourceChanged.rdio
         // volumeChanged.rdio
         // muteChanged.rdio
         // queueChanged.rdio
@@ -733,20 +728,22 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 ])
 
 .factory('Artist', ['$resource', function($resource) {
-  var Artist = $resource('/api/artist/:id/:action', {
+  var Artist = $resource('/api/artist/:id/:action/:type', {
     id: '@id'
   },{
     albums: {
       method: 'GET',
       params: {
-        action: 'albums'
+        action: 'albums',
+        type: '@collection'
       }
     }
   });
 
-  Artist.getAlbums = function(artistId) {
+  Artist.getAlbums = function(artistId, type) {
     return Artist.albums({
-      id: artistId
+      id: artistId,
+      type: type
     }).$promise;
   };
 
@@ -754,20 +751,22 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
 }])
 
 .factory('Album', ['$resource', function($resource) {
-  var Album = $resource('/api/album/:id/:action', {
+  var Album = $resource('/api/album/:id/:action/:type', {
     id: '@id'
   },{
     tracks: {
       method: 'GET',
       params: {
-        action: 'tracks'
+        action: 'tracks',
+        type: '@collection'
       }
     }
   });
 
-  Album.getTracks = function(artistId) {
+  Album.getTracks = function(artistId, type) {
     return this.tracks({
-      id: artistId
+      id: artistId,
+      type: type
     }).$promise;
   };
 
@@ -804,14 +803,14 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
   p: 'playlist', // Playlist
   r: 'artist', // Artist
   t: 'track', // Track
-  al: 'album', // CollectionAlbum
+  al: 'collectionAlbum', // CollectionAlbum
   ap: 'station', // AutoplayStation
   tp: 'station', // TasteProfileStation
   ar: 'station', // AlbumStation
   gr: 'station', // GenreStation
   lr: 'station', // LabelStation
   pr: 'station', // PlaylistStation
-  rl: 'artist', // CollectionArtist
+  rl: 'collectionArtist', // CollectionArtist
   rr: 'station', // ArtistStation
   sr: 'station', // SongStation
   tr: 'station', // ArtistTopSongsStation
@@ -974,6 +973,12 @@ angular.module('lstn.services', ['mm.emoji.util', 'ngResource'])
       },
       album: function(key) {
         return Album.getTracks(key);
+      },
+      collectionArtist: function(key) {
+        return Artist.getAlbums(key, 'collection');
+      },
+      collectionAlbum: function(key) {
+        return Album.getTracks(key, 'collection');
       }
     };
 

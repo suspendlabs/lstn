@@ -137,6 +137,40 @@ angular.module('lstn.controllers', [])
     var promises = {};
     var timeouts = {};
 
+    var setEmoticons = function(newVal, oldVal) {
+      if (newVal === oldVal) {
+        return;
+      }
+
+      emojione.ascii = newVal === 'replace';
+    };
+
+    $scope.$watch('current_user.settings.chat.emoticons', setEmoticons);
+
+    var emoticons = 'keep';
+    if ($scope.current_user &&
+      $scope.current_user.settings &&
+      $scope.current_user.settings.chat &&
+      $scope.current_user.settings.chat.emoticons) {
+
+      emoticons = $scope.current_user.settings.chat.emoticons;
+    }
+
+    setEmoticons(emoticons, 'keep');
+
+    $scope.tabs = {
+      queue: true,
+      music: false
+    };
+
+    $scope.selectTab = function(tab) {
+      $.each($scope.tabs, function(name, active) {
+        $scope.tabs[name] = false;
+      });
+
+      $scope.tabs[tab] = true;
+    };
+
     $scope.isController = false;
     $scope.isCurrentController = false;
     $scope.currentController = null;
@@ -274,7 +308,7 @@ angular.module('lstn.controllers', [])
         $scope.isCurrentController = false;
         socket.emit('room:controller:empty');
 
-        Alert.info("You've been made a listener because your queue ran out of music.");
+        Alert.info("You've been made a listener because your queue ran out of music.", 'listener');
         return;
       }
 
@@ -460,6 +494,7 @@ angular.module('lstn.controllers', [])
     };
 
     window.toggleBroadcast = $scope.toggleBroadcast = function() {
+      Alert.remove('listener');
       $scope.isController = !$scope.isController;
     };
 
@@ -741,11 +776,14 @@ angular.module('lstn.controllers', [])
 ])
 
 .controller('ProfileController', ['$scope', '$modalInstance', function($scope, $modalInstance) {
-  $scope.settings = $scope.current_user.settings || {
-    queue: {
-      behavior: 'bottom'
-    }
-  };
+  $scope.settings = $scope.current_user.settings || {};
+
+  $scope.settings.queue = $scope.settings.queue || {};
+  $scope.settings.queue.behavior = $scope.settings.queue.behavior || 'bottom';
+
+  $scope.settings.chat = $scope.settings.chat || {};
+  $scope.settings.chat.joinleave = $scope.settings.chat.joinleave || 'show';
+  $scope.settings.chat.emoticons = $scope.settings.chat.emoticons || 'keep';
 
   $scope.ok = function() {
     $modalInstance.close($scope.settings);

@@ -371,7 +371,9 @@ Lstn.prototype.getChatHistory = function() {
     return [];
   }
 
-  return chatHistory[this.roomId];
+  return chatHistory[this.roomId].filter(function(message) {
+    return message.type !== 'connect' && message.type !== 'disconnect';
+  });
 };
 
 Lstn.prototype.sendChatHistory = function() {
@@ -545,6 +547,16 @@ Lstn.prototype.onDisconnect = function(data) {
     return;
   }
 
+  var user = this.getUser(this.userId);
+
+  if (user) {
+    this.sendChatMessage({
+      sender: this.userId,
+      user: user,
+      type: 'disconnect'
+    });
+  }
+
   // Remove the user from the roster and send an updated version
   this.removeFromRoster();
   this.sendRoster();
@@ -610,6 +622,13 @@ Lstn.prototype.onRoomConnect = function(data) {
 
   // Send playing status
   this.sendPlaying();
+
+  // Send connect message
+  this.sendChatMessage({
+    sender: this.userId,
+    user: data.user,
+    type: 'connect'
+  });
 };
 
 Lstn.prototype.onRoomUpdate = function(data) {

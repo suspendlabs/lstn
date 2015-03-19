@@ -35,6 +35,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped\">skipped</span>\n" +
     "        <span class=\"chat__message--skipped\" data-ng-switch-when=\"skipped:downvoted\">skipped (downvoted)</span>\n" +
     "        <span class=\"chat__message--message\" data-ng-switch-when=\"message\">said</span>\n" +
+    "        <span class=\"chat__message--disconnect\" data-ng-switch-when=\"disconnect\">left the room</span>\n" +
+    "        <span class=\"chat__message--connect\" data-ng-switch-when=\"connect\">joined the room</span>\n" +
     "      </span>\n" +
     "      <div class=\"chat__timestamp text-muted\" data-time-from-now=\"message.created\"></div>\n" +
     "    </div>\n" +
@@ -256,12 +258,14 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    mentio-search=\"searchEmoticons(term)\"\n" +
     "    mentio-select=\"getEmoticon(item)\"></mentio-menu>\n" +
     "\n" +
-    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading && chat.messages && chat.messages.length > 0\">\n" +
-    "    <li data-ng-repeat=\"item in chat.messages\">\n" +
+    "  <ul id=\"messages\" class=\"messages list-group\" data-ng-show=\"!chat.loading && messageCount > 0\">\n" +
+    "    <li data-ng-repeat=\"item in chat.messages\" data-ng-show=\"current_user.settings.chat.joinleave === 'show' || (item.type !== 'connect' && item.type !== 'disconnect')\">\n" +
     "      <lstn-chat-message data-message=\"item\"></lstn-chat-message>\n" +
     "    </li>\n" +
     "  </ul>\n" +
-    "  <div class=\"messages--empty\" data-ng-show=\"!chat.loading && (!chat.messages || chat.messages.length === 0)\"></div>\n" +
+    "  <div class=\"messages--empty\" data-ng-show=\"!chat.loading && messageCount === 0\">\n" +
+    "    <i class=\"fa fa-comment\"></i>\n" +
+    "  </div>\n" +
     "  <div class=\"messages--loading\" data-ng-show=\"chat.loading\">\n" +
     "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
     "  </div>\n" +
@@ -480,7 +484,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </li>\n" +
     "  </ul>\n" +
     "  <div class=\"queue--empty\" data-ng-show=\"!queue.loading && (!queue.tracks || queue.tracks.length === 0)\">\n" +
-    "    <p>You don't have any tracks in your queue.</p>\n" +
+    "    <p>Your queue is empty.</p>\n" +
+    "    <div><button type=\"button\" class=\"btn btn-active\" data-ng-click=\"selectTab('music')\">Add Music</button></div>\n" +
     "  </div>\n" +
     "  <div class=\"queue--loading\" data-ng-show=\"queue.loading\">\n" +
     "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
@@ -495,14 +500,18 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <div data-ng-show=\"isController\" class=\"broadcasting broadcasting--on\">\n" +
     "      <a data-ng-click=\"toggleBroadcast()\">\n" +
     "        <i class=\"fa fa-microphone-slash\"></i>\n" +
-    "        <div>STOP BROADCASTING</div>\n" +
+    "        <div class=\"broadcasting-btn\">STOP BROADCASTING</div>\n" +
     "      </a>\n" +
     "    </div>\n" +
-    "    <div data-ng-show=\"!isController && queue && queue.tracks && queue.tracks.length > 0\" class=\"broadcasting broadcasting--off\">\n" +
-    "      <a data-ng-click=\"toggleBroadcast()\">\n" +
+    "    <div data-ng-show=\"!isController\" class=\"broadcasting broadcasting--off\" data-ng-class=\"{'broadcasting--disabled': !queue || !queue.tracks || queue.tracks.length === 0}\">\n" +
+    "      <a data-ng-click=\"toggleBroadcast()\" data-ng-if=\"queue && queue.tracks && queue.tracks.length > 0\">\n" +
     "        <i class=\"fa fa-microphone\"></i>\n" +
-    "        <div>START BROADCASTING</div>\n" +
+    "        <div class=\"broadcasting-btn\">START BROADCASTING</div>\n" +
     "      </a>\n" +
+    "      <span data-ng-if=\"!queue || !queue.tracks || queue.tracks.length === 0\" data-tooltip=\"You can't broadcast without tracks in your queue\" data-tooltip-placement=\"bottom\">\n" +
+    "        <i class=\"fa fa-microphone\"></i>\n" +
+    "        <div class=\"broadcasting-btn\">START BROADCASTING</div>\n" +
+    "      </span>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
@@ -570,14 +579,19 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-refresh-handler=\"refresh\"\n" +
     "    data-bulk-add-handler=\"addTracks\"\n" +
     "    data-current=\"current\"></lstn-drilldown-back>\n" +
+    "\n" +
     "  <ul class=\"drilldown__list text-left\">\n" +
+    "    <li class=\"slide--empty\" data-ng-if=\"!data || data.length === 0\">\n" +
+    "      <i class=\"fa fa-music\"></i>\n" +
+    "    </li>\n" +
+    "\n" +
     "    <lstn-drilldown-item\n" +
     "      data-ng-if=\"current.radioKey\"\n" +
     "      data-context=\"{{ current.type }}\"\n" +
     "      data-radio=\"current\"\n" +
     "      data-load=\"load\"></lstn-drilldown-item>\n" +
     "\n" +
-    "    <li data-ng-repeat=\"item in data\">\n" +
+    "    <li data-ng-repeat=\"item in data\" data-ng-if=\"data && data.length > 0\">\n" +
     "      <div data-ng-switch=\"getType(item.type)\">\n" +
     "        <lstn-track\n" +
     "          data-ng-switch-when=\"track\"\n" +
@@ -727,11 +741,27 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "<div>\n" +
     "  <div class=\"modal-header\"><h3 data-ng-bind=\"current_user.name\"></h3></div>\n" +
     "  <div class=\"modal-body\">\n" +
+    "    <div class=\"profile__header\">Queue</div>\n" +
     "    <div class=\"form-group\">\n" +
     "      <label for=\"queue-behavior\">When a track is played from my queue:</label>\n" +
     "      <select data-ng-model=\"settings.queue.behavior\">\n" +
     "        <option value=\"bottom\">Move to bottom of queue</option>\n" +
     "        <option value=\"remove\">Remove the track</option>\n" +
+    "      </select>\n" +
+    "    </div>\n" +
+    "    <div class=\"profile__header\">Chat</div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label for=\"joinleave\">When a user joins/leaves the room:</label>\n" +
+    "      <select data-ng-model=\"settings.chat.joinleave\">\n" +
+    "        <option value=\"show\">Show join/leave messages</option>\n" +
+    "        <option value=\"hide\">Hide join/leave messages</option>\n" +
+    "      </select>\n" +
+    "    </div>\n" +
+    "    <div class=\"form-group\">\n" +
+    "      <label for=\"emoticons\">When sending a text emoticon:</label>\n" +
+    "      <select data-ng-model=\"settings.chat.emoticons\">\n" +
+    "        <option value=\"keep\">Keep as text emoticon</option>\n" +
+    "        <option value=\"replace\">Replace with image emoticon</option>\n" +
     "      </select>\n" +
     "    </div>\n" +
     "  </div>\n" +
@@ -751,11 +781,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "  <div class=\"col-md-5 col-sm-8 room__middle\">\n" +
     "    <tabset class=\"queue__tabs\">\n" +
-    "      <tab id=\"my-queue-tab\">\n" +
+    "      <tab id=\"my-queue-tab\" data-select=\"selectTab('queue')\" data-active=\"tabs.queue\">\n" +
     "        <tab-heading>MY QUEUE</tab-heading>\n" +
     "        <lstn-room-queue></lstn-room-queue>\n" +
     "      </tab>\n" +
-    "      <tab>\n" +
+    "      <tab id=\"more-music-tab\" data-select=\"selectTab('music')\" data-active=\"tabs.music\">\n" +
     "        <tab-heading>MORE MUSIC</tab-heading>\n" +
     "        <lstn-more-music></lstn-more-music>\n" +
     "      </tab>\n" +

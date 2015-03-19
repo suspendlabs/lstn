@@ -430,7 +430,7 @@ div.progress-bar-info {
   font-size: 1.4em;
   text-align: center;
 }
-.roster__broadcasting .broadcasting div {
+.roster__broadcasting .broadcasting .broadcasting-btn {
   display: inline-block;
   line-height: 50px;
   margin-left: 15px;
@@ -441,7 +441,7 @@ div.progress-bar-info {
 .roster__broadcasting .broadcasting--on .fa {
   background-color: #b62b2b;
 }
-.roster__broadcasting .broadcasting--on div {
+.roster__broadcasting .broadcasting--on .broadcasting-btn {
   text-shadow: 1px 1px 1px #b62b2b;
 }
 .roster__broadcasting .broadcasting--off {
@@ -450,8 +450,17 @@ div.progress-bar-info {
 .roster__broadcasting .broadcasting--off .fa {
   background-color: #247e4a;
 }
-.roster__broadcasting .broadcasting--off div {
+.roster__broadcasting .broadcasting--off .broadcasting-btn {
   text-shadow: 1px 1px 1px #247e4a;
+}
+.roster__broadcasting .broadcasting--disabled {
+  background-color: #777;
+}
+.roster__broadcasting .broadcasting--disabled .fa {
+  background-color: #5e5e5e;
+}
+.roster__broadcasting .broadcasting--disabled .broadcasting-btn {
+  text-shadow: 1px 1px 1px #5e5e5e;
 }
 
 .roster__category {
@@ -498,6 +507,9 @@ div.progress-bar-info {
   color: white;
   font-size: 0.9rem;
   border: 1px solid white;
+}
+.roster__container .roster__user {
+  color: #333;
 }
 .roster__container .roster__user img {
   margin: 0 0 15px 0;
@@ -651,6 +663,16 @@ div.progress-bar-info {
   color: #333;
 }
 
+.messages--empty {
+  height: calc(100% - 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 10em;
+  color: #333;
+}
+
 .drilldown__list {
   height: 100%;
   list-style: none;
@@ -758,6 +780,16 @@ div.progress-bar-info {
   color: #d24242;
 }
 .item__image .item__image__overlay__icon--message {
+  color: #777;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  opacity: 0.8;
+}
+.item__image .item__image__overlay__icon--disconnect {
+  color: #777;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  opacity: 0.8;
+}
+.item__image .item__image__overlay__icon--connect {
   color: #777;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
   opacity: 0.8;
@@ -1040,6 +1072,15 @@ div.chat__message--message {
 .lstn-carousel .slides .slide__container .slide {
   height: calc(100% - 40px);
 }
+.lstn-carousel .slides .slide__container .slide .slide--empty {
+  height: calc(100% - 76px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 10em;
+  color: #333;
+}
 
 .more-music {
   height: calc(100% - 36px);
@@ -1081,6 +1122,10 @@ div.chat__message--message {
 }
 .carousel__back .carousel__action .fa {
   font-size: 1.25em;
+}
+
+.profile__header {
+  font-size: 20px;
 }
 
 /* sm */

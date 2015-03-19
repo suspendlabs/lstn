@@ -485,7 +485,7 @@ div.progress-bar-info {
   }
 
   .broadcasting {
-    div {
+    .broadcasting-btn {
       display: inline-block;
       line-height: 50px;
       margin-left: 15px;
@@ -499,7 +499,7 @@ div.progress-bar-info {
       background-color: $broadcasting-on-dark;
     }
 
-    div {
+    .broadcasting-btn {
       @include text-shadow(1px 1px 1px $broadcasting-on-dark);
     }
   }
@@ -511,8 +511,20 @@ div.progress-bar-info {
       background-color: $broadcasting-off-dark;
     }
 
-    div {
+    .broadcasting-btn {
       @include text-shadow(1px 1px 1px $broadcasting-off-dark);
+    }
+  }
+
+  .broadcasting--disabled {
+    background-color: $gray;
+
+    .fa {
+      background-color: darken($gray, 10%);
+    }
+
+    .broadcasting-btn {
+      @include text-shadow(1px 1px 1px darken($gray, 10%));
     }
   }
 }
@@ -573,6 +585,7 @@ div.progress-bar-info {
   }
 
   .roster__user {
+    color: $darker-gray;
     img {
       margin: 0 0 15px 0;
     }
@@ -748,6 +761,17 @@ div.progress-bar-info {
   color: $background-color;
 }
 
+.messages--empty {
+  height: calc(100% - 36px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 10em;
+  color: $background-color;
+}
+
 .drilldown__list {
   height: 100%;
 
@@ -857,6 +881,16 @@ div.progress-bar-info {
   }
 
   .item__image__overlay__icon--message {
+    color: $gray;
+    @include opacity(0.8);
+  }
+
+  .item__image__overlay__icon--disconnect {
+    color: $gray;
+    @include opacity(0.8);
+  }
+
+  .item__image__overlay__icon--connect {
     color: $gray;
     @include opacity(0.8);
   }
@@ -1165,6 +1199,16 @@ div.chat__message--message {
 
       .slide {
         height: calc(100% - 40px);
+
+        .slide--empty {
+          height: calc(100% - 76px);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-size: 10em;
+          color: #333;
+        }
       }
     }
   }
@@ -1220,6 +1264,10 @@ div.chat__message--message {
       font-size: 1.25em;
     }
   }
+}
+
+.profile__header {
+  font-size: 20px;
 }
 
 /* sm */

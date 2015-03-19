@@ -3,14 +3,18 @@
     <div data-ng-show="isController" class="broadcasting broadcasting--on">
       <a data-ng-click="toggleBroadcast()">
         <i class="fa fa-microphone-slash"></i>
-        <div>STOP BROADCASTING</div>
+        <div class="broadcasting-btn">STOP BROADCASTING</div>
       </a>
     </div>
-    <div data-ng-show="!isController && queue && queue.tracks && queue.tracks.length > 0" class="broadcasting broadcasting--off">
-      <a data-ng-click="toggleBroadcast()">
+    <div data-ng-show="!isController" class="broadcasting broadcasting--off" data-ng-class="{'broadcasting--disabled': !queue || !queue.tracks || queue.tracks.length === 0}">
+      <a data-ng-click="toggleBroadcast()" data-ng-if="queue && queue.tracks && queue.tracks.length > 0">
         <i class="fa fa-microphone"></i>
-        <div>START BROADCASTING</div>
+        <div class="broadcasting-btn">START BROADCASTING</div>
       </a>
+      <span data-ng-if="!queue || !queue.tracks || queue.tracks.length === 0" data-tooltip="You can't broadcast without tracks in your queue" data-tooltip-placement="bottom">
+        <i class="fa fa-microphone"></i>
+        <div class="broadcasting-btn">START BROADCASTING</div>
+      </span>
     </div>
   </div>
 

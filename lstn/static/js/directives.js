@@ -44,6 +44,37 @@ angular.module('lstn.directives', [])
         $scope.emoticons = [];
         $scope.mentioned = false;
 
+        $scope.messageCount = $scope.chat.messages.length;
+
+        var setMessageCount = function(newVal, oldVal) {
+          console.log('showMessageCount', newVal, oldVal);
+
+          if (newVal === oldVal) {
+            return;
+          }
+
+          if (newVal === 'hide') {
+            $scope.messageCount = $scope.chat.messages.filter(function(message) {
+              return message.type !== 'connect' && message.type !== 'disconnect';
+            }).length;
+          } else {
+            $scope.messageCount = $scope.chat.messages.length;
+          }
+        };
+        
+        $scope.$watchGroup(['chat.messages', 'current_user.settings.chat.joinleave'], setMessageCount);
+
+        var joinleave = true;
+        if ($scope.current_user &&
+          $scope.current_user.settings &&
+          $scope.current_user.settings.chat &&
+          $scope.current_user.settings.chat.joinleave) {
+
+          joinleave = $scope.current_user.settings.chat.joinleave;
+        }
+
+        setMessageCount(joinleave, 'show');
+
         $scope.$on('mentioned', function(e) {
           $scope.mentioned = true;
         });
@@ -494,7 +525,9 @@ angular.module('lstn.directives', [])
           downvote: 'item__image__overlay__icon--downvote fa-thumbs-down',
           skipped: 'item__image__overlay__icon--skipped fa-step-forward',
           'skipped:downvoted': 'item__image__overlay__icon--skipped fa-thumbs-down',
-          message: 'item__image__overlay__icon--message fa-comment'
+          message: 'item__image__overlay__icon--message fa-comment',
+          disconnect: 'item__image__overlay__icon--disconnect fa-sign-out',
+          connect: 'item__image__overlay__icon--connect fa-sign-in'
         };
 
         $scope.getOverlayClass = function() {

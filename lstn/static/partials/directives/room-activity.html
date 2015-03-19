@@ -30,12 +30,14 @@
     mentio-search="searchEmoticons(term)"
     mentio-select="getEmoticon(item)"></mentio-menu>
 
-  <ul id="messages" class="messages list-group" data-ng-show="!chat.loading && chat.messages && chat.messages.length > 0">
-    <li data-ng-repeat="item in chat.messages">
+  <ul id="messages" class="messages list-group" data-ng-show="!chat.loading && messageCount > 0">
+    <li data-ng-repeat="item in chat.messages" data-ng-show="current_user.settings.chat.joinleave === 'show' || (item.type !== 'connect' && item.type !== 'disconnect')">
       <lstn-chat-message data-message="item"></lstn-chat-message>
     </li>
   </ul>
-  <div class="messages--empty" data-ng-show="!chat.loading && (!chat.messages || chat.messages.length === 0)"></div>
+  <div class="messages--empty" data-ng-show="!chat.loading && messageCount === 0">
+    <i class="fa fa-comment"></i>
+  </div>
   <div class="messages--loading" data-ng-show="chat.loading">
     <i class="fa fa-circle-o-notch fa-spin"></i>
   </div>
