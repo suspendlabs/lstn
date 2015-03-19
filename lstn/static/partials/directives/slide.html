@@ -14,14 +14,19 @@
     data-refresh-handler="refresh"
     data-bulk-add-handler="addTracks"
     data-current="current"></lstn-drilldown-back>
+
   <ul class="drilldown__list text-left">
+    <li class="slide--empty" data-ng-if="!data || data.length === 0">
+      <i class="fa fa-music"></i>
+    </li>
+
     <lstn-drilldown-item
       data-ng-if="current.radioKey"
       data-context="{{ current.type }}"
       data-radio="current"
       data-load="load"></lstn-drilldown-item>
 
-    <li data-ng-repeat="item in data">
+    <li data-ng-repeat="item in data" data-ng-if="data && data.length > 0">
       <div data-ng-switch="getType(item.type)">
         <lstn-track
           data-ng-switch-when="track"

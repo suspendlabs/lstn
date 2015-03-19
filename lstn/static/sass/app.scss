@@ -1178,6 +1178,16 @@ div.chat__message--message {
 
       .slide {
         height: calc(100% - 40px);
+
+        .slide--empty {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          font-size: 10em;
+          color: #333;
+        }
       }
     }
   }

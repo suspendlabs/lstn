@@ -575,14 +575,19 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    data-refresh-handler=\"refresh\"\n" +
     "    data-bulk-add-handler=\"addTracks\"\n" +
     "    data-current=\"current\"></lstn-drilldown-back>\n" +
+    "\n" +
     "  <ul class=\"drilldown__list text-left\">\n" +
+    "    <li class=\"slide--empty\" data-ng-if=\"!data || data.length === 0\">\n" +
+    "      <i class=\"fa fa-music\"></i>\n" +
+    "    </li>\n" +
+    "\n" +
     "    <lstn-drilldown-item\n" +
     "      data-ng-if=\"current.radioKey\"\n" +
     "      data-context=\"{{ current.type }}\"\n" +
     "      data-radio=\"current\"\n" +
     "      data-load=\"load\"></lstn-drilldown-item>\n" +
     "\n" +
-    "    <li data-ng-repeat=\"item in data\">\n" +
+    "    <li data-ng-repeat=\"item in data\" data-ng-if=\"data && data.length > 0\">\n" +
     "      <div data-ng-switch=\"getType(item.type)\">\n" +
     "        <lstn-track\n" +
     "          data-ng-switch-when=\"track\"\n" +
