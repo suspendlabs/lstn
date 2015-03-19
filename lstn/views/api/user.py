@@ -439,7 +439,7 @@ def user_collection():
   data = {
     'method': 'getArtistsInCollection',
     'user': current_user.external_id,
-    'extras': 'albumCount,radioKey',
+    'extras': 'albumCount,radioKey,count',
   }
 
   try:
@@ -448,7 +448,12 @@ def user_collection():
     current_app.logger.debug(e)
     raise APIException('Unable to get your collection: %s' % str(e))
 
-  return jsonify(success=True, data=response)
+  artists = []
+  for artist in response:
+    artist['length'] = artist['count']
+    artists.append(artist)
+
+  return jsonify(success=True, data=artists)
 
 @user.route('/settings', methods=['POST'])
 @login_required
