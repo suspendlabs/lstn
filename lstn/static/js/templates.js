@@ -480,7 +480,8 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    </li>\n" +
     "  </ul>\n" +
     "  <div class=\"queue--empty\" data-ng-show=\"!queue.loading && (!queue.tracks || queue.tracks.length === 0)\">\n" +
-    "    <p>You don't have any tracks in your queue.</p>\n" +
+    "    <p>Your queue is empty.</p>\n" +
+    "    <div><button type=\"button\" class=\"btn btn-danger\" data-ng-click=\"selectTab('music')\">Add Music</button></div>\n" +
     "  </div>\n" +
     "  <div class=\"queue--loading\" data-ng-show=\"queue.loading\">\n" +
     "    <i class=\"fa fa-circle-o-notch fa-spin\"></i>\n" +
@@ -495,14 +496,18 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "    <div data-ng-show=\"isController\" class=\"broadcasting broadcasting--on\">\n" +
     "      <a data-ng-click=\"toggleBroadcast()\">\n" +
     "        <i class=\"fa fa-microphone-slash\"></i>\n" +
-    "        <div>STOP BROADCASTING</div>\n" +
+    "        <div class=\"broadcasting-btn\">STOP BROADCASTING</div>\n" +
     "      </a>\n" +
     "    </div>\n" +
-    "    <div data-ng-show=\"!isController && queue && queue.tracks && queue.tracks.length > 0\" class=\"broadcasting broadcasting--off\">\n" +
-    "      <a data-ng-click=\"toggleBroadcast()\">\n" +
+    "    <div data-ng-show=\"!isController\" class=\"broadcasting broadcasting--off\" data-ng-class=\"{'broadcasting--disabled': !queue || !queue.tracks || queue.tracks.length === 0}\">\n" +
+    "      <a data-ng-click=\"toggleBroadcast()\" data-ng-if=\"queue && queue.tracks && queue.tracks.length > 0\">\n" +
     "        <i class=\"fa fa-microphone\"></i>\n" +
-    "        <div>START BROADCASTING</div>\n" +
+    "        <div class=\"broadcasting-btn\">START BROADCASTING</div>\n" +
     "      </a>\n" +
+    "      <span data-ng-if=\"!queue || !queue.tracks || queue.tracks.length === 0\" data-tooltip=\"You can't broadcast without tracks in your queue\" data-tooltip-placement=\"bottom\">\n" +
+    "        <i class=\"fa fa-microphone\"></i>\n" +
+    "        <div class=\"broadcasting-btn\">START BROADCASTING</div>\n" +
+    "      </span>\n" +
     "    </div>\n" +
     "  </div>\n" +
     "\n" +
@@ -751,11 +756,11 @@ angular.module('lstn.templates', []).run(['$templateCache', function($templateCa
     "  </div>\n" +
     "  <div class=\"col-md-5 col-sm-8 room__middle\">\n" +
     "    <tabset class=\"queue__tabs\">\n" +
-    "      <tab id=\"my-queue-tab\">\n" +
+    "      <tab id=\"my-queue-tab\" data-select=\"selectTab('queue')\" data-active=\"tabs.queue\">\n" +
     "        <tab-heading>MY QUEUE</tab-heading>\n" +
     "        <lstn-room-queue></lstn-room-queue>\n" +
     "      </tab>\n" +
-    "      <tab>\n" +
+    "      <tab id=\"more-music-tab\" data-select=\"selectTab('music')\" data-active=\"tabs.music\">\n" +
     "        <tab-heading>MORE MUSIC</tab-heading>\n" +
     "        <lstn-more-music></lstn-more-music>\n" +
     "      </tab>\n" +
