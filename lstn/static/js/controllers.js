@@ -137,6 +137,19 @@ angular.module('lstn.controllers', [])
     var promises = {};
     var timeouts = {};
 
+    $scope.tabs = {
+      queue: true,
+      music: false
+    };
+
+    $scope.selectTab = function(tab) {
+      $.each($scope.tabs, function(name, active) {
+        $scope.tabs[name] = false;
+      });
+
+      $scope.tabs[tab] = true;
+    };
+
     $scope.isController = false;
     $scope.isCurrentController = false;
     $scope.currentController = null;
